@@ -1,0 +1,10 @@
+name: Chunky
+version: ${project.version}
+main: org.popcraft.chunky.Chunky
+api-version: "1.14"
+authors: [pop4959]
+description: Generates chunks
+commands:
+  chunky:
+    description: Generate chunks.
+    usage: /chunky <radius>
