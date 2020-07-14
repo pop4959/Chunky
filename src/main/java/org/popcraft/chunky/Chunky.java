@@ -39,8 +39,8 @@ public final class Chunky extends JavaPlugin {
         }
     }
 
-    final String printUpdateFormat = "Task running for '%s'. Progress: %d chunks (%.2f%%) , ETA: %01d:%02d:%02d, Speed: %.1f ch/s, Last Chunk: %d, %d";
-    final String printDoneFormat = "Task finished after %d chunks.";
+    final String printUpdateFormat = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Speed: %.1f cps, Current: %d, %d";
+    final String printDoneFormat = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
     final AtomicLong startTime = new AtomicLong();
     final AtomicInteger finishedChunks = new AtomicInteger();
     final AtomicInteger totalChunks = new AtomicInteger();
@@ -48,20 +48,23 @@ public final class Chunky extends JavaPlugin {
     final int FREQ = 50;
 
     private void printUpdate(Chunk chunk) {
-        String world = chunk.getWorld().getName();
-        int chunkNum = finishedChunks.addAndGet(1);
-        double percentDone = 100f * chunkNum / totalChunks.get();
-        long currentTime = System.currentTimeMillis();
-        chunkUpdateTimes10Sec.add(currentTime);
-        while(currentTime - chunkUpdateTimes10Sec.peek() > 1e4 /* 10 seconds */) chunkUpdateTimes10Sec.poll();
-        double speed = chunkUpdateTimes10Sec.size() / 10f; // chunk updates in 1 second
-        int chunksLeft = totalChunks.get() - finishedChunks.get();
-        int eta = (int) (chunksLeft / speed);
-        int etaHours = eta / 3600;
-        int etaMinutes = (eta - etaHours * 3600) / 60;
-        int etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
-        String message = String.format(printUpdateFormat, world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunk.getX(), chunk.getZ());
-        this.getServer().getConsoleSender().sendMessage(message);
+//        String world = chunk.getWorld().getName();
+//        int chunkNum = finishedChunks.addAndGet(1);
+//        double percentDone = 100f * chunkNum / totalChunks.get();
+//        long currentTime = System.currentTimeMillis();
+//        chunkUpdateTimes10Sec.add(currentTime);
+//        while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4 /* 10 seconds */) chunkUpdateTimes10Sec.poll();
+//        long oldestTime = chunkUpdateTimes10Sec.peek();
+//        double timeDiff = (currentTime - oldestTime) / 1e3;
+//        double speed = chunkUpdateTimes10Sec.size() / timeDiff; // chunk updates in 1 second
+//        int chunksLeft = totalChunks.get() - finishedChunks.get();
+//        int eta = (int) (chunksLeft / speed);
+//        int etaHours = eta / 3600;
+//        int etaMinutes = (eta - etaHours * 3600) / 60;
+//        int etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
+//        String message = String.format(printUpdateFormat, world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunk.getX(), chunk.getZ());
+//        this.getServer().getConsoleSender().sendMessage(message);
+        printUpdate(chunk.getWorld(), new ChunkLocation(chunk.getX(), chunk.getZ()));
     }
 
     private void printUpdate(World chunkWorld, ChunkLocation chunk) {
@@ -70,19 +73,26 @@ public final class Chunky extends JavaPlugin {
         double percentDone = 100f * chunkNum / totalChunks.get();
         long currentTime = System.currentTimeMillis();
         chunkUpdateTimes10Sec.add(currentTime);
-        while(currentTime - chunkUpdateTimes10Sec.peek() > 1e4 /* 10 seconds */) chunkUpdateTimes10Sec.poll();
-        double speed = chunkUpdateTimes10Sec.size() / 10f; // chunk updates in 1 second
+        while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4 /* 10 seconds */) chunkUpdateTimes10Sec.poll();
+        long oldestTime = chunkUpdateTimes10Sec.peek();
+        double timeDiff = (currentTime - oldestTime) / 1e3;
+        double speed = chunkUpdateTimes10Sec.size() / timeDiff; // chunk updates in 1 second
         int chunksLeft = totalChunks.get() - finishedChunks.get();
-        int eta = (int) (chunksLeft / speed);
-        int etaHours = eta / 3600;
-        int etaMinutes = (eta - etaHours * 3600) / 60;
-        int etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
-        String message = String.format(printUpdateFormat, world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunk.x, chunk.z);
+        final String message;
+        if (totalChunks.get() == finishedChunks.get()) {
+            int total = (int) ((currentTime - startTime.get()) / 1e3);
+            int totalHours = total / 3600;
+            int totalMinutes = (total - totalHours * 3600) / 60;
+            int totalSeconds = total - totalHours * 3600 - totalMinutes * 60;
+            message = String.format(printDoneFormat, world, chunkNum, percentDone, totalHours, totalMinutes, totalSeconds);
+        } else {
+            int eta = (int) (chunksLeft / speed);
+            int etaHours = eta / 3600;
+            int etaMinutes = (eta - etaHours * 3600) / 60;
+            int etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
+            message = String.format(printUpdateFormat, world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunk.x, chunk.z);
+        }
         this.getServer().getConsoleSender().sendMessage(message);
-    }
-
-    private void printDone() {
-        this.getServer().getConsoleSender().sendMessage(String.format(printDoneFormat, finishedChunks.get()));
     }
 
     @Override
@@ -90,7 +100,6 @@ public final class Chunky extends JavaPlugin {
         final World world = sender instanceof Player ? ((Player) sender).getWorld() : this.getServer().getWorlds().get(0);
         final int radius = Integer.parseInt(args[0]);
         final CompletableFuture<Void> genTask = new CompletableFuture<>();
-        genTask.thenRun(this::printDone);
         this.getServer().getScheduler().runTaskAsynchronously(this, () -> {
             Queue<ChunkLocation> chunkLocations = new LinkedList<>();
             this.getServer().getConsoleSender().sendMessage("Preparing...");
@@ -114,10 +123,12 @@ public final class Chunky extends JavaPlugin {
                     }
                     working.getAndIncrement();
                     CompletableFuture<Chunk> chunkFuture = PaperLib.getChunkAtAsync(world, chunkLocation.x, chunkLocation.z);
-                    chunkFuture.thenAccept(this::printUpdate).thenRun(working::getAndDecrement);
+                    chunkFuture.thenAccept(chunk -> {
+                        working.getAndDecrement();
+                        printUpdate(chunk);
+                    });
                 }
             }
-            genTask.complete(null);
         });
         return true;
     }
