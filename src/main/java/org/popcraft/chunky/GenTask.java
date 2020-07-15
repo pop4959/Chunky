@@ -12,6 +12,8 @@ public class GenTask implements Runnable {
     private final Chunky chunky;
     private final World world;
     private final int radius;
+    private final int centerX;
+    private final int centerZ;
     private final static int FREQ = 50;
     private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
     private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
@@ -23,11 +25,13 @@ public class GenTask implements Runnable {
     private final AtomicBoolean cancelled = new AtomicBoolean();
     private final ChunkCoordinateIterator chunkCoordinates;
 
-    public GenTask(Chunky chunky, World world, int radius) {
+    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ) {
         this.chunky = chunky;
         this.world = world;
         this.radius = radius;
-        this.chunkCoordinates = new ChunkCoordinateIterator(radius);
+        this.centerX = centerX;
+        this.centerZ = centerZ;
+        this.chunkCoordinates = new ChunkCoordinateIterator(radius, centerX, centerZ);
     }
 
     private void printUpdate(World chunkWorld, int chunkX, int chunkZ) {
@@ -100,6 +104,14 @@ public class GenTask implements Runnable {
 
     public int getRadius() {
         return radius;
+    }
+
+    public int getCenterX() {
+        return centerX;
+    }
+
+    public int getCenterZ() {
+        return centerZ;
     }
 
     public ChunkCoordinateIterator getChunkCoordinateIterator() {

@@ -23,7 +23,9 @@ public class Config {
         }
         String world_key = TASKS_KEY + world.getName() + ".";
         int radius = config.getInt(world_key + "radius");
-        return Optional.of(new GenTask(chunky, world, radius));
+        int centerX = config.getInt(world_key + "x-center");
+        int centerZ = config.getInt(world_key + "z-center");
+        return Optional.of(new GenTask(chunky, world, radius, centerX, centerZ));
     }
 
     public List<GenTask> loadTasks() {
@@ -39,9 +41,11 @@ public class Config {
         }
         String world_key = TASKS_KEY + world.getName() + ".";
         config.set(world_key + "radius", genTask.getRadius());
+        config.set(world_key + "x-center", genTask.getCenterX());
+        config.set(world_key + "z-center", genTask.getCenterZ());
         ChunkCoordinate currentChunk = genTask.getChunkCoordinateIterator().peek();
-        config.set(world_key + "x", currentChunk.x);
-        config.set(world_key + "z", currentChunk.z);
+        config.set(world_key + "x-chunk", currentChunk.x);
+        config.set(world_key + "z-chunk", currentChunk.z);
         chunky.saveDefaultConfig();
     }
 

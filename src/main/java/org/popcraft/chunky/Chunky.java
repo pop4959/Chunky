@@ -86,7 +86,7 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, world.getName()));
             return true;
         }
-        GenTask genTask = new GenTask(this, world, radius);
+        GenTask genTask = new GenTask(this, world, radius, x, z);
         genTasks.put(world, genTask);
         this.getServer().getScheduler().runTaskAsynchronously(this, genTask);
         String verb = "start".equalsIgnoreCase(args[0]) ? "started" : "queued";

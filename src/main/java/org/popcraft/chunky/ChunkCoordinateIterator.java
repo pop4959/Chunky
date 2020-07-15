@@ -5,13 +5,18 @@ import java.util.Iterator;
 public class ChunkCoordinateIterator implements Iterator<ChunkCoordinate> {
     private final int radius;
     private int x, z;
+    private int x1, x2, z1, z2;
     private boolean hasNext = true;
     private final static int CHUNK_SIZE = 16;
 
-    public ChunkCoordinateIterator(int radius) {
+    public ChunkCoordinateIterator(int radius, int centerX, int centerZ) {
         this.radius = radius;
-        this.x = -radius;
-        this.z = -radius;
+        this.x1 = centerX - radius;
+        this.x2 = centerX + radius;
+        this.z1 = centerZ - radius;
+        this.z2 = centerZ + radius;
+        this.x = x1;
+        this.z = z1;
     }
 
     @Override
@@ -22,9 +27,9 @@ public class ChunkCoordinateIterator implements Iterator<ChunkCoordinate> {
     @Override
     public ChunkCoordinate next() {
         final ChunkCoordinate chunkCoord = new ChunkCoordinate(x >> 4, z >> 4);
-        if ((z += CHUNK_SIZE) >= radius) {
-            z = -radius;
-            if ((x += CHUNK_SIZE) >= radius) {
+        if ((z += CHUNK_SIZE) >= z2) {
+            z = z1;
+            if ((x += CHUNK_SIZE) >= x2) {
                 hasNext = false;
             }
         }
