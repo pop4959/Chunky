@@ -21,6 +21,7 @@ public final class Chunky extends JavaPlugin {
     private boolean queue;
     private boolean silent;
     private int quiet;
+    private Metrics metrics;
 
     private final static String FORMAT_START = "[Chunky] Task started for %s at %d, %d with radius %d.";
     private final static String FORMAT_STARTED_ALREADY = "[Chunky] Task already started for %s!";
@@ -42,6 +43,7 @@ public final class Chunky extends JavaPlugin {
         this.radius = 500;
         this.silent = false;
         this.quiet = 0;
+        this.metrics = new Metrics(this, 8211);
     }
 
     @Override
