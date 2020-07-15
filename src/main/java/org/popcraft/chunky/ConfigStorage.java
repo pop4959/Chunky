@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Config {
+public class ConfigStorage {
     private final Chunky chunky;
     private final FileConfiguration config;
     private final static String TASKS_KEY = "tasks.";
 
-    public Config(Chunky chunky) {
+    public ConfigStorage(Chunky chunky) {
         this.chunky = chunky;
         this.config = chunky.getConfig();
     }
@@ -34,22 +34,18 @@ public class Config {
         return genTasks;
     }
 
-    public void saveTask(World world) {
-        GenTask genTask = chunky.getGenTasks().get(world);
-        if (genTask == null) {
-            return;
-        }
-        String world_key = TASKS_KEY + world.getName() + ".";
+    public void saveTask(GenTask genTask) {
+        String world_key = TASKS_KEY + genTask.getWorld().getName() + ".";
         config.set(world_key + "radius", genTask.getRadius());
         config.set(world_key + "x-center", genTask.getCenterX());
         config.set(world_key + "z-center", genTask.getCenterZ());
         ChunkCoordinate currentChunk = genTask.getChunkCoordinateIterator().peek();
         config.set(world_key + "x-chunk", currentChunk.x);
         config.set(world_key + "z-chunk", currentChunk.z);
-        chunky.saveDefaultConfig();
+        chunky.saveConfig();
     }
 
     public void saveTasks() {
-        chunky.getServer().getWorlds().forEach(this::saveTask);
+        chunky.getGenTasks().values().forEach(this::saveTask);
     }
 }

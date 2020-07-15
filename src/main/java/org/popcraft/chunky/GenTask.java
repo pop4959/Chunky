@@ -90,8 +90,10 @@ public class GenTask implements Runnable {
             }
         }
         if (cancelled.get()) {
+            chunky.getConfigStorage().saveTask(this);
             chunky.getServer().getConsoleSender().sendMessage(String.format(FORMAT_STOPPED, world.getName()));
         }
+        chunky.getGenTasks().remove(this.getWorld());
     }
 
     void cancel() {
