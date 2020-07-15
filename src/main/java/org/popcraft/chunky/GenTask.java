@@ -25,6 +25,15 @@ public class GenTask implements Runnable {
     private final AtomicBoolean cancelled = new AtomicBoolean();
     private final ChunkCoordinateIterator chunkCoordinates;
 
+    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count) {
+        this.chunky = chunky;
+        this.world = world;
+        this.radius = radius;
+        this.centerX = centerX;
+        this.centerZ = centerZ;
+        this.chunkCoordinates = new ChunkCoordinateIterator(radius, centerX, centerZ, count);
+    }
+
     public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ) {
         this.chunky = chunky;
         this.world = world;
@@ -114,6 +123,10 @@ public class GenTask implements Runnable {
 
     public int getCenterZ() {
         return centerZ;
+    }
+
+    public long getCount() {
+        return finishedChunks.get();
     }
 
     public ChunkCoordinateIterator getChunkCoordinateIterator() {

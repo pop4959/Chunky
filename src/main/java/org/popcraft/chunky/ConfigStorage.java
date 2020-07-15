@@ -25,7 +25,8 @@ public class ConfigStorage {
         int radius = config.getInt(world_key + "radius");
         int centerX = config.getInt(world_key + "x-center");
         int centerZ = config.getInt(world_key + "z-center");
-        return Optional.of(new GenTask(chunky, world, radius, centerX, centerZ));
+        long count = config.getLong(world_key + "count");
+        return Optional.of(new GenTask(chunky, world, radius, centerX, centerZ, count));
     }
 
     public List<GenTask> loadTasks() {
@@ -42,6 +43,7 @@ public class ConfigStorage {
         ChunkCoordinate currentChunk = genTask.getChunkCoordinateIterator().peek();
         config.set(world_key + "x-chunk", currentChunk.x);
         config.set(world_key + "z-chunk", currentChunk.z);
+        config.set(world_key + "count", genTask.getCount());
         chunky.saveConfig();
     }
 
