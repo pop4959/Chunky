@@ -6,5 +6,10 @@ authors: [pop4959]
 description: Generates chunks
 commands:
   chunky:
-    description: Generate chunks.
-    usage: /chunky <radius>
+    description: Generates chunks
+    permission: chunky.chunky
+    usage: "[Chunky] https://github.com/pop4959/Chunky/wiki/Commands"
+permissions:
+  chunky.chunky:
+    description: Generates chunks
+    default: op
