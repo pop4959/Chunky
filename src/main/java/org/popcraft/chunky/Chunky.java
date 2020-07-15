@@ -24,7 +24,7 @@ public final class Chunky extends JavaPlugin {
 
     private final static String FORMAT_START = "[Chunky] Task started for %s at %d, %d with radius %d.";
     private final static String FORMAT_STARTED_ALREADY = "[Chunky] Task already started for %s!";
-    private final static String FORMAT_PAUSE = "[Chunky] Task paused for %s.";
+    private final static String FORMAT_PAUSE = "[Chunky] Task stopped for %s.";
     private final static String FORMAT_CONTINUE = "[Chunky] Task continuing for %s.";
     private final static String FORMAT_WORLD = "[Chunky] World changed to %s.";
     private final static String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
@@ -44,7 +44,8 @@ public final class Chunky extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        pause(this.getServer().getConsoleSender(), new String[]{"pause"});
+        pause(this.getServer().getConsoleSender());
+        this.getServer().getScheduler().cancelTasks(this);
     }
 
     @Override
@@ -54,11 +55,13 @@ public final class Chunky extends JavaPlugin {
         }
         switch (args[0].toLowerCase()) {
             case "start":
-                return start(sender, args);
+                return start(sender);
             case "pause":
-                return pause(sender, args);
+                return pause(sender);
             case "continue":
-                return cont(sender, args);
+                return cont(sender);
+            case "cancel":
+                return cancel(sender);
             case "world":
                 return world(sender, args);
             case "center":
@@ -81,7 +84,7 @@ public final class Chunky extends JavaPlugin {
         return Collections.emptyList();
     }
 
-    private boolean start(CommandSender sender, String[] args) {
+    private boolean start(CommandSender sender) {
         if (genTasks.containsKey(world)) {
             sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, world.getName()));
             return true;
@@ -93,17 +96,15 @@ public final class Chunky extends JavaPlugin {
         return true;
     }
 
-    private boolean pause(CommandSender sender, String[] args) {
+    private boolean pause(CommandSender sender) {
         for (GenTask genTask : genTasks.values()) {
             genTask.cancel();
             sender.sendMessage(String.format(FORMAT_PAUSE, genTask.getWorld().getName()));
         }
-        genTasks.clear();
-        this.getServer().getScheduler().cancelTasks(this);
         return true;
     }
 
-    private boolean cont(CommandSender sender, String[] args) {
+    private boolean cont(CommandSender sender) {
         configStorage.loadTasks().forEach(genTask -> {
             if (!genTasks.containsKey(genTask.getWorld())) {
                 genTasks.put(genTask.getWorld(), genTask);
@@ -113,6 +114,13 @@ public final class Chunky extends JavaPlugin {
                 sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, world.getName()));
             }
         });
+        return true;
+    }
+
+    private boolean cancel(CommandSender sender) {
+        pause(sender);
+        this.getConfigStorage().reset();
+        this.getServer().getScheduler().cancelTasks(this);
         return true;
     }
 

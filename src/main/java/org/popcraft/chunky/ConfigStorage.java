@@ -3,6 +3,7 @@ package org.popcraft.chunky;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,5 +50,12 @@ public class ConfigStorage {
 
     public void saveTasks() {
         chunky.getGenTasks().values().forEach(this::saveTask);
+    }
+
+    public void reset() {
+        File file = new File(chunky.getDataFolder(), "config.yml");
+        //noinspection ResultOfMethodCallIgnored
+        file.delete();
+        chunky.saveDefaultConfig();
     }
 }
