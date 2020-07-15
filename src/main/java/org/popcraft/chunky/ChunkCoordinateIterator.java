@@ -55,6 +55,6 @@ public class ChunkCoordinateIterator implements Iterator<ChunkCoordinate> {
     }
 
     public long count() {
-        return diameterChunks * diameterChunks - startCount;
+        return diameterChunks * diameterChunks;
     }
 }

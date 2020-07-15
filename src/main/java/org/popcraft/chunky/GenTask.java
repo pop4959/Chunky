@@ -14,6 +14,7 @@ public class GenTask implements Runnable {
     private final int radius;
     private final int centerX;
     private final int centerZ;
+    private ChunkCoordinateIterator chunkCoordinates;
     private final static int FREQ = 50;
     private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
     private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
@@ -24,15 +25,11 @@ public class GenTask implements Runnable {
     private final AtomicLong totalChunks = new AtomicLong();
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
     private final AtomicBoolean cancelled = new AtomicBoolean();
-    private final ChunkCoordinateIterator chunkCoordinates;
 
     public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count) {
-        this.chunky = chunky;
-        this.world = world;
-        this.radius = radius;
-        this.centerX = centerX;
-        this.centerZ = centerZ;
+        this(chunky, world, radius, centerX, centerZ);
         this.chunkCoordinates = new ChunkCoordinateIterator(radius, centerX, centerZ, count);
+        this.finishedChunks.set(count);
     }
 
     public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ) {
@@ -42,6 +39,7 @@ public class GenTask implements Runnable {
         this.centerX = centerX;
         this.centerZ = centerZ;
         this.chunkCoordinates = new ChunkCoordinateIterator(radius, centerX, centerZ);
+        this.totalChunks.set(chunkCoordinates.count());
     }
 
     private void printUpdate(World chunkWorld, int chunkX, int chunkZ) {
@@ -78,9 +76,6 @@ public class GenTask implements Runnable {
 
     @Override
     public void run() {
-        totalChunks.set(chunkCoordinates.count());
-        finishedChunks.set(0);
-        chunkUpdateTimes10Sec.clear();
         startTime.set(System.currentTimeMillis());
         final AtomicInteger working = new AtomicInteger();
         while (!cancelled.get() && chunkCoordinates.hasNext()) {
