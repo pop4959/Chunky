@@ -15,16 +15,19 @@ public class GenTask implements Runnable {
     private final static int FREQ = 50;
     private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
     private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
+    private final static String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
     private final AtomicLong totalChunks = new AtomicLong();
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
     private final AtomicBoolean cancelled = new AtomicBoolean();
+    private final ChunkCoordinateIterator chunkCoordinates;
 
     public GenTask(Chunky chunky, World world, int radius) {
         this.chunky = chunky;
         this.world = world;
         this.radius = radius;
+        this.chunkCoordinates = new ChunkCoordinateIterator(radius);
     }
 
     private void printUpdate(World chunkWorld, int chunkX, int chunkZ) {
@@ -57,12 +60,9 @@ public class GenTask implements Runnable {
 
     @Override
     public void run() {
-        chunky.getServer().getConsoleSender().sendMessage("Preparing...");
-        final ChunkCoordinateIterator chunkCoordinates = new ChunkCoordinateIterator(radius);
         totalChunks.set(chunkCoordinates.count());
         finishedChunks.set(0);
         chunkUpdateTimes10Sec.clear();
-        chunky.getServer().getConsoleSender().sendMessage("Starting...");
         startTime.set(System.currentTimeMillis());
         final AtomicInteger working = new AtomicInteger();
         while (!cancelled.get() && chunkCoordinates.hasNext()) {
@@ -79,9 +79,30 @@ public class GenTask implements Runnable {
                 });
             }
         }
+        while (working.get() > 0) {
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException ignored) {
+            }
+        }
+        if (cancelled.get()) {
+            chunky.getServer().getConsoleSender().sendMessage(String.format(FORMAT_STOPPED, world.getName()));
+        }
     }
 
     void cancel() {
         cancelled.set(true);
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public ChunkCoordinateIterator getChunkCoordinateIterator() {
+        return chunkCoordinates;
     }
 }

@@ -22,18 +22,26 @@ public class ChunkCoordinateIterator implements Iterator<ChunkCoordinate> {
     @Override
     public ChunkCoordinate next() {
         final ChunkCoordinate chunkCoord = new ChunkCoordinate(x >> 4, z >> 4);
-        if ((z += CHUNK_SIZE) > radius) {
+        if ((z += CHUNK_SIZE) >= radius) {
             z = -radius;
-            if ((x += CHUNK_SIZE) > radius) {
+            if ((x += CHUNK_SIZE) >= radius) {
                 hasNext = false;
             }
         }
         return chunkCoord;
     }
 
+    public ChunkCoordinate peek() {
+        return new ChunkCoordinate(x >> 4, z >> 4);
+    }
+
     public long count() {
         long diameterBlocks = 2 * radius;
-        long diameterChunks = (long) Math.ceil((double) diameterBlocks / CHUNK_SIZE);
+        long diameterChunks = 0;
+        if (diameterBlocks % CHUNK_SIZE != 0) {
+            ++diameterChunks;
+        }
+        diameterChunks += diameterBlocks / CHUNK_SIZE;
         return diameterChunks * diameterChunks;
     }
 }
