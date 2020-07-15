@@ -24,11 +24,13 @@ public final class Chunky extends JavaPlugin {
 
     private final static String FORMAT_START = "[Chunky] Task started for %s at %d, %d with radius %d.";
     private final static String FORMAT_STARTED_ALREADY = "[Chunky] Task already started for %s!";
-    private final static String FORMAT_PAUSE = "[Chunky] Task stopped for %s.";
+    private final static String FORMAT_PAUSE = "[Chunky] Task paused for %s.";
     private final static String FORMAT_CONTINUE = "[Chunky] Task continuing for %s.";
     private final static String FORMAT_WORLD = "[Chunky] World changed to %s.";
-    private final static String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
     private final static String FORMAT_CENTER = "[Chunky] Center changed to %d, %d.";
+    private final static String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
+    private final static String FORMAT_SILENT = "[Chunky] Silent mode %s.";
+    private final static String FORMAT_QUIET = "[Chunky] Quiet interval set to %d seconds.";
 
     @Override
     public void onEnable() {
@@ -39,7 +41,7 @@ public final class Chunky extends JavaPlugin {
         this.z = 0;
         this.radius = 500;
         this.silent = false;
-        this.quiet = 5;
+        this.quiet = 0;
     }
 
     @Override
@@ -68,6 +70,10 @@ public final class Chunky extends JavaPlugin {
                 return center(sender, args);
             case "radius":
                 return radius(sender, args);
+            case "silent":
+                return silent(sender);
+            case "quiet":
+                return quiet(sender, args);
             default:
                 return false;
         }
@@ -76,7 +82,7 @@ public final class Chunky extends JavaPlugin {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return Arrays.asList("start", "pause", "continue", "world", "center", "radius");
+            return Arrays.asList("start", "pause", "continue", "world", "center", "radius", "silent", "quiet");
         }
         if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
             return Bukkit.getWorlds().stream().map(World::getName).map(String::toLowerCase).filter(w -> w.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
@@ -137,19 +143,6 @@ public final class Chunky extends JavaPlugin {
         return true;
     }
 
-    private boolean radius(CommandSender sender, String[] args) {
-        if (args.length < 2) {
-            return false;
-        }
-        Optional<Integer> newRadius = Input.tryInteger(args[1]);
-        if (!newRadius.isPresent()) {
-            return false;
-        }
-        this.radius = newRadius.get();
-        sender.sendMessage(String.format(FORMAT_RADIUS, radius));
-        return true;
-    }
-
     private boolean center(CommandSender sender, String[] args) {
         Optional<Integer> newX = Optional.empty();
         if (args.length > 1) {
@@ -168,11 +161,51 @@ public final class Chunky extends JavaPlugin {
         return true;
     }
 
+    private boolean radius(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            return false;
+        }
+        Optional<Integer> newRadius = Input.tryInteger(args[1]);
+        if (!newRadius.isPresent()) {
+            return false;
+        }
+        this.radius = newRadius.get();
+        sender.sendMessage(String.format(FORMAT_RADIUS, radius));
+        return true;
+    }
+
+    private boolean silent(CommandSender sender) {
+        this.silent = !silent;
+        sender.sendMessage(String.format(FORMAT_SILENT, silent ? "enabled" : "disabled"));
+        return true;
+    }
+
+    private boolean quiet(CommandSender sender, String[] args) {
+        Optional<Integer> newQuiet = Optional.empty();
+        if (args.length > 1) {
+            newQuiet = Input.tryInteger(args[1]);
+        }
+        if (!newQuiet.isPresent()) {
+            return false;
+        }
+        this.quiet = newQuiet.get();
+        sender.sendMessage(String.format(FORMAT_QUIET, quiet));
+        return true;
+    }
+
     public ConfigStorage getConfigStorage() {
         return configStorage;
     }
 
     public ConcurrentHashMap<World, GenTask> getGenTasks() {
         return genTasks;
+    }
+
+    public boolean isSilent() {
+        return silent;
+    }
+
+    public int getQuiet() {
+        return quiet;
     }
 }

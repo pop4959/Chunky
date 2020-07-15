@@ -19,6 +19,7 @@ public class GenTask implements Runnable {
     private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
     private final static String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
     private final AtomicLong startTime = new AtomicLong();
+    private final AtomicLong printTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
     private final AtomicLong totalChunks = new AtomicLong();
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
@@ -50,6 +51,10 @@ public class GenTask implements Runnable {
         long currentTime = System.currentTimeMillis();
         chunkUpdateTimes10Sec.add(currentTime);
         while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4 /* 10 seconds */) chunkUpdateTimes10Sec.poll();
+        if (chunky.isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getQuiet()) {
+            return;
+        }
+        printTime.set(currentTime);
         long oldestTime = chunkUpdateTimes10Sec.peek();
         double timeDiff = (currentTime - oldestTime) / 1e3;
         double speed = chunkUpdateTimes10Sec.size() / timeDiff; // chunk updates in 1 second
