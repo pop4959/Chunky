@@ -44,7 +44,7 @@ public final class Chunky extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        pause(this.getServer().getConsoleSender(), new String[]{"stop"});
+        pause(this.getServer().getConsoleSender(), new String[]{"pause"});
     }
 
     @Override
