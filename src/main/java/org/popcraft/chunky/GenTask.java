@@ -49,16 +49,16 @@ public class GenTask implements Runnable {
         long currentTime = System.currentTimeMillis();
         chunkUpdateTimes10Sec.add(currentTime);
         while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4 /* 10 seconds */) chunkUpdateTimes10Sec.poll();
-        if (chunky.isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getQuiet()) {
+        long chunksLeft = totalChunks.get() - finishedChunks.get();
+        if (chunksLeft > 0 && (chunky.isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getQuiet())) {
             return;
         }
         printTime.set(currentTime);
         long oldestTime = chunkUpdateTimes10Sec.peek();
         double timeDiff = (currentTime - oldestTime) / 1e3;
         double speed = chunkUpdateTimes10Sec.size() / timeDiff; // chunk updates in 1 second
-        long chunksLeft = totalChunks.get() - finishedChunks.get();
         String message;
-        if (totalChunks.get() == finishedChunks.get()) {
+        if (chunksLeft == 0) {
             int total = (int) ((currentTime - startTime.get()) / 1e3);
             int totalHours = total / 3600;
             int totalMinutes = (total - totalHours * 3600) / 60;
