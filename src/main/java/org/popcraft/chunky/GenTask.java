@@ -3,6 +3,8 @@ package org.popcraft.chunky;
 import io.papermc.lib.PaperLib;
 import org.bukkit.World;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,8 +18,8 @@ public class GenTask implements Runnable {
     private final int centerZ;
     private ChunkCoordinateIterator chunkCoordinates;
     private final static int FREQ = 50;
-    private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
-    private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
+    private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %s, Rate: %.1f cps, Current: %d, %d";
+    private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %s";
     private final static String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong printTime = new AtomicLong();
@@ -59,17 +61,11 @@ public class GenTask implements Runnable {
         double speed = chunkUpdateTimes10Sec.size() / timeDiff; // chunk updates in 1 second
         String message;
         if (chunksLeft == 0) {
-            int total = (int) ((currentTime - startTime.get()) / 1e3);
-            int totalHours = total / 3600;
-            int totalMinutes = (total - totalHours * 3600) / 60;
-            int totalSeconds = total - totalHours * 3600 - totalMinutes * 60;
-            message = String.format(FORMAT_DONE, world, chunkNum, percentDone, totalHours, totalMinutes, totalSeconds);
+            long totalSeconds = Math.round((currentTime - startTime.get()) / 1e3);
+            message = String.format(FORMAT_DONE, world, chunkNum, percentDone, LocalTime.ofSecondOfDay(totalSeconds).format(DateTimeFormatter.ISO_LOCAL_TIME));
         } else {
-            int eta = (int) (chunksLeft / speed);
-            int etaHours = eta / 3600;
-            int etaMinutes = (eta - etaHours * 3600) / 60;
-            int etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
-            message = String.format(FORMAT_UPDATE, world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunkX, chunkZ);
+            long etaSeconds = Math.round(chunksLeft / speed);
+            message = String.format(FORMAT_UPDATE, world, chunkNum, percentDone, LocalTime.ofSecondOfDay(etaSeconds).format(DateTimeFormatter.ISO_LOCAL_TIME), speed, chunkX, chunkZ);
         }
         chunky.getServer().getConsoleSender().sendMessage(message);
     }
