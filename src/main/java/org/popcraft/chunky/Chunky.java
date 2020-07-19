@@ -9,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.stream.Collectors.toList;
 import static org.popcraft.chunky.Constants.*;
 
 public final class Chunky extends JavaPlugin {
@@ -17,7 +16,6 @@ public final class Chunky extends JavaPlugin {
     private ConcurrentHashMap<World, GenTask> genTasks;
     private World world;
     private int x, z, radius;
-    private boolean queue;
     private boolean silent;
     private int quiet;
     private Metrics metrics;
@@ -36,20 +34,20 @@ public final class Chunky extends JavaPlugin {
         this.quiet = 0;
         this.metrics = new Metrics(this, 8211);
 
-        commandMap.put("start", this::start);
-        commandMap.put("pause", this::pause);
-        commandMap.put("continue", this::cont);
-        commandMap.put("cancel", this::cancel);
-        commandMap.put("world", this::world);
-        commandMap.put("center", this::center);
-        commandMap.put("radius", this::radius);
-        commandMap.put("silent", this::silent);
-        commandMap.put("quiet", this::quiet);
+        commandMap.put("start", this::startCommand);
+        commandMap.put("pause", this::pauseCommand);
+        commandMap.put("continue", this::continueCommand);
+        commandMap.put("cancel", this::cancelCommand);
+        commandMap.put("world", this::worldCommand);
+        commandMap.put("center", this::centerCommand);
+        commandMap.put("radius", this::radiusCommand);
+        commandMap.put("silent", this::silentCommand);
+        commandMap.put("quiet", this::quietCommand);
     }
 
     @Override
     public void onDisable() {
-        pause(this.getServer().getConsoleSender(), null);
+        pauseCommand(this.getServer().getConsoleSender(), null);
         this.getServer().getScheduler().cancelTasks(this);
     }
 
@@ -59,14 +57,10 @@ public final class Chunky extends JavaPlugin {
                 .map(String::toLowerCase)
                 .orElse("");
 
-        commandMap.getOrDefault(commandString, this::defaultCommand)
-                .accept(sender, args);
+        commandMap.getOrDefault(commandString, this::unknownCommand)
+                .accept(sender, new CommandArguments(args));
 
         return true;
-    }
-
-    private void defaultCommand(CommandSender sender, String[] strings) {
-        sender.sendMessage(HELP_MENU);
     }
 
     @Override
@@ -80,24 +74,17 @@ public final class Chunky extends JavaPlugin {
                     .map(String::toLowerCase)
                     .orElse("");
 
-            return getWorldNames(worldName);
+            return Utils.getWorldNamesFilteredByName(worldName);
         }
 
         return Collections.emptyList();
     }
 
-    private List<String> getWorldNames(String worldName) {
-        final String worldNameLowerCase = worldName.toLowerCase();
-
-        return Bukkit.getWorlds()
-                .stream()
-                .map(World::getName)
-                .map(String::toLowerCase)
-                .filter(w -> w.startsWith(worldNameLowerCase))
-                .collect(toList());
+    private void unknownCommand(CommandSender sender, CommandArguments args) {
+        sender.sendMessage(HELP_MENU);
     }
 
-    private void start(CommandSender sender, String[] args) {
+    private void startCommand(CommandSender sender, CommandArguments args) {
         if (genTasks.containsKey(world)) {
             sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, world.getName()));
             return;
@@ -109,14 +96,14 @@ public final class Chunky extends JavaPlugin {
         sender.sendMessage(String.format(FORMAT_START, world.getName(), x, z, radius));
     }
 
-    private void pause(CommandSender sender, String[] args) {
+    private void pauseCommand(CommandSender sender, CommandArguments args) {
         for (GenTask genTask : genTasks.values()) {
             genTask.cancel();
             sender.sendMessage(String.format(FORMAT_PAUSE, genTask.getWorld().getName()));
         }
     }
 
-    private void cont(CommandSender sender, String[] args) {
+    private void continueCommand(CommandSender sender, CommandArguments args) {
         configStorage.loadTasks().forEach(genTask -> {
             if (!genTasks.containsKey(genTask.getWorld())) {
                 genTasks.put(genTask.getWorld(), genTask);
@@ -128,18 +115,21 @@ public final class Chunky extends JavaPlugin {
         });
     }
 
-    private void cancel(CommandSender sender, String[] args) {
-        pause(sender, args);
+    private void cancelCommand(CommandSender sender, CommandArguments args) {
+        pauseCommand(sender, args);
         this.getConfigStorage().reset();
         this.getServer().getScheduler().cancelTasks(this);
     }
 
-    private void world(CommandSender sender, String[] args) {
-        if (args.length < 2) {
+    private void worldCommand(CommandSender sender, CommandArguments args) {
+        if (args.size() < 2) {
             sender.sendMessage(HELP_WORLD);
             return;
         }
-        Optional<World> newWorld = Input.tryWorld(args[1]);
+
+        Optional<World> newWorld = args.getString(1)
+                .map(Bukkit::getWorld);
+
         if (!newWorld.isPresent()) {
             sender.sendMessage(HELP_WORLD);
             return;
@@ -148,52 +138,50 @@ public final class Chunky extends JavaPlugin {
         sender.sendMessage(String.format(FORMAT_WORLD, world.getName()));
     }
 
-    private void center(CommandSender sender, String[] args) {
-        Optional<Integer> newX = Optional.empty();
-        if (args.length > 1) {
-            newX = Input.tryInteger(args[1]);
-        }
-        Optional<Integer> newZ = Optional.empty();
-        if (args.length > 2) {
-            newZ = Input.tryInteger(args[2]);
-        }
+    private void centerCommand(CommandSender sender, CommandArguments args) {
+        Optional<Integer> newX = args.getInt(1);
+        Optional<Integer> newZ = args.getInt(2);
+
         if (!newX.isPresent() || !newZ.isPresent()) {
             sender.sendMessage(HELP_CENTER);
             return;
         }
+
         this.x = newX.get();
         this.z = newZ.get();
         sender.sendMessage(String.format(FORMAT_CENTER, x, z));
     }
 
-    private void radius(CommandSender sender, String[] args) {
-        if (args.length < 2) {
+    private void radiusCommand(CommandSender sender, CommandArguments args) {
+        if (args.size() < 2) {
             sender.sendMessage(HELP_RADIUS);
             return;
         }
-        Optional<Integer> newRadius = Input.tryInteger(args[1]);
+
+        Optional<Integer> newRadius = args.getInt(1);
+
         if (!newRadius.isPresent()) {
             sender.sendMessage(HELP_RADIUS);
             return;
         }
+
         this.radius = newRadius.get();
         sender.sendMessage(String.format(FORMAT_RADIUS, radius));
     }
 
-    private void silent(CommandSender sender, String[] args) {
+    private void silentCommand(CommandSender sender, CommandArguments args) {
         this.silent = !silent;
         sender.sendMessage(String.format(FORMAT_SILENT, silent ? "enabled" : "disabled"));
     }
 
-    private void quiet(CommandSender sender, String[] args) {
-        Optional<Integer> newQuiet = Optional.empty();
-        if (args.length > 1) {
-            newQuiet = Input.tryInteger(args[1]);
-        }
+    private void quietCommand(CommandSender sender, CommandArguments args) {
+        Optional<Integer> newQuiet = args.getInt(1);
+
         if (!newQuiet.isPresent()) {
             sender.sendMessage(HELP_QUIET);
             return;
         }
+
         this.quiet = newQuiet.get();
         sender.sendMessage(String.format(FORMAT_QUIET, quiet));
     }
