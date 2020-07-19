@@ -6,12 +6,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static org.popcraft.chunky.Constants.*;
 
 public final class Chunky extends JavaPlugin {
     private ConfigStorage configStorage;
@@ -23,25 +22,7 @@ public final class Chunky extends JavaPlugin {
     private int quiet;
     private Metrics metrics;
 
-    private final static String HELP_START = "§2chunky start§r - Start a new chunk generation task";
-    private final static String HELP_PAUSE = "§2chunky pause§r - Pause current tasks and save progress";
-    private final static String HELP_CONTINUE = "§2chunky continue§r - Continue current or saved tasks";
-    private final static String HELP_CANCEL = "§2chunky cancel§r - Stop and delete current or saved tasks";
-    private final static String HELP_WORLD = "§2chunky world <world>§r - Set the world target";
-    private final static String HELP_CENTER = "§2chunky center <x> <z>§r - Set the center block location";
-    private final static String HELP_RADIUS = "§2chunky radius <radius>§r - Set the radius";
-    private final static String HELP_SILENT = "§2chunky silent§r - Toggle displaying update messages";
-    private final static String HELP_QUIET = "§2chunky quiet <interval>§r - Set the quiet interval";
-    private final static String HELP_MENU = String.format("§aChunky Commands§r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s", HELP_START, HELP_PAUSE, HELP_CONTINUE, HELP_CANCEL, HELP_WORLD, HELP_CENTER, HELP_RADIUS, HELP_SILENT, HELP_QUIET);
-    private final static String FORMAT_START = "[Chunky] Task started for %s at %d, %d with radius %d.";
-    private final static String FORMAT_STARTED_ALREADY = "[Chunky] Task already started for %s!";
-    private final static String FORMAT_PAUSE = "[Chunky] Task paused for %s.";
-    private final static String FORMAT_CONTINUE = "[Chunky] Task continuing for %s.";
-    private final static String FORMAT_WORLD = "[Chunky] World changed to %s.";
-    private final static String FORMAT_CENTER = "[Chunky] Center changed to %d, %d.";
-    private final static String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
-    private final static String FORMAT_SILENT = "[Chunky] Silent mode %s.";
-    private final static String FORMAT_QUIET = "[Chunky] Quiet interval set to %d seconds.";
+    private final Map<String, ChunkyCommand> commandMap = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -54,85 +35,88 @@ public final class Chunky extends JavaPlugin {
         this.silent = false;
         this.quiet = 0;
         this.metrics = new Metrics(this, 8211);
+
+        commandMap.put("start", this::start);
+        commandMap.put("pause", this::pause);
+        commandMap.put("continue", this::cont);
+        commandMap.put("cancel", this::cancel);
+        commandMap.put("world", this::world);
+        commandMap.put("center", this::center);
+        commandMap.put("radius", this::radius);
+        commandMap.put("silent", this::silent);
+        commandMap.put("quiet", this::quiet);
     }
 
     @Override
     public void onDisable() {
-        pause(this.getServer().getConsoleSender());
+        pause(this.getServer().getConsoleSender(), null);
         this.getServer().getScheduler().cancelTasks(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length < 1) {
-            sender.sendMessage(HELP_MENU);
-            return true;
-        }
-        switch (args[0].toLowerCase()) {
-            case "start":
-                start(sender);
-                break;
-            case "pause":
-                pause(sender);
-                break;
-            case "continue":
-                cont(sender);
-                break;
-            case "cancel":
-                cancel(sender);
-                break;
-            case "world":
-                world(sender, args);
-                break;
-            case "center":
-                center(sender, args);
-                break;
-            case "radius":
-                radius(sender, args);
-                break;
-            case "silent":
-                silent(sender);
-                break;
-            case "quiet":
-                quiet(sender, args);
-                break;
-            default:
-                sender.sendMessage(HELP_MENU);
-                break;
-        }
+        final String commandString = Optional.of(args[0])
+                .map(String::toLowerCase)
+                .orElse("");
+
+        commandMap.getOrDefault(commandString, this::defaultCommand)
+                .accept(sender, args);
+
         return true;
+    }
+
+    private void defaultCommand(CommandSender sender, String[] strings) {
+        sender.sendMessage(HELP_MENU);
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return Arrays.asList("start", "pause", "continue", "world", "center", "radius", "silent", "quiet");
+            return new ArrayList<>(commandMap.keySet());
         }
+
         if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
-            return Bukkit.getWorlds().stream().map(World::getName).map(String::toLowerCase).filter(w -> w.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+            final String worldName = Optional.ofNullable(args[1])
+                    .map(String::toLowerCase)
+                    .orElse("");
+
+            return getWorldNames(worldName);
         }
+
         return Collections.emptyList();
     }
 
-    private void start(CommandSender sender) {
+    private List<String> getWorldNames(String worldName) {
+        final String worldNameLowerCase = worldName.toLowerCase();
+
+        return Bukkit.getWorlds()
+                .stream()
+                .map(World::getName)
+                .map(String::toLowerCase)
+                .filter(w -> w.startsWith(worldNameLowerCase))
+                .collect(toList());
+    }
+
+    private void start(CommandSender sender, String[] args) {
         if (genTasks.containsKey(world)) {
             sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, world.getName()));
             return;
         }
+
         GenTask genTask = new GenTask(this, world, radius, x, z);
         genTasks.put(world, genTask);
         this.getServer().getScheduler().runTaskAsynchronously(this, genTask);
         sender.sendMessage(String.format(FORMAT_START, world.getName(), x, z, radius));
     }
 
-    private void pause(CommandSender sender) {
+    private void pause(CommandSender sender, String[] args) {
         for (GenTask genTask : genTasks.values()) {
             genTask.cancel();
             sender.sendMessage(String.format(FORMAT_PAUSE, genTask.getWorld().getName()));
         }
     }
 
-    private void cont(CommandSender sender) {
+    private void cont(CommandSender sender, String[] args) {
         configStorage.loadTasks().forEach(genTask -> {
             if (!genTasks.containsKey(genTask.getWorld())) {
                 genTasks.put(genTask.getWorld(), genTask);
@@ -144,8 +128,8 @@ public final class Chunky extends JavaPlugin {
         });
     }
 
-    private void cancel(CommandSender sender) {
-        pause(sender);
+    private void cancel(CommandSender sender, String[] args) {
+        pause(sender, args);
         this.getConfigStorage().reset();
         this.getServer().getScheduler().cancelTasks(this);
     }
@@ -196,7 +180,7 @@ public final class Chunky extends JavaPlugin {
         sender.sendMessage(String.format(FORMAT_RADIUS, radius));
     }
 
-    private void silent(CommandSender sender) {
+    private void silent(CommandSender sender, String[] args) {
         this.silent = !silent;
         sender.sendMessage(String.format(FORMAT_SILENT, silent ? "enabled" : "disabled"));
     }
