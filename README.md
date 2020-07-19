@@ -1,4 +1,6 @@
 ## Chunky
-Generates chunks
+Pre-generates chunks, quickly, efficiently, and safely
 
-Usage information can be found [here](https://github.com/pop4959/Chunky/wiki/Commands)
+[Spigot Resource Page](https://www.spigotmc.org/resources/chunky.81534/)
+
+[Wiki](https://github.com/pop4959/Chunky/wiki/Commands)
