@@ -53,12 +53,14 @@ public final class Chunky extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        final String commandString = Optional.of(args[0])
+        final CommandArguments arguments = new CommandArguments(args);
+
+        final String commandString = arguments.getString(0)
                 .map(String::toLowerCase)
                 .orElse("");
 
         commandMap.getOrDefault(commandString, this::unknownCommand)
-                .accept(sender, new CommandArguments(args));
+                .accept(sender, arguments);
 
         return true;
     }
