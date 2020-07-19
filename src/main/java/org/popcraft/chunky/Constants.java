@@ -21,6 +21,9 @@ public final class Constants {
     public final static String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
     public final static String FORMAT_SILENT = "[Chunky] Silent mode %s.";
     public final static String FORMAT_QUIET = "[Chunky] Quiet interval set to %d seconds.";
+    public final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
+    public final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
+    public final static String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
 
     private Constants() {
         throw new IllegalStateException("Static Constant Class");

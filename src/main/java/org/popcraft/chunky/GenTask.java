@@ -8,6 +8,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.popcraft.chunky.Constants.*;
+
 public class GenTask implements Runnable {
     private final Chunky chunky;
     private final World world;
@@ -16,9 +18,6 @@ public class GenTask implements Runnable {
     private final int centerZ;
     private ChunkCoordinateIterator chunkCoordinates;
     private final static int FREQ = 50;
-    private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
-    private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
-    private final static String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong printTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
