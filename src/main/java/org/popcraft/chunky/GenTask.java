@@ -4,8 +4,8 @@ import io.papermc.lib.PaperLib;
 import org.bukkit.World;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GenTask implements Runnable {
@@ -15,7 +15,7 @@ public class GenTask implements Runnable {
     private final int centerX;
     private final int centerZ;
     private ChunkCoordinateIterator chunkCoordinates;
-    private final static int FREQ = 50;
+    private final static int MAX_WORKING = 50;
     private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
     private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
     private final static String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
@@ -76,28 +76,21 @@ public class GenTask implements Runnable {
 
     @Override
     public void run() {
+        final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
-        final AtomicInteger working = new AtomicInteger();
         while (!cancelled.get() && chunkCoordinates.hasNext()) {
-            if (working.get() < FREQ) {
-                ChunkCoordinate chunkCoord = chunkCoordinates.next();
-                if (PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
-                    printUpdate(world, chunkCoord.x, chunkCoord.z);
-                    continue;
-                }
-                working.getAndIncrement();
-                PaperLib.getChunkAtAsync(world, chunkCoord.x, chunkCoord.z).thenAccept(chunk -> {
-                    working.getAndDecrement();
-                    printUpdate(world, chunk.getX(), chunk.getZ());
-                });
+            ChunkCoordinate chunkCoord = chunkCoordinates.next();
+            if (PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
+                printUpdate(world, chunkCoord.x, chunkCoord.z);
+                continue;
             }
+            working.acquireUninterruptibly();
+            PaperLib.getChunkAtAsync(world, chunkCoord.x, chunkCoord.z).thenAccept(chunk -> {
+                working.release();
+                printUpdate(world, chunk.getX(), chunk.getZ());
+            });
         }
-        while (working.get() > 0) {
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException ignored) {
-            }
-        }
+        working.acquireUninterruptibly(MAX_WORKING);
         if (cancelled.get()) {
             chunky.getConfigStorage().saveTask(this);
             chunky.getServer().getConsoleSender().sendMessage(String.format(FORMAT_STOPPED, world.getName()));
