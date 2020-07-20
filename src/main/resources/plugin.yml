@@ -8,7 +8,7 @@ commands:
   chunky:
     description: Generates chunks
     permission: chunky.chunky
-    usage: "[Chunky] https://github.com/pop4959/Chunky/wiki/Commands"
+    usage: /chunky
 permissions:
   chunky.chunky:
     description: Generates chunks
