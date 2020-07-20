@@ -3,7 +3,7 @@ version: ${project.version}
 main: org.popcraft.chunky.Chunky
 api-version: "1.14"
 authors: [pop4959]
-description: Generates chunks
+description: Pre-generates chunks, quickly, efficiently, and safely
 commands:
   chunky:
     description: Generates chunks
