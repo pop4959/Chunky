@@ -5,7 +5,6 @@ import org.bukkit.World;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GenTask implements Runnable {
@@ -15,6 +14,7 @@ public class GenTask implements Runnable {
     private final int centerX;
     private final int centerZ;
     private ChunkCoordinateIterator chunkCoordinates;
+    private boolean cancelled;
     private final static int MAX_WORKING = 50;
     private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
     private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
@@ -24,7 +24,6 @@ public class GenTask implements Runnable {
     private final AtomicLong finishedChunks = new AtomicLong();
     private final AtomicLong totalChunks = new AtomicLong();
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
-    private final AtomicBoolean cancelled = new AtomicBoolean();
 
     public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count) {
         this(chunky, world, radius, centerX, centerZ);
@@ -78,7 +77,7 @@ public class GenTask implements Runnable {
     public void run() {
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
-        while (!cancelled.get() && chunkCoordinates.hasNext()) {
+        while (!cancelled && chunkCoordinates.hasNext()) {
             ChunkCoordinate chunkCoord = chunkCoordinates.next();
             if (PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
@@ -91,7 +90,7 @@ public class GenTask implements Runnable {
             });
         }
         working.acquireUninterruptibly(MAX_WORKING);
-        if (cancelled.get()) {
+        if (cancelled) {
             chunky.getConfigStorage().saveTask(this);
             chunky.getServer().getConsoleSender().sendMessage(String.format(FORMAT_STOPPED, world.getName()));
         }
@@ -99,7 +98,7 @@ public class GenTask implements Runnable {
     }
 
     void cancel() {
-        cancelled.set(true);
+        cancelled = true;
     }
 
     public World getWorld() {
