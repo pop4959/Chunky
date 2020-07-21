@@ -155,7 +155,7 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(HELP_WORLD);
             return;
         }
-        Optional<World> newWorld = Input.tryWorld(args[1]);
+        Optional<World> newWorld = Input.tryWorld(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
         if (!newWorld.isPresent()) {
             sender.sendMessage(HELP_WORLD);
             return;
