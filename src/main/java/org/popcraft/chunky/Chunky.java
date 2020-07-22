@@ -52,7 +52,7 @@ public final class Chunky extends JavaPlugin {
         this.z = 0;
         this.radius = 500;
         this.silent = false;
-        this.quiet = 0;
+        this.quiet = 1;
         this.metrics = new Metrics(this, 8211);
     }
 
