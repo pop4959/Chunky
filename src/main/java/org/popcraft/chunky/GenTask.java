@@ -42,6 +42,9 @@ public class GenTask implements Runnable {
     }
 
     private void printUpdate(World chunkWorld, int chunkX, int chunkZ) {
+        if (cancelled) {
+            return;
+        }
         String world = chunkWorld.getName();
         long chunkNum = finishedChunks.addAndGet(1);
         double percentDone = 100f * chunkNum / totalChunks.get();
@@ -83,13 +86,17 @@ public class GenTask implements Runnable {
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
                 continue;
             }
-            working.acquireUninterruptibly();
+            try {
+                working.acquire();
+            } catch (InterruptedException e) {
+                cancel();
+                break;
+            }
             PaperLib.getChunkAtAsync(world, chunkCoord.x, chunkCoord.z).thenAccept(chunk -> {
                 working.release();
                 printUpdate(world, chunk.getX(), chunk.getZ());
             });
         }
-        working.acquireUninterruptibly(MAX_WORKING);
         if (cancelled) {
             chunky.getConfigStorage().saveTask(this);
             chunky.getServer().getConsoleSender().sendMessage(String.format(FORMAT_STOPPED, world.getName()));

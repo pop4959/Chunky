@@ -5,6 +5,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitWorker;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -59,6 +60,10 @@ public final class Chunky extends JavaPlugin {
     @Override
     public void onDisable() {
         pause(this.getServer().getConsoleSender());
+        this.getServer().getScheduler().getActiveWorkers().stream()
+                .filter(w -> w.getOwner() == this)
+                .map(BukkitWorker::getThread)
+                .forEach(Thread::interrupt);
         this.getServer().getScheduler().cancelTasks(this);
     }
 
