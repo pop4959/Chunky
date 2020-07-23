@@ -2,8 +2,10 @@ name: Chunky
 version: ${project.version}
 main: org.popcraft.chunky.Chunky
 api-version: "1.14"
+load: POSTWORLD
 authors: [pop4959]
 description: Pre-generates chunks, quickly, efficiently, and safely
+website: https://www.spigotmc.org/resources/chunky.81534/
 commands:
   chunky:
     description: Generates chunks
