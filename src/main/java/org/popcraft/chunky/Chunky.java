@@ -1,5 +1,6 @@
 package org.popcraft.chunky;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -43,6 +44,7 @@ public final class Chunky extends JavaPlugin {
     private final static String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
     private final static String FORMAT_SILENT = "[Chunky] Silent mode %s.";
     private final static String FORMAT_QUIET = "[Chunky] Quiet interval set to %d seconds.";
+    private final static String ERROR_SPIGOT_1_13 = "This plugin is not compatible with Spigot 1.13! Please use Paper instead.";
 
     @Override
     public void onEnable() {
@@ -55,6 +57,10 @@ public final class Chunky extends JavaPlugin {
         this.silent = false;
         this.quiet = 1;
         this.metrics = new Metrics(this, 8211);
+        if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
+            this.getLogger().severe(ERROR_SPIGOT_1_13);
+            this.getServer().getPluginManager().disablePlugin(this);
+        }
     }
 
     @Override

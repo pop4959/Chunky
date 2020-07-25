@@ -1,7 +1,7 @@
 name: Chunky
 version: ${project.version}
 main: org.popcraft.chunky.Chunky
-api-version: "1.14"
+api-version: "1.13"
 load: POSTWORLD
 authors: [pop4959]
 description: Pre-generates chunks, quickly, efficiently, and safely
