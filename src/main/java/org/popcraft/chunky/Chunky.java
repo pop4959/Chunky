@@ -45,6 +45,7 @@ public final class Chunky extends JavaPlugin {
     private final static String FORMAT_SILENT = "[Chunky] Silent mode %s.";
     private final static String FORMAT_QUIET = "[Chunky] Quiet interval set to %d seconds.";
     private final static String ERROR_SPIGOT_1_13 = "This plugin is not compatible with Spigot 1.13! Please use Paper instead.";
+    private final static String ERROR_BELOW_1_13 = "This plugin is not compatible with Minecraft versions below 1.13.";
 
     @Override
     public void onEnable() {
@@ -59,6 +60,9 @@ public final class Chunky extends JavaPlugin {
         this.metrics = new Metrics(this, 8211);
         if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
             this.getLogger().severe(ERROR_SPIGOT_1_13);
+            this.getServer().getPluginManager().disablePlugin(this);
+        } else if (BukkitVersion.v1_13_2.isHigherThan(BukkitVersion.getCurrent())) {
+            this.getLogger().severe(ERROR_BELOW_1_13);
             this.getServer().getPluginManager().disablePlugin(this);
         }
     }
