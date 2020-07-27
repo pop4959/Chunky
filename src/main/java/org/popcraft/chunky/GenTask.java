@@ -58,6 +58,9 @@ public class GenTask implements Runnable {
         printTime.set(currentTime);
         long oldestTime = chunkUpdateTimes10Sec.peek();
         double timeDiff = (currentTime - oldestTime) / 1e3;
+        if (timeDiff < 1e-1) {
+            return;
+        }
         double speed = chunkUpdateTimes10Sec.size() / timeDiff; // chunk updates in 1 second
         String message;
         if (chunksLeft == 0) {
