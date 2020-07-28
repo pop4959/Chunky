@@ -23,6 +23,9 @@ public class ConfigStorage {
             return Optional.empty();
         }
         String world_key = TASKS_KEY + world.getName() + ".";
+        if (config.getBoolean(world_key + "cancelled", false)) {
+            return Optional.empty();
+        }
         int radius = config.getInt(world_key + "radius");
         int centerX = config.getInt(world_key + "x-center");
         int centerZ = config.getInt(world_key + "z-center");
@@ -38,6 +41,7 @@ public class ConfigStorage {
 
     public void saveTask(GenTask genTask) {
         String world_key = TASKS_KEY + genTask.getWorld().getName() + ".";
+        config.set(world_key + "cancelled", genTask.isCancelled());
         config.set(world_key + "radius", genTask.getRadius());
         config.set(world_key + "x-center", genTask.getCenterX());
         config.set(world_key + "z-center", genTask.getCenterZ());
@@ -50,6 +54,13 @@ public class ConfigStorage {
 
     public void saveTasks() {
         chunky.getGenTasks().values().forEach(this::saveTask);
+    }
+
+    public void cancelTasks() {
+        loadTasks().forEach(genTask -> {
+            genTask.stop(true);
+            saveTask(genTask);
+        });
     }
 
     public void reset() {

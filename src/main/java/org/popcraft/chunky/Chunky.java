@@ -39,6 +39,7 @@ public final class Chunky extends JavaPlugin {
     private final static String FORMAT_STARTED_ALREADY = "[Chunky] Task already started for %s!";
     private final static String FORMAT_PAUSE = "[Chunky] Task paused for %s.";
     private final static String FORMAT_CONTINUE = "[Chunky] Task continuing for %s.";
+    private final static String FORMAT_CANCEL = "[Chunky] Cancelling all tasks.";
     private final static String FORMAT_WORLD = "[Chunky] World changed to %s.";
     private final static String FORMAT_CENTER = "[Chunky] Center changed to %d, %d.";
     private final static String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
@@ -142,7 +143,7 @@ public final class Chunky extends JavaPlugin {
 
     private void pause(CommandSender sender) {
         for (GenTask genTask : genTasks.values()) {
-            genTask.cancel();
+            genTask.stop(false);
             sender.sendMessage(String.format(FORMAT_PAUSE, genTask.getWorld().getName()));
         }
     }
@@ -160,8 +161,10 @@ public final class Chunky extends JavaPlugin {
     }
 
     private void cancel(CommandSender sender) {
-        pause(sender);
-        this.getConfigStorage().reset();
+        sender.sendMessage(FORMAT_CANCEL);
+        configStorage.cancelTasks();
+        genTasks.values().forEach(genTask -> genTask.stop(true));
+        genTasks.clear();
         this.getServer().getScheduler().cancelTasks(this);
     }
 

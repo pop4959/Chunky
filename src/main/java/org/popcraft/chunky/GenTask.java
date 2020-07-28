@@ -14,7 +14,7 @@ public class GenTask implements Runnable {
     private final int centerX;
     private final int centerZ;
     private ChunkCoordinateIterator chunkCoordinates;
-    private boolean cancelled;
+    private boolean stopped, cancelled;
     private final static int MAX_WORKING = 50;
     private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
     private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
@@ -42,7 +42,7 @@ public class GenTask implements Runnable {
     }
 
     private void printUpdate(World chunkWorld, int chunkX, int chunkZ) {
-        if (cancelled) {
+        if (stopped) {
             return;
         }
         String world = chunkWorld.getName();
@@ -83,7 +83,7 @@ public class GenTask implements Runnable {
     public void run() {
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
-        while (!cancelled && chunkCoordinates.hasNext()) {
+        while (!stopped && chunkCoordinates.hasNext()) {
             ChunkCoordinate chunkCoord = chunkCoordinates.next();
             if (PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
@@ -92,7 +92,7 @@ public class GenTask implements Runnable {
             try {
                 working.acquire();
             } catch (InterruptedException e) {
-                cancel();
+                stop(cancelled);
                 break;
             }
             PaperLib.getChunkAtAsync(world, chunkCoord.x, chunkCoord.z).thenAccept(chunk -> {
@@ -100,15 +100,16 @@ public class GenTask implements Runnable {
                 printUpdate(world, chunk.getX(), chunk.getZ());
             });
         }
-        if (cancelled) {
+        if (stopped) {
             chunky.getConfigStorage().saveTask(this);
             chunky.getServer().getConsoleSender().sendMessage(String.format(FORMAT_STOPPED, world.getName()));
         }
         chunky.getGenTasks().remove(this.getWorld());
     }
 
-    void cancel() {
-        cancelled = true;
+    void stop(boolean cancelled) {
+        this.stopped = true;
+        this.cancelled = cancelled;
     }
 
     public World getWorld() {
@@ -133,5 +134,9 @@ public class GenTask implements Runnable {
 
     public ChunkCoordinateIterator getChunkCoordinateIterator() {
         return chunkCoordinates;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
     }
 }
