@@ -15,20 +15,22 @@ public class GenTask implements Runnable {
     private final int centerZ;
     private ChunkCoordinateIterator chunkCoordinates;
     private boolean stopped, cancelled;
-    private final static int MAX_WORKING = 50;
-    private final static String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
-    private final static String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
-    private final static String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
+    private long prevTime, totalTime;
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong printTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
     private final AtomicLong totalChunks = new AtomicLong();
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
+    private static final int MAX_WORKING = 50;
+    private static final String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
+    private static final String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
+    private static final String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
 
-    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count) {
+    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, long time) {
         this(chunky, world, radius, centerX, centerZ);
         this.chunkCoordinates = new ChunkCoordinateIterator(radius, centerX, centerZ, count);
         this.finishedChunks.set(count);
+        this.prevTime = time;
     }
 
     public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ) {
@@ -64,10 +66,10 @@ public class GenTask implements Runnable {
         double speed = chunkUpdateTimes10Sec.size() / timeDiff; // chunk updates in 1 second
         String message;
         if (chunksLeft == 0) {
-            int total = (int) ((currentTime - startTime.get()) / 1e3);
-            int totalHours = total / 3600;
-            int totalMinutes = (total - totalHours * 3600) / 60;
-            int totalSeconds = total - totalHours * 3600 - totalMinutes * 60;
+            long total = (prevTime + (currentTime - startTime.get())) / 1000;
+            long totalHours = total / 3600;
+            long totalMinutes = (total - totalHours * 3600) / 60;
+            long totalSeconds = total - totalHours * 3600 - totalMinutes * 60;
             message = String.format(FORMAT_DONE, world, chunkNum, percentDone, totalHours, totalMinutes, totalSeconds);
         } else {
             int eta = (int) (chunksLeft / speed);
@@ -100,10 +102,13 @@ public class GenTask implements Runnable {
                 printUpdate(world, chunk.getX(), chunk.getZ());
             });
         }
+        totalTime += prevTime + (System.currentTimeMillis() - startTime.get());
         if (stopped) {
-            chunky.getConfigStorage().saveTask(this);
             chunky.getServer().getConsoleSender().sendMessage(String.format(FORMAT_STOPPED, world.getName()));
+        } else {
+            this.cancelled = true;
         }
+        chunky.getConfigStorage().saveTask(this);
         chunky.getGenTasks().remove(this.getWorld());
     }
 
@@ -138,5 +143,9 @@ public class GenTask implements Runnable {
 
     public boolean isCancelled() {
         return cancelled;
+    }
+
+    public long getTotalTime() {
+        return totalTime;
     }
 }
