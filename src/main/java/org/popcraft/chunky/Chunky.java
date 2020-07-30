@@ -153,9 +153,9 @@ public final class Chunky extends JavaPlugin {
             if (!genTasks.containsKey(genTask.getWorld())) {
                 genTasks.put(genTask.getWorld(), genTask);
                 this.getServer().getScheduler().runTaskAsynchronously(this, genTask);
-                sender.sendMessage(String.format(FORMAT_CONTINUE, world.getName()));
+                sender.sendMessage(String.format(FORMAT_CONTINUE, genTask.getWorld().getName()));
             } else {
-                sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, world.getName()));
+                sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, genTask.getWorld().getName()));
             }
         });
     }
