@@ -9,7 +9,7 @@ public class ChunkCoordinateIterator implements Iterator<ChunkCoordinate> {
     private int x, z;
     private long startCount;
     private boolean hasNext = true;
-    private final static int CHUNK_SIZE = 16;
+    private static final int CHUNK_SIZE = 16;
 
     public ChunkCoordinateIterator(int radius, int centerX, int centerZ, long startCount) {
         this(radius, centerX, centerZ);

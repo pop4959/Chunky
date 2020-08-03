@@ -11,7 +11,7 @@ import java.util.Optional;
 public class ConfigStorage {
     private final Chunky chunky;
     private final FileConfiguration config;
-    private final static String TASKS_KEY = "tasks.";
+    private static final String TASKS_KEY = "tasks.";
 
     public ConfigStorage(Chunky chunky) {
         this.chunky = chunky;

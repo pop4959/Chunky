@@ -25,28 +25,28 @@ public final class Chunky extends JavaPlugin {
     private int quiet;
     private Metrics metrics;
 
-    private final static String HELP_START = "§2chunky start§r - Start a new chunk generation task";
-    private final static String HELP_PAUSE = "§2chunky pause§r - Pause current tasks and save progress";
-    private final static String HELP_CONTINUE = "§2chunky continue§r - Continue current or saved tasks";
-    private final static String HELP_CANCEL = "§2chunky cancel§r - Stop and delete current or saved tasks";
-    private final static String HELP_WORLD = "§2chunky world <world>§r - Set the world target";
-    private final static String HELP_CENTER = "§2chunky center <x> <z>§r - Set the center block location";
-    private final static String HELP_RADIUS = "§2chunky radius <radius>§r - Set the radius";
-    private final static String HELP_SILENT = "§2chunky silent§r - Toggle displaying update messages";
-    private final static String HELP_QUIET = "§2chunky quiet <interval>§r - Set the quiet interval";
-    private final static String HELP_MENU = String.format("§aChunky Commands§r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s", HELP_START, HELP_PAUSE, HELP_CONTINUE, HELP_CANCEL, HELP_WORLD, HELP_CENTER, HELP_RADIUS, HELP_SILENT, HELP_QUIET);
-    private final static String FORMAT_START = "[Chunky] Task started for %s at %d, %d with radius %d.";
-    private final static String FORMAT_STARTED_ALREADY = "[Chunky] Task already started for %s!";
-    private final static String FORMAT_PAUSE = "[Chunky] Task paused for %s.";
-    private final static String FORMAT_CONTINUE = "[Chunky] Task continuing for %s.";
-    private final static String FORMAT_CANCEL = "[Chunky] Cancelling all tasks.";
-    private final static String FORMAT_WORLD = "[Chunky] World changed to %s.";
-    private final static String FORMAT_CENTER = "[Chunky] Center changed to %d, %d.";
-    private final static String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
-    private final static String FORMAT_SILENT = "[Chunky] Silent mode %s.";
-    private final static String FORMAT_QUIET = "[Chunky] Quiet interval set to %d seconds.";
-    private final static String ERROR_SPIGOT_1_13 = "This plugin is not compatible with Spigot 1.13! Please use Paper instead.";
-    private final static String ERROR_BELOW_1_13 = "This plugin is not compatible with Minecraft versions below 1.13.";
+    private static final String HELP_START = "§2chunky start§r - Start a new chunk generation task";
+    private static final String HELP_PAUSE = "§2chunky pause§r - Pause current tasks and save progress";
+    private static final String HELP_CONTINUE = "§2chunky continue§r - Continue current or saved tasks";
+    private static final String HELP_CANCEL = "§2chunky cancel§r - Stop and delete current or saved tasks";
+    private static final String HELP_WORLD = "§2chunky world <world>§r - Set the world target";
+    private static final String HELP_CENTER = "§2chunky center <x> <z>§r - Set the center block location";
+    private static final String HELP_RADIUS = "§2chunky radius <radius>§r - Set the radius";
+    private static final String HELP_SILENT = "§2chunky silent§r - Toggle displaying update messages";
+    private static final String HELP_QUIET = "§2chunky quiet <interval>§r - Set the quiet interval";
+    private static final String HELP_MENU = String.format("§aChunky Commands§r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s", HELP_START, HELP_PAUSE, HELP_CONTINUE, HELP_CANCEL, HELP_WORLD, HELP_CENTER, HELP_RADIUS, HELP_SILENT, HELP_QUIET);
+    private static final String FORMAT_START = "[Chunky] Task started for %s at %d, %d with radius %d.";
+    private static final String FORMAT_STARTED_ALREADY = "[Chunky] Task already started for %s!";
+    private static final String FORMAT_PAUSE = "[Chunky] Task paused for %s.";
+    private static final String FORMAT_CONTINUE = "[Chunky] Task continuing for %s.";
+    private static final String FORMAT_CANCEL = "[Chunky] Cancelling all tasks.";
+    private static final String FORMAT_WORLD = "[Chunky] World changed to %s.";
+    private static final String FORMAT_CENTER = "[Chunky] Center changed to %d, %d.";
+    private static final String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
+    private static final String FORMAT_SILENT = "[Chunky] Silent mode %s.";
+    private static final String FORMAT_QUIET = "[Chunky] Quiet interval set to %d seconds.";
+    private static final String ERROR_SPIGOT_1_13 = "This plugin is not compatible with Spigot 1.13! Please use Paper instead.";
+    private static final String ERROR_BELOW_1_13 = "This plugin is not compatible with Minecraft versions below 1.13.";
 
     @Override
     public void onEnable() {
