@@ -100,6 +100,9 @@ public class GenTask implements Runnable {
             PaperLib.getChunkAtAsync(world, chunkCoord.x, chunkCoord.z).thenAccept(chunk -> {
                 working.release();
                 printUpdate(world, chunk.getX(), chunk.getZ());
+                if (TuinityLib.isTuinity() && TuinityLib.getDelayChunkUnloadsBy() > 0) {
+                    chunky.getServer().getScheduler().scheduleSyncDelayedTask(chunky, chunk::unload);
+                }
             });
         }
         totalTime += prevTime + (System.currentTimeMillis() - startTime.get());
