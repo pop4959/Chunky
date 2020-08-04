@@ -2,7 +2,9 @@ package org.popcraft.chunky;
 
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -100,6 +102,9 @@ public final class Chunky extends JavaPlugin {
             case "world":
                 world(sender, args);
                 break;
+            case "worldborder":
+                worldBorder(sender);
+                break;
             case "center":
                 center(sender, args);
                 break;
@@ -122,7 +127,7 @@ public final class Chunky extends JavaPlugin {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return Arrays.asList("start", "pause", "continue", "world", "center", "radius", "silent", "quiet");
+            return Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet");
         }
         if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
             return Bukkit.getWorlds().stream().map(World::getName).map(String::toLowerCase).filter(w -> w.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
@@ -180,6 +185,16 @@ public final class Chunky extends JavaPlugin {
         }
         this.world = newWorld.get();
         sender.sendMessage(String.format(FORMAT_WORLD, world.getName()));
+    }
+
+    private void worldBorder(CommandSender sender) {
+        WorldBorder border = world.getWorldBorder();
+        Location center = border.getCenter();
+        this.x = center.getBlockX();
+        this.z = center.getBlockZ();
+        this.radius = (int) border.getSize() / 2;
+        sender.sendMessage(String.format(FORMAT_CENTER, x, z));
+        sender.sendMessage(String.format(FORMAT_RADIUS, radius));
     }
 
     private void center(CommandSender sender, String[] args) {
