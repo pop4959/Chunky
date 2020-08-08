@@ -22,9 +22,6 @@ public class GenTask implements Runnable {
     private final AtomicLong totalChunks = new AtomicLong();
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
     private static final int MAX_WORKING = 50;
-    private static final String FORMAT_UPDATE = "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d";
-    private static final String FORMAT_DONE = "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d";
-    private static final String FORMAT_STOPPED = "[Chunky] Task stopped for %s.";
 
     public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, long time) {
         this(chunky, world, radius, centerX, centerZ);
@@ -70,13 +67,13 @@ public class GenTask implements Runnable {
             long totalHours = total / 3600;
             long totalMinutes = (total - totalHours * 3600) / 60;
             long totalSeconds = total - totalHours * 3600 - totalMinutes * 60;
-            message = String.format(FORMAT_DONE, world, chunkNum, percentDone, totalHours, totalMinutes, totalSeconds);
+            message = chunky.message("task_done", world, chunkNum, percentDone, totalHours, totalMinutes, totalSeconds);
         } else {
             int eta = (int) (chunksLeft / speed);
             int etaHours = eta / 3600;
             int etaMinutes = (eta - etaHours * 3600) / 60;
             int etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
-            message = String.format(FORMAT_UPDATE, world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunkX, chunkZ);
+            message = chunky.message("task_update", world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunkX, chunkZ);
         }
         chunky.getServer().getConsoleSender().sendMessage(message);
     }
@@ -107,7 +104,7 @@ public class GenTask implements Runnable {
         }
         totalTime += prevTime + (System.currentTimeMillis() - startTime.get());
         if (stopped) {
-            chunky.getServer().getConsoleSender().sendMessage(String.format(FORMAT_STOPPED, world.getName()));
+            chunky.getServer().getConsoleSender().sendMessage(chunky.message("task_stopped", world.getName()));
         } else {
             this.cancelled = true;
         }

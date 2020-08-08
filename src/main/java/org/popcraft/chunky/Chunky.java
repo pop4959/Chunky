@@ -1,7 +1,10 @@
 package org.popcraft.chunky;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -10,9 +13,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitWorker;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -20,6 +29,7 @@ import java.util.stream.Collectors;
 public final class Chunky extends JavaPlugin {
     private ConfigStorage configStorage;
     private ConcurrentHashMap<World, GenTask> genTasks;
+    private Map<String, String> translations, fallbackTranslations;
     private World world;
     private int x, z, radius;
     private boolean queue;
@@ -27,33 +37,12 @@ public final class Chunky extends JavaPlugin {
     private int quiet;
     private Metrics metrics;
 
-    private static final String HELP_START = "§2chunky start§r - Start a new chunk generation task";
-    private static final String HELP_PAUSE = "§2chunky pause§r - Pause current tasks and save progress";
-    private static final String HELP_CONTINUE = "§2chunky continue§r - Continue current or saved tasks";
-    private static final String HELP_CANCEL = "§2chunky cancel§r - Stop and delete current or saved tasks";
-    private static final String HELP_WORLD = "§2chunky world <world>§r - Set the world target";
-    private static final String HELP_CENTER = "§2chunky center <x> <z>§r - Set the center block location";
-    private static final String HELP_RADIUS = "§2chunky radius <radius>§r - Set the radius";
-    private static final String HELP_SILENT = "§2chunky silent§r - Toggle displaying update messages";
-    private static final String HELP_QUIET = "§2chunky quiet <interval>§r - Set the quiet interval";
-    private static final String HELP_MENU = String.format("§aChunky Commands§r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s", HELP_START, HELP_PAUSE, HELP_CONTINUE, HELP_CANCEL, HELP_WORLD, HELP_CENTER, HELP_RADIUS, HELP_SILENT, HELP_QUIET);
-    private static final String FORMAT_START = "[Chunky] Task started for %s at %d, %d with radius %d.";
-    private static final String FORMAT_STARTED_ALREADY = "[Chunky] Task already started for %s!";
-    private static final String FORMAT_PAUSE = "[Chunky] Task paused for %s.";
-    private static final String FORMAT_CONTINUE = "[Chunky] Task continuing for %s.";
-    private static final String FORMAT_CANCEL = "[Chunky] Cancelling all tasks.";
-    private static final String FORMAT_WORLD = "[Chunky] World changed to %s.";
-    private static final String FORMAT_CENTER = "[Chunky] Center changed to %d, %d.";
-    private static final String FORMAT_RADIUS = "[Chunky] Radius changed to %d.";
-    private static final String FORMAT_SILENT = "[Chunky] Silent mode %s.";
-    private static final String FORMAT_QUIET = "[Chunky] Quiet interval set to %d seconds.";
-    private static final String ERROR_SPIGOT_1_13 = "This plugin is not compatible with Spigot 1.13! Please use Paper instead.";
-    private static final String ERROR_BELOW_1_13 = "This plugin is not compatible with Minecraft versions below 1.13.";
-
     @Override
     public void onEnable() {
         this.configStorage = new ConfigStorage(this);
         this.genTasks = new ConcurrentHashMap<>();
+        this.translations = loadTranslation(this.getConfig().getString("language", "en"));
+        this.fallbackTranslations = loadTranslation("en");
         this.world = this.getServer().getWorlds().get(0);
         this.x = 0;
         this.z = 0;
@@ -62,10 +51,10 @@ public final class Chunky extends JavaPlugin {
         this.quiet = 1;
         this.metrics = new Metrics(this, 8211);
         if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
-            this.getLogger().severe(ERROR_SPIGOT_1_13);
+            this.getLogger().severe(message("error_version_spigot"));
             this.getServer().getPluginManager().disablePlugin(this);
         } else if (BukkitVersion.v1_13_2.isHigherThan(BukkitVersion.getCurrent())) {
-            this.getLogger().severe(ERROR_BELOW_1_13);
+            this.getLogger().severe(message("error_version"));
             this.getServer().getPluginManager().disablePlugin(this);
         }
     }
@@ -83,7 +72,10 @@ public final class Chunky extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(HELP_MENU);
+            sender.sendMessage(message("help_menu",
+                    message("help_start"), message("help_pause"), message("help_continue"),
+                    message("help_cancel"), message("help_world"), message("help_center"),
+                    message("help_radius"), message("help_silent"), message("help_quiet")));
             return true;
         }
         switch (args[0].toLowerCase()) {
@@ -118,7 +110,10 @@ public final class Chunky extends JavaPlugin {
                 quiet(sender, args);
                 break;
             default:
-                sender.sendMessage(HELP_MENU);
+                sender.sendMessage(message("help_menu",
+                        message("help_start"), message("help_pause"), message("help_continue"),
+                        message("help_cancel"), message("help_world"), message("help_center"),
+                        message("help_radius"), message("help_silent"), message("help_quiet")));
                 break;
         }
         return true;
@@ -137,19 +132,19 @@ public final class Chunky extends JavaPlugin {
 
     private void start(CommandSender sender) {
         if (genTasks.containsKey(world)) {
-            sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, world.getName()));
+            sender.sendMessage(message("format_started_already", world.getName()));
             return;
         }
         GenTask genTask = new GenTask(this, world, radius, x, z);
         genTasks.put(world, genTask);
         this.getServer().getScheduler().runTaskAsynchronously(this, genTask);
-        sender.sendMessage(String.format(FORMAT_START, world.getName(), x, z, radius));
+        sender.sendMessage(message("format_start", world.getName(), x, z, radius));
     }
 
     private void pause(CommandSender sender) {
         for (GenTask genTask : genTasks.values()) {
             genTask.stop(false);
-            sender.sendMessage(String.format(FORMAT_PAUSE, genTask.getWorld().getName()));
+            sender.sendMessage(message("format_pause", genTask.getWorld().getName()));
         }
     }
 
@@ -158,15 +153,15 @@ public final class Chunky extends JavaPlugin {
             if (!genTasks.containsKey(genTask.getWorld())) {
                 genTasks.put(genTask.getWorld(), genTask);
                 this.getServer().getScheduler().runTaskAsynchronously(this, genTask);
-                sender.sendMessage(String.format(FORMAT_CONTINUE, genTask.getWorld().getName()));
+                sender.sendMessage(message("format_continue", genTask.getWorld().getName()));
             } else {
-                sender.sendMessage(String.format(FORMAT_STARTED_ALREADY, genTask.getWorld().getName()));
+                sender.sendMessage(message("format_started_already", genTask.getWorld().getName()));
             }
         });
     }
 
     private void cancel(CommandSender sender) {
-        sender.sendMessage(FORMAT_CANCEL);
+        sender.sendMessage(message("format_cancel"));
         configStorage.cancelTasks();
         genTasks.values().forEach(genTask -> genTask.stop(true));
         genTasks.clear();
@@ -175,16 +170,16 @@ public final class Chunky extends JavaPlugin {
 
     private void world(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(HELP_WORLD);
+            sender.sendMessage(message("help_world"));
             return;
         }
         Optional<World> newWorld = Input.tryWorld(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
         if (!newWorld.isPresent()) {
-            sender.sendMessage(HELP_WORLD);
+            sender.sendMessage(message("help_world"));
             return;
         }
         this.world = newWorld.get();
-        sender.sendMessage(String.format(FORMAT_WORLD, world.getName()));
+        sender.sendMessage(message("format_world", world.getName()));
     }
 
     private void worldBorder(CommandSender sender) {
@@ -193,8 +188,8 @@ public final class Chunky extends JavaPlugin {
         this.x = center.getBlockX();
         this.z = center.getBlockZ();
         this.radius = (int) border.getSize() / 2;
-        sender.sendMessage(String.format(FORMAT_CENTER, x, z));
-        sender.sendMessage(String.format(FORMAT_RADIUS, radius));
+        sender.sendMessage(message("format_center", x, z));
+        sender.sendMessage(message("format_radius", radius));
     }
 
     private void center(CommandSender sender, String[] args) {
@@ -207,31 +202,31 @@ public final class Chunky extends JavaPlugin {
             newZ = Input.tryInteger(args[2]);
         }
         if (!newX.isPresent() || !newZ.isPresent()) {
-            sender.sendMessage(HELP_CENTER);
+            sender.sendMessage(message("help_center"));
             return;
         }
         this.x = newX.get();
         this.z = newZ.get();
-        sender.sendMessage(String.format(FORMAT_CENTER, x, z));
+        sender.sendMessage(message("format_center", x, z));
     }
 
     private void radius(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage(HELP_RADIUS);
+            sender.sendMessage(message("help_radius"));
             return;
         }
         Optional<Integer> newRadius = Input.tryInteger(args[1]);
         if (!newRadius.isPresent()) {
-            sender.sendMessage(HELP_RADIUS);
+            sender.sendMessage(message("help_radius"));
             return;
         }
         this.radius = newRadius.get();
-        sender.sendMessage(String.format(FORMAT_RADIUS, radius));
+        sender.sendMessage(message("format_radius", radius));
     }
 
     private void silent(CommandSender sender) {
         this.silent = !silent;
-        sender.sendMessage(String.format(FORMAT_SILENT, silent ? "enabled" : "disabled"));
+        sender.sendMessage(message("format_silent", silent ? "enabled" : "disabled"));
     }
 
     private void quiet(CommandSender sender, String[] args) {
@@ -240,11 +235,36 @@ public final class Chunky extends JavaPlugin {
             newQuiet = Input.tryInteger(args[1]);
         }
         if (!newQuiet.isPresent()) {
-            sender.sendMessage(HELP_QUIET);
+            sender.sendMessage(message("help_quiet"));
             return;
         }
         this.quiet = newQuiet.get();
-        sender.sendMessage(String.format(FORMAT_QUIET, quiet));
+        sender.sendMessage(message("format_quiet", quiet));
+    }
+
+    private Map<String, String> loadTranslation(String language) {
+        InputStream input = this.getResource("lang/" + language + ".json");
+        if (input == null) {
+            input = this.getResource("lang/en.json");
+        }
+        if (input != null) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+                StringBuilder lang = new StringBuilder();
+                String s;
+                while ((s = reader.readLine()) != null) {
+                    lang.append(s);
+                }
+                return new Gson().fromJson(lang.toString(), new TypeToken<HashMap<String, String>>() {
+                }.getType());
+            } catch (Exception ignored) {
+            }
+        }
+        return Collections.emptyMap();
+    }
+
+    public String message(String key, Object... args) {
+        String message = translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, "Missing translation"));
+        return ChatColor.translateAlternateColorCodes('&', String.format(message, args));
     }
 
     public ConfigStorage getConfigStorage() {
