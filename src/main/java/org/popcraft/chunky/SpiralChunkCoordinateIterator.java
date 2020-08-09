@@ -25,18 +25,18 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
         // If we are starting at the first position, we are already done.
         if (startCount == 0) return;
         // Our internal count starts at 0. The count that we display starts at 1.
-        count = ++startCount - 1;
+        count = startCount;
         // Stretch is basically the inverse of { aₙ = n²-n+2 } offset by one and floored.
         // This value is useful to us for other things as well though, so we save it as its own thing.
-        stretch = (int) (0.5 + Math.sqrt(1d - 4d * (2 - startCount - 1)) / 2d);
+        stretch = (int) (0.5 + Math.sqrt(1d - 4d * -startCount) / 2d);
         // SubCount...
         final int stretchStart = stretch * stretch - stretch + 2;
-        subCount = (startCount - stretchStart) % stretch + 1;
+        subCount = (1 + startCount - stretchStart) % stretch + 1;
         // Flip is positive when stretch is even, negative when it is odd
         flip = stretch % 2 == 0 ? 1 : -1;
         // xNotY is true for the first half of each stretch interval, false for the second half.
-        xNotZ = startCount - stretchStart < stretch;
-
+        xNotZ = 1 + startCount - stretchStart < stretch;
+        // This next part moves the current chunk position to the correct position in series.
         if (stretch % 2 != 0) {
             posX += -1 + (stretch - 1) / 2;
             posZ = (stretch - 1) / 2;
@@ -50,17 +50,19 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
             posX += flip * (stretch - 1);
             posZ += flip * subCount;
         }
+        chunkCoord = new ChunkCoordinate(posX, posZ);
     }
 
     public SpiralChunkCoordinateIterator(int radius, int centerX, int centerZ) {
         diameterChunks = radius / 8 + (radius % 8 != 0 ? 1 : 0);
         posX = centerX >> 4;
         posZ = centerX >> 4;
+        chunkCoord = new ChunkCoordinate(posX, posZ);
     }
 
     @Override
     public ChunkCoordinate next() {
-        if (!hasNext()) throw new NoSuchElementException();
+        if (!hasNext) throw new NoSuchElementException();
         chunkCoord = new ChunkCoordinate(posX, posZ);
         count++;
         if (xNotZ) {
@@ -81,12 +83,12 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
                 xNotZ = true;
             }
         }
+        if (count >= diameterChunks * diameterChunks) hasNext = false;
         return chunkCoord;
     }
 
     @Override
     public boolean hasNext() {
-        if (hasNext && count >= diameterChunks * diameterChunks) hasNext = false;
         return hasNext;
     }
 
@@ -98,10 +100,5 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
     @Override
     public long count() {
         return diameterChunks * diameterChunks;
-    }
-
-    @Override
-    public long covered() {
-        return count;
     }
 }

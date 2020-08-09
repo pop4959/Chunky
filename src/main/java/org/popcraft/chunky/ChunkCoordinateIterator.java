@@ -10,14 +10,13 @@ public interface ChunkCoordinateIterator extends Iterator<ChunkCoordinate> {
      *
      * @return The current {@code ChunkCoordinate}.
      */
-    public ChunkCoordinate peek();
+    ChunkCoordinate peek();
 
     /**
      * The total number of chunk coordinates that the iterator will give.
      *
      * @return the total number of chunk coordinates that the iterator will give.
      */
-    public long count();
+    long count();
 
-    public long covered();
 }

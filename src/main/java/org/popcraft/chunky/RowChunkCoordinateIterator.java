@@ -15,6 +15,7 @@ public class RowChunkCoordinateIterator implements ChunkCoordinateIterator {
         this(radius, centerX, centerZ);
         this.x = x1 + ((int) (startCount / diameterChunks)) * CHUNK_SIZE;
         this.z = z1 + ((int) (startCount % diameterChunks)) * CHUNK_SIZE;
+        chunkCoord = new ChunkCoordinate((x >> 4) + recenter, (z >> 4) + recenter);
     }
 
     public RowChunkCoordinateIterator(int radius, int centerX, int centerZ) {
@@ -26,6 +27,7 @@ public class RowChunkCoordinateIterator implements ChunkCoordinateIterator {
         this.z2 = centerZ + radius;
         this.x = x1;
         this.z = z1;
+        chunkCoord = new ChunkCoordinate((x >> 4) + recenter, (z >> 4) + recenter);
     }
 
     @Override
@@ -54,10 +56,5 @@ public class RowChunkCoordinateIterator implements ChunkCoordinateIterator {
     @Override
     public long count() {
         return diameterChunks * diameterChunks;
-    }
-
-    @Override
-    public long covered() {
-        return (x - x1 >> 4) * diameterChunks + (z - z1 >> 4);
     }
 }
