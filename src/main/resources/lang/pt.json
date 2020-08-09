@@ -25,3 +25,4 @@
   "task_done": "[Chunky] Tarefa terminada para %s. Processado: %d chunks (%.2f%%), Tempo total: %01d:%02d:%02d",
   "task_stopped": "[Chunky] Tarefa parada para %s.",
   "task_update": "[Chunky] Tarefa em execução para %s. Processado: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Taxa: %.1f cps, Actual: %d, %d"
+}
