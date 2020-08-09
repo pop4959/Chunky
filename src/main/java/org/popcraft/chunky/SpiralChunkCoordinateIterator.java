@@ -25,8 +25,7 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
         // If we are starting at the first position, we are already done.
         if (startCount == 0) return;
         // Our internal count starts at 0. The count that we display starts at 1.
-        startCount++;
-        count = startCount - 1;
+        count = ++startCount - 1;
         // Stretch is basically the inverse of { aₙ = n²-n+2 } offset by one and floored.
         // This value is useful to us for other things as well though, so we save it as its own thing.
         stretch = (int) (0.5 + Math.sqrt(1d - 4d * (2 - startCount - 1)) / 2d);
