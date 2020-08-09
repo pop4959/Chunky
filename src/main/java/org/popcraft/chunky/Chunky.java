@@ -39,6 +39,9 @@ public final class Chunky extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.getConfig().options().copyDefaults(true);
+        this.getConfig().options().copyHeader(true);
+        this.saveConfig();
         this.configStorage = new ConfigStorage(this);
         this.genTasks = new ConcurrentHashMap<>();
         this.translations = loadTranslation(this.getConfig().getString("language", "en"));
