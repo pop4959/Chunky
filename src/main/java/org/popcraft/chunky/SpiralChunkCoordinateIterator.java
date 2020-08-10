@@ -17,7 +17,7 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
             stretch = 1;
     private boolean xNotZ = true;
 
-    public SpiralChunkCoordinateIterator(int radius, int centerX, int centerZ, int startCount) {
+    public SpiralChunkCoordinateIterator(int radius, int centerX, int centerZ, long startCount) {
         if (startCount < 0) throw new IllegalArgumentException("Start count must be 0 or greater.");
         diameterChunks = radius / 8 + (radius % 8 != 0 ? 1 : 0);
         posX = centerX >> 4;
@@ -25,21 +25,21 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
         // If we are starting at the first position, we are already done.
         if (startCount == 0) return;
         // Our internal count starts at 0. The count that we display starts at 1.
-        count = startCount;
+        count = (int) startCount;
         // Stretch is basically the inverse of { aₙ = n²-n+2 } offset by one and floored.
         // This value is useful to us for other things as well though, so we save it as its own thing.
         stretch = (int) (0.5 + Math.sqrt(1d - 4d * -startCount) / 2d);
         // SubCount...
         final int stretchStart = stretch * stretch - stretch + 2;
-        subCount = (1 + startCount - stretchStart) % stretch + 1;
+        subCount = (int) ((1 + startCount - stretchStart) % stretch + 1);
         // Flip is positive when stretch is even, negative when it is odd
         flip = stretch % 2 == 0 ? 1 : -1;
         // xNotY is true for the first half of each stretch interval, false for the second half.
         xNotZ = 1 + startCount - stretchStart < stretch;
         // This next part moves the current chunk position to the correct position in series.
         if (stretch % 2 != 0) {
-            posX += -1 + (stretch - 1) / 2;
-            posZ = (stretch - 1) / 2;
+            posX += (stretch - 1) / 2 - 1;
+            posZ += (stretch - 1) / 2;
         } else {
             posX += -stretch / 2 + 1;
             posZ += -1 - stretch / 2 + 1;
