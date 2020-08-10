@@ -8,11 +8,11 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
     private boolean hasNext = true;
     private ChunkCoordinate chunkCoord;
 
+    private long count = 0;
     private int
             posX,
             posZ,
             flip = -1,
-            count = 0,
             subCount = 0,
             stretch = 1;
     private boolean xNotZ = true;
@@ -25,7 +25,7 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
         // If we are starting at the first position, we are already done.
         if (startCount == 0) return;
         // Our internal count starts at 0. The count that we display starts at 1.
-        count = (int) startCount;
+        count = startCount;
         // Stretch is basically the inverse of { aₙ = n²-n+2 } offset by one and floored.
         // This value is useful to us for other things as well though, so we save it as its own thing.
         stretch = (int) (0.5 + Math.sqrt(1d - 4d * -startCount) / 2d);
