@@ -1,4 +1,6 @@
 {
+  "disabled": "выключен",
+  "enabled": "включен",
   "error_version": "Этот плагин несовместим с версиями Minecraft ниже 1.13.",
   "error_version_spigot": "Этот плагин несовместим со Spigot 1.13!",
   "format_cancel": "[Chunky] Все задачи отменены.",
