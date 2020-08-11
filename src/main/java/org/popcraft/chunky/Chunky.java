@@ -229,7 +229,7 @@ public final class Chunky extends JavaPlugin {
 
     private void silent(CommandSender sender) {
         this.silent = !silent;
-        sender.sendMessage(message("format_silent", silent ? "enabled" : "disabled"));
+        sender.sendMessage(message("format_silent", silent ? message("enabled") : message("disabled")));
     }
 
     private void quiet(CommandSender sender, String[] args) {
