@@ -1,6 +1,6 @@
 {
-  "disabled": "Desativado",
-  "enabled": "Ativado",
+  "disabled": "desativado",
+  "enabled": "ativado",
   "error_version": "Este plugin não é compatível com as versões Minecraft abaixo de 1.13.",
   "error_version_spigot": "Este plugin não é compatível com o Spigot 1.13 !",
   "format_cancel": "[Chunky] Cancelando todas as tarefas.",
