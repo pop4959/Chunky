@@ -8,14 +8,12 @@ public class RowChunkCoordinateIterator implements ChunkCoordinateIterator {
     private int x, z;
     private final int recenter;
     private boolean hasNext = true;
-    private ChunkCoordinate chunkCoord;
     private static final int CHUNK_SIZE = 16;
 
     public RowChunkCoordinateIterator(int radius, int centerX, int centerZ, long startCount) {
         this(radius, centerX, centerZ);
         this.x = x1 + ((int) (startCount / diameterChunks)) * CHUNK_SIZE;
         this.z = z1 + ((int) (startCount % diameterChunks)) * CHUNK_SIZE;
-        chunkCoord = new ChunkCoordinate((x >> 4) + recenter, (z >> 4) + recenter);
     }
 
     public RowChunkCoordinateIterator(int radius, int centerX, int centerZ) {
@@ -27,7 +25,6 @@ public class RowChunkCoordinateIterator implements ChunkCoordinateIterator {
         this.z2 = centerZ + radius;
         this.x = x1;
         this.z = z1;
-        chunkCoord = new ChunkCoordinate((x >> 4) + recenter, (z >> 4) + recenter);
     }
 
     @Override
@@ -38,7 +35,7 @@ public class RowChunkCoordinateIterator implements ChunkCoordinateIterator {
     @Override
     public ChunkCoordinate next() {
         if (!hasNext()) throw new NoSuchElementException();
-        chunkCoord = new ChunkCoordinate((x >> 4) + recenter, (z >> 4) + recenter);
+        ChunkCoordinate chunkCoord = new ChunkCoordinate((x >> 4) + recenter, (z >> 4) + recenter);
         if ((z += CHUNK_SIZE) >= z2) {
             z = z1;
             if ((x += CHUNK_SIZE) >= x2) {
@@ -50,7 +47,7 @@ public class RowChunkCoordinateIterator implements ChunkCoordinateIterator {
 
     @Override
     public ChunkCoordinate peek() {
-        return chunkCoord;
+        return new ChunkCoordinate((x >> 4) + recenter, (z >> 4) + recenter);
     }
 
     @Override

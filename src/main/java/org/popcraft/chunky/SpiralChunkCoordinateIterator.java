@@ -6,7 +6,6 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
 
     private final int diameterChunks;
     private boolean hasNext = true;
-    private ChunkCoordinate chunkCoord;
 
     private long count = 0;
     private int
@@ -18,10 +17,8 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
     private boolean xNotZ = true;
 
     public SpiralChunkCoordinateIterator(int radius, int centerX, int centerZ, long startCount) {
+        this(radius, centerX, centerZ);
         if (startCount < 0) throw new IllegalArgumentException("Start count must be 0 or greater.");
-        diameterChunks = radius / 8 + (radius % 8 != 0 ? 1 : 0);
-        posX = centerX >> 4;
-        posZ = centerX >> 4;
         // If we are starting at the first position, we are already done.
         if (startCount == 0) return;
         // Our internal count starts at 0. The count that we display starts at 1.
@@ -50,20 +47,18 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
             posX += flip * (stretch - 1);
             posZ += flip * subCount;
         }
-        chunkCoord = new ChunkCoordinate(posX, posZ);
     }
 
     public SpiralChunkCoordinateIterator(int radius, int centerX, int centerZ) {
         diameterChunks = radius / 8 + (radius % 8 != 0 ? 1 : 0);
         posX = centerX >> 4;
         posZ = centerX >> 4;
-        chunkCoord = new ChunkCoordinate(posX, posZ);
     }
 
     @Override
     public ChunkCoordinate next() {
         if (!hasNext) throw new NoSuchElementException();
-        chunkCoord = new ChunkCoordinate(posX, posZ);
+        ChunkCoordinate chunkCoord = new ChunkCoordinate(posX, posZ);
         count++;
         if (xNotZ) {
             if (subCount++ < stretch)
@@ -94,7 +89,7 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
 
     @Override
     public ChunkCoordinate peek() {
-        return chunkCoord;
+        return new ChunkCoordinate(posX, posZ);
     }
 
     @Override
