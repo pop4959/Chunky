@@ -47,6 +47,7 @@ public class RowChunkCoordinateIterator implements ChunkCoordinateIterator {
 
     @Override
     public ChunkCoordinate peek() {
+        if (!hasNext) throw new NoSuchElementException();
         return new ChunkCoordinate((x >> 4) + recenter, (z >> 4) + recenter);
     }
 

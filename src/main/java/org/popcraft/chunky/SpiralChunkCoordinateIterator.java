@@ -89,6 +89,7 @@ public class SpiralChunkCoordinateIterator implements ChunkCoordinateIterator {
 
     @Override
     public ChunkCoordinate peek() {
+        if (!hasNext) throw new NoSuchElementException();
         return new ChunkCoordinate(posX, posZ);
     }
 
