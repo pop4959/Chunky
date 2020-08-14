@@ -84,7 +84,7 @@ public class GenTask implements Runnable {
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkCoordinates.hasNext()) {
             ChunkCoordinate chunkCoord = chunkCoordinates.next();
-            if (PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
+            if (PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
                 continue;
             }
