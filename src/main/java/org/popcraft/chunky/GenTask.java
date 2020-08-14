@@ -80,6 +80,8 @@ public class GenTask implements Runnable {
 
     @Override
     public void run() {
+        final String poolThreadName = Thread.currentThread().getName();
+        Thread.currentThread().setName("Generation Task Thread");
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkCoordinates.hasNext()) {
@@ -110,6 +112,7 @@ public class GenTask implements Runnable {
         }
         chunky.getConfigStorage().saveTask(this);
         chunky.getGenTasks().remove(this.getWorld());
+        Thread.currentThread().setName(poolThreadName);
     }
 
     void stop(boolean cancelled) {
