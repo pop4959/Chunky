@@ -9,6 +9,7 @@ website: https://www.spigotmc.org/resources/chunky.81534/
 commands:
   chunky:
     description: Generates chunks
+    aliases: [cy]
     permission: chunky.chunky
     usage: /chunky
 permissions:
