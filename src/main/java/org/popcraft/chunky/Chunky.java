@@ -3,7 +3,6 @@ package org.popcraft.chunky;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.papermc.lib.PaperLib;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -124,13 +124,15 @@ public final class Chunky extends JavaPlugin {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        final List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
-            return Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet");
+            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet"));
+        } else if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
+            this.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
+        } else {
+            return suggestions;
         }
-        if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
-            return Bukkit.getWorlds().stream().map(World::getName).map(String::toLowerCase).filter(w -> w.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        return suggestions.stream().filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
     }
 
     private void start(CommandSender sender) {
