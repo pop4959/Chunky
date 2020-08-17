@@ -32,10 +32,8 @@ public final class Chunky extends JavaPlugin {
     private Map<String, String> translations, fallbackTranslations;
     private World world;
     private int x, z, radius;
-    private boolean queue;
     private boolean silent;
     private int quiet;
-    private Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -44,7 +42,8 @@ public final class Chunky extends JavaPlugin {
         this.saveConfig();
         this.configStorage = new ConfigStorage(this);
         this.genTasks = new ConcurrentHashMap<>();
-        this.translations = loadTranslation(this.getConfig().getString("language", "en"));
+        final String language = this.getConfig().getString("language", "en");
+        this.translations = loadTranslation(language);
         this.fallbackTranslations = loadTranslation("en");
         this.world = this.getServer().getWorlds().get(0);
         this.x = 0;
@@ -52,7 +51,8 @@ public final class Chunky extends JavaPlugin {
         this.radius = 500;
         this.silent = false;
         this.quiet = 1;
-        this.metrics = new Metrics(this, 8211);
+        Metrics metrics = new Metrics(this, 8211);
+        metrics.addCustomChart(new Metrics.SimplePie("language", () -> language));
         if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
             this.getLogger().severe(message("error_version_spigot"));
             this.getServer().getPluginManager().disablePlugin(this);
