@@ -6,6 +6,9 @@ import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ConcentricChunkIterator;
 import org.popcraft.chunky.iterator.Loop2ChunkIterator;
 import org.popcraft.chunky.iterator.SpiralChunkIterator;
+import org.popcraft.chunky.shape.Circle;
+import org.popcraft.chunky.shape.Shape;
+import org.popcraft.chunky.shape.Triangle;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
@@ -18,6 +21,7 @@ public class GenerationTask implements Runnable {
     private final int centerX;
     private final int centerZ;
     private ChunkIterator chunkIterator;
+    private Shape shape;
     private boolean stopped, cancelled;
     private long prevTime, totalTime;
     private final AtomicLong startTime = new AtomicLong();
@@ -63,6 +67,7 @@ public class GenerationTask implements Runnable {
                 this.chunkIterator = new ConcentricChunkIterator(radius, centerX, centerZ);
                 break;
         }
+        this.shape = new Triangle(chunkIterator);
         this.totalChunks.set(chunkIterator.total());
     }
 
@@ -112,7 +117,7 @@ public class GenerationTask implements Runnable {
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             ChunkCoordinate chunkCoord = chunkIterator.next();
-            if (PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
+            if (!shape.isBounding(chunkCoord) || PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
                 continue;
             }

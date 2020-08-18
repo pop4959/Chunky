@@ -86,6 +86,11 @@ public class ConcentricChunkIterator implements ChunkIterator {
     }
 
     @Override
+    public ChunkCoordinate center() {
+        return new ChunkCoordinate(xCenter, zCenter);
+    }
+
+    @Override
     public long total() {
         return total;
     }
