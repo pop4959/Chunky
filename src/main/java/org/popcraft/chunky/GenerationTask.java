@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class GenTask implements Runnable {
+public class GenerationTask implements Runnable {
     private final Chunky chunky;
     private final World world;
     private final int radius;
@@ -27,7 +27,7 @@ public class GenTask implements Runnable {
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
     private static final int MAX_WORKING = 50;
 
-    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, String iteratorType, long time) {
+    public GenerationTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, String iteratorType, long time) {
         this(chunky, world, radius, centerX, centerZ, iteratorType);
         switch (iteratorType) {
             case "loop":
@@ -45,7 +45,7 @@ public class GenTask implements Runnable {
         this.prevTime = time;
     }
 
-    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, String iteratorType) {
+    public GenerationTask(Chunky chunky, World world, int radius, int centerX, int centerZ, String iteratorType) {
         this.chunky = chunky;
         this.world = world;
         this.radius = radius;
@@ -137,7 +137,7 @@ public class GenTask implements Runnable {
             this.cancelled = true;
         }
         chunky.getConfigStorage().saveTask(this);
-        chunky.getGenTasks().remove(this.getWorld());
+        chunky.getGenerationTasks().remove(this.getWorld());
         Thread.currentThread().setName(poolThreadName);
     }
 

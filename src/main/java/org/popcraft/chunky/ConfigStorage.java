@@ -18,7 +18,7 @@ public class ConfigStorage {
         this.config = chunky.getConfig();
     }
 
-    public Optional<GenTask> loadTask(World world) {
+    public Optional<GenerationTask> loadTask(World world) {
         if (config.getConfigurationSection(TASKS_KEY + world.getName()) == null) {
             return Optional.empty();
         }
@@ -33,35 +33,35 @@ public class ConfigStorage {
         String iteratorType = config.getString(world_key + "iterator", "loop");
         long time = config.getLong(world_key + "time", 0);
         //noinspection ConstantConditions
-        return Optional.of(new GenTask(chunky, world, radius, centerX, centerZ, count, iteratorType, time));
+        return Optional.of(new GenerationTask(chunky, world, radius, centerX, centerZ, count, iteratorType, time));
     }
 
-    public List<GenTask> loadTasks() {
-        List<GenTask> genTasks = new ArrayList<>();
-        chunky.getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(genTasks::add));
-        return genTasks;
+    public List<GenerationTask> loadTasks() {
+        List<GenerationTask> generationTasks = new ArrayList<>();
+        chunky.getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
+        return generationTasks;
     }
 
-    public void saveTask(GenTask genTask) {
-        String world_key = TASKS_KEY + genTask.getWorld().getName() + ".";
-        config.set(world_key + "cancelled", genTask.isCancelled());
-        config.set(world_key + "radius", genTask.getRadius());
-        config.set(world_key + "x-center", genTask.getCenterX());
-        config.set(world_key + "z-center", genTask.getCenterZ());
-        config.set(world_key + "count", genTask.getCount());
-        config.set(world_key + "iterator", genTask.getChunkIterator().name());
-        config.set(world_key + "time", genTask.getTotalTime());
+    public void saveTask(GenerationTask generationTask) {
+        String world_key = TASKS_KEY + generationTask.getWorld().getName() + ".";
+        config.set(world_key + "cancelled", generationTask.isCancelled());
+        config.set(world_key + "radius", generationTask.getRadius());
+        config.set(world_key + "x-center", generationTask.getCenterX());
+        config.set(world_key + "z-center", generationTask.getCenterZ());
+        config.set(world_key + "count", generationTask.getCount());
+        config.set(world_key + "iterator", generationTask.getChunkIterator().name());
+        config.set(world_key + "time", generationTask.getTotalTime());
         chunky.saveConfig();
     }
 
     public void saveTasks() {
-        chunky.getGenTasks().values().forEach(this::saveTask);
+        chunky.getGenerationTasks().values().forEach(this::saveTask);
     }
 
     public void cancelTasks() {
-        loadTasks().forEach(genTask -> {
-            genTask.stop(true);
-            saveTask(genTask);
+        loadTasks().forEach(generationTask -> {
+            generationTask.stop(true);
+            saveTask(generationTask);
         });
     }
 

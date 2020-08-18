@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public final class Chunky extends JavaPlugin {
     private ConfigStorage configStorage;
-    private ConcurrentHashMap<World, GenTask> genTasks;
+    private ConcurrentHashMap<World, GenerationTask> generationTasks;
     private Map<String, String> translations, fallbackTranslations;
     private World world;
     private int x, z, radius;
@@ -42,7 +42,7 @@ public final class Chunky extends JavaPlugin {
         this.getConfig().options().copyHeader(true);
         this.saveConfig();
         this.configStorage = new ConfigStorage(this);
-        this.genTasks = new ConcurrentHashMap<>();
+        this.generationTasks = new ConcurrentHashMap<>();
         final String language = this.getConfig().getString("language", "en");
         this.translations = loadTranslation(language);
         this.fallbackTranslations = loadTranslation("en");
@@ -143,31 +143,31 @@ public final class Chunky extends JavaPlugin {
     }
 
     private void start(CommandSender sender) {
-        if (genTasks.containsKey(world)) {
+        if (generationTasks.containsKey(world)) {
             sender.sendMessage(message("format_started_already", world.getName()));
             return;
         }
-        GenTask genTask = new GenTask(this, world, radius, x, z, pattern);
-        genTasks.put(world, genTask);
-        this.getServer().getScheduler().runTaskAsynchronously(this, genTask);
+        GenerationTask generationTask = new GenerationTask(this, world, radius, x, z, pattern);
+        generationTasks.put(world, generationTask);
+        this.getServer().getScheduler().runTaskAsynchronously(this, generationTask);
         sender.sendMessage(message("format_start", world.getName(), x, z, radius));
     }
 
     private void pause(CommandSender sender) {
-        for (GenTask genTask : genTasks.values()) {
-            genTask.stop(false);
-            sender.sendMessage(message("format_pause", genTask.getWorld().getName()));
+        for (GenerationTask generationTask : generationTasks.values()) {
+            generationTask.stop(false);
+            sender.sendMessage(message("format_pause", generationTask.getWorld().getName()));
         }
     }
 
     private void cont(CommandSender sender) {
-        configStorage.loadTasks().forEach(genTask -> {
-            if (!genTasks.containsKey(genTask.getWorld())) {
-                genTasks.put(genTask.getWorld(), genTask);
-                this.getServer().getScheduler().runTaskAsynchronously(this, genTask);
-                sender.sendMessage(message("format_continue", genTask.getWorld().getName()));
+        configStorage.loadTasks().forEach(generationTask -> {
+            if (!generationTasks.containsKey(generationTask.getWorld())) {
+                generationTasks.put(generationTask.getWorld(), generationTask);
+                this.getServer().getScheduler().runTaskAsynchronously(this, generationTask);
+                sender.sendMessage(message("format_continue", generationTask.getWorld().getName()));
             } else {
-                sender.sendMessage(message("format_started_already", genTask.getWorld().getName()));
+                sender.sendMessage(message("format_started_already", generationTask.getWorld().getName()));
             }
         });
     }
@@ -175,8 +175,8 @@ public final class Chunky extends JavaPlugin {
     private void cancel(CommandSender sender) {
         sender.sendMessage(message("format_cancel"));
         configStorage.cancelTasks();
-        genTasks.values().forEach(genTask -> genTask.stop(true));
-        genTasks.clear();
+        generationTasks.values().forEach(generationTask -> generationTask.stop(true));
+        generationTasks.clear();
         this.getServer().getScheduler().cancelTasks(this);
     }
 
@@ -296,8 +296,8 @@ public final class Chunky extends JavaPlugin {
         return configStorage;
     }
 
-    public ConcurrentHashMap<World, GenTask> getGenTasks() {
-        return genTasks;
+    public ConcurrentHashMap<World, GenerationTask> getGenerationTasks() {
+        return generationTasks;
     }
 
     public boolean isSilent() {
