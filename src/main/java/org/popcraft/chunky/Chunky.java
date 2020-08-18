@@ -131,7 +131,7 @@ public final class Chunky extends JavaPlugin {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         final List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
-            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet"));
+            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet", "pattern"));
         } else if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
             this.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
         } else if (args.length == 2 && "pattern".equalsIgnoreCase(args[0])) {
