@@ -26,12 +26,14 @@ public class ConfigStorage {
         if (config.getBoolean(world_key + "cancelled", false)) {
             return Optional.empty();
         }
-        int radius = config.getInt(world_key + "radius");
-        int centerX = config.getInt(world_key + "x-center");
-        int centerZ = config.getInt(world_key + "z-center");
-        long count = config.getLong(world_key + "count");
+        int radius = config.getInt(world_key + "radius", 500);
+        int centerX = config.getInt(world_key + "x-center", 0);
+        int centerZ = config.getInt(world_key + "z-center", 0);
+        long count = config.getLong(world_key + "count", 0);
+        String iteratorType = config.getString(world_key + "iterator", "loop");
         long time = config.getLong(world_key + "time", 0);
-        return Optional.of(new GenTask(chunky, world, radius, centerX, centerZ, count, time));
+        //noinspection ConstantConditions
+        return Optional.of(new GenTask(chunky, world, radius, centerX, centerZ, count, iteratorType, time));
     }
 
     public List<GenTask> loadTasks() {
@@ -46,10 +48,8 @@ public class ConfigStorage {
         config.set(world_key + "radius", genTask.getRadius());
         config.set(world_key + "x-center", genTask.getCenterX());
         config.set(world_key + "z-center", genTask.getCenterZ());
-        ChunkCoordinate currentChunk = genTask.getChunkCoordinateIterator().peek();
-        config.set(world_key + "x-chunk", currentChunk.x);
-        config.set(world_key + "z-chunk", currentChunk.z);
         config.set(world_key + "count", genTask.getCount());
+        config.set(world_key + "iterator", genTask.getChunkIterator().name());
         config.set(world_key + "time", genTask.getTotalTime());
         chunky.saveConfig();
     }

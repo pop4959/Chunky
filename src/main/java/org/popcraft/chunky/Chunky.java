@@ -32,6 +32,7 @@ public final class Chunky extends JavaPlugin {
     private Map<String, String> translations, fallbackTranslations;
     private World world;
     private int x, z, radius;
+    private String pattern;
     private boolean silent;
     private int quiet;
 
@@ -49,6 +50,7 @@ public final class Chunky extends JavaPlugin {
         this.x = 0;
         this.z = 0;
         this.radius = 500;
+        this.pattern = "concentric";
         this.silent = false;
         this.quiet = 1;
         Metrics metrics = new Metrics(this, 8211);
@@ -112,6 +114,9 @@ public final class Chunky extends JavaPlugin {
             case "quiet":
                 quiet(sender, args);
                 break;
+            case "pattern":
+                pattern(sender, args);
+                break;
             default:
                 sender.sendMessage(message("help_menu",
                         message("help_start"), message("help_pause"), message("help_continue"),
@@ -129,6 +134,8 @@ public final class Chunky extends JavaPlugin {
             suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet"));
         } else if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
             this.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
+        } else if (args.length == 2 && "pattern".equalsIgnoreCase(args[0])) {
+            suggestions.addAll(Arrays.asList("concentric", "loop", "spiral"));
         } else {
             return suggestions;
         }
@@ -140,7 +147,7 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(message("format_started_already", world.getName()));
             return;
         }
-        GenTask genTask = new GenTask(this, world, radius, x, z);
+        GenTask genTask = new GenTask(this, world, radius, x, z, pattern);
         genTasks.put(world, genTask);
         this.getServer().getScheduler().runTaskAsynchronously(this, genTask);
         sender.sendMessage(message("format_start", world.getName(), x, z, radius));
@@ -245,6 +252,19 @@ public final class Chunky extends JavaPlugin {
         }
         this.quiet = newQuiet.get();
         sender.sendMessage(message("format_quiet", quiet));
+    }
+
+    private void pattern(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            sender.sendMessage(message("help_pattern"));
+            return;
+        }
+        this.pattern = args[1].toLowerCase();
+        if (!"concentric".equals(pattern) && !"loop".equals(pattern) && !"spiral".equals(pattern)) {
+            sender.sendMessage(message("help_pattern"));
+            return;
+        }
+        sender.sendMessage(message("format_pattern", pattern));
     }
 
     private Map<String, String> loadTranslation(String language) {

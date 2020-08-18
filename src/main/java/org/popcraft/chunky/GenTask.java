@@ -2,6 +2,10 @@ package org.popcraft.chunky;
 
 import io.papermc.lib.PaperLib;
 import org.bukkit.World;
+import org.popcraft.chunky.iterator.ChunkIterator;
+import org.popcraft.chunky.iterator.ConcentricChunkIterator;
+import org.popcraft.chunky.iterator.Loop2ChunkIterator;
+import org.popcraft.chunky.iterator.SpiralChunkIterator;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
@@ -13,7 +17,7 @@ public class GenTask implements Runnable {
     private final int radius;
     private final int centerX;
     private final int centerZ;
-    private ChunkCoordinateIterator chunkCoordinates;
+    private ChunkIterator chunkIterator;
     private boolean stopped, cancelled;
     private long prevTime, totalTime;
     private final AtomicLong startTime = new AtomicLong();
@@ -23,21 +27,43 @@ public class GenTask implements Runnable {
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
     private static final int MAX_WORKING = 50;
 
-    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, long time) {
-        this(chunky, world, radius, centerX, centerZ);
-        this.chunkCoordinates = new ChunkCoordinateIterator(radius, centerX, centerZ, count);
+    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, String iteratorType, long time) {
+        this(chunky, world, radius, centerX, centerZ, iteratorType);
+        switch (iteratorType) {
+            case "loop":
+                this.chunkIterator = new Loop2ChunkIterator(radius, centerX, centerZ, count);
+                break;
+            case "spiral":
+                this.chunkIterator = new SpiralChunkIterator(radius, centerX, centerZ, count);
+                break;
+            case "concentric":
+            default:
+                this.chunkIterator = new ConcentricChunkIterator(radius, centerX, centerZ, count);
+                break;
+        }
         this.finishedChunks.set(count);
         this.prevTime = time;
     }
 
-    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ) {
+    public GenTask(Chunky chunky, World world, int radius, int centerX, int centerZ, String iteratorType) {
         this.chunky = chunky;
         this.world = world;
         this.radius = radius;
         this.centerX = centerX;
         this.centerZ = centerZ;
-        this.chunkCoordinates = new ChunkCoordinateIterator(radius, centerX, centerZ);
-        this.totalChunks.set(chunkCoordinates.count());
+        switch (iteratorType) {
+            case "loop":
+                this.chunkIterator = new Loop2ChunkIterator(radius, centerX, centerZ);
+                break;
+            case "spiral":
+                this.chunkIterator = new SpiralChunkIterator(radius, centerX, centerZ);
+                break;
+            case "concentric":
+            default:
+                this.chunkIterator = new ConcentricChunkIterator(radius, centerX, centerZ);
+                break;
+        }
+        this.totalChunks.set(chunkIterator.total());
     }
 
     private void printUpdate(World chunkWorld, int chunkX, int chunkZ) {
@@ -49,7 +75,7 @@ public class GenTask implements Runnable {
         double percentDone = 100f * chunkNum / totalChunks.get();
         long currentTime = System.currentTimeMillis();
         chunkUpdateTimes10Sec.add(currentTime);
-        while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4 /* 10 seconds */) chunkUpdateTimes10Sec.poll();
+        while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4) chunkUpdateTimes10Sec.poll();
         long chunksLeft = totalChunks.get() - finishedChunks.get();
         if (chunksLeft > 0 && (chunky.isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getQuiet())) {
             return;
@@ -60,7 +86,7 @@ public class GenTask implements Runnable {
         if (chunksLeft > 0 && timeDiff < 1e-1) {
             return;
         }
-        double speed = chunkUpdateTimes10Sec.size() / timeDiff; // chunk updates in 1 second
+        double speed = chunkUpdateTimes10Sec.size() / timeDiff;
         String message;
         if (chunksLeft == 0) {
             long total = (prevTime + (currentTime - startTime.get())) / 1000;
@@ -84,8 +110,8 @@ public class GenTask implements Runnable {
         Thread.currentThread().setName("Generation Task Thread");
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
-        while (!stopped && chunkCoordinates.hasNext()) {
-            ChunkCoordinate chunkCoord = chunkCoordinates.next();
+        while (!stopped && chunkIterator.hasNext()) {
+            ChunkCoordinate chunkCoord = chunkIterator.next();
             if (PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
                 continue;
@@ -140,8 +166,8 @@ public class GenTask implements Runnable {
         return finishedChunks.get();
     }
 
-    public ChunkCoordinateIterator getChunkCoordinateIterator() {
-        return chunkCoordinates;
+    public ChunkIterator getChunkIterator() {
+        return chunkIterator;
     }
 
     public boolean isCancelled() {
