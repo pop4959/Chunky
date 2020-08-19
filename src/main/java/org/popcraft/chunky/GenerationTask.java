@@ -107,7 +107,7 @@ public class GenerationTask implements Runnable {
     @Override
     public void run() {
         final String poolThreadName = Thread.currentThread().getName();
-        Thread.currentThread().setName("Generation Task Thread");
+        Thread.currentThread().setName(String.format("Chunky-%s Thread", world.getName()));
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
