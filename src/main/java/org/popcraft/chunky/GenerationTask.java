@@ -95,10 +95,10 @@ public class GenerationTask implements Runnable {
             long totalSeconds = total - totalHours * 3600 - totalMinutes * 60;
             message = chunky.message("task_done", world, chunkNum, percentDone, totalHours, totalMinutes, totalSeconds);
         } else {
-            int eta = (int) (chunksLeft / speed);
-            int etaHours = eta / 3600;
-            int etaMinutes = (eta - etaHours * 3600) / 60;
-            int etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
+            long eta = (long) (chunksLeft / speed);
+            long etaHours = eta / 3600;
+            long etaMinutes = (eta - etaHours * 3600) / 60;
+            long etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
             message = chunky.message("task_update", world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunkX, chunkZ);
         }
         chunky.getServer().getConsoleSender().sendMessage(message);

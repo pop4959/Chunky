@@ -73,7 +73,7 @@ public class SpiralChunkIterator implements ChunkIterator {
         this.z = zCenter >> 4;
         this.xStop = x + radiusChunks;
         this.zStop = z + radiusChunks;
-        int diameter = 2 * radiusChunks + 1;
+        long diameter = 2 * radiusChunks + 1;
         this.total = diameter * diameter;
     }
 
