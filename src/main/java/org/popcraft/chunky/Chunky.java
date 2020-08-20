@@ -217,6 +217,10 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(message("help_center"));
             return;
         }
+        if (Math.abs(newX.get()) > 3e7 || Math.abs(newZ.get()) > 3e7) {
+            sender.sendMessage(message("help_center"));
+            return;
+        }
         this.x = newX.get();
         this.z = newZ.get();
         sender.sendMessage(message("format_center", x, z));
@@ -229,6 +233,10 @@ public final class Chunky extends JavaPlugin {
         }
         Optional<Integer> newRadius = Input.tryInteger(args[1]);
         if (!newRadius.isPresent()) {
+            sender.sendMessage(message("help_radius"));
+            return;
+        }
+        if (newRadius.get() < 0 || newRadius.get() > 3e7) {
             sender.sendMessage(message("help_radius"));
             return;
         }
