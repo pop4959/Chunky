@@ -20,13 +20,12 @@ public class Triangle extends AbstractShape {
     public boolean isBounding(ChunkCoordinate chunkCoordinate) {
         int xChunk = (chunkCoordinate.x << 4) + 8;
         int zChunk = (chunkCoordinate.z << 4) + 8;
-        boolean insideLp1p2 = insideLine(p1x, p1z, p2x, p2z, xChunk, zChunk);
-        boolean insideLp2p3 = insideLine(p2x, p2z, p3x, p3z, xChunk, zChunk);
-        boolean insideLp3p1 = insideLine(p3x, p3z, p1x, p1z, xChunk, zChunk);
-        return insideLp1p2 && insideLp2p3 && insideLp3p1;
-    }
-
-    private boolean insideLine(int ax, int az, int bx, int bz, int cx, int cz) {
-        return (bx - ax) * (cz - az) > (bz - az) * (cx - ax);
+        if (!insideLine(p1x, p1z, p2x, p2z, xChunk, zChunk)) {
+            return false;
+        }
+        if (!insideLine(p2x, p2z, p3x, p3z, xChunk, zChunk)) {
+            return false;
+        }
+        return insideLine(p3x, p3z, p1x, p1z, xChunk, zChunk);
     }
 }

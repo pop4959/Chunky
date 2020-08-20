@@ -23,4 +23,8 @@ public abstract class AbstractShape implements Shape {
         this.z1 = zCenter - diameter / 2;
         this.z2 = zCenter + diameter / 2;
     }
+
+    protected boolean insideLine(double ax, double az, double bx, double bz, double cx, double cz) {
+        return (bx - ax) * (cz - az) > (bz - az) * (cx - ax);
+    }
 }

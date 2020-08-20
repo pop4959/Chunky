@@ -7,7 +7,9 @@ import org.popcraft.chunky.iterator.ConcentricChunkIterator;
 import org.popcraft.chunky.iterator.Loop2ChunkIterator;
 import org.popcraft.chunky.iterator.SpiralChunkIterator;
 import org.popcraft.chunky.shape.Circle;
+import org.popcraft.chunky.shape.Diamond;
 import org.popcraft.chunky.shape.Shape;
+import org.popcraft.chunky.shape.Star;
 import org.popcraft.chunky.shape.Triangle;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -67,7 +69,7 @@ public class GenerationTask implements Runnable {
                 this.chunkIterator = new ConcentricChunkIterator(radius, centerX, centerZ);
                 break;
         }
-        this.shape = new Triangle(chunkIterator);
+        this.shape = new Diamond(chunkIterator);
         this.totalChunks.set(chunkIterator.total());
     }
 
