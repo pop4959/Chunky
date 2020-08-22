@@ -53,8 +53,12 @@ public final class Chunky extends JavaPlugin {
         this.pattern = "concentric";
         this.silent = false;
         this.quiet = 1;
+
         Metrics metrics = new Metrics(this, 8211);
-        metrics.addCustomChart(new Metrics.SimplePie("language", () -> language));
+        if (metrics.isEnabled()) {
+            metrics.addCustomChart(new Metrics.SimplePie("language", () -> language));
+        }
+
         if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
             this.getLogger().severe(message("error_version_spigot"));
             this.getServer().getPluginManager().disablePlugin(this);
@@ -131,7 +135,7 @@ public final class Chunky extends JavaPlugin {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         final List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
-            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet", "pattern"));
+            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet", "pattern", "cancel"));
         } else if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
             this.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
         } else if (args.length == 2 && "pattern".equalsIgnoreCase(args[0])) {
