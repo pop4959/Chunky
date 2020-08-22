@@ -69,7 +69,7 @@ public class GenerationTask implements Runnable {
                 this.chunkIterator = new ConcentricChunkIterator(radius, centerX, centerZ);
                 break;
         }
-        this.shape = new Diamond(chunkIterator);
+        this.shape = new Star(chunkIterator);
         this.totalChunks.set(chunkIterator.total());
     }
 
