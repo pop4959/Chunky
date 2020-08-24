@@ -54,8 +54,12 @@ public final class Chunky extends JavaPlugin {
         this.shape = "square";
         this.silent = false;
         this.quiet = 1;
+
         Metrics metrics = new Metrics(this, 8211);
-        metrics.addCustomChart(new Metrics.SimplePie("language", () -> language));
+        if (metrics.isEnabled()) {
+            metrics.addCustomChart(new Metrics.SimplePie("language", () -> language));
+        }
+
         if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
             this.getLogger().severe(message("error_version_spigot"));
             this.getServer().getPluginManager().disablePlugin(this);
@@ -135,7 +139,7 @@ public final class Chunky extends JavaPlugin {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         final List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
-            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet", "pattern", "shape"));
+            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet", "pattern", "cancel", "shape"));
         } else if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
             this.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
         } else if (args.length == 2 && "pattern".equalsIgnoreCase(args[0])) {
@@ -223,6 +227,10 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(message("help_center"));
             return;
         }
+        if (Math.abs(newX.get()) > 3e7 || Math.abs(newZ.get()) > 3e7) {
+            sender.sendMessage(message("help_center"));
+            return;
+        }
         this.x = newX.get();
         this.z = newZ.get();
         sender.sendMessage(message("format_center", x, z));
@@ -235,6 +243,10 @@ public final class Chunky extends JavaPlugin {
         }
         Optional<Integer> newRadius = Input.tryInteger(args[1]);
         if (!newRadius.isPresent()) {
+            sender.sendMessage(message("help_radius"));
+            return;
+        }
+        if (newRadius.get() < 0 || newRadius.get() > 3e7) {
             sender.sendMessage(message("help_radius"));
             return;
         }

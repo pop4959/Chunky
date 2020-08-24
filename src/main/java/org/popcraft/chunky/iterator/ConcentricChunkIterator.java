@@ -42,7 +42,7 @@ public class ConcentricChunkIterator implements ChunkIterator {
         this.z = zCenter >> 4;
         this.xCenter = x;
         this.zCenter = z;
-        int diameterChunks = 2 * radiusChunks + 1;
+        long diameterChunks = 2 * radiusChunks + 1;
         this.total = diameterChunks * diameterChunks;
     }
 

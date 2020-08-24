@@ -6,7 +6,7 @@ public class Loop2ChunkIterator implements ChunkIterator {
     private int x, z;
     private int xCenter, zCenter;
     private int x1, x2, z1, z2;
-    private int radiusChunks, diameterChunks;
+    private long diameterChunks;
     private boolean hasNext = true;
     private long total;
 
@@ -20,13 +20,13 @@ public class Loop2ChunkIterator implements ChunkIterator {
     }
 
     public Loop2ChunkIterator(int radius, int xCenter, int zCenter) {
-        this.radiusChunks = (int) Math.ceil(radius / 16f);
-        this.xCenter = xCenter >> 4;
-        this.zCenter = zCenter >> 4;
-        this.x1 = this.xCenter - radiusChunks;
-        this.x2 = this.xCenter + radiusChunks;
-        this.z1 = this.zCenter - radiusChunks;
-        this.z2 = this.zCenter + radiusChunks;
+        int radiusChunks = (int) Math.ceil(radius / 16f);
+        int xCenterChunk = xCenter >> 4;
+        int zCenterChunk = zCenter >> 4;
+        this.x1 = xCenterChunk - radiusChunks;
+        this.x2 = xCenterChunk + radiusChunks;
+        this.z1 = zCenterChunk - radiusChunks;
+        this.z2 = zCenterChunk + radiusChunks;
         this.x = x1;
         this.z = z1;
         this.diameterChunks = 2 * radiusChunks + 1;
