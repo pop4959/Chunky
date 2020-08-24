@@ -8,6 +8,7 @@ import org.popcraft.chunky.iterator.Loop2ChunkIterator;
 import org.popcraft.chunky.iterator.SpiralChunkIterator;
 import org.popcraft.chunky.shape.Circle;
 import org.popcraft.chunky.shape.Diamond;
+import org.popcraft.chunky.shape.Pentagon;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.Star;
 import org.popcraft.chunky.shape.Triangle;
@@ -69,7 +70,7 @@ public class GenerationTask implements Runnable {
                 this.chunkIterator = new ConcentricChunkIterator(radius, centerX, centerZ);
                 break;
         }
-        this.shape = new Star(chunkIterator);
+        this.shape = new Pentagon(chunkIterator);
         this.totalChunks.set(chunkIterator.total());
     }
 
