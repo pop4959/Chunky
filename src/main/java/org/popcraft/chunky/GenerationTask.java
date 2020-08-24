@@ -3,9 +3,9 @@ package org.popcraft.chunky;
 import io.papermc.lib.PaperLib;
 import org.bukkit.World;
 import org.popcraft.chunky.iterator.ChunkIterator;
-import org.popcraft.chunky.iterator.ConcentricChunkIterator;
-import org.popcraft.chunky.iterator.Loop2ChunkIterator;
-import org.popcraft.chunky.iterator.SpiralChunkIterator;
+import org.popcraft.chunky.iterator.ChunkIteratorFactory;
+import org.popcraft.chunky.shape.Shape;
+import org.popcraft.chunky.shape.ShapeFactory;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
@@ -14,10 +14,9 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GenerationTask implements Runnable {
     private final Chunky chunky;
     private final World world;
-    private final int radius;
-    private final int centerX;
-    private final int centerZ;
+    private final int radius, centerX, centerZ;
     private ChunkIterator chunkIterator;
+    private Shape shape;
     private boolean stopped, cancelled;
     private long prevTime, totalTime;
     private final AtomicLong startTime = new AtomicLong();
@@ -27,45 +26,26 @@ public class GenerationTask implements Runnable {
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
     private static final int MAX_WORKING = 50;
 
-    public GenerationTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, String iteratorType, long time) {
-        this(chunky, world, radius, centerX, centerZ, iteratorType);
-        switch (iteratorType) {
-            case "loop":
-                this.chunkIterator = new Loop2ChunkIterator(radius, centerX, centerZ, count);
-                break;
-            case "spiral":
-                this.chunkIterator = new SpiralChunkIterator(radius, centerX, centerZ, count);
-                break;
-            case "concentric":
-            default:
-                this.chunkIterator = new ConcentricChunkIterator(radius, centerX, centerZ, count);
-                break;
-        }
+    public GenerationTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, String iteratorType, String shapeType, long time) {
+        this(chunky, world, radius, centerX, centerZ, iteratorType, shapeType);
+        this.chunkIterator = ChunkIteratorFactory.getChunkIterator(iteratorType, radius, centerX, centerZ, count);
+        this.shape = ShapeFactory.getShape(shapeType, chunkIterator);
         this.finishedChunks.set(count);
         this.prevTime = time;
     }
 
-    public GenerationTask(Chunky chunky, World world, int radius, int centerX, int centerZ, String iteratorType) {
+    public GenerationTask(Chunky chunky, World world, int radius, int centerX, int centerZ, String iteratorType, String shapeType) {
         this.chunky = chunky;
         this.world = world;
         this.radius = radius;
         this.centerX = centerX;
         this.centerZ = centerZ;
-        switch (iteratorType) {
-            case "loop":
-                this.chunkIterator = new Loop2ChunkIterator(radius, centerX, centerZ);
-                break;
-            case "spiral":
-                this.chunkIterator = new SpiralChunkIterator(radius, centerX, centerZ);
-                break;
-            case "concentric":
-            default:
-                this.chunkIterator = new ConcentricChunkIterator(radius, centerX, centerZ);
-                break;
-        }
+        this.chunkIterator = ChunkIteratorFactory.getChunkIterator(iteratorType, radius, centerX, centerZ);
+        this.shape = ShapeFactory.getShape(shapeType, chunkIterator);
         this.totalChunks.set(chunkIterator.total());
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void printUpdate(World chunkWorld, int chunkX, int chunkZ) {
         if (stopped) {
             return;
@@ -112,7 +92,7 @@ public class GenerationTask implements Runnable {
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             ChunkCoordinate chunkCoord = chunkIterator.next();
-            if (PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
+            if (!shape.isBounding(chunkCoord) || PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
                 continue;
             }
@@ -168,6 +148,10 @@ public class GenerationTask implements Runnable {
 
     public ChunkIterator getChunkIterator() {
         return chunkIterator;
+    }
+
+    public Shape getShape() {
+        return shape;
     }
 
     public boolean isCancelled() {

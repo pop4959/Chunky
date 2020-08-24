@@ -31,9 +31,9 @@ public class ConfigStorage {
         int centerZ = config.getInt(world_key + "z-center", 0);
         long count = config.getLong(world_key + "count", 0);
         String iteratorType = config.getString(world_key + "iterator", "loop");
+        String shapeType = config.getString(world_key + "shape", "square");
         long time = config.getLong(world_key + "time", 0);
-        //noinspection ConstantConditions
-        return Optional.of(new GenerationTask(chunky, world, radius, centerX, centerZ, count, iteratorType, time));
+        return Optional.of(new GenerationTask(chunky, world, radius, centerX, centerZ, count, iteratorType, shapeType, time));
     }
 
     public List<GenerationTask> loadTasks() {
@@ -50,6 +50,7 @@ public class ConfigStorage {
         config.set(world_key + "z-center", generationTask.getCenterZ());
         config.set(world_key + "count", generationTask.getCount());
         config.set(world_key + "iterator", generationTask.getChunkIterator().name());
+        config.set(world_key + "shape", generationTask.getShape().name());
         config.set(world_key + "time", generationTask.getTotalTime());
         chunky.saveConfig();
     }

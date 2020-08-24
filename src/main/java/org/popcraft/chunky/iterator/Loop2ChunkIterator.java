@@ -4,6 +4,7 @@ import org.popcraft.chunky.ChunkCoordinate;
 
 public class Loop2ChunkIterator implements ChunkIterator {
     private int x, z;
+    private int xCenter, zCenter;
     private int x1, x2, z1, z2;
     private long diameterChunks;
     private boolean hasNext = true;
@@ -11,6 +12,9 @@ public class Loop2ChunkIterator implements ChunkIterator {
 
     public Loop2ChunkIterator(int radius, int xCenter, int zCenter, long count) {
         this(radius, xCenter, zCenter);
+        if (count <= 0) {
+            return;
+        }
         this.x = x1 + (int) (count / diameterChunks);
         this.z = z1 + (int) (count % diameterChunks);
     }
@@ -49,6 +53,11 @@ public class Loop2ChunkIterator implements ChunkIterator {
     @Override
     public ChunkCoordinate peek() {
         return new ChunkCoordinate(x, z);
+    }
+
+    @Override
+    public ChunkCoordinate center() {
+        return new ChunkCoordinate(xCenter, zCenter);
     }
 
     @Override
