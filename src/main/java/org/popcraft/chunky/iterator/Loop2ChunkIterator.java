@@ -12,6 +12,9 @@ public class Loop2ChunkIterator implements ChunkIterator {
 
     public Loop2ChunkIterator(int radius, int xCenter, int zCenter, long count) {
         this(radius, xCenter, zCenter);
+        if (count <= 0) {
+            return;
+        }
         this.x = x1 + (int) (count / diameterChunks);
         this.z = z1 + (int) (count % diameterChunks);
     }

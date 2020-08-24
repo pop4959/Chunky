@@ -7,4 +7,9 @@ public class Square implements Shape {
     public boolean isBounding(ChunkCoordinate chunkCoordinate) {
         return true;
     }
+
+    @Override
+    public String name() {
+        return "square";
+    }
 }

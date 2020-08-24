@@ -33,4 +33,9 @@ public class Diamond extends AbstractShape {
         }
         return insideLine(p4x, p4z, p1x, p1z, xChunk, zChunk);
     }
+
+    @Override
+    public String name() {
+        return "diamond";
+    }
 }

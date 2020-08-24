@@ -31,4 +31,9 @@ public class Pentagon extends AbstractShape {
         boolean inside51 = insideLine(p5x, p5z, p1x, p1z, xChunk, zChunk);
         return inside12 && inside23 && inside34 && inside45 && inside51;
     }
+
+    @Override
+    public String name() {
+        return "pentagon";
+    }
 }

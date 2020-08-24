@@ -32,7 +32,7 @@ public final class Chunky extends JavaPlugin {
     private Map<String, String> translations, fallbackTranslations;
     private World world;
     private int x, z, radius;
-    private String pattern;
+    private String pattern, shape;
     private boolean silent;
     private int quiet;
 
@@ -51,6 +51,7 @@ public final class Chunky extends JavaPlugin {
         this.z = 0;
         this.radius = 500;
         this.pattern = "concentric";
+        this.shape = "square";
         this.silent = false;
         this.quiet = 1;
         Metrics metrics = new Metrics(this, 8211);
@@ -117,6 +118,9 @@ public final class Chunky extends JavaPlugin {
             case "pattern":
                 pattern(sender, args);
                 break;
+            case "shape":
+                shape(sender, args);
+                break;
             default:
                 sender.sendMessage(message("help_menu",
                         message("help_start"), message("help_pause"), message("help_continue"),
@@ -131,11 +135,13 @@ public final class Chunky extends JavaPlugin {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         final List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
-            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet", "pattern"));
+            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet", "pattern", "shape"));
         } else if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
             this.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
         } else if (args.length == 2 && "pattern".equalsIgnoreCase(args[0])) {
             suggestions.addAll(Arrays.asList("concentric", "loop", "spiral"));
+        } else if (args.length == 2 && "shape".equalsIgnoreCase(args[0])) {
+            suggestions.addAll(Arrays.asList("circle", "diamond", "pentagon", "square", "star", "triangle"));
         } else {
             return suggestions;
         }
@@ -147,7 +153,7 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(message("format_started_already", world.getName()));
             return;
         }
-        GenerationTask generationTask = new GenerationTask(this, world, radius, x, z, pattern);
+        GenerationTask generationTask = new GenerationTask(this, world, radius, x, z, pattern, shape);
         generationTasks.put(world, generationTask);
         this.getServer().getScheduler().runTaskAsynchronously(this, generationTask);
         sender.sendMessage(message("format_start", world.getName(), x, z, radius));
@@ -259,12 +265,28 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(message("help_pattern"));
             return;
         }
-        this.pattern = args[1].toLowerCase();
+        String pattern = args[1].toLowerCase();
         if (!"concentric".equals(pattern) && !"loop".equals(pattern) && !"spiral".equals(pattern)) {
             sender.sendMessage(message("help_pattern"));
             return;
         }
+        this.pattern = pattern;
         sender.sendMessage(message("format_pattern", pattern));
+    }
+
+    private void shape(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            sender.sendMessage(message("help_shape"));
+            return;
+        }
+        String shape = args[1].toLowerCase();
+        if (!"circle".equals(shape) && !"diamond".equals(shape) && !"pentagon".equals(shape)
+                && !"square".equals(shape) && !"star".equals(shape) && !"triangle".equals(shape)) {
+            sender.sendMessage(message("help_shape"));
+            return;
+        }
+        this.shape = shape;
+        sender.sendMessage(message("format_shape", shape));
     }
 
     private Map<String, String> loadTranslation(String language) {

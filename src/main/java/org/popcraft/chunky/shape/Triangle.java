@@ -28,4 +28,9 @@ public class Triangle extends AbstractShape {
         }
         return insideLine(p3x, p3z, p1x, p1z, xChunk, zChunk);
     }
+
+    @Override
+    public String name() {
+        return "triangle";
+    }
 }

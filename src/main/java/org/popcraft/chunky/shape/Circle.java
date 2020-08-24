@@ -14,4 +14,9 @@ public class Circle extends AbstractShape {
         int zChunk = (chunkCoordinate.z << 4) + 8;
         return Math.hypot(xCenter - xChunk, zCenter - zChunk) < radius;
     }
+
+    @Override
+    public String name() {
+        return "circle";
+    }
 }

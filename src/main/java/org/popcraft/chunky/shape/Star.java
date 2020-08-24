@@ -43,4 +43,9 @@ public class Star extends AbstractShape {
         }
         return inside52 && inside13 && inside24 && inside35;
     }
+
+    @Override
+    public String name() {
+        return "star";
+    }
 }
