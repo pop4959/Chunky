@@ -54,18 +54,19 @@ public final class Chunky extends JavaPlugin {
         this.shape = "square";
         this.silent = false;
         this.quiet = 1;
-
         Metrics metrics = new Metrics(this, 8211);
         if (metrics.isEnabled()) {
             metrics.addCustomChart(new Metrics.SimplePie("language", () -> language));
         }
-
         if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
             this.getLogger().severe(message("error_version_spigot"));
             this.getServer().getPluginManager().disablePlugin(this);
         } else if (BukkitVersion.v1_13_2.isHigherThan(BukkitVersion.getCurrent())) {
             this.getLogger().severe(message("error_version"));
             this.getServer().getPluginManager().disablePlugin(this);
+        }
+        if (this.getConfig().getBoolean("continue-on-restart", false)) {
+            cont(this.getServer().getConsoleSender());
         }
     }
 
