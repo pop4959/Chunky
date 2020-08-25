@@ -3,7 +3,6 @@ package org.popcraft.chunky;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +17,7 @@ public class ConfigStorage {
         this.config = chunky.getConfig();
     }
 
-    public Optional<GenerationTask> loadTask(World world) {
+    public synchronized Optional<GenerationTask> loadTask(World world) {
         if (config.getConfigurationSection(TASKS_KEY + world.getName()) == null) {
             return Optional.empty();
         }
@@ -36,13 +35,13 @@ public class ConfigStorage {
         return Optional.of(new GenerationTask(chunky, world, radius, centerX, centerZ, count, iteratorType, shapeType, time));
     }
 
-    public List<GenerationTask> loadTasks() {
+    public synchronized List<GenerationTask> loadTasks() {
         List<GenerationTask> generationTasks = new ArrayList<>();
         chunky.getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
         return generationTasks;
     }
 
-    public void saveTask(GenerationTask generationTask) {
+    public synchronized void saveTask(GenerationTask generationTask) {
         String world_key = TASKS_KEY + generationTask.getWorld().getName() + ".";
         config.set(world_key + "cancelled", generationTask.isCancelled());
         config.set(world_key + "radius", generationTask.getRadius());
@@ -55,21 +54,14 @@ public class ConfigStorage {
         chunky.saveConfig();
     }
 
-    public void saveTasks() {
+    public synchronized void saveTasks() {
         chunky.getGenerationTasks().values().forEach(this::saveTask);
     }
 
-    public void cancelTasks() {
+    public synchronized void cancelTasks() {
         loadTasks().forEach(generationTask -> {
             generationTask.stop(true);
             saveTask(generationTask);
         });
-    }
-
-    public void reset() {
-        File file = new File(chunky.getDataFolder(), "config.yml");
-        //noinspection ResultOfMethodCallIgnored
-        file.delete();
-        chunky.saveDefaultConfig();
     }
 }
