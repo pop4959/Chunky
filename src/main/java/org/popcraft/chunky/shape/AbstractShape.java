@@ -11,7 +11,7 @@ public abstract class AbstractShape implements Shape {
     protected int xCenter, zCenter;
     protected int x1, x2, z1, z2;
 
-    public AbstractShape(ChunkIterator chunkIterator) {
+    protected AbstractShape(ChunkIterator chunkIterator) {
         this.centerChunk = chunkIterator.center();
         this.diameterChunks = (int) Math.sqrt(chunkIterator.total());
         this.diameter = diameterChunks << 4;
