@@ -216,13 +216,13 @@ public final class Chunky extends JavaPlugin {
     }
 
     private void center(CommandSender sender, String[] args) {
-        Optional<Integer> newX = Optional.empty();
+        Optional<Double> newX = Optional.empty();
         if (args.length > 1) {
-            newX = Input.tryInteger(args[1]);
+            newX = Input.tryDouble(args[1]);
         }
-        Optional<Integer> newZ = Optional.empty();
+        Optional<Double> newZ = Optional.empty();
         if (args.length > 2) {
-            newZ = Input.tryInteger(args[2]);
+            newZ = Input.tryDouble(args[2]);
         }
         if (!newX.isPresent() || !newZ.isPresent()) {
             sender.sendMessage(message("help_center"));
@@ -232,8 +232,8 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(message("help_center"));
             return;
         }
-        this.x = newX.get();
-        this.z = newZ.get();
+        this.x = newX.get().intValue();
+        this.z = newZ.get().intValue();
         sender.sendMessage(message("format_center", x, z));
     }
 

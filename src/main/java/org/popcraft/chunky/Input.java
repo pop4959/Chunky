@@ -6,7 +6,6 @@ import org.bukkit.World;
 import java.util.Optional;
 
 public class Input {
-
     public static Optional<World> tryWorld(String input) {
         if (input == null) {
             return Optional.empty();
@@ -18,12 +17,21 @@ public class Input {
         if (input == null) {
             return Optional.empty();
         }
-        Integer integer = null;
         try {
-            integer = Integer.parseInt(input);
-        } catch (NumberFormatException ignored) {
+            return Optional.of(Integer.parseInt(input));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
         }
-        return Optional.ofNullable(integer);
     }
 
+    public static Optional<Double> tryDouble(String input) {
+        if (input == null) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(Double.parseDouble(input));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
 }
