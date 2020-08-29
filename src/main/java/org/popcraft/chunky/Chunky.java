@@ -228,7 +228,7 @@ public final class Chunky extends JavaPlugin {
             sender.sendMessage(message("help_center"));
             return;
         }
-        if (Math.abs(newX.get()) > 3e7 || Math.abs(newZ.get()) > 3e7) {
+        if (Math.abs(newX.get().intValue()) > 3e7 || Math.abs(newZ.get().intValue()) > 3e7) {
             sender.sendMessage(message("help_center"));
             return;
         }
