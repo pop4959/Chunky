@@ -18,7 +18,7 @@
   "help_cancel": "&2chunky cancel&r - Спиране и изтриване на текущи или запазени задачи",
   "help_center": "&2chunky center <x> <z>&r - Задаване на позицията на централния блок",
   "help_continue": "&2chunky continue&r - Възобновяване на текущи или запазени задачи",
-  "help_menu": "&aChunky Команди&r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+  "help_menu": "&aChunky Команди&r%s",
   "help_pattern": "&2chunky pattern <pattern>&r - Задаване на шарката на генериране",
   "help_pause": "&2chunky pause&r - Поставяне на текущите задачи на пауза и запазване на прогреса",
   "help_quiet": "&2chunky quiet <interval>&r - Задаване на тих интервал",

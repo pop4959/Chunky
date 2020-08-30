@@ -16,7 +16,7 @@
   "help_cancel": "&2chunky cancel&r - Arrêter et supprimer les tâches en cours ou enregistrées",
   "help_center": "&2chunky center <x> <z>&r - Définir l'emplacement du bloc central",
   "help_continue": "&2chunky continue&r - Poursuivre les tâches en cours ou sauvegardées",
-  "help_menu": "&aChunky Commandes&r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+  "help_menu": "&aChunky Commandes&r%s",
   "help_pause": "&2chunky pause&r - Pause des tâches en cours et sauvegarde des progrès",
   "help_quiet": "&2chunky quiet <interval>&r - Définir l'intervalle de silence",
   "help_radius": "&2chunky radius <radius>&r - Définir le rayon",

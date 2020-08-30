@@ -16,7 +16,7 @@
   "help_cancel": "&2chunky cancel&r - Stope und lösche alle momentan gespeicherten Aufgaben",
   "help_center": "&2chunky center <x> <z>&r - Setze die Mittlere Block-Position",
   "help_continue": "&2chunky continue&r - Mache weiter mit allen gespeicherten Aufgaben",
-  "help_menu": "&aChunky Befehle&r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+  "help_menu": "&aChunky Befehle&r%s",
   "help_pause": "&2chunky pause&r - Pausiere aktuelle Aufgabne und speichere den Fortschritt",
   "help_quiet": "&2chunky quiet <interval>&r - Setze den Stummen Intervall",
   "help_radius": "&2chunky radius <radius>&r - Setze den Radius",

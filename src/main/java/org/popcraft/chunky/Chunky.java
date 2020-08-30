@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 public final class Chunky extends JavaPlugin {
     private ConfigStorage configStorage;
     private Map<World, GenerationTask> generationTasks;
-    private Map<String, ChunkyCommand> commands;
     private Map<String, String> translations, fallbackTranslations;
+    private Map<String, ChunkyCommand> commands;
     private Selection selection;
 
     @Override
@@ -37,9 +37,9 @@ public final class Chunky extends JavaPlugin {
         this.saveConfig();
         this.configStorage = new ConfigStorage(this);
         this.generationTasks = new ConcurrentHashMap<>();
-        this.commands = loadCommands();
         this.translations = loadTranslation(getConfig().getString("language", "en"));
         this.fallbackTranslations = loadTranslation("en");
+        this.commands = loadCommands();
         this.selection = new Selection();
         Metrics metrics = new Metrics(this, 8211);
         if (metrics.isEnabled()) {
@@ -72,17 +72,7 @@ public final class Chunky extends JavaPlugin {
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
             commands.get(args[0].toLowerCase()).execute(sender, args);
         } else {
-            sender.sendMessage(message("help_menu",
-                    message("help_start"),
-                    message("help_pause"),
-                    message("help_continue"),
-                    message("help_cancel"),
-                    message("help_world"),
-                    message("help_center"),
-                    message("help_radius"),
-                    message("help_silent"),
-                    message("help_quiet")
-            ));
+            commands.get("help").execute(sender, new String[]{});
         }
         return true;
     }
@@ -108,6 +98,7 @@ public final class Chunky extends JavaPlugin {
         commands.put("cancel", new CancelCommand(this));
         commands.put("center", new CenterCommand(this));
         commands.put("continue", new ContinueCommand(this));
+        commands.put("help", new HelpCommand(this));
         commands.put("pattern", new PatternCommand(this));
         commands.put("pause", new PauseCommand(this));
         commands.put("quiet", new QuietCommand(this));
