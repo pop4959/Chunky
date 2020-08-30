@@ -57,7 +57,7 @@ public class GenerationTask implements Runnable {
         chunkUpdateTimes10Sec.add(currentTime);
         while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4) chunkUpdateTimes10Sec.poll();
         long chunksLeft = totalChunks.get() - finishedChunks.get();
-        if (chunksLeft > 0 && (chunky.isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getQuiet())) {
+        if (chunksLeft > 0 && (chunky.getSelection().silent || ((currentTime - printTime.get()) / 1e3) < chunky.getSelection().quiet)) {
             return;
         }
         printTime.set(currentTime);
@@ -121,7 +121,7 @@ public class GenerationTask implements Runnable {
         Thread.currentThread().setName(poolThreadName);
     }
 
-    void stop(boolean cancelled) {
+    public void stop(boolean cancelled) {
         this.stopped = true;
         this.cancelled = cancelled;
     }
