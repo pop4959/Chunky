@@ -85,7 +85,7 @@ public final class Chunky extends JavaPlugin {
         final List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
             suggestions.addAll(commands.keySet());
-        } else {
+        } else if (commands.containsKey(args[0].toLowerCase())) {
             suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(sender, args));
         }
         return suggestions.stream()
