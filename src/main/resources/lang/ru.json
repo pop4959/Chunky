@@ -16,7 +16,7 @@
   "help_cancel": "&2chunky cancel&r - установить и удалить текущие или сохраненные задачи",
   "help_center": "&2chunky center <x> <z>&r - установить координаты центра",
   "help_continue": "&2chunky continue&r - продолжить все имеющиеся задачи",
-  "help_menu": "&aКоманды Chunky&r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+  "help_menu": "&aКоманды Chunky&r%s",
   "help_pause": "&2chunky pause&r - приостановить текущую задачу и сохранить прогресс",
   "help_quiet": "&2chunky quiet <interval>&r - установить интервал отсутствия сообщений о генерации чанков",
   "help_radius": "&2chunky radius <radius>&r - выбрать радиус",

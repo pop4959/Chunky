@@ -16,7 +16,7 @@
   "help_cancel": "&2chunky cancel&r - Mevcut veya kayıtlı fonksiyonları durdurun ve silin",
   "help_center": "&2chunky center <x> <z>&r - Merkez blok konumunu ayarlayın",
   "help_continue": "&2chunky continue&r - Mevcut veya kayıtlı fonksiyonlara devam edin",
-  "help_menu": "&aChunky Commands&r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+  "help_menu": "&aChunky Commands&r%s",
   "help_pause": "&2chunky pause&r - Mevcut fonksiyonları durdurun ve ilerlemeyi kaydedin",
   "help_quiet": "&2chunky quiet <interval>&r - Sessiz aralığı ayarlayın",
   "help_radius": "&2chunky radius <radius>&r - Yarıçapı ayarlayın",

@@ -18,7 +18,8 @@
   "help_cancel": "&2chunky cancel&r - Stop and delete current or saved tasks",
   "help_center": "&2chunky center <x> <z>&r - Set the center block location",
   "help_continue": "&2chunky continue&r - Continue current or saved tasks",
-  "help_menu": "&aChunky Commands&r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+  "help_menu": "&aChunky Commands&r%s",
+  "help_more": "Type &a%s %d&r to see more.",
   "help_pattern": "&2chunky pattern <pattern>&r - Set the generation pattern",
   "help_pause": "&2chunky pause&r - Pause current tasks and save progress",
   "help_quiet": "&2chunky quiet <interval>&r - Set the quiet interval",
@@ -27,7 +28,7 @@
   "help_silent": "&2chunky silent&r - Toggle displaying update messages",
   "help_start": "&2chunky start&r - Start a new chunk generation task",
   "help_world": "&2chunky world <world>&r - Set the world target",
-  "help_worldborder": "&2chunky worldborder&r - Set the center and radius to the world border's",
+  "help_worldborder": "&2chunky worldborder&r - Use the worldborder's center & radius",
   "task_done": "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d",
   "task_stopped": "[Chunky] Task stopped for %s.",
   "task_update": "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d"

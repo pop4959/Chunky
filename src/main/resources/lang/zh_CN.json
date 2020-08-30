@@ -17,7 +17,7 @@
   "help_cancel": "&2chunky cancel&r - 取消并删除当前正在运行或已保存的任务",
   "help_center": "&2chunky center <x> <z>&r - 设置中心方块位置",
   "help_continue": "&2chunky continue&r - 继续当前任务或已保存的任务",
-  "help_menu": "&aChunky 命令&r\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",
+  "help_menu": "&aChunky 命令&r%s",
   "help_pattern": "&2chunky pattern <concentric|loop|spiral>&r - 设置预生成的方案",
   "help_pause": "&2chunky pause&r - 暂停当前任务或已保存的任务",
   "help_quiet": "&2chunky quiet <interval>&r - 设置静止间隔",

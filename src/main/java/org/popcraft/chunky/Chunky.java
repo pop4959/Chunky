@@ -4,37 +4,31 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.papermc.lib.PaperLib;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.WorldBorder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitWorker;
+import org.popcraft.chunky.command.*;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public final class Chunky extends JavaPlugin {
     private ConfigStorage configStorage;
-    private ConcurrentHashMap<World, GenerationTask> generationTasks;
+    private Map<World, GenerationTask> generationTasks;
     private Map<String, String> translations, fallbackTranslations;
-    private World world;
-    private int x, z, radius;
-    private String pattern, shape;
-    private boolean silent;
-    private int quiet;
+    private Map<String, ChunkyCommand> commands;
+    private Selection selection;
 
     @Override
     public void onEnable() {
@@ -43,20 +37,13 @@ public final class Chunky extends JavaPlugin {
         this.saveConfig();
         this.configStorage = new ConfigStorage(this);
         this.generationTasks = new ConcurrentHashMap<>();
-        final String language = this.getConfig().getString("language", "en");
-        this.translations = loadTranslation(language);
+        this.translations = loadTranslation(getConfig().getString("language", "en"));
         this.fallbackTranslations = loadTranslation("en");
-        this.world = this.getServer().getWorlds().get(0);
-        this.x = 0;
-        this.z = 0;
-        this.radius = 500;
-        this.pattern = "concentric";
-        this.shape = "square";
-        this.silent = false;
-        this.quiet = 1;
+        this.commands = loadCommands();
+        this.selection = new Selection();
         Metrics metrics = new Metrics(this, 8211);
         if (metrics.isEnabled()) {
-            metrics.addCustomChart(new Metrics.SimplePie("language", () -> language));
+            metrics.addCustomChart(new Metrics.SimplePie("language", () -> getConfig().getString("language", "en")));
         }
         if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
             this.getLogger().severe(message("error_version_spigot"));
@@ -66,13 +53,13 @@ public final class Chunky extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
         }
         if (this.getConfig().getBoolean("continue-on-restart", false)) {
-            cont(this.getServer().getConsoleSender());
+            commands.get("continue").execute(getServer().getConsoleSender(), new String[]{});
         }
     }
 
     @Override
     public void onDisable() {
-        pause(this.getServer().getConsoleSender());
+        commands.get("pause").execute(getServer().getConsoleSender(), new String[]{});
         this.getServer().getScheduler().getActiveWorkers().stream()
                 .filter(w -> w.getOwner() == this)
                 .map(BukkitWorker::getThread)
@@ -82,224 +69,46 @@ public final class Chunky extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length < 1) {
-            sender.sendMessage(message("help_menu",
-                    message("help_start"), message("help_pause"), message("help_continue"),
-                    message("help_cancel"), message("help_world"), message("help_center"),
-                    message("help_radius"), message("help_silent"), message("help_quiet")));
-            return true;
-        }
-        switch (args[0].toLowerCase()) {
-            case "start":
-                start(sender);
-                break;
-            case "pause":
-                pause(sender);
-                break;
-            case "continue":
-                cont(sender);
-                break;
-            case "cancel":
-                cancel(sender);
-                break;
-            case "world":
-                world(sender, args);
-                break;
-            case "worldborder":
-                worldBorder(sender);
-                break;
-            case "center":
-                center(sender, args);
-                break;
-            case "radius":
-                radius(sender, args);
-                break;
-            case "silent":
-                silent(sender);
-                break;
-            case "quiet":
-                quiet(sender, args);
-                break;
-            case "pattern":
-                pattern(sender, args);
-                break;
-            case "shape":
-                shape(sender, args);
-                break;
-            default:
-                sender.sendMessage(message("help_menu",
-                        message("help_start"), message("help_pause"), message("help_continue"),
-                        message("help_cancel"), message("help_world"), message("help_center"),
-                        message("help_radius"), message("help_silent"), message("help_quiet")));
-                break;
+        if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
+            commands.get(args[0].toLowerCase()).execute(sender, args);
+        } else {
+            commands.get("help").execute(sender, new String[]{});
         }
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length < 1) {
+            return Collections.emptyList();
+        }
         final List<String> suggestions = new ArrayList<>();
         if (args.length == 1) {
-            suggestions.addAll(Arrays.asList("start", "pause", "continue", "world", "worldborder", "center", "radius", "silent", "quiet", "pattern", "cancel", "shape"));
-        } else if (args.length == 2 && "world".equalsIgnoreCase(args[0])) {
-            this.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
-        } else if (args.length == 2 && "pattern".equalsIgnoreCase(args[0])) {
-            suggestions.addAll(Arrays.asList("concentric", "loop", "spiral"));
-        } else if (args.length == 2 && "shape".equalsIgnoreCase(args[0])) {
-            suggestions.addAll(Arrays.asList("circle", "diamond", "pentagon", "square", "star", "triangle"));
+            suggestions.addAll(commands.keySet());
         } else {
-            return suggestions;
+            suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(sender, args));
         }
-        return suggestions.stream().filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
+        return suggestions.stream()
+                .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
+                .collect(Collectors.toList());
     }
 
-    private void start(CommandSender sender) {
-        if (generationTasks.containsKey(world)) {
-            sender.sendMessage(message("format_started_already", world.getName()));
-            return;
-        }
-        GenerationTask generationTask = new GenerationTask(this, world, radius, x, z, pattern, shape);
-        generationTasks.put(world, generationTask);
-        this.getServer().getScheduler().runTaskAsynchronously(this, generationTask);
-        sender.sendMessage(message("format_start", world.getName(), x, z, radius));
-    }
-
-    private void pause(CommandSender sender) {
-        for (GenerationTask generationTask : generationTasks.values()) {
-            generationTask.stop(false);
-            sender.sendMessage(message("format_pause", generationTask.getWorld().getName()));
-        }
-    }
-
-    private void cont(CommandSender sender) {
-        configStorage.loadTasks().forEach(generationTask -> {
-            if (!generationTasks.containsKey(generationTask.getWorld())) {
-                generationTasks.put(generationTask.getWorld(), generationTask);
-                this.getServer().getScheduler().runTaskAsynchronously(this, generationTask);
-                sender.sendMessage(message("format_continue", generationTask.getWorld().getName()));
-            } else {
-                sender.sendMessage(message("format_started_already", generationTask.getWorld().getName()));
-            }
-        });
-    }
-
-    private void cancel(CommandSender sender) {
-        sender.sendMessage(message("format_cancel"));
-        configStorage.cancelTasks();
-        generationTasks.values().forEach(generationTask -> generationTask.stop(true));
-        generationTasks.clear();
-        this.getServer().getScheduler().cancelTasks(this);
-    }
-
-    private void world(CommandSender sender, String[] args) {
-        if (args.length < 2) {
-            sender.sendMessage(message("help_world"));
-            return;
-        }
-        Optional<World> newWorld = Input.tryWorld(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
-        if (!newWorld.isPresent()) {
-            sender.sendMessage(message("help_world"));
-            return;
-        }
-        this.world = newWorld.get();
-        sender.sendMessage(message("format_world", world.getName()));
-    }
-
-    private void worldBorder(CommandSender sender) {
-        WorldBorder border = world.getWorldBorder();
-        Location center = border.getCenter();
-        this.x = center.getBlockX();
-        this.z = center.getBlockZ();
-        this.radius = (int) border.getSize() / 2;
-        sender.sendMessage(message("format_center", x, z));
-        sender.sendMessage(message("format_radius", radius));
-    }
-
-    private void center(CommandSender sender, String[] args) {
-        Optional<Double> newX = Optional.empty();
-        if (args.length > 1) {
-            newX = Input.tryDouble(args[1]);
-        }
-        Optional<Double> newZ = Optional.empty();
-        if (args.length > 2) {
-            newZ = Input.tryDouble(args[2]);
-        }
-        if (!newX.isPresent() || !newZ.isPresent()) {
-            sender.sendMessage(message("help_center"));
-            return;
-        }
-        if (Math.abs(newX.get().intValue()) > 3e7 || Math.abs(newZ.get().intValue()) > 3e7) {
-            sender.sendMessage(message("help_center"));
-            return;
-        }
-        this.x = newX.get().intValue();
-        this.z = newZ.get().intValue();
-        sender.sendMessage(message("format_center", x, z));
-    }
-
-    private void radius(CommandSender sender, String[] args) {
-        if (args.length < 2) {
-            sender.sendMessage(message("help_radius"));
-            return;
-        }
-        Optional<Integer> newRadius = Input.tryInteger(args[1]);
-        if (!newRadius.isPresent()) {
-            sender.sendMessage(message("help_radius"));
-            return;
-        }
-        if (newRadius.get() < 0 || newRadius.get() > 3e7) {
-            sender.sendMessage(message("help_radius"));
-            return;
-        }
-        this.radius = newRadius.get();
-        sender.sendMessage(message("format_radius", radius));
-    }
-
-    private void silent(CommandSender sender) {
-        this.silent = !silent;
-        sender.sendMessage(message("format_silent", silent ? message("enabled") : message("disabled")));
-    }
-
-    private void quiet(CommandSender sender, String[] args) {
-        Optional<Integer> newQuiet = Optional.empty();
-        if (args.length > 1) {
-            newQuiet = Input.tryInteger(args[1]);
-        }
-        if (!newQuiet.isPresent()) {
-            sender.sendMessage(message("help_quiet"));
-            return;
-        }
-        this.quiet = newQuiet.get();
-        sender.sendMessage(message("format_quiet", quiet));
-    }
-
-    private void pattern(CommandSender sender, String[] args) {
-        if (args.length < 2) {
-            sender.sendMessage(message("help_pattern"));
-            return;
-        }
-        String pattern = args[1].toLowerCase();
-        if (!"concentric".equals(pattern) && !"loop".equals(pattern) && !"spiral".equals(pattern)) {
-            sender.sendMessage(message("help_pattern"));
-            return;
-        }
-        this.pattern = pattern;
-        sender.sendMessage(message("format_pattern", pattern));
-    }
-
-    private void shape(CommandSender sender, String[] args) {
-        if (args.length < 2) {
-            sender.sendMessage(message("help_shape"));
-            return;
-        }
-        String shape = args[1].toLowerCase();
-        if (!"circle".equals(shape) && !"diamond".equals(shape) && !"pentagon".equals(shape)
-                && !"square".equals(shape) && !"star".equals(shape) && !"triangle".equals(shape)) {
-            sender.sendMessage(message("help_shape"));
-            return;
-        }
-        this.shape = shape;
-        sender.sendMessage(message("format_shape", shape));
+    private Map<String, ChunkyCommand> loadCommands() {
+        Map<String, ChunkyCommand> commands = new HashMap<>();
+        commands.put("cancel", new CancelCommand(this));
+        commands.put("center", new CenterCommand(this));
+        commands.put("continue", new ContinueCommand(this));
+        commands.put("help", new HelpCommand(this));
+        commands.put("pattern", new PatternCommand(this));
+        commands.put("pause", new PauseCommand(this));
+        commands.put("quiet", new QuietCommand(this));
+        commands.put("radius", new RadiusCommand(this));
+        commands.put("shape", new ShapeCommand(this));
+        commands.put("silent", new SilentCommand(this));
+        commands.put("start", new StartCommand(this));
+        commands.put("worldborder", new WorldBorderCommand(this));
+        commands.put("world", new WorldCommand(this));
+        return commands;
     }
 
     private Map<String, String> loadTranslation(String language) {
@@ -331,15 +140,11 @@ public final class Chunky extends JavaPlugin {
         return configStorage;
     }
 
-    public ConcurrentHashMap<World, GenerationTask> getGenerationTasks() {
+    public Map<World, GenerationTask> getGenerationTasks() {
         return generationTasks;
     }
 
-    public boolean isSilent() {
-        return silent;
-    }
-
-    public int getQuiet() {
-        return quiet;
+    public Selection getSelection() {
+        return selection;
     }
 }
