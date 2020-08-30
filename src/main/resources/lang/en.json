@@ -28,7 +28,7 @@
   "help_silent": "&2chunky silent&r - Toggle displaying update messages",
   "help_start": "&2chunky start&r - Start a new chunk generation task",
   "help_world": "&2chunky world <world>&r - Set the world target",
-  "help_worldborder": "&2chunky worldborder&r - Use the worldborder's center & radius",
+  "help_worldborder": "&2chunky worldborder&r - Use the world border center & radius",
   "task_done": "[Chunky] Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d",
   "task_stopped": "[Chunky] Task stopped for %s.",
   "task_update": "[Chunky] Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d"
