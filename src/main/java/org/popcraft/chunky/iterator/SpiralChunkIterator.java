@@ -1,10 +1,10 @@
 package org.popcraft.chunky.iterator;
 
 import org.popcraft.chunky.ChunkCoordinate;
+import org.popcraft.chunky.Selection;
 
 public class SpiralChunkIterator implements ChunkIterator {
     private int x, z;
-    private int xCenter, zCenter;
     private int xStop, zStop;
     private int span = 1, spanCount, spanProgress;
     private int direction;
@@ -12,8 +12,8 @@ public class SpiralChunkIterator implements ChunkIterator {
     private long total;
     private final static int RIGHT = 0, DOWN = 1, LEFT = 2, UP = 3;
 
-    public SpiralChunkIterator(int radius, int xCenter, int zCenter, long count) {
-        this(radius, xCenter, zCenter);
+    public SpiralChunkIterator(Selection selection, long count) {
+        this(selection);
         if (count <= 0) {
             return;
         }
@@ -68,15 +68,13 @@ public class SpiralChunkIterator implements ChunkIterator {
         }
     }
 
-    public SpiralChunkIterator(int radius, int xCenter, int zCenter) {
-        int radiusChunks = (int) Math.ceil(radius / 16f);
-        this.x = xCenter >> 4;
-        this.z = zCenter >> 4;
-        this.xCenter = x;
-        this.zCenter = z;
+    public SpiralChunkIterator(Selection selection) {
+        int radiusChunks = selection.getRadiusChunks();
+        this.x = selection.getChunkX();
+        this.z = selection.getChunkZ();
         this.xStop = x + radiusChunks;
         this.zStop = z + radiusChunks;
-        long diameter = 2 * radiusChunks + 1;
+        long diameter = selection.getDiameterChunks();
         this.total = diameter * diameter;
     }
 
@@ -116,16 +114,6 @@ public class SpiralChunkIterator implements ChunkIterator {
             direction = direction == UP ? RIGHT : ++direction;
         }
         return chunkCoord;
-    }
-
-    @Override
-    public ChunkCoordinate peek() {
-        return new ChunkCoordinate(x, z);
-    }
-
-    @Override
-    public ChunkCoordinate center() {
-        return new ChunkCoordinate(xCenter, zCenter);
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.popcraft.chunky.iterator;
 
 import org.junit.Test;
 import org.popcraft.chunky.ChunkCoordinate;
+import org.popcraft.chunky.Selection;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,13 +15,13 @@ import static org.junit.Assert.assertEquals;
  * with one another.
  */
 public class BoundaryTest {
-    private static final int RADIUS = 50, X_CENTER = -25, Z_CENTER = 25;
+    private static final Selection SELECTION = new Selection(-25, 25, 50);
 
     @Test
     public void boundaries() {
-        ChunkIterator concentricIterator = new ConcentricChunkIterator(RADIUS, X_CENTER, Z_CENTER);
-        ChunkIterator loop2Iterator = new Loop2ChunkIterator(RADIUS, X_CENTER, Z_CENTER);
-        ChunkIterator spiralIterator = new SpiralChunkIterator(RADIUS, X_CENTER, Z_CENTER);
+        ChunkIterator concentricIterator = new ConcentricChunkIterator(SELECTION);
+        ChunkIterator loop2Iterator = new Loop2ChunkIterator(SELECTION);
+        ChunkIterator spiralIterator = new SpiralChunkIterator(SELECTION);
         List<ChunkCoordinate> concentricCoordinates = new ArrayList<>();
         List<ChunkCoordinate> loop2Coordinates = new ArrayList<>();
         List<ChunkCoordinate> spiralCoordinates = new ArrayList<>();

@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GenerationTask implements Runnable {
     private final Chunky chunky;
     private final World world;
-    private final int radius, centerX, centerZ;
+    private final int radiusX, radiusZ, centerX, centerZ;
     private ChunkIterator chunkIterator;
     private Shape shape;
     private boolean stopped, cancelled;
@@ -26,22 +26,23 @@ public class GenerationTask implements Runnable {
     private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
     private static final int MAX_WORKING = 50;
 
-    public GenerationTask(Chunky chunky, World world, int radius, int centerX, int centerZ, long count, String iteratorType, String shapeType, long time) {
-        this(chunky, world, radius, centerX, centerZ, iteratorType, shapeType);
-        this.chunkIterator = ChunkIteratorFactory.getChunkIterator(iteratorType, radius, centerX, centerZ, count);
-        this.shape = ShapeFactory.getShape(shapeType, chunkIterator);
+    public GenerationTask(Chunky chunky, Selection selection, long count, long time) {
+        this(chunky, selection);
+        this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection, count);
+        this.shape = ShapeFactory.getShape(selection);
         this.finishedChunks.set(count);
         this.prevTime = time;
     }
 
-    public GenerationTask(Chunky chunky, World world, int radius, int centerX, int centerZ, String iteratorType, String shapeType) {
+    public GenerationTask(Chunky chunky, Selection selection) {
         this.chunky = chunky;
-        this.world = world;
-        this.radius = radius;
-        this.centerX = centerX;
-        this.centerZ = centerZ;
-        this.chunkIterator = ChunkIteratorFactory.getChunkIterator(iteratorType, radius, centerX, centerZ);
-        this.shape = ShapeFactory.getShape(shapeType, chunkIterator);
+        this.world = selection.world;
+        this.radiusX = selection.radius;
+        this.radiusZ = selection.zRadius;
+        this.centerX = selection.x;
+        this.centerZ = selection.z;
+        this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection);
+        this.shape = ShapeFactory.getShape(selection);
         this.totalChunks.set(chunkIterator.total());
     }
 
@@ -92,7 +93,9 @@ public class GenerationTask implements Runnable {
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             ChunkCoordinate chunkCoord = chunkIterator.next();
-            if (!shape.isBounding(chunkCoord) || PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
+            int xChunkCenter = (chunkCoord.x << 4) + 8;
+            int zChunkCenter = (chunkCoord.z << 4) + 8;
+            if (!shape.isBounding(xChunkCenter, zChunkCenter) || PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
                 continue;
             }
@@ -130,8 +133,12 @@ public class GenerationTask implements Runnable {
         return world;
     }
 
-    public int getRadius() {
-        return radius;
+    public int getRadiusX() {
+        return radiusX;
+    }
+
+    public int getRadiusZ() {
+        return radiusZ;
     }
 
     public int getCenterX() {

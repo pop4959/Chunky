@@ -16,7 +16,7 @@ public class StartCommand extends ChunkyCommand {
             sender.sendMessage(chunky.message("format_started_already", selection.world.getName()));
             return;
         }
-        GenerationTask generationTask = new GenerationTask(chunky, selection.world, selection.radius, selection.x, selection.z, selection.pattern, selection.shape);
+        GenerationTask generationTask = new GenerationTask(chunky, selection);
         chunky.getGenerationTasks().put(selection.world, generationTask);
         chunky.getServer().getScheduler().runTaskAsynchronously(chunky, generationTask);
         sender.sendMessage(chunky.message("format_start", selection.world.getName(), selection.x, selection.z, selection.radius));

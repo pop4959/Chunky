@@ -1,23 +1,18 @@
 package org.popcraft.chunky.shape;
 
-import org.popcraft.chunky.ChunkCoordinate;
-import org.popcraft.chunky.iterator.ChunkIterator;
+import org.popcraft.chunky.Selection;
 
 public abstract class AbstractShape implements Shape {
-    protected ChunkCoordinate centerChunk;
-    protected int diameterChunks;
+    protected int xCenter, zCenter;
     protected int diameter;
     protected int radius;
-    protected int xCenter, zCenter;
     protected int x1, x2, z1, z2;
 
-    protected AbstractShape(ChunkIterator chunkIterator) {
-        this.centerChunk = chunkIterator.center();
-        this.diameterChunks = (int) Math.sqrt(chunkIterator.total());
-        this.diameter = diameterChunks << 4;
+    protected AbstractShape(Selection selection) {
+        this.xCenter = (selection.getChunkX() << 4) + 8;
+        this.zCenter = (selection.getChunkZ() << 4) + 8;
+        this.diameter = selection.getDiameterChunks() << 4;
         this.radius = diameter / 2;
-        this.xCenter = (centerChunk.x << 4) + 8;
-        this.zCenter = (centerChunk.z << 4) + 8;
         this.x1 = xCenter - diameter / 2;
         this.x2 = xCenter + diameter / 2;
         this.z1 = zCenter - diameter / 2;

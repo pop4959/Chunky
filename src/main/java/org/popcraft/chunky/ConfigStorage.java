@@ -25,14 +25,17 @@ public class ConfigStorage {
         if (config.getBoolean(world_key + "cancelled", false)) {
             return Optional.empty();
         }
-        int radius = config.getInt(world_key + "radius", 500);
-        int centerX = config.getInt(world_key + "x-center", 0);
-        int centerZ = config.getInt(world_key + "z-center", 0);
+        Selection selection = new Selection();
+        selection.world = world;
+        selection.radius = config.getInt(world_key + "radius", 500);
+        selection.zRadius = config.getInt(world_key + "z-radius", selection.radius);
+        selection.x = config.getInt(world_key + "x-center", 0);
+        selection.z = config.getInt(world_key + "z-center", 0);
+        selection.pattern = config.getString(world_key + "iterator", "loop");
+        selection.shape = config.getString(world_key + "shape", "square");
         long count = config.getLong(world_key + "count", 0);
-        String iteratorType = config.getString(world_key + "iterator", "loop");
-        String shapeType = config.getString(world_key + "shape", "square");
         long time = config.getLong(world_key + "time", 0);
-        return Optional.of(new GenerationTask(chunky, world, radius, centerX, centerZ, count, iteratorType, shapeType, time));
+        return Optional.of(new GenerationTask(chunky, selection, count, time));
     }
 
     public synchronized List<GenerationTask> loadTasks() {
@@ -43,13 +46,17 @@ public class ConfigStorage {
 
     public synchronized void saveTask(GenerationTask generationTask) {
         String world_key = TASKS_KEY + generationTask.getWorld().getName() + ".";
+        String shape = generationTask.getShape().name();
         config.set(world_key + "cancelled", generationTask.isCancelled());
-        config.set(world_key + "radius", generationTask.getRadius());
+        config.set(world_key + "radius", generationTask.getRadiusX());
+        if ("rectangle".equals(shape) || "oval".equals(shape)) {
+            config.set(world_key + "z-radius", generationTask.getRadiusZ());
+        }
         config.set(world_key + "x-center", generationTask.getCenterX());
         config.set(world_key + "z-center", generationTask.getCenterZ());
-        config.set(world_key + "count", generationTask.getCount());
         config.set(world_key + "iterator", generationTask.getChunkIterator().name());
-        config.set(world_key + "shape", generationTask.getShape().name());
+        config.set(world_key + "shape", shape);
+        config.set(world_key + "count", generationTask.getCount());
         config.set(world_key + "time", generationTask.getTotalTime());
         chunky.saveConfig();
     }

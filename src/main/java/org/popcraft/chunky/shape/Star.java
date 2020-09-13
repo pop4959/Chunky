@@ -1,13 +1,12 @@
 package org.popcraft.chunky.shape;
 
-import org.popcraft.chunky.ChunkCoordinate;
-import org.popcraft.chunky.iterator.ChunkIterator;
+import org.popcraft.chunky.Selection;
 
 public class Star extends AbstractShape {
     private double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z, p5x, p5z;
 
-    public Star(ChunkIterator chunkIterator) {
-        super(chunkIterator);
+    public Star(Selection selection) {
+        super(selection);
         this.p1x = xCenter + radius * Math.cos(Math.toRadians(54));
         this.p1z = zCenter + radius * Math.sin(Math.toRadians(54));
         this.p2x = xCenter + radius * Math.cos(Math.toRadians(126));
@@ -21,17 +20,15 @@ public class Star extends AbstractShape {
     }
 
     @Override
-    public boolean isBounding(ChunkCoordinate chunkCoordinate) {
-        int xChunk = (chunkCoordinate.x << 4) + 8;
-        int zChunk = (chunkCoordinate.z << 4) + 8;
-        boolean inside13 = insideLine(p1x, p1z, p3x, p3z, xChunk, zChunk);
-        boolean inside24 = insideLine(p2x, p2z, p4x, p4z, xChunk, zChunk);
-        boolean inside35 = insideLine(p3x, p3z, p5x, p5z, xChunk, zChunk);
-        boolean inside41 = insideLine(p4x, p4z, p1x, p1z, xChunk, zChunk);
+    public boolean isBounding(double x, double z) {
+        boolean inside13 = insideLine(p1x, p1z, p3x, p3z, x, z);
+        boolean inside24 = insideLine(p2x, p2z, p4x, p4z, x, z);
+        boolean inside35 = insideLine(p3x, p3z, p5x, p5z, x, z);
+        boolean inside41 = insideLine(p4x, p4z, p1x, p1z, x, z);
         if (inside13 && inside24 && inside35 && inside41) {
             return true;
         }
-        boolean inside52 = insideLine(p5x, p5z, p2x, p2z, xChunk, zChunk);
+        boolean inside52 = insideLine(p5x, p5z, p2x, p2z, x, z);
         if (inside24 && inside35 && inside41 && inside52) {
             return true;
         }

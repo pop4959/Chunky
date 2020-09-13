@@ -1,20 +1,24 @@
 package org.popcraft.chunky.shape;
 
-import org.popcraft.chunky.iterator.ChunkIterator;
+import org.popcraft.chunky.Selection;
 
 public class ShapeFactory {
-    public static Shape getShape(String shape, ChunkIterator iterator) {
-        switch (shape) {
+    public static Shape getShape(Selection selection) {
+        switch (selection.shape) {
             case "circle":
-                return new Circle(iterator);
-            case "triangle":
-                return new Triangle(iterator);
+                return new Circle(selection);
             case "diamond":
-                return new Diamond(iterator);
+                return new Diamond(selection);
+            case "oval":
+                return new Oval(selection);
             case "pentagon":
-                return new Pentagon(iterator);
+                return new Pentagon(selection);
             case "star":
-                return new Star(iterator);
+                return new Star(selection);
+            case "triangle":
+                return new Triangle(selection);
+            case "rectangle":
+                return new Rectangle();
             case "square":
             default:
                 return new Square();

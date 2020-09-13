@@ -1,6 +1,7 @@
 package org.popcraft.chunky.iterator;
 
 import org.popcraft.chunky.ChunkCoordinate;
+import org.popcraft.chunky.Selection;
 
 public class ConcentricChunkIterator implements ChunkIterator {
     private int x, z;
@@ -11,8 +12,8 @@ public class ConcentricChunkIterator implements ChunkIterator {
     private boolean hasNext = true;
     private long total;
 
-    public ConcentricChunkIterator(int radius, int xCenter, int zCenter, long count) {
-        this(radius, xCenter, zCenter);
+    public ConcentricChunkIterator(Selection selection, long count) {
+        this(selection);
         if (count <= 0) {
             return;
         }
@@ -36,13 +37,13 @@ public class ConcentricChunkIterator implements ChunkIterator {
         this.z += up - down;
     }
 
-    public ConcentricChunkIterator(int radius, int xCenter, int zCenter) {
-        this.radiusChunks = (int) Math.ceil(radius / 16f);
-        this.x = xCenter >> 4;
-        this.z = zCenter >> 4;
+    public ConcentricChunkIterator(Selection selection) {
+        this.radiusChunks = selection.getRadiusChunks();
+        this.x = selection.getChunkX();
+        this.z = selection.getChunkZ();
         this.xCenter = x;
         this.zCenter = z;
-        long diameterChunks = 2 * radiusChunks + 1;
+        long diameterChunks = selection.getDiameterChunks();
         this.total = diameterChunks * diameterChunks;
     }
 
@@ -78,16 +79,6 @@ public class ConcentricChunkIterator implements ChunkIterator {
             ++right;
         }
         return chunkCoord;
-    }
-
-    @Override
-    public ChunkCoordinate peek() {
-        return new ChunkCoordinate(x, z);
-    }
-
-    @Override
-    public ChunkCoordinate center() {
-        return new ChunkCoordinate(xCenter, zCenter);
     }
 
     @Override

@@ -17,17 +17,25 @@ public class RadiusCommand extends ChunkyCommand {
             sender.sendMessage(chunky.message("help_radius"));
             return;
         }
-        Optional<Integer> newRadius = Input.tryInteger(args[1]);
-        if (!newRadius.isPresent()) {
-            sender.sendMessage(chunky.message("help_radius"));
-            return;
-        }
-        if (newRadius.get() < 0 || newRadius.get() > 3e7) {
+        Optional<Integer> newRadiusX = Input.tryInteger(args[1]);
+        if (!newRadiusX.isPresent() || newRadiusX.get() < 0 || newRadiusX.get() > 3e7) {
             sender.sendMessage(chunky.message("help_radius"));
             return;
         }
         Selection selection = chunky.getSelection();
-        selection.radius = newRadius.get();
-        sender.sendMessage(chunky.message("format_radius", selection.radius));
+        if (args.length > 2) {
+            Optional<Integer> newRadiusZ = Input.tryInteger(args[2]);
+            if (!newRadiusZ.isPresent() || newRadiusZ.get() < 0 || newRadiusZ.get() > 3e7) {
+                sender.sendMessage(chunky.message("help_radius"));
+                return;
+            }
+            selection.zRadius = newRadiusZ.get();
+        }
+        selection.radius = newRadiusX.get();
+        if (args.length == 2) {
+            sender.sendMessage(chunky.message("format_radius", selection.radius));
+        } else {
+            sender.sendMessage(chunky.message("format_radii", selection.radius, selection.zRadius));
+        }
     }
 }

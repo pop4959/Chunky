@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ShapeCommand extends ChunkyCommand {
-    private static final List<String> SHAPES = Arrays.asList("circle", "diamond", "pentagon", "square", "star", "triangle");
+    private static final List<String> SHAPES = Arrays.asList("circle", "diamond", "oval", "pentagon", "rectangle", "square", "star", "triangle");
 
     public ShapeCommand(Chunky chunky) {
         super(chunky);

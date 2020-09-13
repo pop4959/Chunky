@@ -1,19 +1,28 @@
 package org.popcraft.chunky.iterator;
 
+import org.popcraft.chunky.Selection;
+
 public class ChunkIteratorFactory {
-    public static ChunkIterator getChunkIterator(String type, int radius, int xCenter, int zCenter, long count) {
-        switch (type) {
+    public static ChunkIterator getChunkIterator(Selection selection, long count) {
+        switch (selection.shape) {
+            case "rectangle":
+            case "oval":
+                return new Loop2ChunkIterator(selection, count);
+            default:
+                break;
+        }
+        switch (selection.pattern) {
             case "loop":
-                return new Loop2ChunkIterator(radius, xCenter, zCenter, count);
+                return new Loop2ChunkIterator(selection, count);
             case "spiral":
-                return new SpiralChunkIterator(radius, xCenter, zCenter, count);
+                return new SpiralChunkIterator(selection, count);
             case "concentric":
             default:
-                return new ConcentricChunkIterator(radius, xCenter, zCenter, count);
+                return new ConcentricChunkIterator(selection, count);
         }
     }
 
-    public static ChunkIterator getChunkIterator(String type, int radius, int xCenter, int zCenter) {
-        return getChunkIterator(type, radius, xCenter, zCenter, 0);
+    public static ChunkIterator getChunkIterator(Selection selection) {
+        return getChunkIterator(selection, 0);
     }
 }

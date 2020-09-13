@@ -6,7 +6,7 @@
 
     <groupId>org.popcraft</groupId>
     <artifactId>Chunky</artifactId>
-    <version>1.1.8</version>
+    <version>1.1.9</version>
     <packaging>jar</packaging>
 
     <name>Chunky</name>

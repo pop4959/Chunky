@@ -9,6 +9,7 @@
   "format_pattern": "[Chunky] Pattern changed to %s.",
   "format_pause": "[Chunky] Task paused for %s.",
   "format_quiet": "[Chunky] Quiet interval set to %d seconds.",
+  "format_radii": "[Chunky] Radius changed for x to %d, and for z to %d.",
   "format_radius": "[Chunky] Radius changed to %d.",
   "format_shape": "[Chunky] Shape changed to %s.",
   "format_silent": "[Chunky] Silent mode %s.",

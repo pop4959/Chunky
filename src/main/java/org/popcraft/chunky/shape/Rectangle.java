@@ -1,6 +1,6 @@
 package org.popcraft.chunky.shape;
 
-public class Square implements Shape {
+public class Rectangle implements Shape {
     @Override
     public boolean isBounding(double x, double z) {
         return true;
@@ -8,6 +8,6 @@ public class Square implements Shape {
 
     @Override
     public String name() {
-        return "square";
+        return "rectangle";
     }
 }
