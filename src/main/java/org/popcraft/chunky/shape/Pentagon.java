@@ -2,7 +2,7 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
-public class Pentagon extends AbstractShape {
+public class Pentagon extends AbstractPolygon {
     private double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z, p5x, p5z;
 
     public Pentagon(Selection selection) {
@@ -17,6 +17,16 @@ public class Pentagon extends AbstractShape {
         this.p4z = zCenter + radius * Math.sin(Math.toRadians(270));
         this.p5x = xCenter + radius * Math.cos(Math.toRadians(342));
         this.p5z = zCenter + radius * Math.sin(Math.toRadians(342));
+    }
+
+    @Override
+    public double[] pointsX() {
+        return new double[]{p1x, p2x, p3x, p4x, p5x};
+    }
+
+    @Override
+    public double[] pointsZ() {
+        return new double[]{p1z, p2z, p3z, p4z, p5z};
     }
 
     @Override

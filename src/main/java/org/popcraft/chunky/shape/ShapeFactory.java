@@ -13,15 +13,15 @@ public class ShapeFactory {
                 return new Oval(selection);
             case "pentagon":
                 return new Pentagon(selection);
+            case "rectangle":
+                return new Rectangle(selection);
             case "star":
                 return new Star(selection);
             case "triangle":
                 return new Triangle(selection);
-            case "rectangle":
-                return new Rectangle();
             case "square":
             default:
-                return new Square();
+                return new Square(selection);
         }
     }
 }

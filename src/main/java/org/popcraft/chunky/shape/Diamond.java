@@ -2,7 +2,7 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
-public class Diamond extends AbstractShape {
+public class Diamond extends AbstractPolygon {
     int p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
 
     public Diamond(Selection selection) {
@@ -15,6 +15,16 @@ public class Diamond extends AbstractShape {
         this.p3z = zCenter - radius;
         this.p4x = xCenter + radius;
         this.p4z = zCenter;
+    }
+
+    @Override
+    public double[] pointsX() {
+        return new double[]{p1x, p2x, p3x, p4x};
+    }
+
+    @Override
+    public double[] pointsZ() {
+        return new double[]{p1z, p2z, p3z, p4z};
     }
 
     @Override

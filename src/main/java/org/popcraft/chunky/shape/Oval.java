@@ -3,11 +3,8 @@ package org.popcraft.chunky.shape;
 import org.popcraft.chunky.Selection;
 
 public class Oval extends AbstractShape {
-    private int radiusZ;
-
     protected Oval(Selection selection) {
         super(selection);
-        this.radiusZ = selection.getRadiusChunksZ() << 4;
     }
 
     @Override

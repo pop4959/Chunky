@@ -2,7 +2,7 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
-public class Triangle extends AbstractShape {
+public class Triangle extends AbstractPolygon {
     private int p1x, p1z, p2x, p2z, p3x, p3z;
 
     public Triangle(Selection selection) {
@@ -13,6 +13,16 @@ public class Triangle extends AbstractShape {
         this.p2z = radius;
         this.p3x = 0;
         this.p3z = -radius;
+    }
+
+    @Override
+    public double[] pointsX() {
+        return new double[]{p1x, p2x, p3x};
+    }
+
+    @Override
+    public double[] pointsZ() {
+        return new double[]{p1z, p2z, p3z};
     }
 
     @Override
