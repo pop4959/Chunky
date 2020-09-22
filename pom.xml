@@ -6,7 +6,7 @@
 
     <groupId>org.popcraft</groupId>
     <artifactId>Chunky</artifactId>
-    <version>1.1.11</version>
+    <version>1.1.12</version>
     <packaging>jar</packaging>
 
     <name>Chunky</name>
@@ -72,6 +72,10 @@
             <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -79,6 +83,12 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.16.3-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Brettflan</groupId>
+            <artifactId>WorldBorder</artifactId>
+            <version>c0d1772418</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
