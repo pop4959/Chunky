@@ -2,6 +2,8 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
+import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
+
 public class Pentagon extends AbstractPolygon {
     private double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z, p5x, p5z;
 

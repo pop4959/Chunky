@@ -2,7 +2,7 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
-public class Oval extends AbstractShape {
+public class Oval extends AbstractEllipse {
     protected Oval(Selection selection) {
         super(selection);
     }

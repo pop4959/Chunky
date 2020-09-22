@@ -21,7 +21,7 @@ public abstract class AbstractShape implements Shape {
         this.z2 = zCenter + radiusZ;
     }
 
-    protected boolean insideLine(double ax, double az, double bx, double bz, double cx, double cz) {
-        return (bx - ax) * (cz - az) > (bz - az) * (cx - ax);
+    public double[] getCenter() {
+        return new double[]{xCenter, zCenter};
     }
 }

@@ -2,6 +2,8 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
+import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
+
 public class Triangle extends AbstractPolygon {
     private int p1x, p1z, p2x, p2z, p3x, p3z;
 

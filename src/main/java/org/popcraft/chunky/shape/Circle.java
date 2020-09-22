@@ -2,7 +2,7 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
-public class Circle extends AbstractShape {
+public class Circle extends AbstractEllipse {
     public Circle(Selection selection) {
         super(selection);
     }
