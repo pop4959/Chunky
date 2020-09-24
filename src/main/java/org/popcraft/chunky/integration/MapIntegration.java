@@ -9,4 +9,6 @@ public interface MapIntegration {
     void removeShapeMarker(World world);
 
     void removeAllShapeMarkers();
+
+    void setOptions(String label, String color, boolean hideByDefault, int priority, int weight);
 }

@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitWorker;
 import org.popcraft.chunky.command.*;
+import org.popcraft.chunky.util.Version;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -45,10 +46,11 @@ public final class Chunky extends JavaPlugin {
         if (metrics.isEnabled()) {
             metrics.addCustomChart(new Metrics.SimplePie("language", () -> getConfig().getString("language", "en")));
         }
-        if (BukkitVersion.v1_13_2.isEqualTo(BukkitVersion.getCurrent()) && !PaperLib.isPaper()) {
+        Version currentVersion = Version.getCurrentMinecraftVersion();
+        if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
             this.getLogger().severe(message("error_version_spigot"));
             this.getServer().getPluginManager().disablePlugin(this);
-        } else if (BukkitVersion.v1_13_2.isHigherThan(BukkitVersion.getCurrent())) {
+        } else if (Version.v1_13_2.isHigherThan(currentVersion)) {
             this.getLogger().severe(message("error_version"));
             this.getServer().getPluginManager().disablePlugin(this);
         }

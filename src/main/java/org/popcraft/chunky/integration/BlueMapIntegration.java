@@ -15,9 +15,8 @@ import org.popcraft.chunky.shape.Shape;
 import java.awt.Color;
 import java.io.IOException;
 
-public class BlueMapIntegration implements MapIntegration, BlueMapAPIListener {
+public class BlueMapIntegration extends AbstractMapIntegration implements BlueMapAPIListener {
     BlueMapAPI blueMapAPI;
-    private final String SET_LABEL = "world border";
 
     @Override
     public void onEnable(BlueMapAPI blueMapApi) {
@@ -41,7 +40,7 @@ public class BlueMapIntegration implements MapIntegration, BlueMapAPIListener {
         } catch (IOException e) {
             return;
         }
-        final MarkerSet markerSet = markerAPI.createMarkerSet(SET_LABEL);
+        final MarkerSet markerSet = markerAPI.createMarkerSet(this.label.toLowerCase());
         de.bluecolored.bluemap.api.marker.Shape blueShape;
         if (shape instanceof AbstractPolygon) {
             AbstractPolygon polygon = (AbstractPolygon) shape;
@@ -66,7 +65,7 @@ public class BlueMapIntegration implements MapIntegration, BlueMapAPIListener {
         }
         blueMapAPI.getWorld(world.getUID()).ifPresent(blueWorld -> blueWorld.getMaps().forEach(map -> {
             ShapeMarker marker = markerSet.createShapeMarker(shapeLabel(world), map, blueShape, world.getSeaLevel());
-            marker.setColors(Color.RED, new Color(0, true));
+            marker.setColors(this.color, new Color(0, true));
         }));
         try {
             markerAPI.save();
@@ -86,7 +85,7 @@ public class BlueMapIntegration implements MapIntegration, BlueMapAPIListener {
         } catch (IOException e) {
             return;
         }
-        final MarkerSet markerSet = markerAPI.createMarkerSet(SET_LABEL);
+        final MarkerSet markerSet = markerAPI.createMarkerSet(this.label.toLowerCase());
         blueMapAPI.getWorld(world.getUID()).ifPresent(blueWorld -> blueWorld.getMaps().forEach(map -> {
             markerSet.removeMarker(shapeLabel(world));
         }));
@@ -108,7 +107,7 @@ public class BlueMapIntegration implements MapIntegration, BlueMapAPIListener {
         } catch (IOException e) {
             return;
         }
-        final MarkerSet markerSet = markerAPI.createMarkerSet(SET_LABEL);
+        final MarkerSet markerSet = markerAPI.createMarkerSet(this.label.toLowerCase());
         Bukkit.getWorlds().forEach(world -> markerSet.removeMarker(shapeLabel(world)));
         try {
             markerAPI.save();

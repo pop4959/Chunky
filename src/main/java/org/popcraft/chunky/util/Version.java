@@ -1,21 +1,21 @@
-package org.popcraft.chunky;
+package org.popcraft.chunky.util;
 
 import org.bukkit.Bukkit;
 
-public class BukkitVersion implements Comparable<BukkitVersion> {
+public class Version implements Comparable<Version> {
 
-    public static final BukkitVersion v1_13_2 = new BukkitVersion(1, 13, 2);
+    public static final Version v1_13_2 = new Version(1, 13, 2);
 
-    private static BukkitVersion currentVersion;
+    private static Version currentMinecraftVersion;
     private int major = 0, minor = 0, patch = 0;
 
-    public BukkitVersion(int major, int minor, int patch) {
+    public Version(int major, int minor, int patch) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
     }
 
-    public BukkitVersion(String version) {
+    public Version(String version) {
         int dash = version.indexOf('-');
         if (dash > -1) {
             version = version.substring(0, dash);
@@ -35,35 +35,35 @@ public class BukkitVersion implements Comparable<BukkitVersion> {
         }
     }
 
-    public static BukkitVersion getCurrent() {
-        if (currentVersion == null) {
-            currentVersion = new BukkitVersion(Bukkit.getBukkitVersion());
+    public static Version getCurrentMinecraftVersion() {
+        if (currentMinecraftVersion == null) {
+            currentMinecraftVersion = new Version(Bukkit.getVersion());
         }
-        return currentVersion;
+        return currentMinecraftVersion;
     }
 
-    public boolean isEqualTo(BukkitVersion o) {
+    public boolean isEqualTo(Version o) {
         return compareTo(o) == 0;
     }
 
-    public boolean isHigherThan(BukkitVersion o) {
+    public boolean isHigherThan(Version o) {
         return compareTo(o) > 0;
     }
 
-    public boolean isHigherThanOrEqualTo(BukkitVersion o) {
+    public boolean isHigherThanOrEqualTo(Version o) {
         return compareTo(o) >= 0;
     }
 
-    public boolean isLowerThan(BukkitVersion o) {
+    public boolean isLowerThan(Version o) {
         return compareTo(o) < 0;
     }
 
-    public boolean isLowerThanOrEqualTo(BukkitVersion o) {
+    public boolean isLowerThanOrEqualTo(Version o) {
         return compareTo(o) <= 0;
     }
 
     @Override
-    public int compareTo(BukkitVersion o) {
+    public int compareTo(Version o) {
         if (this.major != o.major) {
             return this.major - o.major;
         }

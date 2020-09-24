@@ -3,7 +3,7 @@ package org.popcraft.chunky.command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.popcraft.chunky.Chunky;
-import org.popcraft.chunky.Input;
+import org.popcraft.chunky.util.Input;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.popcraft.chunky;
+package org.popcraft.chunky.util;
 
 public class TuinityLib {
 
