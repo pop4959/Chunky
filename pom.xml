@@ -6,7 +6,7 @@
 
     <groupId>org.popcraft</groupId>
     <artifactId>Chunky</artifactId>
-    <version>1.1.12</version>
+    <version>1.1.13</version>
     <packaging>jar</packaging>
 
     <name>Chunky</name>
@@ -60,6 +60,7 @@
     </build>
 
     <repositories>
+        <!-- Spigot API -->
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -68,10 +69,17 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <!-- PaperLib -->
         <repository>
             <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
+        <!-- Dynmap -->
+        <repository>
+            <id>dynmap-repo</id>
+            <url>https://repo.mikeprimm.com/</url>
+        </repository>
+        <!-- BlueMap, WorldBorder -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -79,10 +87,30 @@
     </repositories>
 
     <dependencies>
+        <!-- Compile -->
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Provided -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.16.3-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>us.dynmap</groupId>
+            <artifactId>dynmap-api</artifactId>
+            <version>3.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.BlueMap-Minecraft</groupId>
+            <artifactId>BlueMapAPI</artifactId>
+            <version>v1.1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -91,12 +119,7 @@
             <version>c0d1772418</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>io.papermc</groupId>
-            <artifactId>paperlib</artifactId>
-            <version>1.0.5</version>
-            <scope>compile</scope>
-        </dependency>
+        <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -66,4 +66,21 @@ public class ShapeUtil {
         double iz = (a2 * c1 - a1 * c2) / (a1 - a2);
         return Optional.of(new double[]{ix, iz});
     }
+
+    /**
+     * Given an ellipse defined by the center and radii, find a point on the perimeter corresponding to a specific
+     * angle.
+     *
+     * @param centerX Ellipse center x
+     * @param centerZ Ellipse center z
+     * @param radiusX Ellipse radius x
+     * @param radiusZ Ellipse radius z
+     * @param angle   Angle in radians
+     * @return The point on the ellipse.
+     */
+    public static double[] pointOnEllipse(double centerX, double centerZ, double radiusX, double radiusZ, float angle) {
+        double pointX = centerX + radiusX * Math.cos(angle);
+        double pointZ = centerZ + radiusZ * Math.sin(angle);
+        return new double[]{pointX, pointZ};
+    }
 }
