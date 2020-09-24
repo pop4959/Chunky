@@ -78,7 +78,7 @@ public class ShapeUtil {
      * @param angle   Angle in radians
      * @return The point on the ellipse.
      */
-    public static double[] pointOnEllipse(double centerX, double centerZ, double radiusX, double radiusZ, float angle) {
+    public static double[] pointOnEllipse(double centerX, double centerZ, double radiusX, double radiusZ, double angle) {
         double pointX = centerX + radiusX * Math.cos(angle);
         double pointZ = centerZ + radiusZ * Math.sin(angle);
         return new double[]{pointX, pointZ};
