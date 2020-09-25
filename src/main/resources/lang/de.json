@@ -32,5 +32,5 @@
   "help_worldborder": "&2chunky worldborder&r - Setze die mitte und den Radius der Weltgrenze",
   "task_done": "[Chunky] Aufgabe beendet für %s. Verarbeitet: %d Chunks (%.2f%%), Totale Zeit: %01d:%02d:%02d",
   "task_stopped": "[Chunky] Aufgabe gestoppt für %s.",
-  "task_update": "[Chunky] Aufgabe läuft seit %s. Verarbeitet: %d Chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Aktuell: %d, %d"
+  "task_update": "[Chunky] Aufgabe läuft für %s. Verarbeitet: %d Chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Aktuell: %d, %d"
 }
