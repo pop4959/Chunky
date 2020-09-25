@@ -37,7 +37,7 @@ public class Version implements Comparable<Version> {
 
     public static Version getCurrentMinecraftVersion() {
         if (currentMinecraftVersion == null) {
-            currentMinecraftVersion = new Version(Bukkit.getVersion());
+            currentMinecraftVersion = new Version(Bukkit.getBukkitVersion());
         }
         return currentMinecraftVersion;
     }
