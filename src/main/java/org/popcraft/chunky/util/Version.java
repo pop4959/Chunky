@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 public class Version implements Comparable<Version> {
 
     public static final Version v1_13_2 = new Version(1, 13, 2);
+    public static final Version v1_15_0 = new Version(1, 15, 0);
 
     private static Version currentMinecraftVersion;
     private int major = 0, minor = 0, patch = 0;
