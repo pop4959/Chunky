@@ -36,7 +36,6 @@ public class BlueMapIntegration extends AbstractMapIntegration implements BlueMa
         final MarkerAPI markerAPI;
         try {
             markerAPI = blueMapAPI.getMarkerAPI();
-            markerAPI.load();
         } catch (IOException e) {
             return;
         }
@@ -78,18 +77,12 @@ public class BlueMapIntegration extends AbstractMapIntegration implements BlueMa
         if (blueMapAPI == null) {
             return;
         }
-        final MarkerAPI markerAPI;
         try {
-            markerAPI = blueMapAPI.getMarkerAPI();
-            markerAPI.load();
-        } catch (IOException e) {
-            return;
-        }
-        final MarkerSet markerSet = markerAPI.createMarkerSet(this.label.toLowerCase());
-        blueMapAPI.getWorld(world.getUID()).ifPresent(blueWorld -> blueWorld.getMaps().forEach(map -> {
-            markerSet.removeMarker(shapeLabel(world));
-        }));
-        try {
+            final MarkerAPI markerAPI = blueMapAPI.getMarkerAPI();
+            final MarkerSet markerSet = markerAPI.createMarkerSet(this.label.toLowerCase());
+            blueMapAPI.getWorld(world.getUID()).ifPresent(blueWorld -> blueWorld.getMaps().forEach(map -> {
+                markerSet.removeMarker(shapeLabel(world));
+            }));
             markerAPI.save();
         } catch (IOException ignored) {
         }
@@ -100,16 +93,10 @@ public class BlueMapIntegration extends AbstractMapIntegration implements BlueMa
         if (blueMapAPI == null) {
             return;
         }
-        final MarkerAPI markerAPI;
         try {
-            markerAPI = blueMapAPI.getMarkerAPI();
-            markerAPI.load();
-        } catch (IOException e) {
-            return;
-        }
-        final MarkerSet markerSet = markerAPI.createMarkerSet(this.label.toLowerCase());
-        Bukkit.getWorlds().forEach(world -> markerSet.removeMarker(shapeLabel(world)));
-        try {
+            final MarkerAPI markerAPI = blueMapAPI.getMarkerAPI();
+            final MarkerSet markerSet = markerAPI.createMarkerSet(this.label.toLowerCase());
+            Bukkit.getWorlds().forEach(world -> markerSet.removeMarker(shapeLabel(world)));
             markerAPI.save();
         } catch (IOException ignored) {
         }
