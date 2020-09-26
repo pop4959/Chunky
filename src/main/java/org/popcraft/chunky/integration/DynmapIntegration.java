@@ -26,10 +26,11 @@ public class DynmapIntegration extends AbstractMapIntegration {
     @Override
     public void addShapeMarker(World world, Shape shape) {
         removeShapeMarker(world);
+        int color = (this.color.getRed() << 16) + (this.color.getGreen() << 8) + this.color.getBlue();
         if (shape instanceof AbstractPolygon) {
             AbstractPolygon polygon = (AbstractPolygon) shape;
             AreaMarker marker = markerSet.createAreaMarker(null, this.label, false, world.getName(), polygon.pointsX(), polygon.pointsZ(), false);
-            marker.setLineStyle(this.weight, 1f, this.color.getRGB());
+            marker.setLineStyle(this.weight, 1f, color);
             marker.setFillStyle(0f, 0x000000);
             markers.put(world, marker);
         } else if (shape instanceof AbstractEllipse) {
@@ -37,7 +38,7 @@ public class DynmapIntegration extends AbstractMapIntegration {
             double[] center = ellipse.getCenter();
             double[] radii = ellipse.getRadii();
             CircleMarker marker = markerSet.createCircleMarker(null, this.label, false, world.getName(), center[0], world.getSeaLevel(), center[1], radii[0], radii[1], false);
-            marker.setLineStyle(this.weight, 1f, this.color.getRGB());
+            marker.setLineStyle(this.weight, 1f, color);
             marker.setFillStyle(0f, 0x000000);
             markers.put(world, marker);
         }
