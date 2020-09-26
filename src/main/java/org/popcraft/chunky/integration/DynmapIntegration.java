@@ -15,39 +15,37 @@ import java.util.Map;
 
 public class DynmapIntegration extends AbstractMapIntegration {
     private MarkerSet markerSet;
-    private Map<String, MarkerDescription> markers;
-    private final String SET_NAME = "chunky.markerset";
+    private Map<World, MarkerDescription> markers;
     private int weight = 3;
 
     public DynmapIntegration(DynmapAPI dynmapAPI) {
-        this.markerSet = dynmapAPI.getMarkerAPI().createMarkerSet(SET_NAME, this.label, null, false);
+        this.markerSet = dynmapAPI.getMarkerAPI().createMarkerSet("chunky.markerset", this.label, null, false);
         this.markers = new HashMap<>();
     }
 
     @Override
     public void addShapeMarker(World world, Shape shape) {
         removeShapeMarker(world);
-        String id = shapeLabel(world);
         if (shape instanceof AbstractPolygon) {
             AbstractPolygon polygon = (AbstractPolygon) shape;
-            AreaMarker marker = markerSet.createAreaMarker(id, this.label, false, world.getName(), polygon.pointsX(), polygon.pointsZ(), false);
+            AreaMarker marker = markerSet.createAreaMarker(null, this.label, false, world.getName(), polygon.pointsX(), polygon.pointsZ(), false);
             marker.setLineStyle(this.weight, 1f, this.color.getRGB());
             marker.setFillStyle(0f, 0x000000);
-            markers.put(label, marker);
+            markers.put(world, marker);
         } else if (shape instanceof AbstractEllipse) {
             AbstractEllipse ellipse = (AbstractEllipse) shape;
             double[] center = ellipse.getCenter();
             double[] radii = ellipse.getRadii();
-            CircleMarker marker = markerSet.createCircleMarker(id, this.label, false, world.getName(), center[0], world.getSeaLevel(), center[1], radii[0], radii[1], false);
+            CircleMarker marker = markerSet.createCircleMarker(null, this.label, false, world.getName(), center[0], world.getSeaLevel(), center[1], radii[0], radii[1], false);
             marker.setLineStyle(this.weight, 1f, this.color.getRGB());
             marker.setFillStyle(0f, 0x000000);
-            markers.put(label, marker);
+            markers.put(world, marker);
         }
     }
 
     @Override
     public void removeShapeMarker(World world) {
-        MarkerDescription marker = markers.remove(shapeLabel(world));
+        MarkerDescription marker = markers.remove(world);
         if (marker != null) {
             marker.deleteMarker();
         }
@@ -69,9 +67,5 @@ public class DynmapIntegration extends AbstractMapIntegration {
             markerSet.setLayerPriority(priority);
             this.weight = weight;
         }
-    }
-
-    private String shapeLabel(World world) {
-        return String.format("%s.%s", SET_NAME, world.getName());
     }
 }

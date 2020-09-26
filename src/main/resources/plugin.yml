@@ -2,7 +2,7 @@ name: Chunky
 version: ${project.version}
 main: org.popcraft.chunky.Chunky
 api-version: "1.13"
-softdepend: [WorldBorder]
+softdepend: [dynmap, BlueMap, WorldBorder]
 load: POSTWORLD
 authors: [pop4959]
 description: Pre-generates chunks, quickly, efficiently, and safely
