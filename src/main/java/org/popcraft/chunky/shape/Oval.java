@@ -9,7 +9,7 @@ public class Oval extends AbstractEllipse {
 
     @Override
     public boolean isBounding(double x, double z) {
-        return (Math.pow(x - xCenter, 2) / Math.pow(radius, 2)) + (Math.pow(z - zCenter, 2) / Math.pow(radiusZ, 2)) <= 1;
+        return (Math.pow(x - centerX, 2) / Math.pow(radiusX, 2)) + (Math.pow(z - centerZ, 2) / Math.pow(radiusZ, 2)) <= 1;
     }
 
     @Override

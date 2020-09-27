@@ -9,14 +9,14 @@ public class Diamond extends AbstractPolygon {
 
     public Diamond(Selection selection) {
         super(selection);
-        this.p1x = xCenter;
-        this.p1z = zCenter + radius;
-        this.p2x = xCenter - radius;
-        this.p2z = zCenter;
-        this.p3x = xCenter;
-        this.p3z = zCenter - radius;
-        this.p4x = xCenter + radius;
-        this.p4z = zCenter;
+        this.p1x = centerX;
+        this.p1z = centerZ + radiusX;
+        this.p2x = centerX - radiusX;
+        this.p2z = centerZ;
+        this.p3x = centerX;
+        this.p3z = centerZ - radiusX;
+        this.p4x = centerX + radiusX;
+        this.p4z = centerZ;
     }
 
     @Override

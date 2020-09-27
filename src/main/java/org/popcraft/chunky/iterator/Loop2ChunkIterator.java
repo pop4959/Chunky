@@ -20,19 +20,19 @@ public class Loop2ChunkIterator implements ChunkIterator {
     }
 
     public Loop2ChunkIterator(Selection selection) {
-        int radiusChunks = selection.getRadiusChunks();
+        int radiusChunksX = selection.getRadiusChunksX();
         int radiusChunksZ = selection.getRadiusChunksZ();
-        int xCenterChunk = selection.getChunkX();
-        int zCenterChunk = selection.getChunkZ();
-        this.x1 = xCenterChunk - radiusChunks;
-        this.x2 = xCenterChunk + radiusChunks;
-        this.z1 = zCenterChunk - radiusChunksZ;
-        this.z2 = zCenterChunk + radiusChunksZ;
+        int centerChunkX = selection.getChunkX();
+        int centerChunkZ = selection.getChunkZ();
+        this.x1 = centerChunkX - radiusChunksX;
+        this.x2 = centerChunkX + radiusChunksX;
+        this.z1 = centerChunkZ - radiusChunksZ;
+        this.z2 = centerChunkZ + radiusChunksZ;
         this.x = x1;
         this.z = z1;
-        int diameterChunks = selection.getDiameterChunks();
+        int diameterChunksX = selection.getDiameterChunksX();
         this.diameterChunksZ = selection.getDiameterChunksZ();
-        this.total = diameterChunks * diameterChunksZ;
+        this.total = diameterChunksX * diameterChunksZ;
     }
 
     @Override

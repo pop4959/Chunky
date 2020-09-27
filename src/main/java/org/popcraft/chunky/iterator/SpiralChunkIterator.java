@@ -5,7 +5,7 @@ import org.popcraft.chunky.Selection;
 
 public class SpiralChunkIterator implements ChunkIterator {
     private int x, z;
-    private int xStop, zStop;
+    private int stopX, stopZ;
     private int span = 1, spanCount, spanProgress;
     private int direction;
     private boolean hasNext = true;
@@ -69,12 +69,12 @@ public class SpiralChunkIterator implements ChunkIterator {
     }
 
     public SpiralChunkIterator(Selection selection) {
-        int radiusChunks = selection.getRadiusChunks();
+        int radiusChunks = selection.getRadiusChunksX();
         this.x = selection.getChunkX();
         this.z = selection.getChunkZ();
-        this.xStop = x + radiusChunks;
-        this.zStop = z + radiusChunks;
-        long diameter = selection.getDiameterChunks();
+        this.stopX = x + radiusChunks;
+        this.stopZ = z + radiusChunks;
+        long diameter = selection.getDiameterChunksX();
         this.total = diameter * diameter;
     }
 
@@ -86,7 +86,7 @@ public class SpiralChunkIterator implements ChunkIterator {
     @Override
     public ChunkCoordinate next() {
         final ChunkCoordinate chunkCoord = new ChunkCoordinate(x, z);
-        if (x == xStop && z == zStop) {
+        if (x == stopX && z == stopZ) {
             hasNext = false;
         }
         if (spanCount == 2) {

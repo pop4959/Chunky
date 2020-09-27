@@ -7,14 +7,14 @@ public class Rectangle extends AbstractPolygon {
 
     protected Rectangle(Selection selection) {
         super(selection);
-        this.p1x = xCenter + radius;
-        this.p1z = zCenter - radiusZ;
-        this.p2x = xCenter - radius;
-        this.p2z = zCenter - radiusZ;
-        this.p3x = xCenter - radius;
-        this.p3z = zCenter + radiusZ;
-        this.p4x = xCenter + radius;
-        this.p4z = zCenter + radiusZ;
+        this.p1x = centerX + radiusX;
+        this.p1z = centerZ - radiusZ;
+        this.p2x = centerX - radiusX;
+        this.p2z = centerZ - radiusZ;
+        this.p3x = centerX - radiusX;
+        this.p3z = centerZ + radiusZ;
+        this.p4x = centerX + radiusX;
+        this.p4z = centerZ + radiusZ;
     }
 
     @Override

@@ -16,10 +16,10 @@ public class TotalTest {
      */
     @Test
     public void radius() {
-        Selection s = new Selection(SELECTION.x, SELECTION.z, SELECTION.radius);
-        for (int i = 0; i < SELECTION.radius; ++i) {
-            s.radius = i;
-            s.zRadius = i;
+        Selection s = new Selection(SELECTION.centerX, SELECTION.centerZ, SELECTION.radiusX);
+        for (int i = 0; i < SELECTION.radiusX; ++i) {
+            s.radiusX = i;
+            s.radiusZ = i;
             ChunkIterator concentricIterator = new ConcentricChunkIterator(s);
             ChunkIterator loop2Iterator = new Loop2ChunkIterator(s);
             ChunkIterator spiralIterator = new SpiralChunkIterator(s);
@@ -33,11 +33,11 @@ public class TotalTest {
      */
     @Test
     public void center() {
-        Selection s = new Selection(SELECTION.x, SELECTION.z, SELECTION.radius);
-        for (int i = 0; i > SELECTION.x; --i) {
-            for (int j = 0; j < SELECTION.z; ++j) {
-                s.x = i;
-                s.z = j;
+        Selection s = new Selection(SELECTION.centerX, SELECTION.centerZ, SELECTION.radiusX);
+        for (int i = 0; i > SELECTION.centerX; --i) {
+            for (int j = 0; j < SELECTION.centerZ; ++j) {
+                s.centerX = i;
+                s.centerZ = j;
                 ChunkIterator concentricIterator = new ConcentricChunkIterator(s);
                 ChunkIterator loop2Iterator = new Loop2ChunkIterator(s);
                 ChunkIterator spiralIterator = new SpiralChunkIterator(s);

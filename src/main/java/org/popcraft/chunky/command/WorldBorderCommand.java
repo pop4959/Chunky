@@ -19,18 +19,18 @@ public class WorldBorderCommand extends ChunkyCommand {
             // WorldBorder is installed, use its border
             BorderData borderData = Config.Border(selection.world.getName());
             if (borderData != null) {
-                selection.x = Location.locToBlock(borderData.getX());
-                selection.z = Location.locToBlock(borderData.getZ());
-                selection.radius = borderData.getRadiusX();
-                selection.zRadius = borderData.getRadiusZ();
+                selection.centerX = Location.locToBlock(borderData.getX());
+                selection.centerZ = Location.locToBlock(borderData.getZ());
+                selection.radiusX = borderData.getRadiusX();
+                selection.radiusZ = borderData.getRadiusZ();
                 boolean round = borderData.getShape() != null && borderData.getShape();
-                sender.sendMessage(chunky.message("format_center", selection.x, selection.z));
-                if (selection.radius == selection.zRadius) {
+                sender.sendMessage(chunky.message("format_center", selection.centerX, selection.centerZ));
+                if (selection.radiusX == selection.radiusZ) {
                     selection.shape = round ? "circle" : "square";
-                    sender.sendMessage(chunky.message("format_radius", selection.radius));
+                    sender.sendMessage(chunky.message("format_radius", selection.radiusX));
                 } else {
                     selection.shape = round ? "oval" : "rectangle";
-                    sender.sendMessage(chunky.message("format_radii", selection.radius, selection.zRadius));
+                    sender.sendMessage(chunky.message("format_radii", selection.radiusX, selection.radiusZ));
                 }
                 sender.sendMessage(chunky.message("format_shape", selection.shape));
                 return;
@@ -39,10 +39,10 @@ public class WorldBorderCommand extends ChunkyCommand {
         // Default to the vanilla world border
         WorldBorder border = selection.world.getWorldBorder();
         Location center = border.getCenter();
-        selection.x = center.getBlockX();
-        selection.z = center.getBlockZ();
-        selection.radius = (int) border.getSize() / 2;
-        sender.sendMessage(chunky.message("format_center", selection.x, selection.z));
-        sender.sendMessage(chunky.message("format_radius", selection.radius));
+        selection.centerX = center.getBlockX();
+        selection.centerZ = center.getBlockZ();
+        selection.radiusX = (int) border.getSize() / 2;
+        sender.sendMessage(chunky.message("format_center", selection.centerX, selection.centerZ));
+        sender.sendMessage(chunky.message("format_radius", selection.radiusX));
     }
 }

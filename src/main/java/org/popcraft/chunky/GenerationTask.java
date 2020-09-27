@@ -38,10 +38,10 @@ public class GenerationTask implements Runnable {
     public GenerationTask(Chunky chunky, Selection selection) {
         this.chunky = chunky;
         this.world = selection.world;
-        this.radiusX = selection.radius;
-        this.radiusZ = selection.zRadius;
-        this.centerX = selection.x;
-        this.centerZ = selection.z;
+        this.radiusX = selection.radiusX;
+        this.radiusZ = selection.radiusZ;
+        this.centerX = selection.centerX;
+        this.centerZ = selection.centerZ;
         this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection);
         this.shape = ShapeFactory.getShape(selection);
         this.totalChunks.set(chunkIterator.total());

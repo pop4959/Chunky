@@ -29,14 +29,14 @@ public class RadiusCommand extends ChunkyCommand {
                 sender.sendMessage(chunky.message("help_radius"));
                 return;
             }
-            selection.zRadius = newRadiusZ.get();
+            selection.radiusZ = newRadiusZ.get();
         }
-        selection.radius = newRadiusX.get();
+        selection.radiusX = newRadiusX.get();
         if (args.length == 2) {
-            selection.zRadius = selection.radius;
-            sender.sendMessage(chunky.message("format_radius", selection.radius));
+            selection.radiusZ = selection.radiusX;
+            sender.sendMessage(chunky.message("format_radius", selection.radiusX));
         } else {
-            sender.sendMessage(chunky.message("format_radii", selection.radius, selection.zRadius));
+            sender.sendMessage(chunky.message("format_radii", selection.radiusX, selection.radiusZ));
         }
     }
 }

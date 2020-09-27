@@ -5,10 +5,10 @@ import org.bukkit.World;
 
 public class Selection {
     public World world;
-    public int x;
-    public int z;
-    public int radius;
-    public int zRadius;
+    public int centerX;
+    public int centerZ;
+    public int radiusX;
+    public int radiusZ;
     public String pattern;
     public String shape;
     public boolean silent;
@@ -16,38 +16,38 @@ public class Selection {
 
     public Selection() {
         this.world = Bukkit.getServer().getWorlds().get(0);
-        this.radius = 500;
-        this.zRadius = radius;
+        this.radiusX = 500;
+        this.radiusZ = radiusX;
         this.pattern = "concentric";
         this.shape = "square";
         this.quiet = 1;
     }
 
     public Selection(int x, int z, int radius) {
-        this.x = x;
-        this.z = z;
-        this.radius = radius;
-        this.zRadius = radius;
+        this.centerX = x;
+        this.centerZ = z;
+        this.radiusX = radius;
+        this.radiusZ = radius;
     }
 
     public int getChunkX() {
-        return x >> 4;
+        return centerX >> 4;
     }
 
     public int getChunkZ() {
-        return z >> 4;
+        return centerZ >> 4;
     }
 
-    public int getRadiusChunks() {
-        return (int) Math.ceil(radius / 16f);
+    public int getRadiusChunksX() {
+        return (int) Math.ceil(radiusX / 16f);
     }
 
     public int getRadiusChunksZ() {
-        return (int) Math.ceil(zRadius / 16f);
+        return (int) Math.ceil(radiusZ / 16f);
     }
 
-    public int getDiameterChunks() {
-        return 2 * getRadiusChunks() + 1;
+    public int getDiameterChunksX() {
+        return 2 * getRadiusChunksX() + 1;
     }
 
     public int getDiameterChunksZ() {

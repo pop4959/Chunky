@@ -7,14 +7,14 @@ public class Square extends AbstractPolygon {
 
     protected Square(Selection selection) {
         super(selection);
-        this.p1x = xCenter + radius;
-        this.p1z = zCenter - radius;
-        this.p2x = xCenter - radius;
-        this.p2z = zCenter - radius;
-        this.p3x = xCenter - radius;
-        this.p3z = zCenter + radius;
-        this.p4x = xCenter + radius;
-        this.p4z = zCenter + radius;
+        this.p1x = centerX + radiusX;
+        this.p1z = centerZ - radiusX;
+        this.p2x = centerX - radiusX;
+        this.p2z = centerZ - radiusX;
+        this.p3x = centerX - radiusX;
+        this.p3z = centerZ + radiusX;
+        this.p4x = centerX + radiusX;
+        this.p4z = centerZ + radiusX;
     }
 
     @Override

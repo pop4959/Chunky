@@ -87,7 +87,7 @@ public class ConstructorTest {
     public void rectangle() {
         List<ChunkCoordinate> chunks = new ArrayList<>();
         Selection s = new Selection(-25, 25, 50);
-        s.zRadius = 100;
+        s.radiusZ = 100;
         ChunkIterator chunkIterator = new Loop2ChunkIterator(s);
         chunkIterator.forEachRemaining(chunks::add);
         int total = (int) chunkIterator.total();

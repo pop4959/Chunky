@@ -27,10 +27,10 @@ public class ConfigStorage {
         }
         Selection selection = new Selection();
         selection.world = world;
-        selection.radius = config.getInt(world_key + "radius", 500);
-        selection.zRadius = config.getInt(world_key + "z-radius", selection.radius);
-        selection.x = config.getInt(world_key + "x-center", 0);
-        selection.z = config.getInt(world_key + "z-center", 0);
+        selection.radiusX = config.getInt(world_key + "radius", 500);
+        selection.radiusZ = config.getInt(world_key + "z-radius", selection.radiusX);
+        selection.centerX = config.getInt(world_key + "x-center", 0);
+        selection.centerZ = config.getInt(world_key + "z-center", 0);
         selection.pattern = config.getString(world_key + "iterator", "loop");
         selection.shape = config.getString(world_key + "shape", "square");
         long count = config.getLong(world_key + "count", 0);

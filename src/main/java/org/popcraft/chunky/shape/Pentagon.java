@@ -9,16 +9,16 @@ public class Pentagon extends AbstractPolygon {
 
     public Pentagon(Selection selection) {
         super(selection);
-        this.p1x = xCenter + radius * Math.cos(Math.toRadians(54));
-        this.p1z = zCenter + radius * Math.sin(Math.toRadians(54));
-        this.p2x = xCenter + radius * Math.cos(Math.toRadians(126));
-        this.p2z = zCenter + radius * Math.sin(Math.toRadians(126));
-        this.p3x = xCenter + radius * Math.cos(Math.toRadians(198));
-        this.p3z = zCenter + radius * Math.sin(Math.toRadians(198));
-        this.p4x = xCenter + radius * Math.cos(Math.toRadians(270));
-        this.p4z = zCenter + radius * Math.sin(Math.toRadians(270));
-        this.p5x = xCenter + radius * Math.cos(Math.toRadians(342));
-        this.p5z = zCenter + radius * Math.sin(Math.toRadians(342));
+        this.p1x = centerX + radiusX * Math.cos(Math.toRadians(54));
+        this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(54));
+        this.p2x = centerX + radiusX * Math.cos(Math.toRadians(126));
+        this.p2z = centerZ + radiusX * Math.sin(Math.toRadians(126));
+        this.p3x = centerX + radiusX * Math.cos(Math.toRadians(198));
+        this.p3z = centerZ + radiusX * Math.sin(Math.toRadians(198));
+        this.p4x = centerX + radiusX * Math.cos(Math.toRadians(270));
+        this.p4z = centerZ + radiusX * Math.sin(Math.toRadians(270));
+        this.p5x = centerX + radiusX * Math.cos(Math.toRadians(342));
+        this.p5z = centerZ + radiusX * Math.sin(Math.toRadians(342));
     }
 
     @Override

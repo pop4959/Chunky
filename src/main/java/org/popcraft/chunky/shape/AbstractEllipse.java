@@ -8,6 +8,6 @@ public abstract class AbstractEllipse extends AbstractShape {
     }
 
     public double[] getRadii() {
-        return new double[]{radius, radiusZ};
+        return new double[]{radiusX, radiusZ};
     }
 }
