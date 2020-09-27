@@ -14,13 +14,19 @@ import org.popcraft.chunky.shape.Shape;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class BlueMapIntegration extends AbstractMapIntegration implements BlueMapAPIListener {
-    BlueMapAPI blueMapAPI;
+    private BlueMapAPI blueMapAPI;
+    private List<Consumer<Void>> toAdd = new ArrayList<>();
 
     @Override
     public void onEnable(BlueMapAPI blueMapApi) {
         this.blueMapAPI = blueMapApi;
+        toAdd.forEach(add -> add.accept(null));
+        toAdd.clear();
     }
 
     @Override
@@ -29,8 +35,9 @@ public class BlueMapIntegration extends AbstractMapIntegration implements BlueMa
     }
 
     @Override
-    public void addShapeMarker(World world, Shape shape) {
+    public void addShapeMarker(final World world, final Shape shape) {
         if (blueMapAPI == null) {
+            this.toAdd.add(v -> this.addShapeMarker(world, shape));
             return;
         }
         final MarkerAPI markerAPI;
