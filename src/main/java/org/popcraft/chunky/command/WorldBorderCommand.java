@@ -41,7 +41,7 @@ public class WorldBorderCommand extends ChunkyCommand {
         Location center = border.getCenter();
         selection.centerX = center.getBlockX();
         selection.centerZ = center.getBlockZ();
-        selection.radiusX = (int) border.getSize() / 2;
+        selection.radiusX = selection.radiusZ = (int) border.getSize() / 2;
         sender.sendMessage(chunky.message("format_center", selection.centerX, selection.centerZ));
         sender.sendMessage(chunky.message("format_radius", selection.radiusX));
     }
