@@ -1,7 +1,7 @@
 {
   "disabled": "关闭的",
   "enabled": "启用的",
-  "error_version": "本插件无法与Minecraft版本低于 1.13 的服务器兼容。 ",
+  "error_version": "本插件无法与Minecraft版本低于 1.13 的服务器兼容。",
   "error_version_spigot": "本插件无法与 Spigot 1.13 兼容!",
   "format_cancel": "[Chunky] 取消所有任务中。",
   "format_center": "[Chunky] 预生成中心转移至 %d, %d。",
