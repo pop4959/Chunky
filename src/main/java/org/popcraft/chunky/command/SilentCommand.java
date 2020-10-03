@@ -13,6 +13,6 @@ public class SilentCommand extends ChunkyCommand {
         Selection selection = chunky.getSelection();
         selection.silent = !selection.silent;
         String status = selection.silent ? chunky.message("enabled") : chunky.message("disabled");
-        sender.sendMessage(chunky.message("format_silent", status));
+        sender.sendMessage(chunky.message("format_silent", chunky.message("prefix"), status));
     }
 }

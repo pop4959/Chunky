@@ -18,9 +18,9 @@ public class ContinueCommand extends ChunkyCommand {
             if (!generationTasks.containsKey(generationTask.getWorld())) {
                 generationTasks.put(generationTask.getWorld(), generationTask);
                 chunky.getServer().getScheduler().runTaskAsynchronously(chunky, generationTask);
-                sender.sendMessage(chunky.message("format_continue", generationTask.getWorld().getName()));
+                sender.sendMessage(chunky.message("format_continue", chunky.message("prefix"), generationTask.getWorld().getName()));
             } else {
-                sender.sendMessage(chunky.message("format_started_already", generationTask.getWorld().getName()));
+                sender.sendMessage(chunky.message("format_started_already", chunky.message("prefix"), generationTask.getWorld().getName()));
             }
         });
     }

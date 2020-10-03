@@ -34,9 +34,9 @@ public class RadiusCommand extends ChunkyCommand {
         selection.radiusX = newRadiusX.get();
         if (args.length == 2) {
             selection.radiusZ = selection.radiusX;
-            sender.sendMessage(chunky.message("format_radius", selection.radiusX));
+            sender.sendMessage(chunky.message("format_radius", chunky.message("prefix"), selection.radiusX));
         } else {
-            sender.sendMessage(chunky.message("format_radii", selection.radiusX, selection.radiusZ));
+            sender.sendMessage(chunky.message("format_radii", chunky.message("prefix"), selection.radiusX, selection.radiusZ));
         }
     }
 }

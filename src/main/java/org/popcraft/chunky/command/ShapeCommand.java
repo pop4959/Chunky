@@ -26,7 +26,7 @@ public class ShapeCommand extends ChunkyCommand {
         }
         Selection selection = chunky.getSelection();
         selection.shape = shape;
-        sender.sendMessage(chunky.message("format_shape", shape));
+        sender.sendMessage(chunky.message("format_shape", chunky.message("prefix"), shape));
     }
 
     @Override

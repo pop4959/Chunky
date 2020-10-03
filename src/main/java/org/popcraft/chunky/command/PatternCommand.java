@@ -24,7 +24,7 @@ public class PatternCommand extends ChunkyCommand {
             return;
         }
         chunky.getSelection().pattern = pattern;
-        sender.sendMessage(chunky.message("format_pattern", pattern));
+        sender.sendMessage(chunky.message("format_pattern", chunky.message("prefix"), pattern));
     }
 
     @Override

@@ -32,6 +32,6 @@ public class CenterCommand extends ChunkyCommand {
         Selection selection = chunky.getSelection();
         selection.centerX = newX.get().intValue();
         selection.centerZ = newZ.get().intValue();
-        sender.sendMessage(chunky.message("format_center", selection.centerX, selection.centerZ));
+        sender.sendMessage(chunky.message("format_center", chunky.message("prefix"), selection.centerX, selection.centerZ));
     }
 }

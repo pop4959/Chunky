@@ -24,15 +24,15 @@ public class WorldBorderCommand extends ChunkyCommand {
                 selection.radiusX = borderData.getRadiusX();
                 selection.radiusZ = borderData.getRadiusZ();
                 boolean round = borderData.getShape() != null && borderData.getShape();
-                sender.sendMessage(chunky.message("format_center", selection.centerX, selection.centerZ));
+                sender.sendMessage(chunky.message("format_center", chunky.message("prefix"), selection.centerX, selection.centerZ));
                 if (selection.radiusX == selection.radiusZ) {
                     selection.shape = round ? "circle" : "square";
-                    sender.sendMessage(chunky.message("format_radius", selection.radiusX));
+                    sender.sendMessage(chunky.message("format_radius", chunky.message("prefix"), selection.radiusX));
                 } else {
                     selection.shape = round ? "oval" : "rectangle";
-                    sender.sendMessage(chunky.message("format_radii", selection.radiusX, selection.radiusZ));
+                    sender.sendMessage(chunky.message("format_radii", chunky.message("prefix"), selection.radiusX, selection.radiusZ));
                 }
-                sender.sendMessage(chunky.message("format_shape", selection.shape));
+                sender.sendMessage(chunky.message("format_shape", chunky.message("prefix"), selection.shape));
                 return;
             }
         }
@@ -42,7 +42,7 @@ public class WorldBorderCommand extends ChunkyCommand {
         selection.centerX = center.getBlockX();
         selection.centerZ = center.getBlockZ();
         selection.radiusX = selection.radiusZ = (int) border.getSize() / 2;
-        sender.sendMessage(chunky.message("format_center", selection.centerX, selection.centerZ));
-        sender.sendMessage(chunky.message("format_radius", selection.radiusX));
+        sender.sendMessage(chunky.message("format_center", chunky.message("prefix"), selection.centerX, selection.centerZ));
+        sender.sendMessage(chunky.message("format_radius", chunky.message("prefix"), selection.radiusX));
     }
 }
