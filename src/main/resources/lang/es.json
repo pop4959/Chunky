@@ -13,7 +13,7 @@
   "format_radius": "%s Distancia cambiada a %d.",
   "format_shape": "%s La forma cambio a %s.",
   "format_silent": "%s El modo silencioso esta %s.",
-  "format_start": "%s Tarea iniciada en %s %d, %d con un area de %d.",
+  "format_start": "%s Tarea iniciada en %s %d, %d con un area de %s.",
   "format_started_already": "%s Tarea ya iniciada para %s!",
   "format_world": "%s Mundo cambiado a %s.",
   "help_cancel": "&2chunky cancel&r - Detiene y elimina las tareas actuales o guardadas",

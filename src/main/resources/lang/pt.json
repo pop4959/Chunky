@@ -10,7 +10,7 @@
   "format_quiet": "%s Intervalo silencioso definido para %d segundos.",
   "format_radius": "%s O raio mudou para %d.",
   "format_silent": "%s Modo silencioso %s.",
-  "format_start": "%s Tarefa iniciada para %s em %d, %d com raio de %d.",
+  "format_start": "%s Tarefa iniciada para %s em %d, %d com raio de %s.",
   "format_started_already": "%s Tarefa já iniciada para %s !",
   "format_world": "%s O mundo mudou para %s.",
   "help_cancel": "&2chunky cancel&r - Parar e apagar tarefas actuais ou guardadas",
