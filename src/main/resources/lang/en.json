@@ -9,6 +9,7 @@
   "format_continue": "%s Task continuing for %s.",
   "format_pattern": "%s Pattern changed to %s.",
   "format_pause": "%s Task paused for %s.",
+  "format_pause_no_tasks": "%s No tasks to pause.",
   "format_quiet": "%s Quiet interval set to %d seconds.",
   "format_radii": "%s Radius changed for x to %d, and for z to %d.",
   "format_radius": "%s Radius changed to %d.",
