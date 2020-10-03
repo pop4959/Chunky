@@ -114,7 +114,6 @@ public class GenerationTask implements Runnable {
                 }
             });
         }
-        totalTime += prevTime + (System.currentTimeMillis() - startTime.get());
         if (stopped) {
             chunky.getServer().getConsoleSender().sendMessage(chunky.message("task_stopped", chunky.message("prefix"), world.getName()));
         } else {
@@ -129,6 +128,7 @@ public class GenerationTask implements Runnable {
         this.stopped = true;
         this.cancelled = cancelled;
         if (save && !hasSaved) {
+            totalTime += prevTime + (System.currentTimeMillis() - startTime.get());
             chunky.getConfigStorage().saveTask(this);
             this.hasSaved = true;
         }
