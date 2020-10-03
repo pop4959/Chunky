@@ -61,7 +61,7 @@ public final class Chunky extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        commands.get("pause").execute(getServer().getConsoleSender(), new String[]{});
+        this.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false, true));
         this.getServer().getScheduler().getActiveWorkers().stream()
                 .filter(w -> w.getOwner() == this)
                 .map(BukkitWorker::getThread)

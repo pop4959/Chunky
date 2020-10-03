@@ -18,7 +18,7 @@ public class GenerationTask implements Runnable {
     private final int radiusX, radiusZ, centerX, centerZ;
     private ChunkIterator chunkIterator;
     private Shape shape;
-    private boolean stopped, cancelled;
+    private boolean stopped, cancelled, hasSaved;
     private long prevTime, totalTime;
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong printTime = new AtomicLong();
@@ -103,7 +103,7 @@ public class GenerationTask implements Runnable {
             try {
                 working.acquire();
             } catch (InterruptedException e) {
-                stop(cancelled);
+                stop(cancelled, false);
                 break;
             }
             PaperLib.getChunkAtAsync(world, chunkCoord.x, chunkCoord.z).thenAccept(chunk -> {
@@ -114,20 +114,24 @@ public class GenerationTask implements Runnable {
                 }
             });
         }
-        totalTime += prevTime + (System.currentTimeMillis() - startTime.get());
         if (stopped) {
             chunky.getServer().getConsoleSender().sendMessage(chunky.message("task_stopped", chunky.message("prefix"), world.getName()));
         } else {
             this.cancelled = true;
         }
-        chunky.getConfigStorage().saveTask(this);
+        stop(cancelled, true);
         chunky.getGenerationTasks().remove(this.getWorld());
         Thread.currentThread().setName(poolThreadName);
     }
 
-    public void stop(boolean cancelled) {
+    public void stop(boolean cancelled, boolean save) {
         this.stopped = true;
         this.cancelled = cancelled;
+        if (save && !hasSaved) {
+            totalTime += prevTime + (System.currentTimeMillis() - startTime.get());
+            chunky.getConfigStorage().saveTask(this);
+            this.hasSaved = true;
+        }
     }
 
     public World getWorld() {
