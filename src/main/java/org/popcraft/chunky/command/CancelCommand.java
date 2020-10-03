@@ -11,7 +11,7 @@ public class CancelCommand extends ChunkyCommand {
     public void execute(CommandSender sender, String[] args) {
         sender.sendMessage(chunky.message("format_cancel", chunky.message("prefix")));
         chunky.getConfigStorage().cancelTasks();
-        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true));
+        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true, false));
         chunky.getGenerationTasks().clear();
         chunky.getServer().getScheduler().cancelTasks(chunky);
     }
