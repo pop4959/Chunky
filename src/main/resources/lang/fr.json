@@ -10,7 +10,7 @@
   "format_quiet": "%s Intervalle de silence réglé à %d secondes.",
   "format_radius": "%s Le rayon est passé à %d.",
   "format_silent": "%s Mode silencieux %s.",
-  "format_start": "%s La tâche a commencé pour %s à %d, %d avec un rayon de %d.",
+  "format_start": "%s La tâche a commencé pour %s à %d, %d avec un rayon de %s.",
   "format_started_already": "%s La tâche a déjà commencé pour %s!",
   "format_world": "%s Le monde est passé à %s.",
   "help_cancel": "&2chunky cancel&r - Arrêter et supprimer les tâches en cours ou enregistrées",

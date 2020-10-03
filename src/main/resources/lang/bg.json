@@ -12,7 +12,7 @@
   "format_radius": "%s Радиус променен на %d.",
   "format_shape": "%s Форма променена на %s.",
   "format_silent": "%s Тих режим %s.",
-  "format_start": "%s Задача стартирана за %s на %d, %d с радиус %d.",
+  "format_start": "%s Задача стартирана за %s на %d, %d с радиус %s.",
   "format_started_already": "%s Задачата е вече стартирана за %s!",
   "format_world": "%s Свят променен на %s.",
   "help_cancel": "&2chunky cancel&r - Спиране и изтриване на текущи или запазени задачи",

@@ -13,7 +13,7 @@
   "format_radius": "%s 生成范围半径已更改为 %d。",
   "format_shape": "%s 预生成形状已更改为 %s。",
   "format_silent": "%s 静默模式 %s。",
-  "format_start": "%s 任务开始于模式 %s 以间隔 %d, %d 以 %d 的范围进行。",
+  "format_start": "%s 任务开始于模式 %s 以间隔 %d, %d 以 %s 的范围进行。",
   "format_started_already": "%s 任务已经持续了 %s!",
   "format_world": "%s 世界被改变为 %s。",
   "help_cancel": "&2chunky cancel&r - 取消并删除当前正在运行或已保存的任务",
