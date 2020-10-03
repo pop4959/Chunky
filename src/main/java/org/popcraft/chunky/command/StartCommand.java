@@ -13,12 +13,12 @@ public class StartCommand extends ChunkyCommand {
     public void execute(CommandSender sender, String[] args) {
         Selection selection = chunky.getSelection();
         if (chunky.getGenerationTasks().containsKey(selection.world)) {
-            sender.sendMessage(chunky.message("format_started_already", selection.world.getName()));
+            sender.sendMessage(chunky.message("format_started_already", chunky.message("prefix"), selection.world.getName()));
             return;
         }
         GenerationTask generationTask = new GenerationTask(chunky, selection);
         chunky.getGenerationTasks().put(selection.world, generationTask);
         chunky.getServer().getScheduler().runTaskAsynchronously(chunky, generationTask);
-        sender.sendMessage(chunky.message("format_start", selection.world.getName(), selection.centerX, selection.centerZ, selection.radiusX));
+        sender.sendMessage(chunky.message("format_start", chunky.message("prefix"), selection.world.getName(), selection.centerX, selection.centerZ, selection.radiusX));
     }
 }

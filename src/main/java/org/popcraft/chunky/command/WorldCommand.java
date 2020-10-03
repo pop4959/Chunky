@@ -28,7 +28,7 @@ public class WorldCommand extends ChunkyCommand {
         }
         Selection selection = chunky.getSelection();
         selection.world = newWorld.get();
-        sender.sendMessage(chunky.message("format_world", selection.world.getName()));
+        sender.sendMessage(chunky.message("format_world", chunky.message("prefix"), selection.world.getName()));
     }
 
     @Override
