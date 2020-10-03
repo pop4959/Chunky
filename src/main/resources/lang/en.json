@@ -4,6 +4,7 @@
   "error_version": "This plugin is not compatible with Minecraft versions below 1.13.",
   "error_version_spigot": "This plugin is not compatible with Spigot 1.13!",
   "format_cancel": "%s Cancelling all tasks.",
+  "format_cancel_no_tasks": "%s No tasks to cancel.",
   "format_center": "%s Center changed to %d, %d.",
   "format_continue": "%s Task continuing for %s.",
   "format_pattern": "%s Pattern changed to %s.",
