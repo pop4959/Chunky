@@ -13,6 +13,10 @@ public class ContinueCommand extends ChunkyCommand {
     }
 
     public void execute(CommandSender sender, String[] args) {
+        if (chunky.getConfigStorage().loadTasks().size() == 0) {
+            sender.sendMessage(chunky.message("format_continue_no_tasks", chunky.message("prefix")));
+            return;
+        }
         final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
         chunky.getConfigStorage().loadTasks().forEach(generationTask -> {
             if (!generationTasks.containsKey(generationTask.getWorld())) {
