@@ -7,6 +7,7 @@
   "format_cancel_no_tasks": "%s No tasks to cancel.",
   "format_center": "%s Center changed to %d, %d.",
   "format_continue": "%s Task continuing for %s.",
+  "format_continue_no_tasks": "%s No tasks to continue.",
   "format_pattern": "%s Pattern changed to %s.",
   "format_pause": "%s Task paused for %s.",
   "format_pause_no_tasks": "%s No tasks to pause.",

@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 
+import java.util.List;
 import java.util.Map;
 
 public class ContinueCommand extends ChunkyCommand {
@@ -13,8 +14,13 @@ public class ContinueCommand extends ChunkyCommand {
     }
 
     public void execute(CommandSender sender, String[] args) {
+        final List<GenerationTask> loadTasks = chunky.getConfigStorage().loadTasks();
+        if (loadTasks.size() == 0) {
+            sender.sendMessage(chunky.message("format_continue_no_tasks", chunky.message("prefix")));
+            return;
+        }
         final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
-        chunky.getConfigStorage().loadTasks().forEach(generationTask -> {
+        loadTasks.forEach(generationTask -> {
             if (!generationTasks.containsKey(generationTask.getWorld())) {
                 generationTasks.put(generationTask.getWorld(), generationTask);
                 chunky.getServer().getScheduler().runTaskAsynchronously(chunky, generationTask);
