@@ -114,7 +114,6 @@ public class GenerationTask implements Runnable {
                 if (TuinityLib.isTuinity() && TuinityLib.getDelayChunkUnloadsBy() > 0) {
                     chunky.getServer().getScheduler().scheduleSyncDelayedTask(chunky, chunk::unload);
                 }
-                chunky.getServer().getConsoleSender().sendMessage(String.format("Finished with %s: %d, %d", chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
             });
         }
         if (stopped) {

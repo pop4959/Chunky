@@ -12,6 +12,10 @@ public class PauseCommand extends ChunkyCommand {
 
     public void execute(CommandSender sender, String[] args) {
         TaskManager taskManager = chunky.getTaskManager();
+        if (chunky.getTaskManager().getTasks().size() == 0) {
+            sender.sendMessage(chunky.message("format_pause_no_tasks", chunky.message("prefix")));
+            return;
+        }
         for (GenerationTask task : taskManager.getTasks()) {
             sender.sendMessage(chunky.message("format_pause", chunky.message("prefix"), task.getWorld().getName()));
         }
