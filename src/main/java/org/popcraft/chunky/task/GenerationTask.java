@@ -1,7 +1,10 @@
-package org.popcraft.chunky;
+package org.popcraft.chunky.task;
 
 import io.papermc.lib.PaperLib;
 import org.bukkit.World;
+import org.popcraft.chunky.ChunkCoordinate;
+import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ChunkIteratorFactory;
 import org.popcraft.chunky.shape.Shape;
@@ -48,7 +51,7 @@ public class GenerationTask implements Runnable {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void printUpdate(World chunkWorld, int chunkX, int chunkZ) {
+    private void update(World chunkWorld, int chunkX, int chunkZ) {
         if (stopped) {
             return;
         }
@@ -88,7 +91,6 @@ public class GenerationTask implements Runnable {
 
     @Override
     public void run() {
-        final String poolThreadName = Thread.currentThread().getName();
         Thread.currentThread().setName(String.format("Chunky-%s Thread", world.getName()));
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
@@ -97,7 +99,7 @@ public class GenerationTask implements Runnable {
             int xChunkCenter = (chunkCoord.x << 4) + 8;
             int zChunkCenter = (chunkCoord.z << 4) + 8;
             if (!shape.isBounding(xChunkCenter, zChunkCenter) || PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
-                printUpdate(world, chunkCoord.x, chunkCoord.z);
+                update(world, chunkCoord.x, chunkCoord.z);
                 continue;
             }
             try {
@@ -108,7 +110,7 @@ public class GenerationTask implements Runnable {
             }
             PaperLib.getChunkAtAsync(world, chunkCoord.x, chunkCoord.z).thenAccept(chunk -> {
                 working.release();
-                printUpdate(world, chunk.getX(), chunk.getZ());
+                update(world, chunk.getX(), chunk.getZ());
                 if (TuinityLib.isTuinity() && TuinityLib.getDelayChunkUnloadsBy() > 0) {
                     chunky.getServer().getScheduler().scheduleSyncDelayedTask(chunky, chunk::unload);
                 }
@@ -119,9 +121,7 @@ public class GenerationTask implements Runnable {
         } else {
             this.cancelled = true;
         }
-        stop(cancelled, true);
-        chunky.getGenerationTasks().remove(this.getWorld());
-        Thread.currentThread().setName(poolThreadName);
+        chunky.getTaskManager().stop(this.getWorld(), this, cancelled, true);
     }
 
     public void stop(boolean cancelled, boolean save) {
