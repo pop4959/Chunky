@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.papermc.lib.PaperLib;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitWorker;
 import org.popcraft.chunky.command.*;
+import org.popcraft.chunky.task.BukkitTaskManager;
+import org.popcraft.chunky.task.TaskManager;
 import org.popcraft.chunky.util.Version;
 
 import java.io.BufferedReader;
@@ -21,12 +21,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public final class Chunky extends JavaPlugin {
     private ConfigStorage configStorage;
-    private Map<World, GenerationTask> generationTasks;
+    private TaskManager taskManager;
     private Map<String, String> translations, fallbackTranslations;
     private Map<String, ChunkyCommand> commands;
     private Selection selection;
@@ -37,7 +36,7 @@ public final class Chunky extends JavaPlugin {
         this.getConfig().options().copyHeader(true);
         this.saveConfig();
         this.configStorage = new ConfigStorage(this);
-        this.generationTasks = new ConcurrentHashMap<>();
+        this.taskManager = new BukkitTaskManager();
         this.translations = loadTranslation(getConfig().getString("language", "en"));
         this.fallbackTranslations = loadTranslation("en");
         this.commands = loadCommands();
@@ -61,12 +60,7 @@ public final class Chunky extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false, true));
-        this.getServer().getScheduler().getActiveWorkers().stream()
-                .filter(w -> w.getOwner() == this)
-                .map(BukkitWorker::getThread)
-                .forEach(Thread::interrupt);
-        this.getServer().getScheduler().cancelTasks(this);
+        this.getTaskManager().stopAll(true, false, true);
     }
 
     @Override
@@ -142,8 +136,8 @@ public final class Chunky extends JavaPlugin {
         return configStorage;
     }
 
-    public Map<World, GenerationTask> getGenerationTasks() {
-        return generationTasks;
+    public TaskManager getTaskManager() {
+        return taskManager;
     }
 
     public Selection getSelection() {
