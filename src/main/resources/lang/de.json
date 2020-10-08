@@ -6,6 +6,7 @@
   "format_cancel": "%s Abbrechen aller Aufgaben.",
   "format_center": "%s Mitte geändert zu %d, %d.",
   "format_continue": "%s Mache weiter mit Aufgabe für %s.",
+  "format_continue_no_tasks": "%s Keine Aufgaben zum weitermachen.",
   "format_pattern": "%s Muster geändert zu %s.",
   "format_pause": "%s Aufgabe pausiert für %s.",
   "format_quiet": "%s Stummer Intervall auf %d Sekunden gesetzt.",
