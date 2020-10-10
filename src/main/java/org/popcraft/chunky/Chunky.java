@@ -3,6 +3,8 @@ package org.popcraft.chunky;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.papermc.lib.PaperLib;
+import lombok.Getter;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,6 +13,8 @@ import org.popcraft.chunky.command.*;
 import org.popcraft.chunky.task.BukkitTaskManager;
 import org.popcraft.chunky.task.TaskManager;
 import org.popcraft.chunky.util.Version;
+
+import co.aikar.commands.PaperCommandManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -29,6 +33,7 @@ public final class Chunky extends JavaPlugin {
     private Map<String, String> translations, fallbackTranslations;
     private Map<String, ChunkyCommand> commands;
     private Selection selection;
+    private @Getter PaperCommandManager commandManager;
 
     @Override
     public void onEnable() {
@@ -40,6 +45,9 @@ public final class Chunky extends JavaPlugin {
         this.translations = loadTranslation(getConfig().getString("language", "en"));
         this.fallbackTranslations = loadTranslation("en");
         this.commands = loadCommands();
+        this.commandManager = new PaperCommandManager(this);
+        this.commandManager.registerCommand(new HynixChunkyCommand(this));
+
         this.selection = new Selection();
         Metrics metrics = new Metrics(this, 8211);
         if (metrics.isEnabled()) {
@@ -54,7 +62,7 @@ public final class Chunky extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
         }
         if (this.getConfig().getBoolean("continue-on-restart", false)) {
-            commands.get("continue").execute(getServer().getConsoleSender(), new String[]{});
+            commands.get("continue").execute(getServer().getConsoleSender(), new String[] {});
         }
     }
 
@@ -68,7 +76,7 @@ public final class Chunky extends JavaPlugin {
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
             commands.get(args[0].toLowerCase()).execute(sender, args);
         } else {
-            commands.get("help").execute(sender, new String[]{});
+            commands.get("help").execute(sender, new String[] {});
         }
         return true;
     }
@@ -84,8 +92,7 @@ public final class Chunky extends JavaPlugin {
         } else if (commands.containsKey(args[0].toLowerCase())) {
             suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(sender, args));
         }
-        return suggestions.stream()
-                .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
+        return suggestions.stream().filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
                 .collect(Collectors.toList());
     }
 

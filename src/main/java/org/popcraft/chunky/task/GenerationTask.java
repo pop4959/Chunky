@@ -50,6 +50,10 @@ public class GenerationTask implements Runnable {
         this.totalChunks.set(chunkIterator.total());
     }
 
+    public double getPercentDone() {
+        return (100f * finishedChunks.addAndGet(0)) / totalChunks.get();
+    }
+
     @SuppressWarnings("ConstantConditions")
     private void update(World chunkWorld, int chunkX, int chunkZ) {
         if (stopped) {
@@ -60,9 +64,11 @@ public class GenerationTask implements Runnable {
         double percentDone = 100f * chunkNum / totalChunks.get();
         long currentTime = System.currentTimeMillis();
         chunkUpdateTimes10Sec.add(currentTime);
-        while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4) chunkUpdateTimes10Sec.poll();
+        while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4)
+            chunkUpdateTimes10Sec.poll();
         long chunksLeft = totalChunks.get() - finishedChunks.get();
-        if (chunksLeft > 0 && (chunky.getSelection().silent || ((currentTime - printTime.get()) / 1e3) < chunky.getSelection().quiet)) {
+        if (chunksLeft > 0 && (chunky.getSelection().silent
+                || ((currentTime - printTime.get()) / 1e3) < chunky.getSelection().quiet)) {
             return;
         }
         printTime.set(currentTime);
@@ -78,13 +84,15 @@ public class GenerationTask implements Runnable {
             long totalHours = total / 3600;
             long totalMinutes = (total - totalHours * 3600) / 60;
             long totalSeconds = total - totalHours * 3600 - totalMinutes * 60;
-            message = chunky.message("task_done", chunky.message("prefix"), world, chunkNum, percentDone, totalHours, totalMinutes, totalSeconds);
+            message = chunky.message("task_done", chunky.message("prefix"), world, chunkNum, percentDone, totalHours,
+                    totalMinutes, totalSeconds);
         } else {
             long eta = (long) (chunksLeft / speed);
             long etaHours = eta / 3600;
             long etaMinutes = (eta - etaHours * 3600) / 60;
             long etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
-            message = chunky.message("task_update", chunky.message("prefix"), world, chunkNum, percentDone, etaHours, etaMinutes, etaSeconds, speed, chunkX, chunkZ);
+            message = chunky.message("task_update", chunky.message("prefix"), world, chunkNum, percentDone, etaHours,
+                    etaMinutes, etaSeconds, speed, chunkX, chunkZ);
         }
         chunky.getServer().getConsoleSender().sendMessage(message);
     }
@@ -98,7 +106,8 @@ public class GenerationTask implements Runnable {
             ChunkCoordinate chunkCoord = chunkIterator.next();
             int xChunkCenter = (chunkCoord.x << 4) + 8;
             int zChunkCenter = (chunkCoord.z << 4) + 8;
-            if (!shape.isBounding(xChunkCenter, zChunkCenter) || PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
+            if (!shape.isBounding(xChunkCenter, zChunkCenter)
+                    || PaperLib.isPaper() && PaperLib.isChunkGenerated(world, chunkCoord.x, chunkCoord.z)) {
                 update(world, chunkCoord.x, chunkCoord.z);
                 continue;
             }
@@ -117,7 +126,8 @@ public class GenerationTask implements Runnable {
             });
         }
         if (stopped) {
-            chunky.getServer().getConsoleSender().sendMessage(chunky.message("task_stopped", chunky.message("prefix"), world.getName()));
+            chunky.getServer().getConsoleSender()
+                    .sendMessage(chunky.message("task_stopped", chunky.message("prefix"), world.getName()));
         } else {
             this.cancelled = true;
         }
