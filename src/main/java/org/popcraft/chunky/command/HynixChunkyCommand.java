@@ -28,7 +28,7 @@ public class HynixChunkyCommand extends BaseCommand {
     public void onGetTasksStatus(CommandSender sender) {
         var tasks = instance.getTaskManager().getTasks();
         sender.sendMessage(tasks.isEmpty() ? "No tasks currently running" : "Tasks running: ");
-        tasks.forEach(task -> sender.sendMessage(" - " + task.getWorld() + " is " + task.getPercentDone() + "% done."));
+        tasks.forEach(task -> sender.sendMessage(String.format(" - %s is at %.2f%s", task.getWorld().getName(), task.getPercentDone(), "%")));
     }
 
 }
