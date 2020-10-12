@@ -19,7 +19,7 @@ public class GenerationTask implements Runnable {
     private ChunkIterator chunkIterator;
     private Shape shape;
     private boolean stopped, cancelled;
-    private long prevTime, totalTime;
+    private long prevTime;
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong printTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
@@ -114,7 +114,6 @@ public class GenerationTask implements Runnable {
                 }
             });
         }
-        totalTime += prevTime + (System.currentTimeMillis() - startTime.get());
         if (stopped) {
             chunky.getServer().getConsoleSender().sendMessage(chunky.message("task_stopped", chunky.message("prefix"), world.getName()));
         } else {
@@ -167,6 +166,6 @@ public class GenerationTask implements Runnable {
     }
 
     public long getTotalTime() {
-        return totalTime;
+        return prevTime + (System.currentTimeMillis() - startTime.get());
     }
 }
