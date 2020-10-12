@@ -15,7 +15,7 @@ public class PauseCommand extends ChunkyCommand {
             return;
         }
         for (GenerationTask generationTask : chunky.getGenerationTasks().values()) {
-            generationTask.stop(false, false);
+            generationTask.stop(false);
             sender.sendMessage(chunky.message("format_pause", chunky.message("prefix"), generationTask.getWorld().getName()));
         }
     }

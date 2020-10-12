@@ -67,7 +67,7 @@ public class ConfigStorage {
 
     public synchronized void cancelTasks() {
         loadTasks().forEach(generationTask -> {
-            generationTask.stop(true, false);
+            generationTask.stop(true);
             saveTask(generationTask);
         });
     }
