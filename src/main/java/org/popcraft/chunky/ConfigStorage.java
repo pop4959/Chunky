@@ -2,7 +2,6 @@ package org.popcraft.chunky;
 
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.popcraft.chunky.task.GenerationTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +62,7 @@ public class ConfigStorage {
     }
 
     public synchronized void saveTasks() {
-        chunky.getTaskManager().getTasks().forEach(this::saveTask);
+        chunky.getGenerationTasks().values().forEach(this::saveTask);
     }
 
     public synchronized void cancelTasks() {

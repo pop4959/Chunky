@@ -2,8 +2,7 @@ package org.popcraft.chunky.command;
 
 import org.bukkit.command.CommandSender;
 import org.popcraft.chunky.Chunky;
-import org.popcraft.chunky.task.GenerationTask;
-import org.popcraft.chunky.task.TaskManager;
+import org.popcraft.chunky.GenerationTask;
 
 public class PauseCommand extends ChunkyCommand {
     public PauseCommand(Chunky chunky) {
@@ -11,14 +10,13 @@ public class PauseCommand extends ChunkyCommand {
     }
 
     public void execute(CommandSender sender, String[] args) {
-        TaskManager taskManager = chunky.getTaskManager();
-        if (chunky.getTaskManager().getTasks().size() == 0) {
+        if (chunky.getGenerationTasks().size() == 0) {
             sender.sendMessage(chunky.message("format_pause_no_tasks", chunky.message("prefix")));
             return;
         }
-        for (GenerationTask task : taskManager.getTasks()) {
-            sender.sendMessage(chunky.message("format_pause", chunky.message("prefix"), task.getWorld().getName()));
+        for (GenerationTask generationTask : chunky.getGenerationTasks().values()) {
+            generationTask.stop(false, false);
+            sender.sendMessage(chunky.message("format_pause", chunky.message("prefix"), generationTask.getWorld().getName()));
         }
-        chunky.getTaskManager().stopAll(false, false, false);
     }
 }

@@ -9,13 +9,14 @@ public class CancelCommand extends ChunkyCommand {
     }
 
     public void execute(CommandSender sender, String[] args) {
-        if (chunky.getTaskManager().getTasks().size() == 0 && chunky.getConfigStorage().loadTasks().size() == 0) {
+        if (chunky.getGenerationTasks().size() == 0 && chunky.getConfigStorage().loadTasks().size() == 0) {
             sender.sendMessage(chunky.message("format_cancel_no_tasks", chunky.message("prefix")));
             return;
         }
         sender.sendMessage(chunky.message("format_cancel", chunky.message("prefix")));
         chunky.getConfigStorage().cancelTasks();
-        chunky.getTaskManager().stopAll(false, true, false);
+        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true, false));
+        chunky.getGenerationTasks().clear();
         chunky.getServer().getScheduler().cancelTasks(chunky);
     }
 }
