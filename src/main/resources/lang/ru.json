@@ -30,6 +30,7 @@
   "help_radius": "&2chunky radius <radius>&r - выбрать радиус",
   "help_shape": "&2chunky shape <shape>&r - установить форму генерации",
   "help_silent": "&2chunky silent&r - включить/выключить показ сообщений о генерации чанков",
+  "help_spawn": "&2chunky spawn&r - установить центр на точку спауна игроков",
   "help_start": "&2chunky start&r - начать новую задачу генерации чанков",
   "help_world": "&2chunky world <world>&r - выбрать мир для генерации чанков",
   "help_worldborder": "&2chunky worldborder&r - установить центр и радиус, исходя из границы мира",
