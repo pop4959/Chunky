@@ -21,6 +21,7 @@ public class HelpCommand extends ChunkyCommand {
         helpMessages.add(chunky.message("help_world"));
         helpMessages.add(chunky.message("help_worldborder"));
         helpMessages.add(chunky.message("help_center"));
+        helpMessages.add(chunky.message("help_spawn"));
         helpMessages.add(chunky.message("help_radius"));
         helpMessages.add(chunky.message("help_shape"));
         helpMessages.add(chunky.message("help_pattern"));

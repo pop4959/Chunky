@@ -30,6 +30,7 @@
   "help_radius": "&2chunky radius <radius>&r - Set the radius",
   "help_shape": "&2chunky shape <shape>&r - Set the shape to generate",
   "help_silent": "&2chunky silent&r - Toggle displaying update messages",
+  "help_spawn": "&2chunky spawn&r - Set the center to the spawn point",
   "help_start": "&2chunky start&r - Start a new chunk generation task",
   "help_world": "&2chunky world <world>&r - Set the world target",
   "help_worldborder": "&2chunky worldborder&r - Use the world border center & radius",
