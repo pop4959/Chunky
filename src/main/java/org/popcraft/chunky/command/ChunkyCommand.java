@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class ChunkyCommand {
-    protected Chunky chunky;
+    protected final Chunky chunky;
 
     public ChunkyCommand(Chunky chunky) {
         this.chunky = chunky;

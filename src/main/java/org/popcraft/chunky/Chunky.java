@@ -30,6 +30,7 @@ public final class Chunky extends JavaPlugin {
     private Map<String, String> translations, fallbackTranslations;
     private Map<String, ChunkyCommand> commands;
     private Selection selection;
+    private Runnable pendingAction;
 
     @Override
     public void onEnable() {
@@ -100,6 +101,7 @@ public final class Chunky extends JavaPlugin {
         Map<String, ChunkyCommand> commands = new HashMap<>();
         commands.put("cancel", new CancelCommand(this));
         commands.put("center", new CenterCommand(this));
+        commands.put("confirm", new ConfirmCommand(this));
         commands.put("continue", new ContinueCommand(this));
         commands.put("help", new HelpCommand(this));
         commands.put("pattern", new PatternCommand(this));
@@ -151,5 +153,13 @@ public final class Chunky extends JavaPlugin {
 
     public Selection getSelection() {
         return selection;
+    }
+
+    public Runnable getPendingAction() {
+        return pendingAction;
+    }
+
+    public void setPendingAction(Runnable pendingAction) {
+        this.pendingAction = pendingAction;
     }
 }

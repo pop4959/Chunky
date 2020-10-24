@@ -13,10 +13,14 @@ public class CancelCommand extends ChunkyCommand {
             sender.sendMessage(chunky.message("format_cancel_no_tasks", chunky.message("prefix")));
             return;
         }
-        sender.sendMessage(chunky.message("format_cancel", chunky.message("prefix")));
-        chunky.getConfigStorage().cancelTasks();
-        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true));
-        chunky.getGenerationTasks().clear();
-        chunky.getServer().getScheduler().cancelTasks(chunky);
+        final Runnable cancelAction = () -> {
+            sender.sendMessage(chunky.message("format_cancel", chunky.message("prefix")));
+            chunky.getConfigStorage().cancelTasks();
+            chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true));
+            chunky.getGenerationTasks().clear();
+            chunky.getServer().getScheduler().cancelTasks(chunky);
+        };
+        chunky.setPendingAction(cancelAction);
+        sender.sendMessage(chunky.message("format_cancel_confirm", chunky.message("prefix")));
     }
 }
