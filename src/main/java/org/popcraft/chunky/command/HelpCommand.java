@@ -27,6 +27,7 @@ public class HelpCommand extends ChunkyCommand {
         helpMessages.add(chunky.message("help_pattern"));
         helpMessages.add(chunky.message("help_silent"));
         helpMessages.add(chunky.message("help_quiet"));
+        helpMessages.add(chunky.message("help_reload"));
     }
 
     @Override

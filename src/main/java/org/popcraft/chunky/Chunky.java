@@ -106,6 +106,7 @@ public final class Chunky extends JavaPlugin {
         commands.put("pause", new PauseCommand(this));
         commands.put("quiet", new QuietCommand(this));
         commands.put("radius", new RadiusCommand(this));
+        commands.put("reload", new ReloadCommand(this));
         commands.put("shape", new ShapeCommand(this));
         commands.put("silent", new SilentCommand(this));
         commands.put("spawn", new SpawnCommand(this));

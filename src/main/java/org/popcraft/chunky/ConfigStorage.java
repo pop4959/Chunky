@@ -9,15 +9,14 @@ import java.util.Optional;
 
 public class ConfigStorage {
     private final Chunky chunky;
-    private final FileConfiguration config;
     private static final String TASKS_KEY = "tasks.";
 
     public ConfigStorage(Chunky chunky) {
         this.chunky = chunky;
-        this.config = chunky.getConfig();
     }
 
     public synchronized Optional<GenerationTask> loadTask(World world) {
+        FileConfiguration config = chunky.getConfig();
         if (config.getConfigurationSection(TASKS_KEY + world.getName()) == null) {
             return Optional.empty();
         }
@@ -45,6 +44,7 @@ public class ConfigStorage {
     }
 
     public synchronized void saveTask(GenerationTask generationTask) {
+        FileConfiguration config = chunky.getConfig();
         String world_key = TASKS_KEY + generationTask.getWorld().getName() + ".";
         String shape = generationTask.getShape().name();
         config.set(world_key + "cancelled", generationTask.isCancelled());
