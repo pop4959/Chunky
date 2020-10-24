@@ -9,8 +9,8 @@ public class ConcentricChunkIterator implements ChunkIterator {
     private int annulus, span;
     private int down, left, up, right;
     private int radiusChunks;
-    private boolean hasNext = true;
     private long total;
+    private boolean hasNext = true;
 
     public ConcentricChunkIterator(Selection selection, long count) {
         this(selection);
@@ -35,6 +35,9 @@ public class ConcentricChunkIterator implements ChunkIterator {
         this.right += Math.min(span, perimeterCount);
         this.x += right - left;
         this.z += up - down;
+        if (annulus > radiusChunks) {
+            hasNext = false;
+        }
     }
 
     public ConcentricChunkIterator(Selection selection) {

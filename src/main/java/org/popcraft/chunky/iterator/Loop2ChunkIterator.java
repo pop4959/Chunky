@@ -7,8 +7,8 @@ public class Loop2ChunkIterator implements ChunkIterator {
     private int x, z;
     private int x1, x2, z1, z2;
     private long diameterChunksZ;
-    private boolean hasNext = true;
     private long total;
+    private boolean hasNext = true;
 
     public Loop2ChunkIterator(Selection selection, long count) {
         this(selection);
@@ -17,6 +17,9 @@ public class Loop2ChunkIterator implements ChunkIterator {
         }
         this.x = x1 + (int) (count / diameterChunksZ);
         this.z = z1 + (int) (count % diameterChunksZ);
+        if (x > x2) {
+            hasNext = false;
+        }
     }
 
     public Loop2ChunkIterator(Selection selection) {

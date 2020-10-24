@@ -8,9 +8,9 @@ public class SpiralChunkIterator implements ChunkIterator {
     private int stopX, stopZ;
     private int span = 1, spanCount, spanProgress;
     private int direction;
-    private boolean hasNext = true;
     private long total;
     private final static int RIGHT = 0, DOWN = 1, LEFT = 2, UP = 3;
+    private boolean hasNext = true;
 
     public SpiralChunkIterator(Selection selection, long count) {
         this(selection);
@@ -65,6 +65,9 @@ public class SpiralChunkIterator implements ChunkIterator {
             direction = DOWN;
         } else {
             spanProgress += spanned;
+        }
+        if (x > stopX) {
+            hasNext = false;
         }
     }
 
