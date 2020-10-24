@@ -166,6 +166,6 @@ public class GenerationTask implements Runnable {
     }
 
     public long getTotalTime() {
-        return prevTime + (System.currentTimeMillis() - startTime.get());
+        return prevTime + (startTime.get() > 0 ? System.currentTimeMillis() - startTime.get() : 0);
     }
 }
