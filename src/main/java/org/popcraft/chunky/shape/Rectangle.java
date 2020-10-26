@@ -5,8 +5,8 @@ import org.popcraft.chunky.Selection;
 public class Rectangle extends AbstractPolygon {
     int p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
 
-    protected Rectangle(Selection selection) {
-        super(selection);
+    protected Rectangle(Selection selection, boolean chunkAligned) {
+        super(selection, chunkAligned);
         this.p1x = centerX + radiusX;
         this.p1z = centerZ - radiusZ;
         this.p2x = centerX - radiusX;

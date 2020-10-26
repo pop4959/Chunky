@@ -5,8 +5,8 @@ import org.popcraft.chunky.Selection;
 public class Square extends AbstractPolygon {
     int p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
 
-    protected Square(Selection selection) {
-        super(selection);
+    protected Square(Selection selection, boolean chunkAligned) {
+        super(selection, chunkAligned);
         this.p1x = centerX + radiusX;
         this.p1z = centerZ - radiusX;
         this.p2x = centerX - radiusX;

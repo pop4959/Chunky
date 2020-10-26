@@ -9,8 +9,8 @@ public class Star extends AbstractPolygon {
     private double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z, p5x, p5z;
     private double i1x, i1z, i2x, i2z, i3x, i3z, i4x, i4z, i5x, i5z;
 
-    public Star(Selection selection) {
-        super(selection);
+    public Star(Selection selection, boolean chunkAligned) {
+        super(selection, chunkAligned);
         this.p1x = centerX + radiusX * Math.cos(Math.toRadians(54));
         this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(54));
         this.p2x = centerX + radiusX * Math.cos(Math.toRadians(126));

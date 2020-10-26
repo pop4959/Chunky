@@ -7,8 +7,8 @@ import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
 public class Triangle extends AbstractPolygon {
     private int p1x, p1z, p2x, p2z, p3x, p3z;
 
-    public Triangle(Selection selection) {
-        super(selection);
+    public Triangle(Selection selection, boolean chunkAligned) {
+        super(selection, chunkAligned);
         this.p1x = radiusX;
         this.p1z = radiusX;
         this.p2x = -radiusX;
