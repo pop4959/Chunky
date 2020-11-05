@@ -6,7 +6,6 @@ import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ChunkIteratorFactory;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
-import org.popcraft.chunky.util.TuinityLib;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
@@ -109,9 +108,6 @@ public class GenerationTask implements Runnable {
             PaperLib.getChunkAtAsync(world, chunkCoord.x, chunkCoord.z).thenAccept(chunk -> {
                 working.release();
                 printUpdate(world, chunk.getX(), chunk.getZ());
-                if (TuinityLib.isTuinity() && TuinityLib.getDelayChunkUnloadsBy() > 0) {
-                    chunky.getServer().getScheduler().scheduleSyncDelayedTask(chunky, chunk::unload);
-                }
             });
         }
         if (stopped) {
