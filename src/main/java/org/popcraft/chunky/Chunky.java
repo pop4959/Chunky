@@ -58,6 +58,7 @@ public final class Chunky extends JavaPlugin {
         if (this.getConfig().getBoolean("continue-on-restart", false)) {
             commands.get("continue").execute(getServer().getConsoleSender(), new String[]{});
         }
+        getServer().getPluginManager().registerEvents(new Milk(), this);
     }
 
     @Override
