@@ -1,0 +1,21 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'org.spongepowered.plugin' version '0.9.0'
+}
+
+sponge.plugin.id = 'chunky'
+
+dependencies {
+    implementation project(':common')
+
+    compileOnly 'org.spongepowered:spongeapi:7.3.0'
+    annotationProcessor 'org.spongepowered:spongeapi:7.3.0'
+}
+
+shadowJar {
+    archiveFileName = "Chunky-${project.ext.fullVersion}.jar"
+}
+
+artifacts {
+    archives shadowJar
+}

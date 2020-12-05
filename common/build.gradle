@@ -1,0 +1,23 @@
+repositories {
+    maven {
+        url 'https://repo.mikeprimm.com'
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.1'
+    compileOnly 'us.dynmap:dynmap-api:3.0'
+    compileOnly 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.1.0'
+    compileOnly 'com.github.Brettflan:WorldBorder:c0d1772418'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

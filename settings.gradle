@@ -1,0 +1,18 @@
+// This block is required by Fabric
+pluginManagement {
+    repositories {
+        jcenter()
+        maven {
+            url = 'https://maven.fabricmc.net'
+        }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'chunky'
+include(
+        'common',
+        'bukkit',
+        'sponge',
+        'fabric'
+)

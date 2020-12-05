@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "chunky-fabric",
+  "version": "${version}",
+  "name": "Chunky",
+  "description": "Pre-generates chunks, quickly, efficiently, and safely",
+  "authors": [
+    "pop4959"
+  ],
+  "contact": {
+    "website": "https://github.com/pop4959/Chunky",
+    "repo": "https://github.com/pop4959/Chunky"
+  },
+  "license": "GPLv3",
+  "icon": "assets/chunky-fabric/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "org.popcraft.chunky.client.ChunkyFabricClient"
+    ],
+    "main": [
+      "org.popcraft.chunky.ChunkyFabric"
+    ]
+  },
+  "mixins": [
+    "chunky-fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.10.8",
+    "fabric": "*",
+    "minecraft": "1.16.4"
+  }
+}

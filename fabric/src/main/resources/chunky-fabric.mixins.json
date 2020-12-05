@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.popcraft.chunky.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ServerChunkManagerMixin",
+    "ThreadedAnvilChunkStorageMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

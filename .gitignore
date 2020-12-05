@@ -7,6 +7,10 @@
 
 # IntelliJ
 out/
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+# JIRA plugin
+atlassian-ide-plugin.xml
 
 # Compiled class file
 *.class
@@ -95,6 +99,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Maven
 target/
 
 pom.xml.tag
@@ -108,6 +113,21 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 .flattened-pom.xml
+
+# Gradle
+.gradle
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Cache of project
+.gradletasknamecache
+
+**/build/
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
 
 # Common working directory
 run/
