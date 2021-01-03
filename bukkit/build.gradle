@@ -34,3 +34,26 @@ shadowJar {
 artifacts {
     archives shadowJar
 }
+
+publishing {
+    repositories {
+        if (project.hasProperty('mavenUsername') && project.hasProperty('mavenPassword'))
+            maven {
+                credentials {
+                    username = project.mavenUsername
+                    password = project.mavenPassword
+                }
+                def releasesRepoUrl = 'https://repo.codemc.io/repository/maven-releases/'
+                def snapshotsRepoUrl = 'https://repo.codemc.io/repository/maven-snapshots/'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = 'org.popcraft'
+            artifactId = 'chunky-bukkit'
+            version = project.ext.fullVersion
+            from components.java
+        }
+    }
+}

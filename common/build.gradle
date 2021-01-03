@@ -15,8 +15,23 @@ dependencies {
 }
 
 publishing {
+    repositories {
+        if (project.hasProperty('mavenUsername') && project.hasProperty('mavenPassword'))
+            maven {
+                credentials {
+                    username = project.mavenUsername
+                    password = project.mavenPassword
+                }
+                def releasesRepoUrl = 'https://repo.codemc.io/repository/maven-releases/'
+                def snapshotsRepoUrl = 'https://repo.codemc.io/repository/maven-snapshots/'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            }
+    }
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
+            groupId = 'org.popcraft'
+            artifactId = 'chunky-common'
+            version = project.ext.fullVersion
             from components.java
         }
     }
