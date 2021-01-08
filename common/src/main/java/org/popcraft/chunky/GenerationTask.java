@@ -1,6 +1,5 @@
 package org.popcraft.chunky;
 
-import org.bukkit.Bukkit;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.ChunkCoordinate;
@@ -8,7 +7,7 @@ import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ChunkIteratorFactory;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
-import org.popcraft.chunky.watchdog.AbstractGenerationWatchdog;
+import org.popcraft.chunky.platform.watchdog.GenerationWatchdog;
 import org.popcraft.chunky.watchdog.WatchdogManager;
 
 import java.util.Optional;
@@ -98,22 +97,23 @@ public class GenerationTask implements Runnable {
 
     @Override
     public void run() {
+        Sender console = chunky.getPlatform().getServer().getConsoleSender();
         final String poolThreadName = Thread.currentThread().getName();
         Thread.currentThread().setName(String.format("Chunky-%s Thread", world.getName()));
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
 
-        AbstractGenerationWatchdog previousUnmet = null;
+        GenerationWatchdog previousUnmet = null;
         boolean previousShouldSleep = false;
 
         while (!stopped && chunkIterator.hasNext()) {
 
-            Optional<AbstractGenerationWatchdog> unmetWatchdog = this.watchdogManager.getUnmetWatchdog();
+            Optional<GenerationWatchdog> unmetWatchdog = this.watchdogManager.getUnmetWatchdog();
             boolean shouldSleep = unmetWatchdog.isPresent();
             if (shouldSleep) {
                 try {
                     if(!previousShouldSleep) {
-                        Bukkit.getLogger().info(translate(unmetWatchdog.get().getStopReasonKey(), translate("prefix")));
+                        console.sendMessage(unmetWatchdog.get().getStopReasonKey(), translate("prefix"));
                         previousShouldSleep = true;
                         previousUnmet = unmetWatchdog.get();
                     }
@@ -126,7 +126,7 @@ public class GenerationTask implements Runnable {
                 }
             } else {
                 if(previousShouldSleep) {
-                    Bukkit.getLogger().info(translate(previousUnmet.getStartReasonKey(), translate("prefix")));
+                    console.sendMessage(previousUnmet.getStartReasonKey(), translate("prefix"));
                     previousShouldSleep = false;
                 }
             }

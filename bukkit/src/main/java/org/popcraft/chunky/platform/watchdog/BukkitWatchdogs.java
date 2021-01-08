@@ -1,7 +1,6 @@
 package org.popcraft.chunky.platform.watchdog;
 
 import org.popcraft.chunky.ChunkyBukkit;
-import org.popcraft.chunky.watchdog.AbstractGenerationWatchdog;
 
 public class BukkitWatchdogs implements Watchdogs {
 
@@ -14,12 +13,12 @@ public class BukkitWatchdogs implements Watchdogs {
     }
 
     @Override
-    public AbstractGenerationWatchdog getPlayerWatchdog() {
+    public GenerationWatchdog getPlayerWatchdog() {
         return player;
     }
 
     @Override
-    public AbstractGenerationWatchdog getTPSWatchdog() {
+    public GenerationWatchdog getTPSWatchdog() {
         return tps;
     }
 }

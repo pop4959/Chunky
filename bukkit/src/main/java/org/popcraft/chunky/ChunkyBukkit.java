@@ -70,6 +70,7 @@ public final class ChunkyBukkit extends JavaPlugin {
                 .map(BukkitWorker::getThread)
                 .forEach(Thread::interrupt);
         this.getServer().getScheduler().cancelTasks(this);
+        chunky.getWatchdogManager().stopAll();
     }
 
     @Override

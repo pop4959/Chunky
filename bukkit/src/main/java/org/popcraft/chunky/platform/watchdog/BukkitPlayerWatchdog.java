@@ -6,9 +6,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.popcraft.chunky.ChunkyBukkit;
-import org.popcraft.chunky.watchdog.AbstractGenerationWatchdog;
 
-public class BukkitPlayerWatchdog extends AbstractGenerationWatchdog implements Listener {
+public class BukkitPlayerWatchdog extends PlayerWatchdog implements Listener {
+    //We have to keep track of player count ourselves as allowsGenerationRun may run asynchronously
     private int playerCount;
     private ChunkyBukkit chunky;
 
@@ -19,22 +19,12 @@ public class BukkitPlayerWatchdog extends AbstractGenerationWatchdog implements 
 
     @Override
     public boolean allowsGenerationRun() {
-        return this.chunky.getConfig().getInt("watchdogs.players.start-on") == playerCount;
+        return this.chunky.getConfig().getInt("watchdogs.players.start-on", -1) >= playerCount;
     }
 
     @Override
     public void stop() {
         HandlerList.unregisterAll(this);
-    }
-
-    @Override
-    public String getStopReasonKey() {
-        return "stop_player_online";
-    }
-
-    @Override
-    public String getStartReasonKey() {
-        return "start_no_players";
     }
 
     @EventHandler

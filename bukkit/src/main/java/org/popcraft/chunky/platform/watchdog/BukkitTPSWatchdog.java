@@ -2,12 +2,11 @@ package org.popcraft.chunky.platform.watchdog;
 
 import org.bukkit.scheduler.BukkitTask;
 import org.popcraft.chunky.ChunkyBukkit;
-import org.popcraft.chunky.watchdog.AbstractGenerationWatchdog;
 
 import java.util.Arrays;
 import java.util.OptionalDouble;
 
-public class BukkitTPSWatchdog extends AbstractGenerationWatchdog {
+public class BukkitTPSWatchdog extends TPSWatchdog {
     private int TICK_COUNT;
     private long[] TICK_TIMES = new long[100];
     private long lastTick = -1;
@@ -29,16 +28,6 @@ public class BukkitTPSWatchdog extends AbstractGenerationWatchdog {
         task.cancel();
     }
 
-    @Override
-    public String getStopReasonKey() {
-        return "stop_tps_low";
-    }
-
-    @Override
-    public String getStartReasonKey() {
-        return "start_tps_high";
-    }
-
     private void saveTickTime() {
         if(lastTick == -1) {
             lastTick = System.nanoTime() - 50_000_000; //50_000_000 = 1/20th of a second in nanoseconds
@@ -53,7 +42,7 @@ public class BukkitTPSWatchdog extends AbstractGenerationWatchdog {
         double tps = 20;
         OptionalDouble averageTickTime = Arrays.stream(TICK_TIMES).average();
         if(averageTickTime.isPresent()) {
-            double averageSec = averageTickTime.getAsDouble() / 1_000_000_000D;
+            double averageSec = averageTickTime.getAsDouble() / 1_000_000_000D; //Convert to seconds
             tps = 1D / averageSec;
         }
         return tps;
