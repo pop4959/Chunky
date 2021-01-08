@@ -37,6 +37,18 @@ public class FabricConfig implements Config {
                     configModel.version = 1;
                     configModel.language = "en";
                     configModel.continueOnRestart = false;
+                    configModel.watchdogs = new HashMap<>();
+
+                    WatchdogModel playerModel = new WatchdogModel();
+                    playerModel.enabled = false;
+                    playerModel.startOn = 0;
+                    configModel.watchdogs.put("players", playerModel);
+
+                    WatchdogModel tpsModel = new WatchdogModel();
+                    tpsModel.enabled = false;
+                    tpsModel.startOn = 17;
+                    configModel.watchdogs.put("tps", tpsModel);
+
                     saveConfig();
                 }
             } catch (IOException e) {
@@ -131,6 +143,21 @@ public class FabricConfig implements Config {
         }.getType());
     }
 
+    @Override
+    public boolean getWatchdogEnabled(String key) {
+        if (this.configModel == null) {
+            this.configModel = new ConfigModel();
+        }
+        if (this.configModel.watchdogs == null) {
+            this.configModel.watchdogs = new HashMap<>();
+        }
+        WatchdogModel model = this.configModel.watchdogs.get(key);
+        if (model != null) {
+            return model.enabled;
+        }
+        return false;
+    }
+
     public void saveConfig() {
         try (Writer writer = Files.newBufferedWriter(configPath)) {
             gson.toJson(configModel, new TypeToken<ConfigModel>() {
@@ -149,6 +176,7 @@ public class FabricConfig implements Config {
         public String language;
         public boolean continueOnRestart;
         public Map<String, TaskModel> tasks;
+        public Map<String, WatchdogModel> watchdogs;
     }
 
     public static class TaskModel {
@@ -161,5 +189,10 @@ public class FabricConfig implements Config {
         public String shape;
         public long count;
         public long time;
+    }
+
+    public static class WatchdogModel {
+        public boolean enabled;
+        public int startOn;
     }
 }

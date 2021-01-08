@@ -86,4 +86,9 @@ public class BukkitConfig implements Config {
     public void reload() {
         plugin.reloadConfig();
     }
+
+    @Override
+    public boolean getWatchdogEnabled(String key) {
+        return plugin.getConfig().getBoolean("watchdogs." + key + ".enabled");
+    }
 }

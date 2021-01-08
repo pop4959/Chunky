@@ -136,4 +136,9 @@ public class SpongeConfig implements Config {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public boolean getWatchdogEnabled(String key) {
+        return false;
+    }
 }

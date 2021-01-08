@@ -41,6 +41,10 @@
   "help_world": "&2chunky world <world>&r - Set the world target",
   "help_worldborder": "&2chunky worldborder&r - Use the world border center & radius",
   "prefix": "[Chunky]",
+  "start_no_players": "%s Woke up all tasks because player count was below threshold.",
+  "start_tps_high": "%s Woke up all tasks because TPS was above threshold.",
+  "stop_player_online": "%s Put all tasks to sleep because player count was above threshold.",
+  "stop_tps_low": "%s Put all tasks to sleep because tps was below threshold.",
   "task_done": "%s Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d",
   "task_stopped": "%s Task stopped for %s.",
   "task_update": "%s Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d"

@@ -17,4 +17,6 @@ public interface Config {
     void cancelTasks();
 
     void reload();
+
+    boolean getWatchdogEnabled(String key);
 }

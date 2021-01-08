@@ -7,6 +7,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import org.popcraft.chunky.ChunkyFabric;
 import org.popcraft.chunky.integration.Integration;
+import org.popcraft.chunky.platform.watchdog.Watchdogs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,5 +64,10 @@ public class FabricServer implements Server {
     @Override
     public Config getConfig() {
         return plugin.getChunky().getConfig();
+    }
+
+    @Override
+    public Watchdogs getWatchdogs() {
+        return null;
     }
 }

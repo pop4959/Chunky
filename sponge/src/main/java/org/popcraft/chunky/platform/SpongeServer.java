@@ -2,6 +2,7 @@ package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.integration.Integration;
+import org.popcraft.chunky.platform.watchdog.Watchdogs;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,5 +49,10 @@ public class SpongeServer implements Server {
     @Override
     public Config getConfig() {
         return plugin.getChunky().getConfig();
+    }
+
+    @Override
+    public Watchdogs getWatchdogs() {
+        return null;
     }
 }

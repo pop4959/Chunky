@@ -7,11 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitWorker;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.integration.WorldBorderIntegration;
-import org.popcraft.chunky.platform.BukkitConfig;
-import org.popcraft.chunky.platform.BukkitPlatform;
-import org.popcraft.chunky.platform.BukkitSender;
-import org.popcraft.chunky.platform.Platform;
-import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.platform.*;
 import org.popcraft.chunky.util.Metrics;
 import org.popcraft.chunky.util.Version;
 
@@ -61,6 +57,8 @@ public final class ChunkyBukkit extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
             platform.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
+
+        chunky.startEnabledWatchdogs();
     }
 
     @Override

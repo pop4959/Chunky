@@ -2,10 +2,12 @@ package org.popcraft.chunky;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.popcraft.chunky.command.*;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Platform;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.watchdog.WatchdogManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -25,12 +27,16 @@ public class Chunky {
     private Map<String, ChunkyCommand> commands;
     private Selection selection;
     private Runnable pendingAction;
+    private WatchdogManager watchdogManager;
 
     public Chunky(Platform platform) {
         this.platform = platform;
         this.generationTasks = new ConcurrentHashMap<>();
         this.selection = new Selection(this);
+        this.watchdogManager = new WatchdogManager();
     }
+
+
 
     public void loadCommands() {
         final Map<String, ChunkyCommand> commands = new HashMap<>();
@@ -74,6 +80,23 @@ public class Chunky {
         return String.format(message, args);
     }
 
+    public void startEnabledWatchdogs() {
+        this.watchdogManager = new WatchdogManager();
+        Config config = this.getConfig();
+        if(config.getWatchdogEnabled("players")) {
+            this.watchdogManager.registerWatchdog(this.platform.getServer().getWatchdogs().getPlayerWatchdog());
+        }
+        if(config.getWatchdogEnabled("tps")) {
+            this.watchdogManager.registerWatchdog(this.platform.getServer().getWatchdogs().getTPSWatchdog());
+        }
+    }
+
+    public void reload() {
+        this.getConfig().reload();
+        this.watchdogManager.stopAll();
+        startEnabledWatchdogs();
+    }
+
     public Platform getPlatform() {
         return platform;
     }
@@ -112,5 +135,9 @@ public class Chunky {
 
     public void setPendingAction(Runnable pendingAction) {
         this.pendingAction = pendingAction;
+    }
+
+    public WatchdogManager getWatchdogManager() {
+        return this.watchdogManager;
     }
 }
