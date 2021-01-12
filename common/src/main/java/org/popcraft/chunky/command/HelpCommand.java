@@ -24,6 +24,7 @@ public class HelpCommand extends ChunkyCommand {
         helpMessages.add(translate("help_center"));
         helpMessages.add(translate("help_spawn"));
         helpMessages.add(translate("help_radius"));
+        helpMessages.add(translate("help_corners"));
         helpMessages.add(translate("help_shape"));
         helpMessages.add(translate("help_pattern"));
         helpMessages.add(translate("help_silent"));

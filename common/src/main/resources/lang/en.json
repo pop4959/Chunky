@@ -27,6 +27,7 @@
   "help_cancel": "&2chunky cancel&r - Stop and delete current or saved tasks",
   "help_center": "&2chunky center <x> <z>&r - Set the center block location",
   "help_continue": "&2chunky continue&r - Continue current or saved tasks",
+  "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Set by corners",
   "help_menu": "&aChunky Commands&r%s",
   "help_more": "Type &a%s %d&r to see more.",
   "help_pattern": "&2chunky pattern <pattern>&r - Set the generation pattern",

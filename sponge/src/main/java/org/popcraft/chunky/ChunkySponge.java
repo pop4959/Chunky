@@ -92,6 +92,26 @@ public class ChunkySponge {
                 .permission("chunky.command.continue")
                 .executor(noArgsCommand("continue"))
                 .build();
+        CommandSpec cornersCommand = CommandSpec.builder()
+                .permission("chunky.command.corners")
+                .executor(noArgsCommand("corners"))
+                .arguments(
+                        GenericArguments.integer(Text.of("x1")),
+                        GenericArguments.integer(Text.of("z1")),
+                        GenericArguments.integer(Text.of("x2")),
+                        GenericArguments.integer(Text.of("z2")))
+                .executor((CommandSource source, CommandContext context) -> {
+                    ChunkyCommand cmd = chunky.getCommands().get("corners");
+                    cmd.execute(new SpongeSender(source), new String[]{
+                            "corners",
+                            context.<Integer>getOne(Text.of("x1")).orElse(0).toString(),
+                            context.<Integer>getOne(Text.of("z1")).orElse(0).toString(),
+                            context.<Integer>getOne(Text.of("x2")).orElse(0).toString(),
+                            context.<Integer>getOne(Text.of("z2")).orElse(0).toString()
+                    });
+                    return CommandResult.success();
+                })
+                .build();
         CommandSpec helpCommand = CommandSpec.builder()
                 .permission("chunky.command.help")
                 .arguments(GenericArguments.optional(GenericArguments.integer(Text.of("page"))))
@@ -197,6 +217,7 @@ public class ChunkySponge {
                 .child(centerCommand, "center")
                 .child(confirmCommand, "confirm")
                 .child(continueCommand, "continue")
+                .child(cornersCommand, "corners")
                 .child(helpCommand, "help")
                 .child(patternCommand, "pattern")
                 .child(pauseCommand, "pause")
