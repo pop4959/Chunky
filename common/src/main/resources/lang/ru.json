@@ -27,6 +27,7 @@
   "help_cancel": "&2chunky cancel&r - установить и удалить текущие или сохраненные задачи",
   "help_center": "&2chunky center <x> <z>&r - установить координаты центра",
   "help_continue": "&2chunky continue&r - продолжить все имеющиеся задачи",
+  "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Установить координаты углов",
   "help_menu": "&aКоманды Chunky&r%s",
   "help_more": "Используйте &a%s %d&r, чтобы узнать больше.",
   "help_pattern": "&2chunky pattern <pattern>&r - установить паттерн генерации",
