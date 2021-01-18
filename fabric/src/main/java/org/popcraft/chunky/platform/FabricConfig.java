@@ -158,6 +158,21 @@ public class FabricConfig implements Config {
         return false;
     }
 
+    @Override
+    public int getWatchdogStartOn(String key) {
+        if (this.configModel == null) {
+            this.configModel = new ConfigModel();
+        }
+        if (this.configModel.watchdogs == null) {
+            this.configModel.watchdogs = new HashMap<>();
+        }
+        WatchdogModel model = this.configModel.watchdogs.get(key);
+        if (model != null) {
+            return model.startOn;
+        }
+        return -1;
+    }
+
     public void saveConfig() {
         try (Writer writer = Files.newBufferedWriter(configPath)) {
             gson.toJson(configModel, new TypeToken<ConfigModel>() {

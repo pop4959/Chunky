@@ -19,4 +19,6 @@ public interface Config {
     void reload();
 
     boolean getWatchdogEnabled(String key);
+
+    int getWatchdogStartOn(String key);
 }

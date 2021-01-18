@@ -2,6 +2,7 @@ package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.integration.Integration;
+import org.popcraft.chunky.platform.watchdog.SpongeWatchdogs;
 import org.popcraft.chunky.platform.watchdog.Watchdogs;
 
 import java.util.HashMap;
@@ -14,11 +15,13 @@ public class SpongeServer implements Server {
     private ChunkySponge plugin;
     private Map<String, Integration> integrations;
     private Scheduler scheduler;
+    private Watchdogs watchdogs;
 
     public SpongeServer(ChunkySponge plugin) {
         this.plugin = plugin;
         this.integrations = new HashMap<>();
         this.scheduler = new SpongeScheduler(plugin);
+        this.watchdogs = new SpongeWatchdogs(plugin);
     }
 
     @Override

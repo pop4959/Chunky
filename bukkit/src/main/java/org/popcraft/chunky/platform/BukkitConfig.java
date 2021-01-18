@@ -91,4 +91,9 @@ public class BukkitConfig implements Config {
     public boolean getWatchdogEnabled(String key) {
         return plugin.getConfig().getBoolean("watchdogs." + key + ".enabled");
     }
+
+    @Override
+    public int getWatchdogStartOn(String key) {
+        return plugin.getConfig().getInt("watchdogs." + key + ".start-on", -1);
+    }
 }

@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform.watchdog;
 
 import org.popcraft.chunky.ChunkyBukkit;
+import org.popcraft.chunky.watchdog.CommonTpsService;
 
 public class BukkitWatchdogs implements Watchdogs {
 
@@ -9,7 +10,7 @@ public class BukkitWatchdogs implements Watchdogs {
 
     public BukkitWatchdogs(ChunkyBukkit chunky) {
         this.player = new BukkitPlayerWatchdog(chunky);
-        this.tps = new BukkitTPSWatchdog(chunky);
+        this.tps = new BukkitTPSWatchdog(chunky, new CommonTpsService());
     }
 
     @Override

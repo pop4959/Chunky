@@ -7,19 +7,21 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.popcraft.chunky.ChunkyBukkit;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class BukkitPlayerWatchdog extends PlayerWatchdog implements Listener {
     //We have to keep track of player count ourselves as allowsGenerationRun may run asynchronously
-    private int playerCount;
-    private ChunkyBukkit chunky;
+    private AtomicInteger playerCount;
 
     public BukkitPlayerWatchdog(ChunkyBukkit chunky) {
-        this.chunky = chunky;
+        super(chunky.getChunky());
+        this.playerCount = new AtomicInteger();
         chunky.getServer().getPluginManager().registerEvents(this, chunky);
     }
 
     @Override
     public boolean allowsGenerationRun() {
-        return this.chunky.getConfig().getInt("watchdogs.players.start-on", -1) >= playerCount;
+        return super.configuredPlayerCount >= playerCount.get();
     }
 
     @Override
@@ -29,11 +31,11 @@ public class BukkitPlayerWatchdog extends PlayerWatchdog implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        playerCount += 1;
+        playerCount.incrementAndGet();
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        playerCount -= 1;
+        playerCount.decrementAndGet();
     }
 }

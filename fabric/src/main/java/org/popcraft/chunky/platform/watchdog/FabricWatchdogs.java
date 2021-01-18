@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform.watchdog;
 
 import org.popcraft.chunky.ChunkyFabric;
+import org.popcraft.chunky.watchdog.CommonTpsService;
 
 public class FabricWatchdogs implements Watchdogs {
 
@@ -9,7 +10,7 @@ public class FabricWatchdogs implements Watchdogs {
 
     public FabricWatchdogs(ChunkyFabric chunky) {
         this.player = new FabricPlayerWatchdog(chunky);
-        this.tps = new FabricTPSWatchdog(chunky);
+        this.tps = new FabricTPSWatchdog(chunky, new CommonTpsService());
     }
 
     @Override

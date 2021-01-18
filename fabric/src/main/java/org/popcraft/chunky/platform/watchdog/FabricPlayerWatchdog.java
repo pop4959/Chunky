@@ -1,41 +1,29 @@
 package org.popcraft.chunky.platform.watchdog;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.ChunkyFabric;
-import org.popcraft.chunky.platform.FabricConfig;
-
-import java.util.Map;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FabricPlayerWatchdog extends PlayerWatchdog {
 
-    private ChunkyFabric chunky;
-    private int playerCount;
+    private AtomicInteger playerCount;
 
     public FabricPlayerWatchdog(ChunkyFabric chunky) {
-        this.chunky = chunky;
+        super(chunky.getChunky());
+        this.playerCount = new AtomicInteger();
         ServerTickEvents.START_SERVER_TICK.register(t -> {
             //This isn't too expensive so it's probably fine to do every tick
-            playerCount = t.getCurrentPlayerCount();
+            playerCount.set(t.getCurrentPlayerCount());
         });
     }
 
     @Override
     public boolean allowsGenerationRun() {
-        Optional<FabricConfig.ConfigModel> configModel = ((FabricConfig) chunky.getChunky().getConfig()).getConfigModel();
-        if(configModel.isPresent()) {
-            Map<String, FabricConfig.WatchdogModel> watchdogs = configModel.get().watchdogs;
-            if(watchdogs != null) {
-                FabricConfig.WatchdogModel model = watchdogs.get("players");
-                return model.startOn >= playerCount;
-            }
-        }
-        return false;
+        return super.configuredPlayerCount >= playerCount.get();
     }
 
     @Override
     public void stop() {
-
+        //TODO: How to cancel the event listener?
     }
 }
