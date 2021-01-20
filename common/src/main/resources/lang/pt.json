@@ -4,7 +4,7 @@
   "error_version": "Este plugin não é compatível com as versões Minecraft abaixo de 1.13.",
   "error_version_spigot": "Este plugin não é compatível com o Spigot 1.13 !",
   "format_cancel": "%s Cancelando todas as tarefas.",
-  "format_cancel_confirm": "%s Tarefas canceladas não podem ser retomadas. Se você tem certeza que deseja cancelar, digite '/chunky confirmar'.",
+  "format_cancel_confirm": "%s Tarefas canceladas não podem ser retomadas. Se você tem certeza que deseja cancelar, digite '/chunky confirm'.",
   "format_cancel_no_tasks": "%s Nenhuma tarefa a ser cancelada.",
   "format_center": "%s O centro mudou para %d, %d.",
   "format_confirm": "%s Nada para confirmar!",
