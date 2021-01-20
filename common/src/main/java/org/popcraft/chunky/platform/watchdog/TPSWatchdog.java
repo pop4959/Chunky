@@ -4,10 +4,10 @@ import org.popcraft.chunky.Chunky;
 
 public abstract class TPSWatchdog implements GenerationWatchdog {
 
-    protected int configuredTPS;
+    private Chunky chunky;
 
     public TPSWatchdog(Chunky chunky) {
-        this.configuredTPS = chunky.getConfig().getWatchdogStartOn("tps");
+        this.chunky = chunky;
     }
 
     @Override
@@ -18,5 +18,9 @@ public abstract class TPSWatchdog implements GenerationWatchdog {
     @Override
     public String getStartReasonKey() {
         return "start_tps_high";
+    }
+
+    protected int getConfiguredTPS() {
+        return this.chunky.getConfig().getWatchdogStartOn("tps");
     }
 }

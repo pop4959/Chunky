@@ -170,7 +170,7 @@ public class FabricConfig implements Config {
         if (model != null) {
             return model.startOn;
         }
-        return -1;
+        return 0;
     }
 
     public void saveConfig() {

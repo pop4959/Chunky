@@ -139,6 +139,19 @@ public class SpongeConfig implements Config {
 
     @Override
     public boolean getWatchdogEnabled(String key) {
-        return false;
+        if (this.rootNode == null) {
+            this.rootNode = configLoader.createEmptyNode();
+        }
+        ConfigurationNode watchdogEnabled = rootNode.getNode("watchdogs", key, "enabled");
+        return watchdogEnabled.getBoolean();
+    }
+
+    @Override
+    public int getWatchdogStartOn(String key) {
+        if (this.rootNode == null) {
+            this.rootNode = configLoader.createEmptyNode();
+        }
+        ConfigurationNode watchdogEnabled = rootNode.getNode("watchdogs", key, "start-on");
+        return watchdogEnabled.getInt();
     }
 }

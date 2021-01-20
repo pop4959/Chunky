@@ -94,6 +94,6 @@ public class BukkitConfig implements Config {
 
     @Override
     public int getWatchdogStartOn(String key) {
-        return plugin.getConfig().getInt("watchdogs." + key + ".start-on", -1);
+        return plugin.getConfig().getInt("watchdogs." + key + ".start-on");
     }
 }

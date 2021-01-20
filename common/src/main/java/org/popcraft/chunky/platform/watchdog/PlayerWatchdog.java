@@ -4,10 +4,10 @@ import org.popcraft.chunky.Chunky;
 
 public abstract class PlayerWatchdog implements GenerationWatchdog {
 
-    protected int configuredPlayerCount;
+    private Chunky chunky;
 
     public PlayerWatchdog(Chunky chunky) {
-        this.configuredPlayerCount = chunky.getConfig().getWatchdogStartOn("players");
+        this.chunky = chunky;
     }
 
     @Override
@@ -18,5 +18,9 @@ public abstract class PlayerWatchdog implements GenerationWatchdog {
     @Override
     public String getStartReasonKey() {
         return "start_no_players";
+    }
+
+    protected int getConfiguredPlayerCount() {
+        return this.chunky.getConfig().getWatchdogStartOn("players");
     }
 }

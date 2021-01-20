@@ -26,10 +26,12 @@ public final class ChunkyBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         this.chunky = new Chunky(new BukkitPlatform(this));
+
         this.getConfig().options().copyDefaults(true);
         this.getConfig().options().copyHeader(true);
         this.saveConfig();
         chunky.setConfig(new BukkitConfig(chunky, this));
+
         InputStream configLanguage = getResource("lang/" + getConfig().getString("language", "en") + ".json");
         InputStream defaultLanguage = getResource("lang/en.json");
         if (configLanguage == null) {

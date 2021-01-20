@@ -19,7 +19,7 @@ public class FabricPlayerWatchdog extends PlayerWatchdog {
 
     @Override
     public boolean allowsGenerationRun() {
-        return super.configuredPlayerCount >= playerCount.get();
+        return super.getConfiguredPlayerCount() >= playerCount.get();
     }
 
     @Override

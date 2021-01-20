@@ -16,7 +16,7 @@ public class BukkitTPSWatchdog extends TPSWatchdog {
 
     @Override
     public boolean allowsGenerationRun() {
-        return tpsService.getTPS() >= super.configuredTPS;
+        return tpsService.getTPS() >= super.getConfiguredTPS();
     }
 
     @Override

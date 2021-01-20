@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform.watchdog;
 
 import org.popcraft.chunky.ChunkySponge;
+import org.popcraft.chunky.watchdog.CommonTpsService;
 
 public class SpongeWatchdogs implements Watchdogs {
 
@@ -9,7 +10,7 @@ public class SpongeWatchdogs implements Watchdogs {
 
     public SpongeWatchdogs(ChunkySponge chunky) {
         this.player = new SpongePlayerWatchdog(chunky);
-        this.tps = new SpongeTPSWatchdog();
+        this.tps = new SpongeTPSWatchdog(chunky, new CommonTpsService());
     }
 
     @Override

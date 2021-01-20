@@ -11,14 +11,12 @@ public class FabricTPSWatchdog extends TPSWatchdog {
     public FabricTPSWatchdog(ChunkyFabric chunky, CommonTpsService tpsService) {
         super(chunky.getChunky());
         this.tpsService = tpsService;
-        ServerTickEvents.START_SERVER_TICK.register(s -> {
-            tpsService.saveTickTime();
-        });
+        ServerTickEvents.START_SERVER_TICK.register(s -> tpsService.saveTickTime());
     }
 
     @Override
     public boolean allowsGenerationRun() {
-        return tpsService.getTPS() >= super.configuredTPS;
+        return super.getConfiguredTPS() >= tpsService.getTPS();
     }
 
     @Override

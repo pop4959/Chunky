@@ -9,28 +9,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpongePlayerWatchdog extends PlayerWatchdog {
 
-    private AtomicInteger playercount;
+    private AtomicInteger playerCount;
     private ChunkySponge chunky;
 
     public SpongePlayerWatchdog(ChunkySponge chunky) {
+        super(chunky.getChunky());
         this.chunky = chunky;
         Sponge.getEventManager().registerListeners(chunky, this);
     }
 
     @Listener
-    private void onPlayerJoin(ClientConnectionEvent.Join event) {
-        playercount.incrementAndGet();
+    public void onPlayerJoin(ClientConnectionEvent.Join event) {
+        playerCount.incrementAndGet();
     }
 
     @Listener
-    private void onPlayerLeave(ClientConnectionEvent.Disconnect event) {
-        playercount.decrementAndGet();
+    public void onPlayerLeave(ClientConnectionEvent.Disconnect event) {
+        playerCount.decrementAndGet();
     }
 
     @Override
     public boolean allowsGenerationRun() {
-
-        return false;
+        return super.getConfiguredPlayerCount() >= playerCount.get();
     }
 
     @Override

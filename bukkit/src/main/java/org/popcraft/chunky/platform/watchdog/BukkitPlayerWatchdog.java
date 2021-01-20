@@ -21,7 +21,7 @@ public class BukkitPlayerWatchdog extends PlayerWatchdog implements Listener {
 
     @Override
     public boolean allowsGenerationRun() {
-        return super.configuredPlayerCount >= playerCount.get();
+        return super.getConfiguredPlayerCount() >= playerCount.get();
     }
 
     @Override
