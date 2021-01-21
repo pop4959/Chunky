@@ -15,7 +15,6 @@ public class SpongePlayerWatchdog extends PlayerWatchdog {
     public SpongePlayerWatchdog(ChunkySponge chunky) {
         this.playerCount = new AtomicInteger();
         this.chunky = chunky;
-        Sponge.getEventManager().registerListeners(chunky, this);
     }
 
     @Listener
@@ -34,7 +33,12 @@ public class SpongePlayerWatchdog extends PlayerWatchdog {
     }
 
     @Override
-    public void stop() {
+    public void stopInternal() {
         Sponge.getEventManager().unregisterListeners(this);
+    }
+
+    @Override
+    public void startInternal() {
+        Sponge.getEventManager().registerListeners(chunky, this);
     }
 }

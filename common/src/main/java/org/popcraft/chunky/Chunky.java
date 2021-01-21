@@ -33,6 +33,10 @@ public class Chunky {
         this.platform = platform;
         this.generationTasks = new ConcurrentHashMap<>();
         this.selection = new Selection(this);
+
+        this.watchdogManager = new WatchdogManager();
+        this.watchdogManager.registerWatchdog(this.platform.getServer().getWatchdogs().getPlayerWatchdog());
+        this.watchdogManager.registerWatchdog(this.platform.getServer().getWatchdogs().getTPSWatchdog());
     }
 
     public void loadCommands() {
@@ -77,21 +81,10 @@ public class Chunky {
         return String.format(message, args);
     }
 
-    public void startEnabledWatchdogs() {
-        this.watchdogManager = new WatchdogManager();
-        Config config = this.getConfig();
-        if(config.getWatchdogEnabled("players")) {
-            this.watchdogManager.registerWatchdog(this.platform.getServer().getWatchdogs().getPlayerWatchdog());
-        }
-        if(config.getWatchdogEnabled("tps")) {
-            this.watchdogManager.registerWatchdog(this.platform.getServer().getWatchdogs().getTPSWatchdog());
-        }
-    }
-
     public void reload() {
-        this.getConfig().reload();
+        this.config.reload();
         this.watchdogManager.stopAll();
-        startEnabledWatchdogs();
+        this.watchdogManager.startEnabled(this.config);
     }
 
     public Platform getPlatform() {

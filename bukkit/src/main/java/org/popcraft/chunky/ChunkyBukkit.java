@@ -60,7 +60,7 @@ public final class ChunkyBukkit extends JavaPlugin {
             platform.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
 
-        chunky.startEnabledWatchdogs();
+        chunky.getWatchdogManager().startEnabled(chunky.getConfig());
     }
 
     @Override

@@ -2,7 +2,7 @@ package org.popcraft.chunky.platform.watchdog;
 
 import org.popcraft.chunky.Chunky;
 
-public abstract class PlayerWatchdog implements GenerationWatchdog {
+public abstract class PlayerWatchdog extends GenerationWatchdog {
 
     @Override
     public String getStopReasonKey() {
@@ -12,5 +12,10 @@ public abstract class PlayerWatchdog implements GenerationWatchdog {
     @Override
     public String getStartReasonKey() {
         return "start_no_players";
+    }
+
+    @Override
+    public String getConfigName() {
+        return "players";
     }
 }

@@ -1,5 +1,6 @@
 package org.popcraft.chunky.watchdog;
 
+import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.watchdog.GenerationWatchdog;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class WatchdogManager {
     public Optional<GenerationWatchdog> getUnmetWatchdog() {
         GenerationWatchdog unmet = null;
         for (GenerationWatchdog watchdog : watchdogs) {
-            if(!watchdog.allowsGenerationRun()) {
+            if (!watchdog.isStopped() && !watchdog.allowsGenerationRun()) {
                 unmet = watchdog;
                 break;
             }
@@ -24,7 +25,16 @@ public class WatchdogManager {
     public void registerWatchdog(GenerationWatchdog watchdog) {
         watchdogs.add(watchdog);
     }
+
     public void stopAll() {
         watchdogs.forEach(GenerationWatchdog::stop);
+    }
+
+    public void startEnabled(Config config) {
+        for (GenerationWatchdog watchdog : watchdogs) {
+            if(config.getWatchdogEnabled(watchdog.getConfigName())) {
+                watchdog.start();
+            }
+        }
     }
 }

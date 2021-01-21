@@ -18,7 +18,6 @@ public class BukkitPlayerWatchdog extends PlayerWatchdog implements Listener {
     public BukkitPlayerWatchdog(ChunkyBukkit chunky) {
         this.chunky = chunky;
         this.playerCount = new AtomicInteger();
-        chunky.getServer().getPluginManager().registerEvents(this, chunky);
     }
 
     @Override
@@ -27,7 +26,12 @@ public class BukkitPlayerWatchdog extends PlayerWatchdog implements Listener {
     }
 
     @Override
-    public void stop() {
+    public void startInternal() {
+        chunky.getServer().getPluginManager().registerEvents(this, chunky);
+    }
+
+    @Override
+    public void stopInternal() {
         HandlerList.unregisterAll(this);
     }
 

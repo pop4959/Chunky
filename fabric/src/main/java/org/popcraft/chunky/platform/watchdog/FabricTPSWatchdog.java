@@ -8,11 +8,11 @@ public class FabricTPSWatchdog extends TPSWatchdog {
 
     private CommonTpsService tpsService;
     private ChunkyFabric chunky;
+    private boolean registeredHandler = false;
 
     public FabricTPSWatchdog(ChunkyFabric chunky, CommonTpsService tpsService) {
         this.chunky = chunky;
         this.tpsService = tpsService;
-        ServerTickEvents.START_SERVER_TICK.register(s -> tpsService.saveTickTime());
     }
 
     @Override
@@ -21,7 +21,16 @@ public class FabricTPSWatchdog extends TPSWatchdog {
     }
 
     @Override
-    public void stop() {
+    public void stopInternal() {
         //TODO: How to cancel event listener?
+    }
+
+    @Override
+    public void startInternal() {
+        //We have to do this because we're not actually stopping anything, meaning the GenerationWatchdog logic wouldn't work.
+        if (!registeredHandler) {
+            ServerTickEvents.START_SERVER_TICK.register(s -> tpsService.saveTickTime());
+            registeredHandler = true;
+        }
     }
 }

@@ -13,11 +13,6 @@ public class SpongeTPSWatchdog extends TPSWatchdog {
     public SpongeTPSWatchdog(ChunkySponge chunky, CommonTpsService tpsService) {
         this.chunky = chunky;
         this.tpsService = tpsService;
-        this.task = Task.builder()
-                .execute(tpsService::saveTickTime)
-                .intervalTicks(1)
-                .name("Chunky - Save TPS")
-                .submit(chunky);
     }
 
     @Override
@@ -26,9 +21,16 @@ public class SpongeTPSWatchdog extends TPSWatchdog {
     }
 
     @Override
-    public void stop() {
-        if(task != null) {
-            task.cancel();
-        }
+    public void stopInternal() {
+        task.cancel();
+    }
+
+    @Override
+    public void startInternal() {
+        this.task = Task.builder()
+                .execute(tpsService::saveTickTime)
+                .intervalTicks(1)
+                .name("Chunky - Save TPS")
+                .submit(chunky);
     }
 }

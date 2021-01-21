@@ -1,8 +1,6 @@
 package org.popcraft.chunky.platform.watchdog;
 
-import org.popcraft.chunky.Chunky;
-
-public abstract class TPSWatchdog implements GenerationWatchdog {
+public abstract class TPSWatchdog extends GenerationWatchdog {
 
     @Override
     public String getStopReasonKey() {
@@ -12,5 +10,10 @@ public abstract class TPSWatchdog implements GenerationWatchdog {
     @Override
     public String getStartReasonKey() {
         return "start_tps_high";
+    }
+
+    @Override
+    public String getConfigName() {
+        return "tps";
     }
 }

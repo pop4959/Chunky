@@ -212,7 +212,7 @@ public class ChunkySponge {
                 .executor(noArgsCommand("help"))
                 .build(), "chunky");
 
-        chunky.startEnabledWatchdogs();
+        chunky.getWatchdogManager().startEnabled(chunky.getConfig());
     }
 
     private CommandExecutor noArgsCommand(final String name) {

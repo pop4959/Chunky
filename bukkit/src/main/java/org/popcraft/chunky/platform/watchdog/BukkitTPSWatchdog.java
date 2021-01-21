@@ -12,7 +12,6 @@ public class BukkitTPSWatchdog extends TPSWatchdog {
     public BukkitTPSWatchdog(ChunkyBukkit chunky, CommonTpsService tpsService) {
         this.chunky = chunky;
         this.tpsService = tpsService;
-        task = chunky.getServer().getScheduler().runTaskTimer(chunky, tpsService::saveTickTime, 0, 1);
     }
 
     @Override
@@ -21,8 +20,13 @@ public class BukkitTPSWatchdog extends TPSWatchdog {
     }
 
     @Override
-    public void stop() {
+    public void stopInternal() {
         task.cancel();
+    }
+
+    @Override
+    public void startInternal() {
+        task = chunky.getServer().getScheduler().runTaskTimer(chunky, tpsService::saveTickTime, 0, 1);
     }
 
 }

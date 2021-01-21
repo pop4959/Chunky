@@ -43,7 +43,8 @@ public class ChunkyFabric implements ModInitializer {
             if (configModel.isPresent() && configModel.get().continueOnRestart) {
                 chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});
             }
-            chunky.startEnabledWatchdogs();
+
+            chunky.getWatchdogManager().startEnabled(chunky.getConfig());
         });
         ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> {
             chunky.getConfig().saveTasks();
