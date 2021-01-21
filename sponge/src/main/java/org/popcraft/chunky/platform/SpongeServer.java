@@ -56,6 +56,6 @@ public class SpongeServer implements Server {
 
     @Override
     public Watchdogs getWatchdogs() {
-        return null;
+        return this.watchdogs;
     }
 }

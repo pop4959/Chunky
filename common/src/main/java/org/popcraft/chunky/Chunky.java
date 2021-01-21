@@ -33,10 +33,7 @@ public class Chunky {
         this.platform = platform;
         this.generationTasks = new ConcurrentHashMap<>();
         this.selection = new Selection(this);
-        this.watchdogManager = new WatchdogManager();
     }
-
-
 
     public void loadCommands() {
         final Map<String, ChunkyCommand> commands = new HashMap<>();

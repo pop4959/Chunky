@@ -4,18 +4,17 @@ import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.watchdog.CommonTpsService;
 import org.spongepowered.api.scheduler.Task;
 
-import java.util.concurrent.TimeUnit;
-
 public class SpongeTPSWatchdog extends TPSWatchdog {
 
-    private CommonTpsService service;
+    private CommonTpsService tpsService;
     private Task task;
+    private ChunkySponge chunky;
 
     public SpongeTPSWatchdog(ChunkySponge chunky, CommonTpsService tpsService) {
-        super(chunky.getChunky());
-        this.service = tpsService;
+        this.chunky = chunky;
+        this.tpsService = tpsService;
         this.task = Task.builder()
-                .execute(service::saveTickTime)
+                .execute(tpsService::saveTickTime)
                 .intervalTicks(1)
                 .name("Chunky - Save TPS")
                 .submit(chunky);
@@ -23,7 +22,7 @@ public class SpongeTPSWatchdog extends TPSWatchdog {
 
     @Override
     public boolean allowsGenerationRun() {
-        return super.getConfiguredTPS() >= service.getTPS();
+        return tpsService.getTPS() >= chunky.getChunky().getConfig().getWatchdogStartOn("tps");
     }
 
     @Override

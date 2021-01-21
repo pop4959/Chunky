@@ -142,7 +142,7 @@ public class SpongeConfig implements Config {
         if (this.rootNode == null) {
             this.rootNode = configLoader.createEmptyNode();
         }
-        ConfigurationNode watchdogEnabled = rootNode.getNode("watchdogs", key, "enabled");
+        ConfigurationNode watchdogEnabled = rootNode.getNode("config", "watchdogs", key, "enabled");
         return watchdogEnabled.getBoolean();
     }
 
@@ -151,7 +151,7 @@ public class SpongeConfig implements Config {
         if (this.rootNode == null) {
             this.rootNode = configLoader.createEmptyNode();
         }
-        ConfigurationNode watchdogEnabled = rootNode.getNode("watchdogs", key, "start-on");
+        ConfigurationNode watchdogEnabled = rootNode.getNode("config", "watchdogs", key, "start-on");
         return watchdogEnabled.getInt();
     }
 }

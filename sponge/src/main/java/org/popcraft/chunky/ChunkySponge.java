@@ -211,6 +211,8 @@ public class ChunkySponge {
                 .child(worldCommand, "world")
                 .executor(noArgsCommand("help"))
                 .build(), "chunky");
+
+        chunky.startEnabledWatchdogs();
     }
 
     private CommandExecutor noArgsCommand(final String name) {

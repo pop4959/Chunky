@@ -13,7 +13,7 @@ public class SpongePlayerWatchdog extends PlayerWatchdog {
     private ChunkySponge chunky;
 
     public SpongePlayerWatchdog(ChunkySponge chunky) {
-        super(chunky.getChunky());
+        this.playerCount = new AtomicInteger();
         this.chunky = chunky;
         Sponge.getEventManager().registerListeners(chunky, this);
     }
@@ -30,7 +30,7 @@ public class SpongePlayerWatchdog extends PlayerWatchdog {
 
     @Override
     public boolean allowsGenerationRun() {
-        return super.getConfiguredPlayerCount() >= playerCount.get();
+        return this.chunky.getChunky().getConfig().getWatchdogStartOn("players") >= playerCount.get();
     }
 
     @Override

@@ -7,16 +7,17 @@ import org.popcraft.chunky.watchdog.CommonTpsService;
 public class FabricTPSWatchdog extends TPSWatchdog {
 
     private CommonTpsService tpsService;
+    private ChunkyFabric chunky;
 
     public FabricTPSWatchdog(ChunkyFabric chunky, CommonTpsService tpsService) {
-        super(chunky.getChunky());
+        this.chunky = chunky;
         this.tpsService = tpsService;
         ServerTickEvents.START_SERVER_TICK.register(s -> tpsService.saveTickTime());
     }
 
     @Override
     public boolean allowsGenerationRun() {
-        return super.getConfiguredTPS() >= tpsService.getTPS();
+        return tpsService.getTPS() >= chunky.getChunky().getConfig().getWatchdogStartOn("tps");
     }
 
     @Override
