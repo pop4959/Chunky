@@ -20,6 +20,7 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.storage.WorldProperties;
@@ -232,6 +233,13 @@ public class ChunkySponge {
                 .child(worldCommand, "world")
                 .executor(noArgsCommand("help"))
                 .build(), "chunky");
+    }
+
+    @Listener
+    public void onServerStop(GameStoppingEvent event) {
+        chunky.getConfig().saveTasks();
+        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
+        chunky.getPlatform().getServer().getScheduler().cancelTasks();
     }
 
     private CommandExecutor noArgsCommand(final String name) {
