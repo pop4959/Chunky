@@ -215,7 +215,7 @@ public class ChunkySponge {
     }
 
     @Listener
-    public void onServerStopping(GameStoppingEvent event) {
+    public void onServerStop(GameStoppingEvent event) {
         chunky.getConfig().saveTasks();
         chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
         chunky.getPlatform().getServer().getScheduler().cancelTasks();
