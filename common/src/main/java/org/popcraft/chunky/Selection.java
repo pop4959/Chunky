@@ -2,24 +2,24 @@ package org.popcraft.chunky;
 
 import org.popcraft.chunky.platform.World;
 
+import java.util.Optional;
+
 public class Selection {
     public World world;
-    public int centerX;
-    public int centerZ;
-    public int radiusX;
-    public int radiusZ;
-    public String pattern;
-    public String shape;
+    public int centerX = 0;
+    public int centerZ = 0;
+    public int radiusX = 500;
+    public int radiusZ = 500;
+    public String pattern = "concentric";
+    public String shape = "square";
     public boolean silent;
-    public int quiet;
+    public int quiet = 1;
+
+    public Selection() {
+    }
 
     public Selection(Chunky chunky) {
         this.world = chunky.getPlatform().getServer().getWorlds().get(0);
-        this.radiusX = 500;
-        this.radiusZ = radiusX;
-        this.pattern = "concentric";
-        this.shape = "square";
-        this.quiet = 1;
     }
 
     public Selection(int x, int z, int radius) {
@@ -27,6 +27,10 @@ public class Selection {
         this.centerZ = z;
         this.radiusX = radius;
         this.radiusZ = radius;
+    }
+
+    public Optional<World> getWorld() {
+        return Optional.ofNullable(world);
     }
 
     public int getChunkX() {
