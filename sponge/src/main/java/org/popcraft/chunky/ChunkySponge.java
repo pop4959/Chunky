@@ -3,6 +3,7 @@ package org.popcraft.chunky;
 import com.google.inject.Inject;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.bstats.sponge.Metrics2;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.platform.SpongeConfig;
 import org.popcraft.chunky.platform.SpongePlatform;
@@ -53,6 +54,11 @@ public class ChunkySponge {
     @Inject
     @DefaultConfig(sharedRoot = true)
     private ConfigurationLoader<CommentedConfigurationNode> configManager;
+
+    @Inject
+    public ChunkySponge(Metrics2.Factory metricsFactory) {
+        metricsFactory.make(9825);
+    }
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
