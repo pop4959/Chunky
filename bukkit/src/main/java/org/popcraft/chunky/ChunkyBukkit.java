@@ -42,10 +42,6 @@ public final class ChunkyBukkit extends JavaPlugin {
         chunky.setTranslations(chunky.loadTranslation(configLanguage));
         chunky.setFallbackTranslations(chunky.loadTranslation(defaultLanguage));
         chunky.loadCommands();
-        Metrics metrics = new Metrics(this, 8211);
-        if (metrics.isEnabled()) {
-            metrics.addCustomChart(new Metrics.SimplePie("language", () -> getConfig().getString("language", "en")));
-        }
         Version currentVersion = Version.getCurrentMinecraftVersion();
         if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
             this.getLogger().severe(translate("error_version_spigot"));
@@ -60,6 +56,10 @@ public final class ChunkyBukkit extends JavaPlugin {
         }
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
             platform.getServer().getIntegrations().put("border", new WorldBorderIntegration());
+        }
+        Metrics metrics = new Metrics(this, 8211);
+        if (metrics.isEnabled()) {
+            metrics.addCustomChart(new Metrics.SimplePie("language", () -> getConfig().getString("language", "en")));
         }
     }
 
