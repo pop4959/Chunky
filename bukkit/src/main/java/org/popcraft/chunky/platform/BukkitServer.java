@@ -3,8 +3,6 @@ package org.popcraft.chunky.platform;
 import org.bukkit.Bukkit;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.integration.Integration;
-import org.popcraft.chunky.platform.watchdog.BukkitWatchdogs;
-import org.popcraft.chunky.platform.watchdog.Watchdogs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,13 +14,11 @@ public class BukkitServer implements Server {
     private ChunkyBukkit plugin;
     private Map<String, Integration> integrations;
     private Scheduler scheduler;
-    private Watchdogs watchdogs;
 
     public BukkitServer(ChunkyBukkit plugin) {
         this.plugin = plugin;
         this.integrations = new HashMap<>();
         this.scheduler = new BukkitScheduler(plugin);
-        this.watchdogs = new BukkitWatchdogs(plugin);
     }
 
     @Override
@@ -59,7 +55,7 @@ public class BukkitServer implements Server {
     }
 
     @Override
-    public Watchdogs getWatchdogs() {
-        return watchdogs;
+    public int getPlayerCount() {
+        return Bukkit.getOnlinePlayers().size();
     }
 }

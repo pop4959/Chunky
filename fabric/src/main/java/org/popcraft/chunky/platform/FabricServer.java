@@ -7,8 +7,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import org.popcraft.chunky.ChunkyFabric;
 import org.popcraft.chunky.integration.Integration;
-import org.popcraft.chunky.platform.watchdog.FabricWatchdogs;
-import org.popcraft.chunky.platform.watchdog.Watchdogs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,13 +18,11 @@ public class FabricServer implements Server {
     private ChunkyFabric plugin;
     private MinecraftServer server;
     private Scheduler scheduler;
-    private Watchdogs watchdogs;
 
     public FabricServer(ChunkyFabric plugin, MinecraftServer server) {
         this.plugin = plugin;
         this.server = server;
         this.scheduler = new FabricScheduler();
-        this.watchdogs = new FabricWatchdogs(plugin);
     }
 
     @Override
@@ -70,7 +66,7 @@ public class FabricServer implements Server {
     }
 
     @Override
-    public Watchdogs getWatchdogs() {
-        return watchdogs;
+    public int getPlayerCount() {
+        return server.getCurrentPlayerCount();
     }
 }

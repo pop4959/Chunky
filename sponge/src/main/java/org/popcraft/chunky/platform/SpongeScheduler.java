@@ -12,6 +12,11 @@ public class SpongeScheduler implements Scheduler {
     }
 
     @Override
+    public void runTaskSyncTimer(Runnable runnable, int tickInterval) {
+        Sponge.getScheduler().createTaskBuilder().intervalTicks(tickInterval).execute(runnable).submit(plugin);
+    }
+
+    @Override
     public void runTaskAsync(Runnable runnable) {
         Sponge.getScheduler().createTaskBuilder().async().execute(runnable).submit(plugin);
     }

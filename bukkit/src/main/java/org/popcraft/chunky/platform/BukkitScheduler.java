@@ -11,6 +11,11 @@ public class BukkitScheduler implements Scheduler {
     }
 
     @Override
+    public void runTaskSyncTimer(Runnable runnable, int tickInterval) {
+        Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, tickInterval);
+    }
+
+    @Override
     public void runTaskAsync(Runnable runnable) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
     }

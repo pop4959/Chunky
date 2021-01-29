@@ -60,7 +60,7 @@ public final class ChunkyBukkit extends JavaPlugin {
             platform.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
 
-        chunky.getWatchdogManager().startEnabled(chunky.getConfig());
+        chunky.getGenerationSleepManager().start();
     }
 
     @Override
@@ -72,7 +72,6 @@ public final class ChunkyBukkit extends JavaPlugin {
                 .map(BukkitWorker::getThread)
                 .forEach(Thread::interrupt);
         this.getServer().getScheduler().cancelTasks(this);
-        chunky.getWatchdogManager().stopAll();
     }
 
     @Override

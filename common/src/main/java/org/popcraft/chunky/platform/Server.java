@@ -1,7 +1,6 @@
 package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.integration.Integration;
-import org.popcraft.chunky.platform.watchdog.Watchdogs;
 
 import java.util.List;
 import java.util.Map;
@@ -20,5 +19,5 @@ public interface Server {
 
     Config getConfig();
 
-    Watchdogs getWatchdogs();
+    int getPlayerCount();
 }

@@ -2,12 +2,10 @@ package org.popcraft.chunky;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.popcraft.chunky.command.*;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Platform;
 import org.popcraft.chunky.platform.World;
-import org.popcraft.chunky.watchdog.WatchdogManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -27,16 +25,14 @@ public class Chunky {
     private Map<String, ChunkyCommand> commands;
     private Selection selection;
     private Runnable pendingAction;
-    private WatchdogManager watchdogManager;
+    private GenerationTaskSleepManager generationTaskSleepManager;
 
     public Chunky(Platform platform) {
         this.platform = platform;
         this.generationTasks = new ConcurrentHashMap<>();
         this.selection = new Selection(this);
 
-        this.watchdogManager = new WatchdogManager();
-        this.watchdogManager.registerWatchdog(this.platform.getServer().getWatchdogs().getPlayerWatchdog());
-        this.watchdogManager.registerWatchdog(this.platform.getServer().getWatchdogs().getTPSWatchdog());
+        this.generationTaskSleepManager = new GenerationTaskSleepManager(this);
     }
 
     public void loadCommands() {
@@ -81,12 +77,6 @@ public class Chunky {
         return String.format(message, args);
     }
 
-    public void reload() {
-        this.config.reload();
-        this.watchdogManager.stopAll();
-        this.watchdogManager.startEnabled(this.config);
-    }
-
     public Platform getPlatform() {
         return platform;
     }
@@ -127,7 +117,7 @@ public class Chunky {
         this.pendingAction = pendingAction;
     }
 
-    public WatchdogManager getWatchdogManager() {
-        return this.watchdogManager;
+    public GenerationTaskSleepManager getGenerationSleepManager() {
+        return this.generationTaskSleepManager;
     }
 }

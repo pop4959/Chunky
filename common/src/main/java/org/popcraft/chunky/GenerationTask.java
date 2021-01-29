@@ -1,20 +1,15 @@
 package org.popcraft.chunky;
 
-import org.popcraft.chunky.platform.Sender;
-import org.popcraft.chunky.platform.World;
-import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ChunkIteratorFactory;
+import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
-import org.popcraft.chunky.platform.watchdog.GenerationWatchdog;
-import org.popcraft.chunky.watchdog.WatchdogManager;
+import org.popcraft.chunky.util.ChunkCoordinate;
 
-import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.popcraft.chunky.Chunky.translate;
@@ -26,8 +21,7 @@ public class GenerationTask implements Runnable {
     private ChunkIterator chunkIterator;
     private Shape shape;
     private boolean stopped, cancelled;
-    private final WatchdogManager watchdogManager;
-    private final CountDownLatch cancelSleep = new CountDownLatch(1); //This can be counted down to stop the generation immediately, even if we're sleeping due to the watchdog
+    private final Semaphore sleepLock = new Semaphore(1);
     private long prevTime;
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong printTime = new AtomicLong();
@@ -54,7 +48,6 @@ public class GenerationTask implements Runnable {
         this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection);
         this.shape = ShapeFactory.getShape(selection);
         this.totalChunks.set(chunkIterator.total());
-        this.watchdogManager = chunky.getWatchdogManager();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -97,39 +90,12 @@ public class GenerationTask implements Runnable {
 
     @Override
     public void run() {
-        Sender console = chunky.getPlatform().getServer().getConsoleSender();
         final String poolThreadName = Thread.currentThread().getName();
         Thread.currentThread().setName(String.format("Chunky-%s Thread", world.getName()));
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
 
-        GenerationWatchdog previousUnmet = null;
-        boolean previousShouldSleep = false;
-
         while (!stopped && chunkIterator.hasNext()) {
-
-            Optional<GenerationWatchdog> unmetWatchdog = this.watchdogManager.getUnmetWatchdog();
-            boolean shouldSleep = unmetWatchdog.isPresent();
-            if (shouldSleep) {
-                try {
-                    if(!previousShouldSleep) {
-                        console.sendMessage(unmetWatchdog.get().getStopReasonKey(), translate("prefix"));
-                        previousShouldSleep = true;
-                        previousUnmet = unmetWatchdog.get();
-                    }
-                    //Wait for 10 seconds OR until task is stopped (countDown called)
-                    this.cancelSleep.await(10, TimeUnit.SECONDS);
-                    continue;
-                } catch (InterruptedException e) {
-                    stop(cancelled);
-                    break;
-                }
-            } else {
-                if(previousShouldSleep) {
-                    console.sendMessage(previousUnmet.getStartReasonKey(), translate("prefix"));
-                    previousShouldSleep = false;
-                }
-            }
 
             final ChunkCoordinate chunkCoord = chunkIterator.next();
             int xChunkCenter = (chunkCoord.x << 4) + 8;
@@ -148,6 +114,15 @@ public class GenerationTask implements Runnable {
                 working.release();
                 printUpdate(world, chunkCoord.x, chunkCoord.z);
             });
+
+            // If sleep was called, wait for wake to be called before continuing
+            try {
+                sleepLock.acquire();
+            } catch (InterruptedException e) {
+                stop(cancelled);
+                break;
+            }
+            sleepLock.release();
         }
         if (stopped) {
             chunky.getPlatform().getServer().getConsoleSender().sendMessage("task_stopped", translate("prefix"), world.getName());
@@ -159,7 +134,16 @@ public class GenerationTask implements Runnable {
         Thread.currentThread().setName(poolThreadName);
     }
 
+    public void sleep() throws InterruptedException {
+        sleepLock.acquire();
+    }
+
+    public void wake() {
+        sleepLock.release();
+    }
+
     public void stop(boolean cancelled) {
+        sleepLock.release();
         this.stopped = true;
         this.cancelled = cancelled;
     }

@@ -43,14 +43,12 @@ public class ChunkyFabric implements ModInitializer {
             if (configModel.isPresent() && configModel.get().continueOnRestart) {
                 chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});
             }
-
-            chunky.getWatchdogManager().startEnabled(chunky.getConfig());
+            chunky.getGenerationSleepManager().start();
         });
         ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> {
             chunky.getConfig().saveTasks();
             chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
             chunky.getPlatform().getServer().getScheduler().cancelTasks();
-            chunky.getWatchdogManager().stopAll();
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             Command<ServerCommandSource> command = context -> {

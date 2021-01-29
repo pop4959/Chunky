@@ -16,7 +16,7 @@ public class ReloadCommand extends ChunkyCommand {
             sender.sendMessage("format_reload_tasks_running", translate("prefix"));
             return;
         }
-        chunky.reload();
+        chunky.getConfig().reload();
         sender.sendMessage("format_reload", translate("prefix"));
     }
 }
