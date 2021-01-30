@@ -48,7 +48,7 @@ public class ChunkyFabric implements ModInitializer {
         ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> {
             chunky.getConfig().saveTasks();
             chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-            chunky.getPlatform().getServer().getScheduler().cancelTasks();
+            chunky.getPlatform().getServer().getScheduler().cancelAllTasks();
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             Command<ServerCommandSource> command = context -> {
@@ -73,6 +73,16 @@ public class ChunkyFabric implements ModInitializer {
                     .then(literal("confirm")
                             .executes(command))
                     .then(literal("continue")
+                            .executes(command))
+                    .then(literal("corners")
+                            .then(argument("x1", integer())
+                                    .then(argument("z1", integer())
+                                            .then(argument("x2", integer())
+                                                    .then(argument("z2", integer())
+                                                            .executes(command))
+                                                    .executes(command))
+                                            .executes(command))
+                                    .executes(command))
                             .executes(command))
                     .then(literal("help")
                             .then(argument("page", integer())

@@ -5,5 +5,7 @@ public interface Scheduler {
 
     void runTaskAsync(Runnable runnable);
 
-    void cancelTasks();
+    void cancelAllTasks();
+
+    void cancelAsyncTasks();
 }

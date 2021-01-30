@@ -46,7 +46,12 @@ public class FabricScheduler implements Scheduler {
     }
 
     @Override
-    public void cancelTasks() {
+    public void cancelAllTasks() {
+        cancelAsyncTasks();
+    }
+
+    @Override
+    public void cancelAsyncTasks() {
         tasks.interrupt();
     }
 }

@@ -5,11 +5,19 @@ plugins {
 
 sponge.plugin.id = 'chunky'
 
+repositories {
+    maven {
+        url 'https://repo.codemc.org/repository/maven-public'
+    }
+}
+
 dependencies {
     implementation project(':common')
 
     compileOnly 'org.spongepowered:spongeapi:7.3.0'
     annotationProcessor 'org.spongepowered:spongeapi:7.3.0'
+
+    implementation 'org.bstats:bstats-sponge:1.8'
 }
 
 shadowJar {

@@ -3,6 +3,7 @@ package org.popcraft.chunky;
 import com.google.inject.Inject;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.bstats.sponge.Metrics2;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.platform.SpongeConfig;
 import org.popcraft.chunky.platform.SpongePlatform;
@@ -20,6 +21,7 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.storage.WorldProperties;
@@ -52,6 +54,11 @@ public class ChunkySponge {
     @Inject
     @DefaultConfig(sharedRoot = true)
     private ConfigurationLoader<CommentedConfigurationNode> configManager;
+
+    @Inject
+    public ChunkySponge(Metrics2.Factory metricsFactory) {
+        metricsFactory.make(9825);
+    }
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -91,6 +98,26 @@ public class ChunkySponge {
         CommandSpec continueCommand = CommandSpec.builder()
                 .permission("chunky.command.continue")
                 .executor(noArgsCommand("continue"))
+                .build();
+        CommandSpec cornersCommand = CommandSpec.builder()
+                .permission("chunky.command.corners")
+                .executor(noArgsCommand("corners"))
+                .arguments(
+                        GenericArguments.integer(Text.of("x1")),
+                        GenericArguments.integer(Text.of("z1")),
+                        GenericArguments.integer(Text.of("x2")),
+                        GenericArguments.integer(Text.of("z2")))
+                .executor((CommandSource source, CommandContext context) -> {
+                    ChunkyCommand cmd = chunky.getCommands().get("corners");
+                    cmd.execute(new SpongeSender(source), new String[]{
+                            "corners",
+                            context.<Integer>getOne(Text.of("x1")).orElse(0).toString(),
+                            context.<Integer>getOne(Text.of("z1")).orElse(0).toString(),
+                            context.<Integer>getOne(Text.of("x2")).orElse(0).toString(),
+                            context.<Integer>getOne(Text.of("z2")).orElse(0).toString()
+                    });
+                    return CommandResult.success();
+                })
                 .build();
         CommandSpec helpCommand = CommandSpec.builder()
                 .permission("chunky.command.help")
@@ -197,6 +224,7 @@ public class ChunkySponge {
                 .child(centerCommand, "center")
                 .child(confirmCommand, "confirm")
                 .child(continueCommand, "continue")
+                .child(cornersCommand, "corners")
                 .child(helpCommand, "help")
                 .child(patternCommand, "pattern")
                 .child(pauseCommand, "pause")
@@ -213,6 +241,13 @@ public class ChunkySponge {
                 .build(), "chunky");
 
         chunky.getGenerationSleepManager().start();
+    }
+
+    @Listener
+    public void onServerStop(GameStoppingEvent event) {
+        chunky.getConfig().saveTasks();
+        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
+        chunky.getPlatform().getServer().getScheduler().cancelAllTasks();
     }
 
     private CommandExecutor noArgsCommand(final String name) {

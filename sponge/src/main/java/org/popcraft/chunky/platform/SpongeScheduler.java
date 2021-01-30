@@ -22,7 +22,16 @@ public class SpongeScheduler implements Scheduler {
     }
 
     @Override
-    public void cancelTasks() {
+    public void cancelAllTasks() {
         Sponge.getScheduler().getScheduledTasks(plugin).forEach(Task::cancel);
+    }
+
+    @Override
+    public void cancelAsyncTasks() {
+        Sponge.getScheduler().getScheduledTasks(plugin).forEach(task -> {
+            if(task.isAsynchronous()) {
+                task.cancel();
+            }
+        });
     }
 }
