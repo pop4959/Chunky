@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "chunky-fabric",
+  "id": "chunky",
   "version": "${version}",
   "name": "Chunky",
   "description": "Pre-generates chunks, quickly, efficiently, and safely",
@@ -12,7 +12,7 @@
     "repo": "https://github.com/pop4959/Chunky"
   },
   "license": "GPLv3",
-  "icon": "assets/chunky-fabric/icon.png",
+  "icon": "assets/chunky/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -23,7 +23,7 @@
     ]
   },
   "mixins": [
-    "chunky-fabric.mixins.json"
+    "chunky.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.10.8",
