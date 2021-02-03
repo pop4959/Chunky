@@ -15,12 +15,18 @@ import org.popcraft.chunky.shape.AbstractPolygon;
 import org.popcraft.chunky.shape.Circle;
 import org.popcraft.chunky.shape.Shape;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class Pl3xMapIntegration extends AbstractMapIntegration {
     private Pl3xMap pl3xMap;
     private boolean hideByDefault;
     private int priority;
     private int weight = 3;
-    private final static Key CHUNKY_KEY = Key.of("chunky");
+    private Map<UUID, LayerProvider> defaultProviders = new HashMap<>();
+    private static final Key WORLDBORDER_KEY = Key.of("pl3xmap-worldborder");
+    private static final Key CHUNKY_KEY = Key.of("chunky");
 
     public Pl3xMapIntegration(Pl3xMap pl3xMap) {
         this.pl3xMap = pl3xMap;
@@ -30,6 +36,10 @@ public class Pl3xMapIntegration extends AbstractMapIntegration {
     public void addShapeMarker(final World world, final Shape shape) {
         pl3xMap.getWorldIfEnabled(world.getUUID()).ifPresent(pl3xWorld -> {
             Registry<LayerProvider> layerRegistry = pl3xWorld.layerRegistry();
+            if (layerRegistry.hasEntry(WORLDBORDER_KEY)) {
+                defaultProviders.put(pl3xWorld.uuid(), layerRegistry.get(WORLDBORDER_KEY));
+                layerRegistry.unregister(WORLDBORDER_KEY);
+            }
             if (!layerRegistry.hasEntry(CHUNKY_KEY)) {
                 layerRegistry.register(CHUNKY_KEY, SimpleLayerProvider.builder(this.label)
                         .defaultHidden(hideByDefault)
@@ -90,6 +100,12 @@ public class Pl3xMapIntegration extends AbstractMapIntegration {
 
     private void unregisterLayer(MapWorld mapWorld) {
         Registry<LayerProvider> layerRegistry = mapWorld.layerRegistry();
+        if (!layerRegistry.hasEntry(WORLDBORDER_KEY)) {
+            LayerProvider defaultProvider = defaultProviders.get(mapWorld.uuid());
+            if (defaultProvider != null) {
+                layerRegistry.register(WORLDBORDER_KEY, defaultProvider);
+            }
+        }
         if (layerRegistry.hasEntry(CHUNKY_KEY)) {
             ((SimpleLayerProvider) layerRegistry.get(CHUNKY_KEY)).clearMarkers();
             layerRegistry.unregister(CHUNKY_KEY);
