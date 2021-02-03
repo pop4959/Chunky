@@ -20,10 +20,10 @@ public class CornersCommand extends ChunkyCommand {
             sender.sendMessage("help_corners");
             return;
         }
-        Optional<Integer> x1 = Input.tryInteger(args[1]);
-        Optional<Integer> z1 = Input.tryInteger(args[2]);
-        Optional<Integer> x2 = Input.tryInteger(args[3]);
-        Optional<Integer> z2 = Input.tryInteger(args[4]);
+        Optional<Integer> x1 = Input.tryIntegerSuffixed(args[1]);
+        Optional<Integer> z1 = Input.tryIntegerSuffixed(args[2]);
+        Optional<Integer> x2 = Input.tryIntegerSuffixed(args[3]);
+        Optional<Integer> z2 = Input.tryIntegerSuffixed(args[4]);
         if (!x1.isPresent() || !z1.isPresent() || !x2.isPresent() || !z2.isPresent()) {
             sender.sendMessage("help_corners");
             return;

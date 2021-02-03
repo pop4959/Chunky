@@ -7,14 +7,14 @@ import java.util.Optional;
 
 public class Input {
     public static Optional<World> tryWorld(Chunky chunky, String input) {
-        if (input == null) {
+        if (input == null || input.isEmpty()) {
             return Optional.empty();
         }
         return chunky.getPlatform().getServer().getWorld(input);
     }
 
     public static Optional<Integer> tryInteger(String input) {
-        if (input == null) {
+        if (input == null || input.isEmpty()) {
             return Optional.empty();
         }
         try {
@@ -24,14 +24,47 @@ public class Input {
         }
     }
 
+    public static Optional<Integer> tryIntegerSuffixed(String input) {
+        if (input == null || input.isEmpty()) {
+            return Optional.empty();
+        }
+        final int last = input.length() - 1;
+        return suffixValue(input.charAt(last))
+                .map(suffixValue -> tryInteger(input.substring(0, last)).map(i -> i * suffixValue))
+                .orElse(tryInteger(input));
+    }
+
     public static Optional<Double> tryDouble(String input) {
-        if (input == null) {
+        if (input == null || input.isEmpty()) {
             return Optional.empty();
         }
         try {
             return Optional.of(Double.parseDouble(input));
         } catch (NumberFormatException e) {
             return Optional.empty();
+        }
+    }
+
+    public static Optional<Double> tryDoubleSuffixed(String input) {
+        if (input == null || input.isEmpty()) {
+            return Optional.empty();
+        }
+        final int last = input.length() - 1;
+        return suffixValue(input.charAt(last))
+                .map(suffixValue -> tryDouble(input.substring(0, last)).map(d -> d * suffixValue))
+                .orElse(tryDouble(input));
+    }
+
+    private static Optional<Integer> suffixValue(char suffix) {
+        switch (Character.toLowerCase(suffix)) {
+            case 'c':
+                return Optional.of(16);
+            case 'r':
+                return Optional.of(512);
+            case 'k':
+                return Optional.of(1000);
+            default:
+                return Optional.empty();
         }
     }
 }
