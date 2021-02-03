@@ -55,6 +55,10 @@ public class Input {
                 .orElse(tryDouble(input));
     }
 
+    public static boolean isPastWorldLimit(double value) {
+        return Math.abs(value) > 3e7;
+    }
+
     private static Optional<Integer> suffixValue(char suffix) {
         switch (Character.toLowerCase(suffix)) {
             case 'c':

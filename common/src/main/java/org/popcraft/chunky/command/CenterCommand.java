@@ -27,7 +27,7 @@ public class CenterCommand extends ChunkyCommand {
             sender.sendMessage("help_center");
             return;
         }
-        if (Math.abs(newX.get().intValue()) > 3e7 || Math.abs(newZ.get().intValue()) > 3e7) {
+        if (Input.isPastWorldLimit(newX.get()) || Input.isPastWorldLimit(newZ.get())) {
             sender.sendMessage("help_center");
             return;
         }

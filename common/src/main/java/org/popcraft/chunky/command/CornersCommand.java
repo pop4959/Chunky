@@ -28,7 +28,7 @@ public class CornersCommand extends ChunkyCommand {
             sender.sendMessage("help_corners");
             return;
         }
-        if (Math.abs(x1.get()) > 3e7 || Math.abs(z1.get()) > 3e7 || Math.abs(x2.get()) > 3e7 || Math.abs(z2.get()) > 3e7) {
+        if (Input.isPastWorldLimit(x1.get()) || Input.isPastWorldLimit(z1.get()) || Input.isPastWorldLimit(x2.get()) || Input.isPastWorldLimit(z2.get())) {
             sender.sendMessage("help_corners");
             return;
         }
