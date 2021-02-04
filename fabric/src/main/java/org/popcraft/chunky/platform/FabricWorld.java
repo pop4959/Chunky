@@ -12,6 +12,7 @@ import org.popcraft.chunky.mixin.ServerChunkManagerMixin;
 import org.popcraft.chunky.mixin.ThreadedAnvilChunkStorageMixin;
 import org.popcraft.chunky.util.Coordinate;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -78,5 +79,17 @@ public class FabricWorld implements World {
     @Override
     public Border getWorldBorder() {
         return worldBorder;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return serverWorld.equals(((FabricWorld) o).serverWorld);
+    }
+
+    @Override
+    public int hashCode() {
+        return serverWorld.hashCode();
     }
 }

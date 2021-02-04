@@ -57,4 +57,16 @@ public class SpongeWorld implements World {
     public Border getWorldBorder() {
         return new SpongeBorder(world.getWorldBorder());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return world.equals(((SpongeWorld) o).world);
+    }
+
+    @Override
+    public int hashCode() {
+        return world.hashCode();
+    }
 }
