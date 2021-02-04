@@ -8,6 +8,7 @@ import org.popcraft.chunky.util.Input;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +36,11 @@ public class WorldCommand extends ChunkyCommand {
 
     @Override
     public List<String> tabSuggestions(Sender sender, String[] args) {
-        List<String> suggestions = new ArrayList<>();
-        chunky.getPlatform().getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
-        return suggestions;
+        if (args.length == 2) {
+            List<String> suggestions = new ArrayList<>();
+            chunky.getPlatform().getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
+            return suggestions;
+        }
+        return Collections.emptyList();
     }
 }
