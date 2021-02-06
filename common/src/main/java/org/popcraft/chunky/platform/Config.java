@@ -14,6 +14,8 @@ public interface Config {
 
     void saveTasks();
 
+    void cancelTask(World world);
+
     void cancelTasks();
 
     void reload();

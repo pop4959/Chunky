@@ -74,7 +74,14 @@ public class ChunkySponge {
         chunky.loadCommands();
         CommandSpec cancelCommand = CommandSpec.builder()
                 .permission("chunky.command.cancel")
-                .executor(noArgsCommand("cancel"))
+                .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
+                .executor((CommandSource source, CommandContext context) -> {
+                    ChunkyCommand cmd = chunky.getCommands().get("cancel");
+                    final List<String> args = new ArrayList<>(Collections.singletonList("cancel"));
+                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
+                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
+                    return CommandResult.success();
+                })
                 .build();
         CommandSpec centerCommand = CommandSpec.builder()
                 .permission("chunky.command.center")
@@ -97,7 +104,14 @@ public class ChunkySponge {
                 .build();
         CommandSpec continueCommand = CommandSpec.builder()
                 .permission("chunky.command.continue")
-                .executor(noArgsCommand("continue"))
+                .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
+                .executor((CommandSource source, CommandContext context) -> {
+                    ChunkyCommand cmd = chunky.getCommands().get("continue");
+                    final List<String> args = new ArrayList<>(Collections.singletonList("continue"));
+                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
+                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
+                    return CommandResult.success();
+                })
                 .build();
         CommandSpec cornersCommand = CommandSpec.builder()
                 .permission("chunky.command.corners")
@@ -145,7 +159,14 @@ public class ChunkySponge {
                 .build();
         CommandSpec pauseCommand = CommandSpec.builder()
                 .permission("chunky.command.pause")
-                .executor(noArgsCommand("pause"))
+                .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
+                .executor((CommandSource source, CommandContext context) -> {
+                    ChunkyCommand cmd = chunky.getCommands().get("pause");
+                    final List<String> args = new ArrayList<>(Collections.singletonList("pause"));
+                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
+                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
+                    return CommandResult.success();
+                })
                 .build();
         CommandSpec quietCommand = CommandSpec.builder()
                 .permission("chunky.command.quiet")
