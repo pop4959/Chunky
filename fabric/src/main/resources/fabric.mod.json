@@ -8,8 +8,11 @@
     "pop4959"
   ],
   "contact": {
-    "website": "https://github.com/pop4959/Chunky",
-    "repo": "https://github.com/pop4959/Chunky"
+    "website": "https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator",
+    "repo": "https://github.com/pop4959/Chunky",
+    "sources": "https://github.com/pop4959/Chunky",
+    "issues": "https://github.com/pop4959/Chunky/issues"
   },
   "license": "GPLv3",
   "icon": "assets/chunky/icon.png",
@@ -29,5 +32,12 @@
     "fabricloader": ">=0.10.8",
     "fabric": "*",
     "minecraft": ">=1.16.0"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/PHpuzZS"
+      }
+    }
   }
 }
