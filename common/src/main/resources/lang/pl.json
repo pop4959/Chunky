@@ -4,7 +4,7 @@
   "error_version": "Ten plugin nie jest kompatibilny z wersjami Minecraft poniżej 1.13.",
   "error_version_spigot": "Ten plugin nie jest kompatibilny ze Spigotem 1.13!",
   "format_cancel": "%s Task cancelled for %s.",
-  "format_cancel_all": "%s Cancelling all tasks.",
+  "format_cancel_all": "%s Anulowanie wszystkich zadań.",
   "format_cancel_confirm": "%s Anulowane zadania nie mogą być kontynuowane. Jeśli jesteś pewien, że chcesz anulować wpisz '/chunky confirm'.",
   "format_cancel_no_tasks": "%s Brak zadań do anulowania.",
   "format_center": "%s Środek zmieniony na %d, %d.",
