@@ -3,7 +3,7 @@
   "enabled": "включен",
   "error_version": "Этот плагин несовместим с версиями Minecraft ниже 1.13.",
   "error_version_spigot": "Этот плагин несовместим со Spigot 1.13!",
-  "format_cancel": "%s Отмена всех задач.",
+  "format_cancel_all": "%s Отмена всех задач.",
   "format_cancel_confirm": "%s Отмененные задачи не могут быть продолжены. Если вы уверены, что хотите отменить задачу, напишите '/chunky confirm'.",
   "format_cancel_no_tasks": "%s Нет задач для отмены.",
   "format_center": "%s Центр установлен на %d, %d.",

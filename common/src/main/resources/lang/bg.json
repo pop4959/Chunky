@@ -3,7 +3,7 @@
   "enabled": "активирано",
   "error_version": "Този плъгин не е съвместим с версии на Minecraft по-стари от 1.13.",
   "error_version_spigot": "Този плъгин не е съвместим с Spigot 1.13!",
-  "format_cancel": "%s Отменяне на всички задачи.",
+  "format_cancel_all": "%s Отменяне на всички задачи.",
   "format_cancel_no_tasks": "%s Няма задачи за отменяне.",
   "format_center": "%s Център променен на %d, %d.",
   "format_continue": "%s Задача възобновена за %s.",
