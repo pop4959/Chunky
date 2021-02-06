@@ -27,6 +27,7 @@
   "help_cancel": "&2chunky cancel&r - 取消并删除当前正在运行或已保存的任务",
   "help_center": "&2chunky center <x> <z>&r - 设置预生成中心的位置",
   "help_continue": "&2chunky continue&r - 继续当前任务或已保存的任务",
+  "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Set by corners",
   "help_menu": "&aChunky 命令&r%s",
   "help_more": "输入 &a%s %d&r 以获取更多信息。",
   "help_pattern": "&2chunky pattern <concentric|loop|spiral>&r - 设置预生成的方案",
