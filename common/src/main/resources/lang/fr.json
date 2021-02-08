@@ -3,6 +3,7 @@
   "enabled": "activé",
   "error_version": "Ce plugin n'est pas compatible avec les versions de Minecraft ultérieures à la 1.13.",
   "error_version_spigot": "Ce plugin n'est pas compatible avec Spigot 1.13 !",
+  "format_cancel": "%s Tâche annulée pour la dimension %s.",
   "format_cancel_all": "%s Annulation de toutes les tâches.",
   "format_cancel_confirm": "%s Les tâches annulées ne peuvent pas être continuées. Si vous êtes sûr(e) de vouloir annuler, tapez '/chunky confirm'.",
   "format_cancel_no_tasks": "%s Aucune tâche à annuler.",
