@@ -2,8 +2,8 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
-public class Oval extends AbstractEllipse {
-    public Oval(Selection selection, boolean chunkAligned) {
+public class Ellipse extends AbstractEllipse {
+    public Ellipse(Selection selection, boolean chunkAligned) {
         super(selection, chunkAligned);
     }
 
@@ -14,6 +14,6 @@ public class Oval extends AbstractEllipse {
 
     @Override
     public String name() {
-        return "oval";
+        return "ellipse";
     }
 }

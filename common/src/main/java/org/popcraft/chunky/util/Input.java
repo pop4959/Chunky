@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Input {
-    public static final List<String> SHAPES = Arrays.asList("circle", "diamond", "oval", "pentagon", "rectangle", "square", "star", "triangle");
+    public static final List<String> SHAPES = Arrays.asList("circle", "diamond", "ellipse", "pentagon", "rectangle", "square", "star", "triangle");
 
     public static Optional<World> tryWorld(Chunky chunky, String input) {
         if (input == null || input.isEmpty()) {
