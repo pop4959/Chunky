@@ -1,5 +1,5 @@
 {
-  "command_no_permission": "&cYou do not have permission for this command.",
+  "command_no_permission": "&cУ вас недостаточно прав для использования этой команды.",
   "disabled": "выключен",
   "enabled": "включен",
   "error_version": "Этот плагин несовместим с версиями Minecraft ниже 1.13.",
