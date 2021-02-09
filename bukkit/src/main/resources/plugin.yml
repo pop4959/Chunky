@@ -11,9 +11,63 @@ commands:
   chunky:
     description: Generates chunks
     aliases: [cy]
-    permission: chunky.chunky
+    permission: chunky.command
     usage: /chunky
 permissions:
-  chunky.chunky:
-    description: Generates chunks
+  chunky.command:
     default: op
+  chunky.command.cancel:
+    default: op
+  chunky.command.center:
+    default: op
+  chunky.command.confirm:
+    default: op
+  chunky.command.continue:
+    default: op
+  chunky.command.corners:
+    default: op
+  chunky.command.help:
+    default: op
+  chunky.command.pattern:
+    default: op
+  chunky.command.pause:
+    default: op
+  chunky.command.quiet:
+    default: op
+  chunky.command.radius:
+    default: op
+  chunky.command.reload:
+    default: op
+  chunky.command.shape:
+    default: op
+  chunky.command.silent:
+    default: op
+  chunky.command.spawn:
+    default: op
+  chunky.command.start:
+    default: op
+  chunky.command.worldborder:
+    default: op
+  chunky.command.world:
+    default: op
+  chunky.chunky:
+    default: false
+    children:
+      - chunky.command
+      - chunky.command.cancel
+      - chunky.command.center
+      - chunky.command.confirm
+      - chunky.command.continue
+      - chunky.command.corners
+      - chunky.command.help
+      - chunky.command.pattern
+      - chunky.command.pause
+      - chunky.command.quiet
+      - chunky.command.radius
+      - chunky.command.reload
+      - chunky.command.shape
+      - chunky.command.silent
+      - chunky.command.spawn
+      - chunky.command.start
+      - chunky.command.worldborder
+      - chunky.command.world
