@@ -1,4 +1,5 @@
 {
+  "command_no_permission": "&cYou do not have permission for this command.",
   "disabled": "выключен",
   "enabled": "включен",
   "error_version": "Этот плагин несовместим с версиями Minecraft ниже 1.13.",
