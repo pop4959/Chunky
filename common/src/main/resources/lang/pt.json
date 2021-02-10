@@ -1,6 +1,5 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
-  "debug": "%s",
   "disabled": "desativado",
   "enabled": "ativado",
   "error_version": "Este plugin não é compatível com as versões Minecraft abaixo de 1.13.",
