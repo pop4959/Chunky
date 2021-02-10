@@ -1,6 +1,5 @@
 {
   "command_no_permission": "&cУ вас недостаточно прав для использования этой команды.",
-  "debug": "%s",
   "disabled": "выключен",
   "enabled": "включен",
   "error_version": "Этот плагин несовместим с версиями Minecraft ниже 1.13.",
@@ -13,7 +12,7 @@
   "format_confirm": "%s Подтверждать нечего!",
   "format_continue": "%s Задача для %s продолжена.",
   "format_continue_no_tasks": "%s Нет задач для продолжения.",
-  "format_delete_confirm": "%s &cWarning: Chunks in %s outside of the %s region centered at %d, %d with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '/chunky confirm'.",
+  "format_delete_confirm": "%s &cВнимание: Чанки в %s, находящиеся снаружи региона %s, с установленной точкой центра в %d, %d с радиусом %s будут полностью удалены. Пожалуйста, убедитесь в том, что у вас есть бэкап вашего сервера, перед тем, как продолжить, чтобы избежать потенциальной потери важных данных. Вам будет необходимо полностью перезагрузить сервер после того, как задача по удалению будет выполнена. Если вы готовы продолжить, используйте команду '/chunky confirm'.",
   "format_pattern": "%s Паттерн изменен на %s.",
   "format_pause": "%s Задача для %s приостановлена.",
   "format_pause_no_tasks": "%s Нет задач для приостановки.",
@@ -46,7 +45,7 @@
   "help_world": "&2chunky world <world>&r - Выбрать мир для генерации чанков",
   "help_worldborder": "&2chunky worldborder&r - Установить центр и радиус, исходя из границы мира",
   "prefix": "[Chunky]",
-  "task_delete": "%s Deleted %d chunks from %s in %.3f seconds.",
+  "task_delete": "%s Удалено %d чанков из %s за %.3f секунд.",
   "task_done": "%s Задача для %s выполнена. Обработано: %d чанков (%.2f%%), Заняло времени: %01d:%02d:%02d",
   "task_stopped": "%s Задача для %s остановлена.",
   "task_update": "%s Задача для %s выполняется. Обработано: %d чанков (%.2f%%), ETA: %01d:%02d:%02d, Скорость: %.1f чвс, Текущий чанк: %d, %d"
