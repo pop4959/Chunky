@@ -1,6 +1,5 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
-  "debug": "%s",
   "disabled": "encendido",
   "enabled": "apagado",
   "error_version": "Chunky no es compatile con versiones menores a 1.13",
