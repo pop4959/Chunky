@@ -1,5 +1,6 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
+  "debug": "%s",
   "disabled": "деактивирано",
   "enabled": "активирано",
   "error_version": "Този плъгин не е съвместим с версии на Minecraft по-стари от 1.13.",
@@ -12,6 +13,7 @@
   "format_confirm": "%s Nothing to confirm!",
   "format_continue": "%s Задача възобновена за %s.",
   "format_continue_no_tasks": "%s Няма задачи за възобновяване.",
+  "format_delete_confirm": "%s &cWarning: Chunks in %s outside of the %s region centered at %d, %d with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '/chunky confirm'.",
   "format_pattern": "%s Шарка променена на %s.",
   "format_pause": "%s Задача поставена на пауза за %s.",
   "format_pause_no_tasks": "%s Няма задачи за поставяне на пауза.",
@@ -44,6 +46,7 @@
   "help_world": "&2chunky world <world>&r - Задаване на света",
   "help_worldborder": "&2chunky worldborder&r - Задаване на центъра и радиуса на границата на света",
   "prefix": "[Chunky]",
+  "task_delete": "%s Deleted %d chunks from %s in %.3f seconds.",
   "task_done": "%s Завършена задача за %s. Обработени: %d чънкове (%.2f%%), Общо време: %01d:%02d:%02d",
   "task_stopped": "%s Задача спряна за %s.",
   "task_update": "%s Протичаща задача за %s. Обработени: %d чънкове (%.2f%%), ETA: %01d:%02d:%02d, Скорост: %.1f cps, Текущ: %d, %d"
