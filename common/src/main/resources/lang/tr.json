@@ -1,6 +1,5 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
-  "debug": "%s",
   "disabled": "de-aktif",
   "enabled": "aktif",
   "error_version": "Bu eklenti, 1.13'ün altındaki Minecraft sürümleriyle uyumlu değildir.",
