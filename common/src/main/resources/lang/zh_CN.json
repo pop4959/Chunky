@@ -1,5 +1,6 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
+  "debug": "%s",
   "disabled": "关闭的",
   "enabled": "启用的",
   "error_version": "本插件无法与Minecraft版本低于 1.13 的服务器兼容。",
@@ -12,6 +13,7 @@
   "format_confirm": "%s 没有什么需要您确认的操作!",
   "format_continue": "%s 任务持续了 %s。",
   "format_continue_no_tasks": "%s 没有预生成任务可以继续。",
+  "format_delete_confirm": "%s &cWarning: Chunks in %s outside of the %s region centered at %d, %d with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '/chunky confirm'.",
   "format_pattern": "%s 预生成方案改为 %s。",
   "format_pause": "%s 任务暂停了 %s。",
   "format_pause_no_tasks": "%s 没有预生成任务可以暂停",
@@ -44,6 +46,7 @@
   "help_world": "&2chunky world <world>&r - 设置目标世界",
   "help_worldborder": "&2chunky worldborder&r - 设置世界边界的中心与范围",
   "prefix": "[Chunky]",
+  "task_delete": "%s Deleted %d chunks from %s in %.3f seconds.",
   "task_done": "%s 任务结束于 %s。 处理了 %d 个区块 (%.2f%%), 总运行时长: %01d:%02d:%02d",
   "task_stopped": "%s 任务暂停于 %s。",
   "task_update": "%s 任务运行于世界 %s。 处理了 %d 个区块 (%.2f%%), 预计距完成还有: %01d:%02d:%02d, 速率: %.1f 区块/秒, 当前区块进度: %d, %d"
