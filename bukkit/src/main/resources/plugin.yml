@@ -26,6 +26,8 @@ permissions:
     default: op
   chunky.command.corners:
     default: op
+  chunky.command.delete:
+    default: op
   chunky.command.help:
     default: op
   chunky.command.pattern:

@@ -2,6 +2,8 @@ package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.util.Coordinate;
 
+import java.nio.file.Path;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -19,4 +21,6 @@ public interface World {
     Coordinate getSpawnCoordinate();
 
     Border getWorldBorder();
+
+    Optional<Path> getRegionDirectory();
 }

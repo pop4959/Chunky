@@ -12,6 +12,7 @@
   "format_confirm": "%s Nothing to confirm!",
   "format_continue": "%s Task continuing for %s.",
   "format_continue_no_tasks": "%s No tasks to continue.",
+  "format_delete_confirm": "%s &cWarning: Chunks in %s outside of the %s region centered at %d, %d with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '/chunky confirm'.",
   "format_pattern": "%s Pattern changed to %s.",
   "format_pause": "%s Task paused for %s.",
   "format_pause_no_tasks": "%s No tasks to pause.",
@@ -44,6 +45,7 @@
   "help_world": "&2chunky world <world>&r - Set the world target",
   "help_worldborder": "&2chunky worldborder&r - Use the world border center & radius",
   "prefix": "[Chunky]",
+  "task_delete": "%s Deleted %d chunks from %s in %.3f seconds.",
   "task_done": "%s Task finished for %s. Processed: %d chunks (%.2f%%), Total time: %01d:%02d:%02d",
   "task_stopped": "%s Task stopped for %s.",
   "task_update": "%s Task running for %s. Processed: %d chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Current: %d, %d"

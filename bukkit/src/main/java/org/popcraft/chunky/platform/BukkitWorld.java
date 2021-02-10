@@ -4,6 +4,10 @@ import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.popcraft.chunky.util.Coordinate;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -41,6 +45,19 @@ public class BukkitWorld implements World {
     @Override
     public Border getWorldBorder() {
         return worldBorder;
+    }
+
+    @Override
+    public Optional<Path> getRegionDirectory() {
+        try {
+            return Files.walk(world.getWorldFolder().toPath())
+                    .filter(Files::isDirectory)
+                    .filter(path -> "region".equals(path.getFileName().toString()))
+                    .findFirst();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 
     @Override

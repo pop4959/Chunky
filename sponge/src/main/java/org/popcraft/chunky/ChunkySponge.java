@@ -133,6 +133,10 @@ public class ChunkySponge {
                     return CommandResult.success();
                 })
                 .build();
+        CommandSpec deleteCommand = CommandSpec.builder()
+                .permission("chunky.command.delete")
+                .executor(noArgsCommand("delete"))
+                .build();
         CommandSpec helpCommand = CommandSpec.builder()
                 .permission("chunky.command.help")
                 .arguments(GenericArguments.optional(GenericArguments.integer(Text.of("page"))))
@@ -264,6 +268,7 @@ public class ChunkySponge {
                 .child(confirmCommand, "confirm")
                 .child(continueCommand, "continue")
                 .child(cornersCommand, "corners")
+                .child(deleteCommand, "delete")
                 .child(helpCommand, "help")
                 .child(patternCommand, "pattern")
                 .child(pauseCommand, "pause")

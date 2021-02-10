@@ -12,7 +12,9 @@ import org.popcraft.chunky.mixin.ServerChunkManagerMixin;
 import org.popcraft.chunky.mixin.ThreadedAnvilChunkStorageMixin;
 import org.popcraft.chunky.util.Coordinate;
 
-import java.util.Objects;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -79,6 +81,12 @@ public class FabricWorld implements World {
     @Override
     public Border getWorldBorder() {
         return worldBorder;
+    }
+
+    @Override
+    public Optional<Path> getRegionDirectory() {
+        Path regionDirectory = ((ThreadedAnvilChunkStorageMixin) serverWorld.getChunkManager().threadedAnvilChunkStorage).getSaveDir().toPath().resolve("region");
+        return Files.exists(regionDirectory) ? Optional.of(regionDirectory) : Optional.empty();
     }
 
     @Override

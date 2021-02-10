@@ -5,6 +5,9 @@ import org.popcraft.chunky.util.Coordinate;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.world.Location;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -56,6 +59,12 @@ public class SpongeWorld implements World {
     @Override
     public Border getWorldBorder() {
         return new SpongeBorder(world.getWorldBorder());
+    }
+
+    @Override
+    public Optional<Path> getRegionDirectory() {
+        Path regionDirectory = world.getDirectory().resolve("region");
+        return Files.exists(regionDirectory) ? Optional.of(regionDirectory) : Optional.empty();
     }
 
     @Override

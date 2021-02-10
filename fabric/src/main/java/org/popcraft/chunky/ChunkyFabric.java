@@ -100,6 +100,8 @@ public class ChunkyFabric implements ModInitializer {
                                             .executes(command))
                                     .executes(command))
                             .executes(command))
+                    .then(literal("delete")
+                            .executes(command))
                     .then(literal("help")
                             .then(argument("page", integer())
                                     .executes(command))
