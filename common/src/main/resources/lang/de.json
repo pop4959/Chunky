@@ -1,5 +1,6 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
+  "debug": "%s",
   "disabled": "deaktiviert",
   "enabled": "aktiviert",
   "error_version": "Dieses Plugin ist nicht kompatibel mit Minecraft versionen unterhalb von 1.13.",
@@ -12,6 +13,7 @@
   "format_confirm": "%s Nichts zum bestätigen!",
   "format_continue": "%s Mache weiter mit Aufgabe für %s.",
   "format_continue_no_tasks": "%s Keine Aufgaben zum Weitermachen.",
+  "format_delete_confirm": "%s &cWarning: Chunks in %s outside of the %s region centered at %d, %d with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '/chunky confirm'.",
   "format_pattern": "%s Muster geändert zu %s.",
   "format_pause": "%s Aufgabe pausiert für %s.",
   "format_pause_no_tasks": "%s Keine aufgaben zum pausieren.",
@@ -44,6 +46,7 @@
   "help_world": "&2chunky world <world>&r - Setze die Zielwelt",
   "help_worldborder": "&2chunky worldborder&r - Setze die Mitte und den Radius der Weltgrenze",
   "prefix": "[Chunky]",
+  "task_delete": "%s Deleted %d chunks from %s in %.3f seconds.",
   "task_done": "%s Aufgabe für %s beendet. Verarbeitet: %d Chunks (%.2f%%), Gesamte Zeit: %01d:%02d:%02d",
   "task_stopped": "%s Aufgabe für %s gestoppt.",
   "task_update": "%s Aufgabe für %s läuft. Verarbeitet: %d Chunks (%.2f%%), ETA: %01d:%02d:%02d, Rate: %.1f cps, Aktuell: %d, %d"
