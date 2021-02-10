@@ -1,5 +1,6 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
+  "debug": "%s",
   "disabled": "encendido",
   "enabled": "apagado",
   "error_version": "Chunky no es compatile con versiones menores a 1.13",
@@ -12,6 +13,7 @@
   "format_confirm": "%s ¡No hay nada que confirmar!",
   "format_continue": "%s Tarea pausada para %s.",
   "format_continue_no_tasks": "%s No hay tareas que continuar.",
+  "format_delete_confirm": "%s &cWarning: Chunks in %s outside of the %s region centered at %d, %d with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '/chunky confirm'.",
   "format_pattern": "%s Patron cambiado a %s.",
   "format_pause": "%s Tarea pausada para %s.",
   "format_pause_no_tasks": "%s No hay tareas que pausar.",
@@ -44,6 +46,7 @@
   "help_world": "&2chunky world <world>&r - Selecciona el mundo a generar",
   "help_worldborder": "&2chunky worldborder&r - Genera todo el terreno adentro del worldborder",
   "prefix": "[Chunky]",
+  "task_delete": "%s Deleted %d chunks from %s in %.3f seconds.",
   "task_done": "%s Tarea finalizada en  %s. Chunks procesados: %d (%.2f%%), Tiempo total: %01d:%02d:%02d",
   "task_stopped": "%s Tarea pausada por %s.",
   "task_update": "%s Tarea en %s. Chunks procesados: %d (%.2f%%), tiempo estimado restante: %01d:%02d:%02d, Promedio de: %.1f cps, Chunk actual: %d, %d"
