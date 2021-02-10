@@ -1,6 +1,5 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
-  "debug": "%s",
   "disabled": "деактивирано",
   "enabled": "активирано",
   "error_version": "Този плъгин не е съвместим с версии на Minecraft по-стари от 1.13.",
