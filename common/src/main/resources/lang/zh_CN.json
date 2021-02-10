@@ -1,6 +1,5 @@
 {
   "command_no_permission": "&cYou do not have permission for this command.",
-  "debug": "%s",
   "disabled": "关闭的",
   "enabled": "启用的",
   "error_version": "本插件无法与Minecraft版本低于 1.13 的服务器兼容。",
