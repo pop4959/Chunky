@@ -25,6 +25,7 @@
   "format_silent": "%s Sessiz mod %s.",
   "format_start": "%s Fonksiyon %s için %d, %d ve yarıçap %s olarak ayarlandı.",
   "format_start_confirm": "%s A task was already started for this world. To continue running it, type '/chunky continue'. To start a new task, type '/chunky confirm'.",
+  "format_start_disk": "%s The server only has %s disk space remaining, but the estimated disk space required for the task is %s. If you wish to start anyway, type '/chunky confirm'.",
   "format_started_already": "%s %s için fonksiyon zaten başladı!",
   "format_world": "%s Dünya %s olarak değiştirildi.",
   "help_cancel": "&2chunky cancel&r - Mevcut veya kayıtlı fonksiyonları durdurun ve silin",
