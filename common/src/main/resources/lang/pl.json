@@ -25,6 +25,7 @@
   "format_silent": "%s Tryb cichy %s.",
   "format_start": "%s Zadanie rozpoczęte dla %s na %d, %d z promieniem %s.",
   "format_start_confirm": "%s Zadanie zostało już uruchomione dla tego świata. Aby kontynuować uruchamianie, wpisz '/chunky continue'. Aby rozpocząć nowe zadanie, wpisz '/chunky confirm'.",
+  "format_start_disk": "%s The server only has %s disk space remaining, but the estimated disk space required for the task is %s. If you wish to start anyway, type '/chunky confirm'.",
   "format_started_already": "%s Zadanie jest już rozpoczęte dla %s!",
   "format_world": "%s Świat zmieniony na %s.",
   "help_cancel": "&2chunky cancel&r - Anuluje i usuwa obecne lub zapisane zadania",
