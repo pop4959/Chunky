@@ -5,6 +5,8 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.util.Disk;
+import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 
 import java.util.ArrayList;
@@ -82,6 +84,13 @@ public class StartCommand extends ChunkyCommand {
         if (chunky.getConfig().loadTask(selection.world).isPresent()) {
             chunky.setPendingAction(startAction);
             sender.sendMessage("format_start_confirm", translate("prefix"));
+            return;
+        }
+        long remainingSpace = Disk.remainingSpace(selection.world);
+        long estimatedSpace = Disk.estimatedSpace(selection);
+        if (remainingSpace > 0 && remainingSpace < estimatedSpace) {
+            chunky.setPendingAction(startAction);
+            sender.sendMessage("format_start_disk", translate("prefix"), Formatting.bytes(remainingSpace), Formatting.bytes(estimatedSpace));
         } else {
             startAction.run();
         }
