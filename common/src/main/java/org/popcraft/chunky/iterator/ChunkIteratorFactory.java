@@ -7,6 +7,7 @@ public class ChunkIteratorFactory {
         switch (selection.shape) {
             case "rectangle":
             case "oval":
+            case "ellipse":
                 return new Loop2ChunkIterator(selection, count);
             default:
                 break;

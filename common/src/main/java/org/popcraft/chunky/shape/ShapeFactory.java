@@ -14,7 +14,8 @@ public class ShapeFactory {
             case "diamond":
                 return new Diamond(selection, chunkAligned);
             case "oval":
-                return new Oval(selection, chunkAligned);
+            case "ellipse":
+                return new Ellipse(selection, chunkAligned);
             case "pentagon":
                 return new Pentagon(selection, chunkAligned);
             case "rectangle":

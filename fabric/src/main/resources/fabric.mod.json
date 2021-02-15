@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "chunky-fabric",
+  "id": "chunky",
   "version": "${version}",
   "name": "Chunky",
   "description": "Pre-generates chunks, quickly, efficiently, and safely",
@@ -8,11 +8,14 @@
     "pop4959"
   ],
   "contact": {
-    "website": "https://github.com/pop4959/Chunky",
-    "repo": "https://github.com/pop4959/Chunky"
+    "website": "https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator",
+    "repo": "https://github.com/pop4959/Chunky",
+    "sources": "https://github.com/pop4959/Chunky",
+    "issues": "https://github.com/pop4959/Chunky/issues"
   },
   "license": "GPLv3",
-  "icon": "assets/chunky-fabric/icon.png",
+  "icon": "assets/chunky/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -23,11 +26,18 @@
     ]
   },
   "mixins": [
-    "chunky-fabric.mixins.json"
+    "chunky.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.10.8",
     "fabric": "*",
     "minecraft": ">=1.16.0"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/PHpuzZS"
+      }
+    }
   }
 }

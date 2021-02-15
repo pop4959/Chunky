@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.popcraft.chunky.Chunky.translate;
@@ -31,6 +32,9 @@ public class PatternCommand extends ChunkyCommand {
 
     @Override
     public List<String> tabSuggestions(Sender sender, String[] args) {
-        return PATTERNS;
+        if (args.length == 2) {
+            return PATTERNS;
+        }
+        return Collections.emptyList();
     }
 }

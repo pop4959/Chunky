@@ -17,17 +17,17 @@ public class CenterCommand extends ChunkyCommand {
     public void execute(Sender sender, String[] args) {
         Optional<Double> newX = Optional.empty();
         if (args.length > 1) {
-            newX = Input.tryDouble(args[1]);
+            newX = Input.tryDoubleSuffixed(args[1]);
         }
         Optional<Double> newZ = Optional.empty();
         if (args.length > 2) {
-            newZ = Input.tryDouble(args[2]);
+            newZ = Input.tryDoubleSuffixed(args[2]);
         }
         if (!newX.isPresent() || !newZ.isPresent()) {
             sender.sendMessage("help_center");
             return;
         }
-        if (Math.abs(newX.get().intValue()) > 3e7 || Math.abs(newZ.get().intValue()) > 3e7) {
+        if (Input.isPastWorldLimit(newX.get()) || Input.isPastWorldLimit(newZ.get())) {
             sender.sendMessage("help_center");
             return;
         }

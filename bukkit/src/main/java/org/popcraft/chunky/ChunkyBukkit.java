@@ -79,7 +79,11 @@ public final class ChunkyBukkit extends JavaPlugin {
         Sender bukkitSender = new BukkitSender(sender);
         Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
-            commands.get(args[0].toLowerCase()).execute(bukkitSender, args);
+            if (sender.hasPermission("chunky.command." + args[0].toLowerCase())) {
+                commands.get(args[0].toLowerCase()).execute(bukkitSender, args);
+            } else {
+                bukkitSender.sendMessage("command_no_permission");
+            }
         } else {
             commands.get("help").execute(bukkitSender, new String[]{});
         }
@@ -94,8 +98,8 @@ public final class ChunkyBukkit extends JavaPlugin {
         final List<String> suggestions = new ArrayList<>();
         Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length == 1) {
-            suggestions.addAll(commands.keySet());
-        } else if (commands.containsKey(args[0].toLowerCase())) {
+            commands.keySet().stream().filter(name -> sender.hasPermission("chunky.command." + name)).forEach(suggestions::add);
+        } else if (commands.containsKey(args[0].toLowerCase()) && sender.hasPermission("chunky.command." + args[0].toLowerCase())) {
             suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(new BukkitSender(sender), args));
         }
         return suggestions.stream()

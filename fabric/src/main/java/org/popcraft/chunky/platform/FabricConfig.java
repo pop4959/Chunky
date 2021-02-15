@@ -124,6 +124,14 @@ public class FabricConfig implements Config {
     }
 
     @Override
+    public void cancelTask(World world) {
+        loadTask(world).ifPresent(generationTask -> {
+            generationTask.stop(true);
+            saveTask(generationTask);
+        });
+    }
+
+    @Override
     public void cancelTasks() {
         loadTasks().forEach(generationTask -> {
             generationTask.stop(true);

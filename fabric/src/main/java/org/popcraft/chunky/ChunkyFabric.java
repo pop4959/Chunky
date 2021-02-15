@@ -2,6 +2,7 @@ package org.popcraft.chunky;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -61,8 +62,22 @@ public class ChunkyFabric implements ModInitializer {
                 commands.get(subCommand).execute(sender, args);
                 return Command.SINGLE_SUCCESS;
             };
+            SuggestionProvider<ServerCommandSource> shapeSuggestionProvider = (commandContext, suggestionsBuilder) -> {
+                List<String> suggestions = chunky.getCommands().get("shape").tabSuggestions(new FabricSender(commandContext.getSource()), new String[]{});
+                try {
+                    final String arg = commandContext.getArgument("shape", String.class);
+                    suggestions.stream()
+                            .filter(s -> arg == null || s.toLowerCase().startsWith(arg.toLowerCase()))
+                            .forEach(suggestionsBuilder::suggest);
+                } catch (IllegalArgumentException ignored) {
+                    suggestions.forEach(suggestionsBuilder::suggest);
+                }
+                return suggestionsBuilder.buildFuture();
+            };
             dispatcher.register(LiteralArgumentBuilder.<ServerCommandSource>literal("chunky")
                     .then(literal("cancel")
+                            .then(argument("world", dimension())
+                                    .executes(command))
                             .executes(command))
                     .then(literal("center")
                             .then(argument("x", integer())
@@ -73,6 +88,8 @@ public class ChunkyFabric implements ModInitializer {
                     .then(literal("confirm")
                             .executes(command))
                     .then(literal("continue")
+                            .then(argument("world", dimension())
+                                    .executes(command))
                             .executes(command))
                     .then(literal("corners")
                             .then(argument("x1", integer())
@@ -83,6 +100,8 @@ public class ChunkyFabric implements ModInitializer {
                                                     .executes(command))
                                             .executes(command))
                                     .executes(command))
+                            .executes(command))
+                    .then(literal("delete")
                             .executes(command))
                     .then(literal("help")
                             .then(argument("page", integer())
@@ -105,6 +124,8 @@ public class ChunkyFabric implements ModInitializer {
                                     .executes(command))
                             .executes(command))
                     .then(literal("pause")
+                            .then(argument("world", dimension())
+                                    .executes(command))
                             .executes(command))
                     .then(literal("quiet")
                             .then(argument("interval", integer())
@@ -120,18 +141,7 @@ public class ChunkyFabric implements ModInitializer {
                             .executes(command))
                     .then(literal("shape")
                             .then(argument("shape", string())
-                                    .suggests((commandContext, suggestionsBuilder) -> {
-                                        List<String> suggestions = chunky.getCommands().get("shape").tabSuggestions(new FabricSender(commandContext.getSource()), new String[]{});
-                                        try {
-                                            final String arg = commandContext.getArgument("shape", String.class);
-                                            suggestions.stream()
-                                                    .filter(s -> arg == null || s.toLowerCase().startsWith(arg.toLowerCase()))
-                                                    .forEach(suggestionsBuilder::suggest);
-                                        } catch (IllegalArgumentException ignored) {
-                                            suggestions.forEach(suggestionsBuilder::suggest);
-                                        }
-                                        return suggestionsBuilder.buildFuture();
-                                    })
+                                    .suggests(shapeSuggestionProvider)
                                     .executes(command))
                             .executes(command))
                     .then(literal("silent")
@@ -139,6 +149,19 @@ public class ChunkyFabric implements ModInitializer {
                     .then(literal("spawn")
                             .executes(command))
                     .then(literal("start")
+                            .then(argument("world", dimension())
+                                    .then(argument("shape", string())
+                                            .then(argument("centerX", integer())
+                                                    .then(argument("centerZ", integer())
+                                                            .then(argument("radiusX", integer())
+                                                                    .then(argument("radiusZ", integer())
+                                                                            .executes(command))
+                                                                    .executes(command))
+                                                            .executes(command))
+                                                    .executes(command))
+                                            .suggests(shapeSuggestionProvider)
+                                            .executes(command))
+                                    .executes(command))
                             .executes(command))
                     .then(literal("worldborder")
                             .executes(command))
