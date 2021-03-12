@@ -32,8 +32,7 @@ public class ChunkyFabric implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
             this.chunky = new Chunky(new FabricPlatform(this, minecraftServer));
             chunky.setConfig(new FabricConfig(chunky));
-            Optional<FabricConfig.ConfigModel> configModel = ((FabricConfig) chunky.getConfig()).getConfigModel();
-            InputStream configLanguage = getClass().getClassLoader().getResourceAsStream("lang/" + configModel.map(model -> model.language).orElse("en") + ".json");
+            InputStream configLanguage = getClass().getClassLoader().getResourceAsStream("lang/" + chunky.getConfig().getLanguage() + ".json");
             InputStream defaultLanguage = getClass().getClassLoader().getResourceAsStream("lang/en.json");
             if (configLanguage == null) {
                 configLanguage = defaultLanguage;
@@ -41,7 +40,7 @@ public class ChunkyFabric implements ModInitializer {
             chunky.setTranslations(chunky.loadTranslation(configLanguage));
             chunky.setFallbackTranslations(chunky.loadTranslation(defaultLanguage));
             chunky.loadCommands();
-            if (configModel.isPresent() && configModel.get().continueOnRestart) {
+            if (chunky.getConfig().getContinueOnRestart()) {
                 chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});
             }
         });

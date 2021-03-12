@@ -18,5 +18,11 @@ public interface Config {
 
     void cancelTasks();
 
+    int getVersion();
+
+    String getLanguage();
+
+    boolean getContinueOnRestart();
+
     void reload();
 }

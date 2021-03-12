@@ -26,7 +26,7 @@ public class GenerationTask implements Runnable {
     private final AtomicLong printTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
     private final AtomicLong totalChunks = new AtomicLong();
-    private final ConcurrentLinkedQueue<Long> chunkUpdateTimes10Sec = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Long> chunkUpdateTimes = new ConcurrentLinkedQueue<>();
     private static final int MAX_WORKING = 50;
 
     public GenerationTask(Chunky chunky, Selection selection, long count, long time) {
@@ -58,19 +58,21 @@ public class GenerationTask implements Runnable {
         long chunkNum = finishedChunks.addAndGet(1);
         double percentDone = 100f * chunkNum / totalChunks.get();
         long currentTime = System.currentTimeMillis();
-        chunkUpdateTimes10Sec.add(currentTime);
-        while (currentTime - chunkUpdateTimes10Sec.peek() > 1e4) chunkUpdateTimes10Sec.poll();
+        chunkUpdateTimes.add(currentTime);
+        while (currentTime - chunkUpdateTimes.peek() > 1e4) {
+            chunkUpdateTimes.poll();
+        }
         long chunksLeft = totalChunks.get() - finishedChunks.get();
         if (chunksLeft > 0 && (chunky.getSelection().silent || ((currentTime - printTime.get()) / 1e3) < chunky.getSelection().quiet)) {
             return;
         }
         printTime.set(currentTime);
-        long oldestTime = chunkUpdateTimes10Sec.peek();
+        long oldestTime = chunkUpdateTimes.peek();
         double timeDiff = (currentTime - oldestTime) / 1e3;
         if (chunksLeft > 0 && timeDiff < 1e-1) {
             return;
         }
-        double speed = chunkUpdateTimes10Sec.size() / timeDiff;
+        double speed = chunkUpdateTimes.size() / timeDiff;
         Sender console = chunky.getPlatform().getServer().getConsoleSender();
         if (chunksLeft == 0) {
             long total = (prevTime + (currentTime - startTime.get())) / 1000;

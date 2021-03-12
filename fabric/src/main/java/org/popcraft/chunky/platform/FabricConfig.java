@@ -128,6 +128,21 @@ public class FabricConfig implements Config {
     }
 
     @Override
+    public int getVersion() {
+        return this.configModel.version == null ? 0 : this.configModel.version;
+    }
+
+    @Override
+    public String getLanguage() {
+        return this.configModel.language == null ? "en" : this.configModel.language;
+    }
+
+    @Override
+    public boolean getContinueOnRestart() {
+        return this.configModel.continueOnRestart == null ? false : this.configModel.continueOnRestart;
+    }
+
+    @Override
     public void reload() {
         StringBuilder configBuilder = new StringBuilder();
         try {
@@ -153,21 +168,21 @@ public class FabricConfig implements Config {
     }
 
     public static class ConfigModel {
-        public int version;
+        public Integer version;
         public String language;
-        public boolean continueOnRestart;
+        public Boolean continueOnRestart;
         public Map<String, TaskModel> tasks;
     }
 
     public static class TaskModel {
-        public boolean cancelled;
-        public int radius;
+        public Boolean cancelled;
+        public Integer radius;
         public Integer radiusZ;
-        public int centerX;
-        public int centerZ;
+        public Integer centerX;
+        public Integer centerZ;
         public String iterator;
         public String shape;
-        public long count;
-        public long time;
+        public Long count;
+        public Long time;
     }
 }

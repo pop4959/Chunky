@@ -137,6 +137,21 @@ public class SpongeConfig implements Config {
     }
 
     @Override
+    public int getVersion() {
+        return this.rootNode == null ? 0 : this.rootNode.getNode("version").getInt(0);
+    }
+
+    @Override
+    public String getLanguage() {
+        return this.rootNode == null ? "en" : this.rootNode.getNode("language").getString("en");
+    }
+
+    @Override
+    public boolean getContinueOnRestart() {
+        return this.rootNode != null && this.rootNode.getNode("continue-on-restart").getBoolean(false);
+    }
+
+    @Override
     public void reload() {
         try {
             this.rootNode = configLoader.load();

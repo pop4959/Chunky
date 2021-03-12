@@ -18,6 +18,9 @@ public class BukkitConfig implements Config {
     public BukkitConfig(Chunky chunky, JavaPlugin plugin) {
         this.chunky = chunky;
         this.plugin = plugin;
+        plugin.getConfig().options().copyDefaults(true);
+        plugin.getConfig().options().copyHeader(true);
+        plugin.saveConfig();
     }
 
     @Override
@@ -88,6 +91,21 @@ public class BukkitConfig implements Config {
             generationTask.stop(true);
             saveTask(generationTask);
         });
+    }
+
+    @Override
+    public int getVersion() {
+        return plugin.getConfig().getInt("version", 0);
+    }
+
+    @Override
+    public String getLanguage() {
+        return plugin.getConfig().getString("language", "en");
+    }
+
+    @Override
+    public boolean getContinueOnRestart() {
+        return plugin.getConfig().getBoolean("continue-on-restart", false);
     }
 
     @Override

@@ -30,15 +30,9 @@ public final class ChunkyBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         this.chunky = new Chunky(new BukkitPlatform(this));
-        this.getConfig().options().copyDefaults(true);
-        this.getConfig().options().copyHeader(true);
-        this.saveConfig();
         chunky.setConfig(new BukkitConfig(chunky, this));
-        InputStream configLanguage = getResource("lang/" + getConfig().getString("language", "en") + ".json");
+        InputStream configLanguage = getResource("lang/" + chunky.getConfig().getLanguage() + ".json");
         InputStream defaultLanguage = getResource("lang/en.json");
-        if (configLanguage == null) {
-            configLanguage = defaultLanguage;
-        }
         chunky.setTranslations(chunky.loadTranslation(configLanguage));
         chunky.setFallbackTranslations(chunky.loadTranslation(defaultLanguage));
         chunky.loadCommands();
@@ -51,7 +45,7 @@ public final class ChunkyBukkit extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
         }
         Platform platform = chunky.getPlatform();
-        if (this.getConfig().getBoolean("continue-on-restart", false)) {
+        if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get("continue").execute(platform.getServer().getConsoleSender(), new String[]{});
         }
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
@@ -59,7 +53,7 @@ public final class ChunkyBukkit extends JavaPlugin {
         }
         Metrics metrics = new Metrics(this, 8211);
         if (metrics.isEnabled()) {
-            metrics.addCustomChart(new Metrics.SimplePie("language", () -> getConfig().getString("language", "en")));
+            metrics.addCustomChart(new Metrics.SimplePie("language", () -> chunky.getConfig().getLanguage()));
         }
     }
 
