@@ -6,6 +6,7 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.util.Input;
 
 import java.io.File;
 import java.io.IOException;
@@ -143,7 +144,10 @@ public class SpongeConfig implements Config {
 
     @Override
     public String getLanguage() {
-        return this.rootNode == null ? "en" : this.rootNode.getNode("language").getString("en");
+        if (this.rootNode == null) {
+            return "en";
+        }
+        return Input.checkLanguage(this.rootNode.getNode("language").getString("en"));
     }
 
     @Override

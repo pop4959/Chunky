@@ -7,6 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.util.Input;
 
 import java.io.File;
 import java.io.IOException;
@@ -134,7 +135,7 @@ public class FabricConfig implements Config {
 
     @Override
     public String getLanguage() {
-        return this.configModel.language == null ? "en" : this.configModel.language;
+        return Input.checkLanguage(this.configModel.language);
     }
 
     @Override

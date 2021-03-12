@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.util.Input;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +101,7 @@ public class BukkitConfig implements Config {
 
     @Override
     public String getLanguage() {
-        return plugin.getConfig().getString("language", "en");
+        return Input.checkLanguage(plugin.getConfig().getString("language", "en"));
     }
 
     @Override
