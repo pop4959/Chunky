@@ -4,7 +4,7 @@
   "enabled": "ingeschakeld",
   "error_version": "Deze plugin is niet compatibel met Minecraft versies onder 1.13.",
   "error_version_spigot": "Deze plugin is niet compatibel met Spigot 1.13!",
-  "format_cancel": "Taak %s geannuleerd voor %s.",
+  "format_cancel": "%s Taak geannuleerd voor %s.",
   "format_cancel_all": "%s Alle taken annuleren.",
   "format_cancel_confirm": "%s Geannuleerde taken kunnen niet worden voortgezet. Als u zeker weet dat u wilt annuleren, typ '/chunky confirm'.",
   "format_cancel_no_tasks": "%s Geen taken om te annuleren.",
