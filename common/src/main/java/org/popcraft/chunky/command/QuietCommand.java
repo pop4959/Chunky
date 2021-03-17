@@ -23,8 +23,8 @@ public class QuietCommand extends ChunkyCommand {
             sender.sendMessage("help_quiet");
             return;
         }
-        Selection selection = chunky.getSelection();
-        selection.quiet = Math.max(0, newQuiet.get());
-        sender.sendMessage("format_quiet", translate("prefix"), selection.quiet);
+        int quietInterval = Math.max(0, newQuiet.get());
+        chunky.getOptions().setQuietInterval(quietInterval);
+        sender.sendMessage("format_quiet", translate("prefix"), quietInterval);
     }
 }

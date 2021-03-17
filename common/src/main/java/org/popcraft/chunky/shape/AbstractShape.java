@@ -10,17 +10,17 @@ public abstract class AbstractShape implements Shape {
 
     protected AbstractShape(Selection selection, boolean chunkAligned) {
         if (chunkAligned) {
-            this.centerX = (selection.getChunkX() << 4) + 8;
-            this.centerZ = (selection.getChunkZ() << 4) + 8;
-            this.diameterX = selection.getDiameterChunksX() << 4;
-            this.diameterZ = selection.getDiameterChunksZ() << 4;
+            this.centerX = (selection.centerChunkX() << 4) + 8;
+            this.centerZ = (selection.centerChunkZ() << 4) + 8;
+            this.diameterX = selection.diameterChunksX() << 4;
+            this.diameterZ = selection.diameterChunksZ() << 4;
             this.radiusX = diameterX / 2;
             this.radiusZ = diameterZ / 2;
         } else {
-            this.centerX = selection.centerX;
-            this.centerZ = selection.centerZ;
-            this.radiusX = selection.radiusX;
-            this.radiusZ = selection.radiusZ;
+            this.centerX = selection.centerX();
+            this.centerZ = selection.centerZ();
+            this.radiusX = selection.radiusX();
+            this.radiusZ = selection.radiusZ();
             this.diameterX = 2 * radiusX;
             this.diameterZ = 2 * radiusZ;
         }

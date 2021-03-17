@@ -14,8 +14,8 @@ public class Disk {
     private static final double PERCENT_OVERESTIMATE = 1.05d;
 
     public static long estimatedSpace(Selection selection) {
-        long diameterChunksX = selection.getDiameterChunksX();
-        long diameterChunksZ = selection.getDiameterChunksZ();
+        long diameterChunksX = selection.diameterChunksX();
+        long diameterChunksZ = selection.diameterChunksZ();
         return (long) (PERCENT_OVERESTIMATE * (diameterChunksX * diameterChunksZ * ESTIMATED_SPACE_PER_CHUNK));
     }
 

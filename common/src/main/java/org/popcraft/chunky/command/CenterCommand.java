@@ -2,7 +2,6 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
-import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.Input;
 
 import java.util.Optional;
@@ -31,9 +30,9 @@ public class CenterCommand extends ChunkyCommand {
             sender.sendMessage("help_center");
             return;
         }
-        Selection selection = chunky.getSelection();
-        selection.centerX = newX.get().intValue();
-        selection.centerZ = newZ.get().intValue();
-        sender.sendMessage("format_center", translate("prefix"), selection.centerX, selection.centerZ);
+        int centerX = newX.get().intValue();
+        int centerZ = newZ.get().intValue();
+        chunky.getSelection().center(centerX, centerZ);
+        sender.sendMessage("format_center", translate("prefix"), centerX, centerZ);
     }
 }

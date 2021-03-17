@@ -1,7 +1,6 @@
 package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
-import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
 
@@ -21,14 +20,14 @@ public class ShapeCommand extends ChunkyCommand {
             sender.sendMessage("help_shape");
             return;
         }
-        Optional<String> shape = Input.tryShape(args[1]);
-        if (!shape.isPresent()) {
+        Optional<String> inputShape = Input.tryShape(args[1]);
+        if (!inputShape.isPresent()) {
             sender.sendMessage("help_shape");
             return;
         }
-        Selection selection = chunky.getSelection();
-        selection.shape = shape.get();
-        sender.sendMessage("format_shape", translate("prefix"), selection.shape);
+        String shape = inputShape.get();
+        chunky.getSelection().shape(shape);
+        sender.sendMessage("format_shape", translate("prefix"), shape);
     }
 
     @Override

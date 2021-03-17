@@ -2,10 +2,11 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.integration.BorderIntegration;
 import org.popcraft.chunky.integration.Integration;
-import org.popcraft.chunky.integration.WorldBorderIntegration;
 import org.popcraft.chunky.platform.Border;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Coordinate;
 
 import java.util.Map;
@@ -18,37 +19,36 @@ public class WorldBorderCommand extends ChunkyCommand {
     }
 
     public void execute(Sender sender, String[] args) {
-        Selection selection = chunky.getSelection();
+        Selection previous = chunky.getSelection().build();
+        if (!setBorderViaIntegration(previous.world())) {
+            chunky.getSelection().worldborder();
+        }
+        Selection current = chunky.getSelection().build();
+        sender.sendMessage("format_center", translate("prefix"), current.centerX(), current.centerZ());
+        if (current.radiusX() == current.radiusZ()) {
+            sender.sendMessage("format_radius", translate("prefix"), current.radiusX());
+        } else {
+            sender.sendMessage("format_radii", translate("prefix"), current.radiusX(), current.radiusZ());
+        }
+        if (!previous.shape().equals(current.shape())) {
+            sender.sendMessage("format_shape", translate("prefix"), current.shape());
+        }
+    }
+
+    boolean setBorderViaIntegration(World world) {
         Map<String, Integration> integrations = chunky.getPlatform().getServer().getIntegrations();
         if (integrations.containsKey("border")) {
-            WorldBorderIntegration worldborder = (WorldBorderIntegration) integrations.get("border");
-            String worldName = selection.world.getName();
+            BorderIntegration worldborder = (BorderIntegration) integrations.get("border");
+            String worldName = world.getName();
             if (worldborder.hasBorder(worldName)) {
                 Border border = worldborder.getBorder(worldName);
                 Coordinate center = border.getCenter();
-                selection.centerX = center.getX();
-                selection.centerZ = center.getZ();
-                selection.radiusX = border.getRadiusX();
-                selection.radiusZ = border.getRadiusZ();
-                selection.shape = border.getShape();
-                sender.sendMessage("format_center", translate("prefix"), selection.centerX, selection.centerZ);
-                if (selection.radiusX == selection.radiusZ) {
-                    sender.sendMessage("format_radius", translate("prefix"), selection.radiusX);
-                } else {
-                    sender.sendMessage("format_radii", translate("prefix"), selection.radiusX, selection.radiusZ);
-                }
-                sender.sendMessage("format_shape", translate("prefix"), selection.shape);
-                return;
+                chunky.getSelection().center(center.getX(), center.getZ())
+                        .radiusX(border.getRadiusX()).radiusZ(border.getRadiusZ())
+                        .shape(border.getShape());
+                return true;
             }
         }
-        // Default to the vanilla world border
-        Border border = selection.world.getWorldBorder();
-        Coordinate center = border.getCenter();
-        selection.centerX = center.getX();
-        selection.centerZ = center.getZ();
-        selection.radiusX = border.getRadiusX();
-        selection.radiusZ = border.getRadiusZ();
-        sender.sendMessage("format_center", translate("prefix"), selection.centerX, selection.centerZ);
-        sender.sendMessage("format_radius", translate("prefix"), selection.radiusX);
+        return false;
     }
 }

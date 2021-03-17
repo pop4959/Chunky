@@ -34,17 +34,18 @@ public class BukkitConfig implements Config {
         if (config.getBoolean(world_key + "cancelled", false)) {
             return Optional.empty();
         }
-        Selection selection = new Selection(chunky);
-        selection.world = world;
-        selection.radiusX = config.getInt(world_key + "radius", 500);
-        selection.radiusZ = config.getInt(world_key + "z-radius", selection.radiusX);
-        selection.centerX = config.getInt(world_key + "x-center", 0);
-        selection.centerZ = config.getInt(world_key + "z-center", 0);
-        selection.pattern = config.getString(world_key + "iterator", "loop");
-        selection.shape = config.getString(world_key + "shape", "square");
+        int radiusX = config.getInt(world_key + "radius", 500);
+        int radiusZ = config.getInt(world_key + "z-radius", radiusX);
+        Selection.Builder selection = Selection.builder(world)
+                .centerX(config.getInt(world_key + "x-center", 0))
+                .centerZ(config.getInt(world_key + "z-center", 0))
+                .radiusX(radiusX)
+                .radiusZ(radiusZ)
+                .pattern(config.getString(world_key + "iterator", "loop"))
+                .shape(config.getString(world_key + "shape", "square"));
         long count = config.getLong(world_key + "count", 0);
         long time = config.getLong(world_key + "time", 0);
-        return Optional.of(new GenerationTask(chunky, selection, count, time));
+        return Optional.of(new GenerationTask(chunky, selection.build(), count, time));
     }
 
     @Override
@@ -57,15 +58,16 @@ public class BukkitConfig implements Config {
     @Override
     public synchronized void saveTask(GenerationTask generationTask) {
         FileConfiguration config = plugin.getConfig();
-        String world_key = TASKS_KEY + generationTask.getWorld().getName() + ".";
+        Selection selection = generationTask.getSelection();
+        String world_key = TASKS_KEY + selection.world().getName() + ".";
         String shape = generationTask.getShape().name();
         config.set(world_key + "cancelled", generationTask.isCancelled());
-        config.set(world_key + "radius", generationTask.getRadiusX());
+        config.set(world_key + "radius", selection.radiusX());
         if ("rectangle".equals(shape) || "oval".equals(shape)) {
-            config.set(world_key + "z-radius", generationTask.getRadiusZ());
+            config.set(world_key + "z-radius", selection.radiusZ());
         }
-        config.set(world_key + "x-center", generationTask.getCenterX());
-        config.set(world_key + "z-center", generationTask.getCenterZ());
+        config.set(world_key + "x-center", selection.centerX());
+        config.set(world_key + "z-center", selection.centerZ());
         config.set(world_key + "iterator", generationTask.getChunkIterator().name());
         config.set(world_key + "shape", shape);
         config.set(world_key + "count", generationTask.getCount());

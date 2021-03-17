@@ -38,7 +38,7 @@ public class PauseCommand extends ChunkyCommand {
         }
         for (GenerationTask generationTask : chunky.getGenerationTasks().values()) {
             generationTask.stop(false);
-            sender.sendMessage("format_pause", translate("prefix"), generationTask.getWorld().getName());
+            sender.sendMessage("format_pause", translate("prefix"), generationTask.getSelection().world().getName());
         }
     }
 

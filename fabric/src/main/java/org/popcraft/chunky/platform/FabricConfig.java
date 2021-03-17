@@ -61,17 +61,16 @@ public class FabricConfig implements Config {
         if (taskModel == null || taskModel.cancelled) {
             return Optional.empty();
         }
-        Selection selection = new Selection(chunky);
-        selection.world = world;
-        selection.radiusX = taskModel.radius;
-        selection.radiusZ = taskModel.radiusZ == null ? taskModel.radius : taskModel.radiusZ;
-        selection.centerX = taskModel.centerX;
-        selection.centerZ = taskModel.centerZ;
-        selection.pattern = taskModel.iterator;
-        selection.shape = taskModel.shape;
+        Selection.Builder selection = Selection.builder(world)
+                .centerX(taskModel.centerX)
+                .centerZ(taskModel.centerZ)
+                .radiusX(taskModel.radius)
+                .radiusZ(taskModel.radiusZ == null ? taskModel.radius : taskModel.radiusZ)
+                .pattern(taskModel.iterator)
+                .shape(taskModel.shape);
         long count = taskModel.count;
         long time = taskModel.time;
-        return Optional.of(new GenerationTask(chunky, selection, count, time));
+        return Optional.of(new GenerationTask(chunky, selection.build(), count, time));
     }
 
     @Override
@@ -90,20 +89,21 @@ public class FabricConfig implements Config {
             this.configModel.tasks = new HashMap<>();
         }
         Map<String, TaskModel> tasks = this.configModel.tasks;
-        TaskModel taskModel = tasks.getOrDefault(generationTask.getWorld().getName(), new TaskModel());
+        Selection selection = generationTask.getSelection();
+        TaskModel taskModel = tasks.getOrDefault(selection.world().getName(), new TaskModel());
         String shape = generationTask.getShape().name();
         taskModel.cancelled = generationTask.isCancelled();
-        taskModel.radius = generationTask.getRadiusX();
+        taskModel.radius = selection.radiusX();
         if ("rectangle".equals(shape) || "oval".equals(shape)) {
-            taskModel.radiusZ = generationTask.getRadiusZ();
+            taskModel.radiusZ = selection.radiusZ();
         }
-        taskModel.centerX = generationTask.getCenterX();
-        taskModel.centerZ = generationTask.getCenterZ();
+        taskModel.centerX = selection.centerX();
+        taskModel.centerZ = selection.centerZ();
         taskModel.iterator = generationTask.getChunkIterator().name();
         taskModel.shape = shape;
         taskModel.count = generationTask.getCount();
         taskModel.time = generationTask.getTotalTime();
-        tasks.put(generationTask.getWorld().getName(), taskModel);
+        tasks.put(selection.world().getName(), taskModel);
         saveConfig();
     }
 

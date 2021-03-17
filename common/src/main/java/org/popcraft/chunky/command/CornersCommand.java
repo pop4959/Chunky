@@ -1,7 +1,6 @@
 package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
-import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
 
@@ -32,19 +31,21 @@ public class CornersCommand extends ChunkyCommand {
             sender.sendMessage("help_corners");
             return;
         }
-        Selection selection = chunky.getSelection();
-        selection.centerX = Math.floorDiv(x1.get() + x2.get(), 2);
-        selection.centerZ = Math.floorDiv(z1.get() + z2.get(), 2);
-        selection.radiusX = (int) Math.ceil(Math.abs(x1.get() - x2.get()) / 2f);
-        selection.radiusZ = (int) Math.ceil(Math.abs(z1.get() - z2.get()) / 2f);
-        sender.sendMessage("format_center", translate("prefix"), selection.centerX, selection.centerZ);
-        if (selection.radiusX == selection.radiusZ) {
-            sender.sendMessage("format_radius", translate("prefix"), selection.radiusX);
-            selection.shape = "square";
+        int centerX = Math.floorDiv(x1.get() + x2.get(), 2);
+        int centerZ = Math.floorDiv(z1.get() + z2.get(), 2);
+        int radiusX = (int) Math.ceil(Math.abs(x1.get() - x2.get()) / 2f);
+        int radiusZ = (int) Math.ceil(Math.abs(z1.get() - z2.get()) / 2f);
+        chunky.getSelection().center(centerX, centerZ).radiusX(radiusX).radiusZ(radiusZ);
+        sender.sendMessage("format_center", translate("prefix"), centerX, centerZ);
+        String shape;
+        if (radiusX == radiusZ) {
+            sender.sendMessage("format_radius", translate("prefix"), radiusX);
+            shape = "square";
         } else {
-            sender.sendMessage("format_radii", translate("prefix"), selection.radiusX, selection.radiusZ);
-            selection.shape = "rectangle";
+            sender.sendMessage("format_radii", translate("prefix"), radiusX, radiusZ);
+            shape = "rectangle";
         }
-        sender.sendMessage("format_shape", translate("prefix"), selection.shape);
+        chunky.getSelection().shape(shape);
+        sender.sendMessage("format_shape", translate("prefix"), shape);
     }
 }

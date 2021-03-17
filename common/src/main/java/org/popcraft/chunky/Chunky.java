@@ -23,13 +23,15 @@ public class Chunky {
     private Config config;
     private Map<World, GenerationTask> generationTasks;
     private Map<String, ChunkyCommand> commands;
-    private Selection selection;
+    private Selection.Builder selection;
+    private Options options;
     private Runnable pendingAction;
 
     public Chunky(Platform platform) {
         this.platform = platform;
         this.generationTasks = new ConcurrentHashMap<>();
-        this.selection = new Selection(this);
+        this.selection = Selection.builder(platform.getServer().getWorlds().get(0));
+        this.options = new Options();
     }
 
     public void loadCommands() {
@@ -104,8 +106,12 @@ public class Chunky {
         return commands;
     }
 
-    public Selection getSelection() {
+    public Selection.Builder getSelection() {
         return selection;
+    }
+
+    public Options getOptions() {
+        return options;
     }
 
     public Runnable getPendingAction() {

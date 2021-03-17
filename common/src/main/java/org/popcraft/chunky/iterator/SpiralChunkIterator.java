@@ -72,12 +72,12 @@ public class SpiralChunkIterator implements ChunkIterator {
     }
 
     public SpiralChunkIterator(Selection selection) {
-        int radiusChunks = selection.getRadiusChunksX();
-        this.x = selection.getChunkX();
-        this.z = selection.getChunkZ();
+        int radiusChunks = selection.radiusChunksX();
+        this.x = selection.centerChunkX();
+        this.z = selection.centerChunkZ();
         this.stopX = x + radiusChunks;
         this.stopZ = z + radiusChunks;
-        long diameter = selection.getDiameterChunksX();
+        long diameter = selection.diameterChunksX();
         this.total = diameter * diameter;
     }
 

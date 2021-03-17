@@ -8,7 +8,7 @@ public class ShapeFactory {
     }
 
     public static Shape getShape(Selection selection, boolean chunkAligned) {
-        switch (selection.shape) {
+        switch (selection.shape()) {
             case "circle":
                 return new Circle(selection, chunkAligned);
             case "diamond":

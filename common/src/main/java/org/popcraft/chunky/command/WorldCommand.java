@@ -1,7 +1,6 @@
 package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
-import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
@@ -29,9 +28,8 @@ public class WorldCommand extends ChunkyCommand {
             sender.sendMessage("help_world");
             return;
         }
-        Selection selection = chunky.getSelection();
-        selection.world = newWorld.get();
-        sender.sendMessage("format_world", translate("prefix"), selection.world.getName());
+        chunky.getSelection().world(newWorld.get());
+        sender.sendMessage("format_world", translate("prefix"), newWorld.get().getName());
     }
 
     @Override

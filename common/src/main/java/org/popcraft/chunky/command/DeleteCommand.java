@@ -24,12 +24,12 @@ public class DeleteCommand extends ChunkyCommand {
 
     @Override
     public void execute(Sender sender, String[] args) {
-        final Selection selection = chunky.getSelection();
+        final Selection selection = chunky.getSelection().build();
         final Shape shape = ShapeFactory.getShape(selection);
-        final String radius = selection.radiusX == selection.radiusZ ? String.valueOf(selection.radiusX) : String.format("%d, %d", selection.radiusX, selection.radiusZ);
+        final String radii = selection.radiusX() == selection.radiusZ() ? String.valueOf(selection.radiusX()) : String.format("%d, %d", selection.radiusX(), selection.radiusZ());
         final Runnable deletionAction = () -> chunky.getPlatform().getServer().getScheduler().runTaskAsync(() -> {
-            sender.sendMessage("format_start", translate("prefix"), selection.world.getName(), selection.centerX, selection.centerZ, radius);
-            final Optional<Path> regionPath = selection.world.getRegionDirectory();
+            sender.sendMessage("format_start", translate("prefix"), selection.world().getName(), selection.centerX(), selection.centerZ(), radii);
+            final Optional<Path> regionPath = selection.world().getRegionDirectory();
             final AtomicLong deleted = new AtomicLong();
             final long startTime = System.currentTimeMillis();
             if (regionPath.isPresent()) {
@@ -40,10 +40,10 @@ public class DeleteCommand extends ChunkyCommand {
                 }
             }
             final long totalTime = System.currentTimeMillis() - startTime;
-            sender.sendMessage("task_delete", translate("prefix"), deleted.get(), selection.world.getName(), totalTime / 1e3f);
+            sender.sendMessage("task_delete", translate("prefix"), deleted.get(), selection.world().getName(), totalTime / 1e3f);
         });
         chunky.setPendingAction(deletionAction);
-        sender.sendMessage("format_delete_confirm", translate("prefix"), selection.world.getName(), selection.shape, selection.centerX, selection.centerZ, radius);
+        sender.sendMessage("format_delete_confirm", translate("prefix"), selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), radii);
     }
 
     private int checkRegion(final Path region, final Shape shape) {

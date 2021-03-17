@@ -71,17 +71,18 @@ public class SpongeConfig implements Config {
         if (taskNode.getNode("cancelled").getBoolean(true)) {
             return Optional.empty();
         }
-        Selection selection = new Selection(plugin.getChunky());
-        selection.world = world;
-        selection.radiusX = taskNode.getNode("radius").getInt(500);
-        selection.radiusZ = taskNode.getNode("radiusZ").getInt(selection.radiusX);
-        selection.centerX = taskNode.getNode("centerX").getInt(0);
-        selection.centerZ = taskNode.getNode("centerZ").getInt(0);
-        selection.pattern = taskNode.getNode("iterator").getString("concentric");
-        selection.shape = taskNode.getNode("shape").getString("square");
+        int radiusX = taskNode.getNode("radius").getInt(500);
+        int radiusZ = taskNode.getNode("radiusZ").getInt(radiusX);
+        Selection.Builder selection = Selection.builder(world)
+                .centerX(taskNode.getNode("centerX").getInt(0))
+                .centerZ(taskNode.getNode("centerZ").getInt(0))
+                .radiusX(radiusX)
+                .radiusZ(radiusZ)
+                .pattern(taskNode.getNode("iterator").getString("concentric"))
+                .shape(taskNode.getNode("shape").getString("square"));
         long count = taskNode.getNode("count").getInt(0);
         long time = taskNode.getNode("time").getInt(0);
-        return Optional.of(new GenerationTask(plugin.getChunky(), selection, count, time));
+        return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time));
     }
 
     @Override
@@ -96,15 +97,16 @@ public class SpongeConfig implements Config {
         if (this.rootNode == null) {
             this.rootNode = configLoader.createEmptyNode();
         }
-        ConfigurationNode taskNode = rootNode.getNode("config", "tasks", generationTask.getWorld().getName());
+        Selection selection = generationTask.getSelection();
+        ConfigurationNode taskNode = rootNode.getNode("config", "tasks", selection.world().getName());
         String shape = generationTask.getShape().name();
         taskNode.getNode("cancelled").setValue(generationTask.isCancelled());
-        taskNode.getNode("radius").setValue(generationTask.getRadiusX());
+        taskNode.getNode("radius").setValue(selection.radiusX());
         if ("rectangle".equals(shape) || "oval".equals(shape)) {
-            taskNode.getNode("radiusZ").setValue(generationTask.getRadiusZ());
+            taskNode.getNode("radiusZ").setValue(selection.radiusZ());
         }
-        taskNode.getNode("centerX").setValue(generationTask.getCenterX());
-        taskNode.getNode("centerZ").setValue(generationTask.getCenterZ());
+        taskNode.getNode("centerX").setValue(selection.centerX());
+        taskNode.getNode("centerZ").setValue(selection.centerZ());
         taskNode.getNode("iterator").setValue(generationTask.getChunkIterator().name());
         taskNode.getNode("shape").setValue(shape);
         taskNode.getNode("count").setValue(generationTask.getCount());

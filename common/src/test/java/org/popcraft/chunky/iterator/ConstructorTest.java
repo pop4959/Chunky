@@ -1,6 +1,7 @@
 package org.popcraft.chunky.iterator;
 
 import org.junit.Test;
+import org.popcraft.chunky.platform.TestWorld;
 import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.Selection;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertTrue;
  * return are consistent with each other.
  */
 public class ConstructorTest {
-    private static final Selection SELECTION = new Selection(-25, 25, 50);
+    private static final Selection SELECTION = Selection.builder(new TestWorld()).center(-25, 25).radiusX(50).build();
 
     @Test
     public void concentric() {
@@ -86,8 +87,7 @@ public class ConstructorTest {
     @Test
     public void rectangle() {
         List<ChunkCoordinate> chunks = new ArrayList<>();
-        Selection s = new Selection(-25, 25, 50);
-        s.radiusZ = 100;
+        Selection s = Selection.builder(new TestWorld()).center(-25, 25).radiusX(50).radiusZ(100).build();
         ChunkIterator chunkIterator = new Loop2ChunkIterator(s);
         chunkIterator.forEachRemaining(chunks::add);
         int total = (int) chunkIterator.total();

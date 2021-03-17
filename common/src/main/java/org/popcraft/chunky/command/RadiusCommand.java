@@ -1,7 +1,6 @@
 package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
-import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
 
@@ -24,21 +23,19 @@ public class RadiusCommand extends ChunkyCommand {
             sender.sendMessage("help_radius");
             return;
         }
-        Selection selection = chunky.getSelection();
+        int radiusX = newRadiusX.get();
         if (args.length > 2) {
             Optional<Integer> newRadiusZ = Input.tryIntegerSuffixed(args[2]);
             if (!newRadiusZ.isPresent() || newRadiusZ.get() < 0 || Input.isPastWorldLimit(newRadiusZ.get())) {
                 sender.sendMessage("help_radius");
                 return;
             }
-            selection.radiusZ = newRadiusZ.get();
-        }
-        selection.radiusX = newRadiusX.get();
-        if (args.length == 2) {
-            selection.radiusZ = selection.radiusX;
-            sender.sendMessage("format_radius", translate("prefix"), selection.radiusX);
+            int radiusZ = newRadiusZ.get();
+            chunky.getSelection().radiusX(radiusX).radiusZ(radiusZ);
+            sender.sendMessage("format_radii", translate("prefix"), radiusX, radiusZ);
         } else {
-            sender.sendMessage("format_radii", translate("prefix"), selection.radiusX, selection.radiusZ);
+            chunky.getSelection().radius(radiusX);
+            sender.sendMessage("format_radius", translate("prefix"), radiusX);
         }
     }
 }

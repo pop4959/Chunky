@@ -41,12 +41,12 @@ public class ConcentricChunkIterator implements ChunkIterator {
     }
 
     public ConcentricChunkIterator(Selection selection) {
-        this.radiusChunks = selection.getRadiusChunksX();
-        this.x = selection.getChunkX();
-        this.z = selection.getChunkZ();
+        this.radiusChunks = selection.radiusChunksX();
+        this.x = selection.centerChunkX();
+        this.z = selection.centerChunkZ();
         this.xCenter = x;
         this.zCenter = z;
-        long diameterChunks = selection.getDiameterChunksX();
+        long diameterChunks = selection.diameterChunksX();
         this.total = diameterChunks * diameterChunks;
     }
 

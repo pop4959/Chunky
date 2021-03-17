@@ -4,7 +4,7 @@ import org.popcraft.chunky.Selection;
 
 public class ChunkIteratorFactory {
     public static ChunkIterator getChunkIterator(Selection selection, long count) {
-        switch (selection.shape) {
+        switch (selection.shape()) {
             case "rectangle":
             case "oval":
             case "ellipse":
@@ -12,7 +12,7 @@ public class ChunkIteratorFactory {
             default:
                 break;
         }
-        switch (selection.pattern) {
+        switch (selection.pattern()) {
             case "loop":
                 return new Loop2ChunkIterator(selection, count);
             case "spiral":
