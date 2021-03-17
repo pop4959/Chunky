@@ -3,10 +3,15 @@ package org.popcraft.chunky.shape;
 import org.popcraft.chunky.Selection;
 
 public class Square extends AbstractPolygon {
+    int b1x, b1z, b2x, b2z;
     int p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
 
     protected Square(Selection selection, boolean chunkAligned) {
         super(selection, chunkAligned);
+        this.b1x = centerX - radiusX;
+        this.b1z = centerZ - radiusX;
+        this.b2x = centerX + radiusX;
+        this.b2z = centerZ + radiusX;
         this.p1x = centerX + radiusX;
         this.p1z = centerZ - radiusX;
         this.p2x = centerX - radiusX;
@@ -29,7 +34,7 @@ public class Square extends AbstractPolygon {
 
     @Override
     public boolean isBounding(double x, double z) {
-        return x > x1 && x < x2 && z > z1 && z < z2;
+        return x > b1x && x < b2x && z > b1z && z < b2z;
     }
 
     @Override

@@ -9,12 +9,12 @@ public class Triangle extends AbstractPolygon {
 
     public Triangle(Selection selection, boolean chunkAligned) {
         super(selection, chunkAligned);
-        this.p1x = radiusX;
-        this.p1z = radiusX;
-        this.p2x = -radiusX;
-        this.p2z = radiusX;
-        this.p3x = 0;
-        this.p3z = -radiusX;
+        this.p1x = centerX + radiusX;
+        this.p1z = centerZ + radiusX;
+        this.p2x = centerX - radiusX;
+        this.p2z = centerZ + radiusX;
+        this.p3x = centerX;
+        this.p3z = centerZ - radiusX;
     }
 
     @Override

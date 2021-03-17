@@ -6,7 +6,6 @@ public abstract class AbstractShape implements Shape {
     protected int centerX, centerZ;
     protected int diameterX, diameterZ;
     protected int radiusX, radiusZ;
-    protected int x1, x2, z1, z2;
 
     protected AbstractShape(Selection selection, boolean chunkAligned) {
         if (chunkAligned) {
@@ -24,10 +23,6 @@ public abstract class AbstractShape implements Shape {
             this.diameterX = 2 * radiusX;
             this.diameterZ = 2 * radiusZ;
         }
-        this.x1 = centerX - radiusX;
-        this.x2 = centerX + radiusX;
-        this.z1 = centerZ - radiusZ;
-        this.z2 = centerZ + radiusZ;
     }
 
     public double[] getCenter() {
