@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ChunkIteratorFactory;
-import org.popcraft.chunky.platform.TestWorld;
 import org.popcraft.chunky.util.ChunkCoordinate;
 
 import static org.junit.Assert.assertEquals;
@@ -13,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * This test checks each shape to ensure that the number of chunks they generate is correct.
  */
 public class ShapeTest {
-    private static final Selection.Builder SELECTION = Selection.builder(new TestWorld()).center(-500, 500).radiusX(1000).radiusZ(500);
+    private static final Selection.Builder SELECTION = Selection.builder(null).center(-500, 500).radiusX(1000).radiusZ(500);
 
     @Test
     public void square() {

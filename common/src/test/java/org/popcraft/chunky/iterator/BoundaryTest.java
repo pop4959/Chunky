@@ -1,9 +1,8 @@
 package org.popcraft.chunky.iterator;
 
 import org.junit.Test;
-import org.popcraft.chunky.platform.TestWorld;
-import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.util.ChunkCoordinate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  * with one another.
  */
 public class BoundaryTest {
-    private static final Selection SELECTION = Selection.builder(new TestWorld()).center(-25, 25).radius(50).build();
+    private static final Selection SELECTION = Selection.builder(null).center(-25, 25).radius(50).build();
 
     @Test
     public void boundaries() {
