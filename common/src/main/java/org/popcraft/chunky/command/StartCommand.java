@@ -83,13 +83,6 @@ public class StartCommand extends ChunkyCommand {
         if (chunky.getConfig().loadTask(current.world()).isPresent()) {
             chunky.setPendingAction(startAction);
             sender.sendMessage("format_start_confirm", translate("prefix"));
-            return;
-        }
-        long remainingSpace = Disk.remainingSpace(current.world());
-        long estimatedSpace = Disk.estimatedSpace(current);
-        if (remainingSpace > 0 && remainingSpace < estimatedSpace) {
-            chunky.setPendingAction(startAction);
-            sender.sendMessage("format_start_disk", translate("prefix"), Formatting.bytes(remainingSpace), Formatting.bytes(estimatedSpace));
         } else {
             startAction.run();
         }
