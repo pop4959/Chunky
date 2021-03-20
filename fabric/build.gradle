@@ -6,6 +6,8 @@ plugins {
     id 'maven-publish'
 }
 
+archivesBaseName = 'chunky'
+
 configurations {
     compile.extendsFrom shadowInclude
 }
