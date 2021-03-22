@@ -46,7 +46,7 @@ public final class ChunkyBukkit extends JavaPlugin {
         }
         Platform platform = chunky.getPlatform();
         if (chunky.getConfig().getContinueOnRestart()) {
-            chunky.getCommands().get("continue").execute(platform.getServer().getConsoleSender(), new String[]{});
+            getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get("continue").execute(platform.getServer().getConsoleSender(), new String[]{}));
         }
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
             platform.getServer().getIntegrations().put("border", new WorldBorderIntegration());
