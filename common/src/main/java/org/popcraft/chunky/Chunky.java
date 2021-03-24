@@ -5,7 +5,9 @@ import com.google.gson.reflect.TypeToken;
 import org.popcraft.chunky.command.*;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Platform;
+import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.util.PendingAction;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -14,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Chunky {
@@ -25,7 +28,7 @@ public class Chunky {
     private Map<String, ChunkyCommand> commands;
     private Selection.Builder selection;
     private Options options;
-    private Runnable pendingAction;
+    private final Map<String, PendingAction> pendingActions = new HashMap<>();
 
     public Chunky(Platform platform) {
         this.platform = platform;
@@ -114,11 +117,13 @@ public class Chunky {
         return options;
     }
 
-    public Runnable getPendingAction() {
-        return pendingAction;
+    public Optional<Runnable> getPendingAction(Sender sender) {
+        pendingActions.values().removeIf(PendingAction::hasExpired);
+        PendingAction pendingAction = pendingActions.remove(sender.getName());
+        return Optional.ofNullable(pendingAction).map(PendingAction::getAction);
     }
 
-    public void setPendingAction(Runnable pendingAction) {
-        this.pendingAction = pendingAction;
+    public void setPendingAction(Sender sender, Runnable action) {
+        pendingActions.put(sender.getName(), new PendingAction(action));
     }
 }

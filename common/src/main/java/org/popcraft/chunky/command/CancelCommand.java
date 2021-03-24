@@ -49,7 +49,7 @@ public class CancelCommand extends ChunkyCommand {
                 chunky.getPlatform().getServer().getScheduler().cancelTasks();
             };
         }
-        chunky.setPendingAction(cancelAction);
+        chunky.setPendingAction(sender, cancelAction);
         sender.sendMessage("format_cancel_confirm", translate("prefix"));
     }
 

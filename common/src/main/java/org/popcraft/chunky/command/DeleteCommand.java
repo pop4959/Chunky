@@ -42,7 +42,7 @@ public class DeleteCommand extends ChunkyCommand {
             final long totalTime = System.currentTimeMillis() - startTime;
             sender.sendMessage("task_delete", translate("prefix"), deleted.get(), selection.world().getName(), totalTime / 1e3f);
         });
-        chunky.setPendingAction(deletionAction);
+        chunky.setPendingAction(sender, deletionAction);
         sender.sendMessage("format_delete_confirm", translate("prefix"), selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), radii);
     }
 

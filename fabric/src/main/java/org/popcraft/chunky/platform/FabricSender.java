@@ -2,9 +2,13 @@ package org.popcraft.chunky.platform;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+
+import java.util.Optional;
 
 import static org.popcraft.chunky.Chunky.translate;
 
@@ -17,15 +21,24 @@ public class FabricSender implements Sender {
 
     @Override
     public boolean isPlayer() {
+        return getPlayer().isPresent();
+    }
+
+    @Override
+    public String getName() {
+        return getPlayer().map(PlayerEntity::getName).map(Text::asString).orElse("Console");
+    }
+
+    private Optional<ServerPlayerEntity> getPlayer() {
         if (!(source instanceof ServerCommandSource)) {
-            return false;
+            return Optional.empty();
         }
         ServerCommandSource serverCommandSource = (ServerCommandSource) source;
         Entity entity = serverCommandSource.getEntity();
         if (entity == null) {
-            return false;
+            return Optional.empty();
         }
-        return entity instanceof ServerPlayerEntity;
+        return Optional.of((ServerPlayerEntity) entity);
     }
 
     @Override

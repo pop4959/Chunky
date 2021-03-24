@@ -4,6 +4,8 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import java.util.Optional;
+
 import static org.popcraft.chunky.Chunky.translate;
 
 public class SpongeSender implements Sender {
@@ -15,7 +17,20 @@ public class SpongeSender implements Sender {
 
     @Override
     public boolean isPlayer() {
-        return commandSource instanceof Player;
+        return getPlayer().isPresent();
+    }
+
+    @Override
+    public String getName() {
+        return getPlayer().map(Player::getName).orElse("Console");
+    }
+
+    private Optional<Player> getPlayer() {
+        if (commandSource instanceof Player) {
+            return Optional.of((Player) commandSource);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override

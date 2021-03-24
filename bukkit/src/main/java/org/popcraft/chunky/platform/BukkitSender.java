@@ -19,6 +19,11 @@ public class BukkitSender implements Sender {
     }
 
     @Override
+    public String getName() {
+        return sender.getName();
+    }
+
+    @Override
     public void sendMessage(String key, Object... args) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', translate(key, args)));
     }

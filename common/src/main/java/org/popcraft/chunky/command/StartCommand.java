@@ -81,7 +81,7 @@ public class StartCommand extends ChunkyCommand {
             sender.sendMessage("format_start", translate("prefix"), current.world().getName(), current.centerX(), current.centerZ(), radius);
         };
         if (chunky.getConfig().loadTask(current.world()).isPresent()) {
-            chunky.setPendingAction(startAction);
+            chunky.setPendingAction(sender, startAction);
             sender.sendMessage("format_start_confirm", translate("prefix"));
         } else {
             startAction.run();
