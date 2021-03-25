@@ -32,6 +32,7 @@
   "help_center": "&2chunky center <x> <z>&r - Setze die mittlere Block-Position",
   "help_continue": "&2chunky continue&r - Mache weiter mit allen gespeicherten Aufgaben",
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Setze durch Ecken",
+  "help_delete": "&2chunky trim&r - Delete chunks outside selection",
   "help_menu": "&aChunky Befehle&r%s",
   "help_more": "Schreibe &a%s %d&r um mehr zu sehen.",
   "help_pattern": "&2chunky pattern <pattern>&r - Setze das Generator-Muster",
