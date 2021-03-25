@@ -32,6 +32,7 @@
   "help_center": "&2chunky center <x> <z>&r - Ustawia lokalizację środka mapy",
   "help_continue": "&2chunky continue&r - Kontynuuje obecne lub zapisane zadanie",
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Ustaw według narożników",
+  "help_delete": "&2chunky trim&r - Delete chunks outside selection",
   "help_menu": "&aKomendy Chunky&r%s",
   "help_more": "Wpisz &a%s %d&r aby zobaczyć więcej.",
   "help_pattern": "&2chunky pattern <pattern>&r - Ustawia wzór generacji.",
