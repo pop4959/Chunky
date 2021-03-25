@@ -32,6 +32,7 @@
   "help_center": "&2chunky center <x> <z>&r - Задаване на позицията на централния блок",
   "help_continue": "&2chunky continue&r - Възобновяване на текущи или запазени задачи",
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Set by corners",
+  "help_delete": "&2chunky trim&r - Delete chunks outside selection",
   "help_menu": "&aChunky Команди&r%s",
   "help_more": "Напишете &a%s %d&r, за да видите повече.",
   "help_pattern": "&2chunky pattern <pattern>&r - Задаване на шарката на генериране",
