@@ -6,6 +6,7 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
 import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 
 import java.io.IOException;
@@ -26,9 +27,8 @@ public class DeleteCommand extends ChunkyCommand {
     public void execute(Sender sender, String[] args) {
         final Selection selection = chunky.getSelection().build();
         final Shape shape = ShapeFactory.getShape(selection);
-        final String radii = selection.radiusX() == selection.radiusZ() ? String.valueOf(selection.radiusX()) : String.format("%d, %d", selection.radiusX(), selection.radiusZ());
         final Runnable deletionAction = () -> chunky.getPlatform().getServer().getScheduler().runTaskAsync(() -> {
-            sender.sendMessage("format_start", translate("prefix"), selection.world().getName(), selection.centerX(), selection.centerZ(), radii);
+            sender.sendMessage("format_start", translate("prefix"), selection.world().getName(), selection.centerX(), selection.centerZ(), Formatting.radius(selection.radiusX(), selection.radiusZ()));
             final Optional<Path> regionPath = selection.world().getRegionDirectory();
             final AtomicLong deleted = new AtomicLong();
             final long startTime = System.currentTimeMillis();
@@ -43,7 +43,7 @@ public class DeleteCommand extends ChunkyCommand {
             sender.sendMessage("task_delete", translate("prefix"), deleted.get(), selection.world().getName(), totalTime / 1e3f);
         });
         chunky.setPendingAction(sender, deletionAction);
-        sender.sendMessage("format_delete_confirm", translate("prefix"), selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), radii);
+        sender.sendMessage("format_delete_confirm", translate("prefix"), selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), Formatting.radius(selection.radiusX(), selection.radiusZ()));
     }
 
     private int checkRegion(final Path region, final Shape shape) {

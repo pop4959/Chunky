@@ -18,4 +18,12 @@ public class Formatting {
         }
         return String.format("%.1f %cB", bytes / (double) prefixValue, BINARY_PREFIXES[i]);
     }
+
+    public static String radius(int radiusX, int radiusZ) {
+        if (radiusX == radiusZ) {
+            return String.valueOf(radiusX);
+        } else {
+            return String.format("%d, %d", radiusX, radiusZ);
+        }
+    }
 }
