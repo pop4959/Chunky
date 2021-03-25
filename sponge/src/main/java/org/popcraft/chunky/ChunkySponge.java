@@ -241,7 +241,25 @@ public class ChunkySponge {
                 .build();
         CommandSpec trimCommand = CommandSpec.builder()
                 .permission("chunky.command.trim")
-                .executor(noArgsCommand("trim"))
+                .arguments(
+                        GenericArguments.optional(GenericArguments.world(Text.of("world"))),
+                        GenericArguments.optional(GenericArguments.string(Text.of("shape"))),
+                        GenericArguments.optional(GenericArguments.integer(Text.of("centerX"))),
+                        GenericArguments.optional(GenericArguments.integer(Text.of("centerZ"))),
+                        GenericArguments.optional(GenericArguments.integer(Text.of("radiusX"))),
+                        GenericArguments.optional(GenericArguments.integer(Text.of("radiusZ"))))
+                .executor((CommandSource source, CommandContext context) -> {
+                    ChunkyCommand cmd = chunky.getCommands().get("trim");
+                    final List<String> args = new ArrayList<>(Collections.singletonList("trim"));
+                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
+                    context.<String>getOne(Text.of("shape")).ifPresent(args::add);
+                    context.<Integer>getOne(Text.of("centerX")).map(String::valueOf).ifPresent(args::add);
+                    context.<Integer>getOne(Text.of("centerZ")).map(String::valueOf).ifPresent(args::add);
+                    context.<Integer>getOne(Text.of("radiusX")).map(String::valueOf).ifPresent(args::add);
+                    context.<Integer>getOne(Text.of("radiusZ")).map(String::valueOf).ifPresent(args::add);
+                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
+                    return CommandResult.success();
+                })
                 .build();
         CommandSpec worldborderCommand = CommandSpec.builder()
                 .permission("chunky.command.worldborder")
