@@ -18,8 +18,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static org.popcraft.chunky.Chunky.translate;
 
-public class DeleteCommand extends ChunkyCommand {
-    public DeleteCommand(Chunky chunky) {
+public class TrimCommand extends ChunkyCommand {
+    public TrimCommand(Chunky chunky) {
         super(chunky);
     }
 

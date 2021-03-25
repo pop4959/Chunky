@@ -44,7 +44,6 @@ public class Chunky {
         commands.put("confirm", new ConfirmCommand(this));
         commands.put("continue", new ContinueCommand(this));
         commands.put("corners", new CornersCommand(this));
-        commands.put("delete", new DeleteCommand(this));
         commands.put("help", new HelpCommand(this));
         commands.put("pattern", new PatternCommand(this));
         commands.put("pause", new PauseCommand(this));
@@ -55,6 +54,7 @@ public class Chunky {
         commands.put("silent", new SilentCommand(this));
         commands.put("spawn", new SpawnCommand(this));
         commands.put("start", new StartCommand(this));
+        commands.put("trim", new TrimCommand(this));
         commands.put("worldborder", new WorldBorderCommand(this));
         commands.put("world", new WorldCommand(this));
         this.commands = commands;

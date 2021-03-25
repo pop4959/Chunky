@@ -133,10 +133,6 @@ public class ChunkySponge {
                     return CommandResult.success();
                 })
                 .build();
-        CommandSpec deleteCommand = CommandSpec.builder()
-                .permission("chunky.command.delete")
-                .executor(noArgsCommand("delete"))
-                .build();
         CommandSpec helpCommand = CommandSpec.builder()
                 .permission("chunky.command.help")
                 .arguments(GenericArguments.optional(GenericArguments.integer(Text.of("page"))))
@@ -243,6 +239,10 @@ public class ChunkySponge {
                     return CommandResult.success();
                 })
                 .build();
+        CommandSpec trimCommand = CommandSpec.builder()
+                .permission("chunky.command.trim")
+                .executor(noArgsCommand("trim"))
+                .build();
         CommandSpec worldborderCommand = CommandSpec.builder()
                 .permission("chunky.command.worldborder")
                 .executor(noArgsCommand("worldborder"))
@@ -268,7 +268,6 @@ public class ChunkySponge {
                 .child(confirmCommand, "confirm")
                 .child(continueCommand, "continue")
                 .child(cornersCommand, "corners")
-                .child(deleteCommand, "delete")
                 .child(helpCommand, "help")
                 .child(patternCommand, "pattern")
                 .child(pauseCommand, "pause")
@@ -279,6 +278,7 @@ public class ChunkySponge {
                 .child(silentCommand, "silent")
                 .child(spawnCommand, "spawn")
                 .child(startCommand, "start")
+                .child(trimCommand, "trim")
                 .child(worldborderCommand, "worldborder")
                 .child(worldCommand, "world")
                 .executor(noArgsCommand("help"))

@@ -31,7 +31,7 @@ permissions:
   chunky.command.corners:
     default: op
     children: [chunky.command]
-  chunky.command.delete:
+  chunky.command.trim:
     default: op
     children: [chunky.command]
   chunky.command.help:
