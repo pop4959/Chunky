@@ -32,6 +32,7 @@
   "help_center": "&2chunky center <x> <z>&r - Merkez blok konumunu ayarlayın",
   "help_continue": "&2chunky continue&r - Mevcut veya kayıtlı fonksiyonlara devam edin",
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Set by corners",
+  "help_delete": "&2chunky trim&r - Delete chunks outside selection",
   "help_menu": "&aChunky Commands&r%s",
   "help_more": "Type &a%s %d&r to see more.",
   "help_pattern": "&2chunky pattern <pattern>&r - Set the generation pattern",
