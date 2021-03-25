@@ -32,6 +32,7 @@
   "help_center": "&2chunky center <x> <z>&r - Définir l'emplacement du bloc central",
   "help_continue": "&2chunky continue&r - Poursuivre les tâches en cours ou sauvegardées",
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Définir par les coins",
+  "help_delete": "&2chunky trim&r - Delete chunks outside selection",
   "help_menu": "&aCommandes de Chunky&r%s",
   "help_more": "Tapez &a%s %d&r pour en voir plus.",
   "help_pattern": "&2chunky pattern <pattern>&r - Définir le modèle de génération",
