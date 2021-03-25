@@ -66,7 +66,6 @@ public class DynmapIntegration extends AbstractMapIntegration {
         if (markerSet != null) {
             markerSet.setHideByDefault(hideByDefault);
             markerSet.setLayerPriority(priority);
-            this.weight = weight;
         }
     }
 }

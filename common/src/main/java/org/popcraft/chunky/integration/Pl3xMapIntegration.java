@@ -117,7 +117,6 @@ public class Pl3xMapIntegration extends AbstractMapIntegration {
         super.setOptions(label, color, hideByDefault, priority, weight);
         this.hideByDefault = hideByDefault;
         this.priority = priority;
-        this.weight = weight;
     }
 
     private Marker ellipse(Point center, double radiusX, double radiusZ) {

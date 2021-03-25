@@ -5,6 +5,7 @@ import java.awt.Color;
 public abstract class AbstractMapIntegration implements MapIntegration {
     protected String label = "World Border";
     protected Color color = Color.RED;
+    protected int weight = 3;
 
     @Override
     public void setOptions(String label, String color, boolean hideByDefault, int priority, int weight) {
@@ -21,5 +22,6 @@ public abstract class AbstractMapIntegration implements MapIntegration {
             this.color = new Color(r, g, b);
         } catch (NumberFormatException ignored) {
         }
+        this.weight = weight;
     }
 }
