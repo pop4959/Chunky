@@ -1,7 +1,7 @@
 package org.popcraft.chunky.iterator;
 
-import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.util.ChunkCoordinate;
 
 public class Loop2ChunkIterator implements ChunkIterator {
     private int x, z;

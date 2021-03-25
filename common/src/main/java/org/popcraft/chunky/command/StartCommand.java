@@ -5,7 +5,6 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
-import org.popcraft.chunky.util.Disk;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 

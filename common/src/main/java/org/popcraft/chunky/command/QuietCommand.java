@@ -1,7 +1,6 @@
 package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
-import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
 
