@@ -32,6 +32,7 @@
   "help_center": "&2chunky center <x> <z>&r - Establece el centro",
   "help_continue": "&2chunky continue&r - Continua con las tareas actuales o guardadas",
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Establece por esquinas",
+  "help_delete": "&2chunky trim&r - Delete chunks outside selection",
   "help_menu": "&aComandos de Chunky&r%s",
   "help_more": "Escribe &a%s %d&r para ver más.",
   "help_pattern": "&2chunky pattern <pattern>&r - Selecciona el patrón",
