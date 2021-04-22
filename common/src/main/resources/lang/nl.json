@@ -30,7 +30,7 @@
   "format_world": "%s Wereld veranderd naar %s.",
   "help_cancel": "&2chunky cancel&r - Stop and delete current or saved tasks",
   "help_center": "&2chunky center <x> <z>&r - Set the center block location",
-  "help_continue": "&2chunky continue&r - Continue current or saved tasks",
+  "help_continue": "&2chunky continue&r - Voortzetten van huidige of opgeslagen taken",
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Set by corners",
   "help_delete": "&2chunky trim&r - Delete chunks outside selection",
   "help_menu": "&aChunky Commando's&r%s",
