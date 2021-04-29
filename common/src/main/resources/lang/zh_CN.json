@@ -55,7 +55,7 @@
   "shape_square": "正方形",
   "shape_star": "星形",
   "shape_triangle": "三角形",
-  "task_delete": "%s 在 %.3f 秒内从 %s 删除了 %d 个区块。",
+  "task_delete": "%1$s 在 %4$.3f 秒内从 %3$s 删除了 %2$d 个区块。",
   "task_done": "%s 任务结束于 %s。 处理了 %d 个区块 (%.2f%%), 总运行时长: %01d:%02d:%02d",
   "task_stopped": "%s 任务暂停于 %s。",
   "task_update": "%s 任务运行于世界 %s。 处理了 %d 个区块 (%.2f%%), 预计距完成还有: %01d:%02d:%02d, 速率: %.1f 区块/秒, 当前区块进度: %d, %d"
