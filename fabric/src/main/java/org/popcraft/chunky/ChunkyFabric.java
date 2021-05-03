@@ -6,13 +6,15 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
 import org.popcraft.chunky.command.ChunkyCommand;
-import org.popcraft.chunky.platform.FabricConfig;
 import org.popcraft.chunky.platform.FabricPlatform;
 import org.popcraft.chunky.platform.FabricSender;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.platform.impl.GsonConfig;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,8 @@ public class ChunkyFabric implements ModInitializer {
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
             this.chunky = new Chunky(new FabricPlatform(this, minecraftServer));
-            chunky.setConfig(new FabricConfig(chunky));
+            File configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "chunky.json");
+            chunky.setConfig(new GsonConfig(chunky, configFile));
             InputStream configLanguage = getClass().getClassLoader().getResourceAsStream("lang/" + chunky.getConfig().getLanguage() + ".json");
             InputStream defaultLanguage = getClass().getClassLoader().getResourceAsStream("lang/en.json");
             if (configLanguage == null) {

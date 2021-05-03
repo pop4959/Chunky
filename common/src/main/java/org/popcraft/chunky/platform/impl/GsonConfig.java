@@ -1,12 +1,13 @@
-package org.popcraft.chunky.platform;
+package org.popcraft.chunky.platform.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.fabricmc.loader.api.FabricLoader;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.platform.Config;
+import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
 
 import java.io.File;
@@ -20,16 +21,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class FabricConfig implements Config {
+public class GsonConfig implements Config {
     private final Chunky chunky;
     private final Gson gson;
     private final Path configPath;
     private ConfigModel configModel;
 
-    public FabricConfig(Chunky chunky) {
+    public GsonConfig(Chunky chunky, File configFile) {
         this.chunky = chunky;
         this.gson = new GsonBuilder().setPrettyPrinting().create();
-        File configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "chunky.json");
         this.configPath = configFile.toPath();
         if (!configFile.exists()) {
             try {

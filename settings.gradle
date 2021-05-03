@@ -10,9 +10,11 @@ pluginManagement {
 }
 
 rootProject.name = 'chunky'
+
 include(
         'common',
         'bukkit',
         'sponge',
+        'forge',
         'fabric'
 )

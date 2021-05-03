@@ -1,15 +1,17 @@
-package org.popcraft.chunky.platform;
+package org.popcraft.chunky.platform.impl;
+
+import org.popcraft.chunky.platform.Scheduler;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class FabricScheduler implements Scheduler {
+public class SimpleScheduler implements Scheduler {
     private ExecutorService executor;
     private final ThreadGroup tasks = new ThreadGroup("tasks");
 
-    public FabricScheduler() {
+    public SimpleScheduler() {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, Integer.MAX_VALUE, 5, TimeUnit.MINUTES, new LinkedBlockingQueue<>());
         threadPoolExecutor.setThreadFactory((runnable) -> {
             Thread thread = new Thread(tasks, runnable);

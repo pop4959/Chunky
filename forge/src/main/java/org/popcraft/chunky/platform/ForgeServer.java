@@ -1,11 +1,10 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import org.popcraft.chunky.ChunkyFabric;
+import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.integration.Integration;
 import org.popcraft.chunky.platform.impl.SimpleScheduler;
 
@@ -15,12 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class FabricServer implements Server {
-    private ChunkyFabric plugin;
+public class ForgeServer implements Server {
+    private ChunkyForge plugin;
     private MinecraftServer server;
     private Scheduler scheduler;
 
-    public FabricServer(ChunkyFabric plugin, MinecraftServer server) {
+    public ForgeServer(ChunkyForge plugin, MinecraftServer server) {
         this.plugin = plugin;
         this.server = server;
         this.scheduler = new SimpleScheduler();
@@ -33,27 +32,24 @@ public class FabricServer implements Server {
 
     @Override
     public Optional<World> getWorld(String name) {
-        Identifier worldIdentifier = Identifier.tryParse(name);
-        if (worldIdentifier == null) {
+        ResourceLocation resourceLocation = ResourceLocation.tryCreate(name);
+        if (resourceLocation == null) {
             return Optional.empty();
         }
-        ServerWorld serverWorld = server.getWorld(RegistryKey.of(Registry.DIMENSION, worldIdentifier));
-        if (serverWorld == null) {
-            return Optional.empty();
-        }
-        return Optional.of(new FabricWorld(serverWorld));
+        return Optional.ofNullable(server.getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, resourceLocation)))
+                .map(ForgeWorld::new);
     }
 
     @Override
     public List<World> getWorlds() {
         List<World> worlds = new ArrayList<>();
-        server.getWorlds().forEach(world -> worlds.add(new FabricWorld(world)));
+        server.getWorlds().forEach(world -> worlds.add(new ForgeWorld(world)));
         return worlds;
     }
 
     @Override
     public Sender getConsoleSender() {
-        return new FabricSender(server.getCommandSource());
+        return new ForgeSender(server.getCommandSource());
     }
 
     @Override
