@@ -38,7 +38,7 @@ public class TranslatorTest {
         translate("format_confirm");
         translate("format_continue", "world");
         translate("format_continue_no_tasks");
-        translate("format_delete_confirm", "world", "square", 1, 2, "500", "/chunky confirm");
+        translate("format_trim_confirm", "world", "square", 1, 2, "500", "/chunky confirm");
         translate("format_pattern", "concentric");
         translate("format_pause", "world");
         translate("format_pause_no_tasks");
@@ -58,7 +58,7 @@ public class TranslatorTest {
         translate("help_center");
         translate("help_continue");
         translate("help_corners");
-        translate("help_delete");
+        translate("help_trim");
         translate("help_menu", "");
         translate("help_more", "/chunky help 2");
         translate("help_pattern");
@@ -81,7 +81,7 @@ public class TranslatorTest {
         translate("shape_square");
         translate("shape_star");
         translate("shape_triangle");
-        translate("task_delete", 5000, "world", String.format("%.3f", 1f));
+        translate("task_trim", 5000, "world", String.format("%.3f", 1f));
         translate("task_done", "world", 5000, String.format("%.2f", 50f), "0", "01", "15");
         translate("task_stopped", "world");
         translate("task_update", "world", 5000, String.format("%.2f", 50f), "0", "00", "01", String.format("%.1f", 40f), 70, 70);

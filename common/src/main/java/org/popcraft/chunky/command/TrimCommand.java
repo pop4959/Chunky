@@ -32,7 +32,7 @@ public class TrimCommand extends ChunkyCommand {
             if (world.isPresent()) {
                 chunky.getSelection().world(world.get());
             } else {
-                sender.sendMessage("help_delete");
+                sender.sendMessage("help_trim");
                 return;
             }
         }
@@ -41,7 +41,7 @@ public class TrimCommand extends ChunkyCommand {
             if (shape.isPresent()) {
                 chunky.getSelection().shape(shape.get());
             } else {
-                sender.sendMessage("help_delete");
+                sender.sendMessage("help_trim");
                 return;
             }
         }
@@ -51,7 +51,7 @@ public class TrimCommand extends ChunkyCommand {
             if (centerX.isPresent() && centerZ.isPresent()) {
                 chunky.getSelection().center(centerX.get().intValue(), centerZ.get().intValue());
             } else {
-                sender.sendMessage("help_delete");
+                sender.sendMessage("help_trim");
                 return;
             }
         }
@@ -60,7 +60,7 @@ public class TrimCommand extends ChunkyCommand {
             if (radiusX.isPresent()) {
                 chunky.getSelection().radius(radiusX.get());
             } else {
-                sender.sendMessage("help_delete");
+                sender.sendMessage("help_trim");
                 return;
             }
         }
@@ -69,7 +69,7 @@ public class TrimCommand extends ChunkyCommand {
             if (radiusZ.isPresent()) {
                 chunky.getSelection().radiusZ(radiusZ.get());
             } else {
-                sender.sendMessage("help_delete");
+                sender.sendMessage("help_trim");
                 return;
             }
         }
@@ -88,10 +88,10 @@ public class TrimCommand extends ChunkyCommand {
                 }
             }
             final long totalTime = System.currentTimeMillis() - startTime;
-            sender.sendMessagePrefixed("task_delete", deleted.get(), selection.world().getName(), String.format("%.3f", totalTime / 1e3f));
+            sender.sendMessagePrefixed("task_trim", deleted.get(), selection.world().getName(), String.format("%.3f", totalTime / 1e3f));
         });
         chunky.setPendingAction(sender, deletionAction);
-        sender.sendMessagePrefixed("format_delete_confirm", selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), Formatting.radius(selection.radiusX(), selection.radiusZ()), "/chunky confirm");
+        sender.sendMessagePrefixed("format_trim_confirm", selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), Formatting.radius(selection.radiusX(), selection.radiusZ()), "/chunky confirm");
     }
 
     private int checkRegion(final Path region, final Shape shape) {
