@@ -23,7 +23,7 @@
   "format_reload_tasks_running": "Die Konfiguration kann nicht neu geladen werden während Aufgaben laufen.",
   "format_shape": "Form geändert zu %s.",
   "format_silent": "Stummer Modus %s.",
-  "format_start": "Aufgabe gestartet für %1$s bei %3$s, %4$s mit Radius %5$s.",
+  "format_start": "Aufgabe gestartet für %2$s Region in %1$s bei %3$s, %4$s mit Radius %5$s.",
   "format_start_confirm": "Eine Aufgabe für diese Welt wurde bereits gestartet. Um sie fort zu führen, schreibe '%s'. Um eine neue Aufgabe zu starten, schreibe '%s'.",
   "format_start_disk": "Der Server hat nurnoch %s Festplattenspeicher verbleibend, aber der geschätzte Speicherplatz benötigt für die Aufgabe ist %s. Wenn du trotzdem starten willst, schreibe '%s'.",
   "format_started_already": "Aufgabe für %s bereits gestartet!",
