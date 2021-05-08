@@ -23,7 +23,7 @@
   "format_reload_tasks_running": "The configuration cannot be reloaded while tasks are running.",
   "format_shape": "Форма променена на %s.",
   "format_silent": "Тих режим %s.",
-  "format_start": "Задача стартирана за %s на %s, %s с радиус %s.",
+  "format_start": "Task started in %s for the %s region centered at %s, %s with radius %s.",
   "format_start_confirm": "A task was already started for this world. To continue running it, type '%s'. To start a new task, type '%s'.",
   "format_start_disk": "The server only has %s disk space remaining, but the estimated disk space required for the task is %s. If you wish to start anyway, type '%s'.",
   "format_started_already": "Задачата е вече стартирана за %s!",
