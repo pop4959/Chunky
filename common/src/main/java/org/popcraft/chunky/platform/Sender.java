@@ -5,5 +5,13 @@ public interface Sender {
 
     String getName();
 
-    void sendMessage(String key, Object... args);
+    void sendMessage(String key, boolean prefixed, Object... args);
+
+    default void sendMessage(String key, Object... args) {
+        sendMessage(key, false, args);
+    }
+
+    default void sendMessagePrefixed(String key, Object... args) {
+        sendMessage(key, true, args);
+    }
 }

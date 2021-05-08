@@ -15,14 +15,13 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Metrics;
 import org.popcraft.chunky.util.Version;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.popcraft.chunky.Chunky.translate;
+import static org.popcraft.chunky.util.Translator.translate;
 
 public final class ChunkyBukkit extends JavaPlugin {
     private Chunky chunky;
@@ -31,10 +30,7 @@ public final class ChunkyBukkit extends JavaPlugin {
     public void onEnable() {
         this.chunky = new Chunky(new BukkitPlatform(this));
         chunky.setConfig(new BukkitConfig(chunky, this));
-        InputStream configLanguage = getResource("lang/" + chunky.getConfig().getLanguage() + ".json");
-        InputStream defaultLanguage = getResource("lang/en.json");
-        chunky.setTranslations(chunky.loadTranslation(configLanguage));
-        chunky.setFallbackTranslations(chunky.loadTranslation(defaultLanguage));
+        chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
         Version currentVersion = Version.getCurrentMinecraftVersion();
         if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {

@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class CancelCommand extends ChunkyCommand {
     public CancelCommand(Chunky chunky) {
         super(chunky);
@@ -23,7 +21,7 @@ public class CancelCommand extends ChunkyCommand {
     public void execute(Sender sender, String[] args) {
         final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
         if (generationTasks.size() == 0 && chunky.getConfig().loadTasks().size() == 0) {
-            sender.sendMessage("format_cancel_no_tasks", translate("prefix"));
+            sender.sendMessagePrefixed("format_cancel_no_tasks");
             return;
         }
         final Runnable cancelAction;
@@ -34,7 +32,7 @@ public class CancelCommand extends ChunkyCommand {
                 return;
             }
             cancelAction = () -> {
-                sender.sendMessage("format_cancel", translate("prefix"), world.get().getName());
+                sender.sendMessagePrefixed("format_cancel", world.get().getName());
                 chunky.getConfig().cancelTask(world.get());
                 if (chunky.getGenerationTasks().containsKey(world.get())) {
                     chunky.getGenerationTasks().remove(world.get()).stop(true);
@@ -42,7 +40,7 @@ public class CancelCommand extends ChunkyCommand {
             };
         } else {
             cancelAction = () -> {
-                sender.sendMessage("format_cancel_all", translate("prefix"));
+                sender.sendMessagePrefixed("format_cancel_all");
                 chunky.getConfig().cancelTasks();
                 chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true));
                 chunky.getGenerationTasks().clear();
@@ -50,7 +48,7 @@ public class CancelCommand extends ChunkyCommand {
             };
         }
         chunky.setPendingAction(sender, cancelAction);
-        sender.sendMessage("format_cancel_confirm", translate("prefix"));
+        sender.sendMessagePrefixed("format_cancel_confirm", "/chunky confirm");
     }
 
     @Override

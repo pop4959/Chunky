@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static org.popcraft.chunky.Chunky.translate;
+import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class BukkitSender implements Sender {
     CommandSender sender;
@@ -24,7 +24,7 @@ public class BukkitSender implements Sender {
     }
 
     @Override
-    public void sendMessage(String key, Object... args) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', translate(key, args)));
+    public void sendMessage(String key, boolean prefixed, Object... args) {
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', translateKey(key, prefixed, args)));
     }
 }

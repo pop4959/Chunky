@@ -6,8 +6,6 @@ import org.popcraft.chunky.util.Input;
 
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class CornersCommand extends ChunkyCommand {
     public CornersCommand(Chunky chunky) {
         super(chunky);
@@ -36,16 +34,16 @@ public class CornersCommand extends ChunkyCommand {
         int radiusX = (int) Math.ceil(Math.abs(x1.get() - x2.get()) / 2f);
         int radiusZ = (int) Math.ceil(Math.abs(z1.get() - z2.get()) / 2f);
         chunky.getSelection().center(centerX, centerZ).radiusX(radiusX).radiusZ(radiusZ);
-        sender.sendMessage("format_center", translate("prefix"), centerX, centerZ);
+        sender.sendMessagePrefixed("format_center", centerX, centerZ);
         String shape;
         if (radiusX == radiusZ) {
-            sender.sendMessage("format_radius", translate("prefix"), radiusX);
+            sender.sendMessagePrefixed("format_radius", radiusX);
             shape = "square";
         } else {
-            sender.sendMessage("format_radii", translate("prefix"), radiusX, radiusZ);
+            sender.sendMessagePrefixed("format_radii", radiusX, radiusZ);
             shape = "rectangle";
         }
         chunky.getSelection().shape(shape);
-        sender.sendMessage("format_shape", translate("prefix"), shape);
+        sender.sendMessagePrefixed("format_shape", shape);
     }
 }

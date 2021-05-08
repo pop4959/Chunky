@@ -11,8 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class WorldCommand extends ChunkyCommand {
     public WorldCommand(Chunky chunky) {
         super(chunky);
@@ -29,7 +27,7 @@ public class WorldCommand extends ChunkyCommand {
             return;
         }
         chunky.getSelection().world(newWorld.get());
-        sender.sendMessage("format_world", translate("prefix"), newWorld.get().getName());
+        sender.sendMessagePrefixed("format_world", newWorld.get().getName());
     }
 
     @Override

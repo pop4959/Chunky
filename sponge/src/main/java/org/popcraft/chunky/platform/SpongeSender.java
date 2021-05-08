@@ -6,7 +6,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
+import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class SpongeSender implements Sender {
     private CommandSource commandSource;
@@ -34,7 +34,7 @@ public class SpongeSender implements Sender {
     }
 
     @Override
-    public void sendMessage(String key, Object... args) {
-        commandSource.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(translate(key, args)));
+    public void sendMessage(String key, boolean prefixed, Object... args) {
+        commandSource.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(translateKey(key, prefixed, args)));
     }
 }

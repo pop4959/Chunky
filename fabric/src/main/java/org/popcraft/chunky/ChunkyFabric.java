@@ -15,7 +15,6 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +33,7 @@ public class ChunkyFabric implements ModInitializer {
             this.chunky = new Chunky(new FabricPlatform(this, minecraftServer));
             File configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "chunky.json");
             chunky.setConfig(new GsonConfig(chunky, configFile));
-            InputStream configLanguage = getClass().getClassLoader().getResourceAsStream("lang/" + chunky.getConfig().getLanguage() + ".json");
-            InputStream defaultLanguage = getClass().getClassLoader().getResourceAsStream("lang/en.json");
-            if (configLanguage == null) {
-                configLanguage = defaultLanguage;
-            }
-            chunky.setTranslations(chunky.loadTranslation(configLanguage));
-            chunky.setFallbackTranslations(chunky.loadTranslation(defaultLanguage));
+            chunky.setLanguage(chunky.getConfig().getLanguage());
             chunky.loadCommands();
             if (chunky.getConfig().getContinueOnRestart()) {
                 chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});

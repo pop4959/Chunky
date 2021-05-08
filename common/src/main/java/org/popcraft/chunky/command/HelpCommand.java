@@ -7,7 +7,7 @@ import org.popcraft.chunky.util.Input;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.popcraft.chunky.Chunky.translate;
+import static org.popcraft.chunky.util.Translator.translate;
 
 public class HelpCommand extends ChunkyCommand {
     private List<String> helpMessages;
@@ -44,7 +44,7 @@ public class HelpCommand extends ChunkyCommand {
                 help.append('\n').append(helpMessages.get(i));
             }
             if (pageIndex != pageIndexLast) {
-                help.append('\n').append(translate("help_more", "/chunky help", pageIndex + 2));
+                help.append('\n').append(translate("help_more", "/chunky help " + (pageIndex + 2)));
             }
         } else {
             helpMessages.forEach(message -> help.append('\n').append(message));

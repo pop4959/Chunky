@@ -26,7 +26,6 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.storage.WorldProperties;
 
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,13 +63,7 @@ public class ChunkySponge {
     public void onServerStart(GameStartedServerEvent event) {
         this.chunky = new Chunky(new SpongePlatform(this));
         chunky.setConfig(new SpongeConfig(this));
-        InputStream configLanguage = getClass().getClassLoader().getResourceAsStream("lang/en.json");
-        InputStream defaultLanguage = getClass().getClassLoader().getResourceAsStream("lang/en.json");
-        if (configLanguage == null) {
-            configLanguage = defaultLanguage;
-        }
-        chunky.setTranslations(chunky.loadTranslation(configLanguage));
-        chunky.setFallbackTranslations(chunky.loadTranslation(defaultLanguage));
+        chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
         CommandSpec cancelCommand = CommandSpec.builder()
                 .permission("chunky.command.cancel")

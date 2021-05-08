@@ -1,27 +1,19 @@
 package org.popcraft.chunky;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.popcraft.chunky.command.*;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Platform;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.PendingAction;
+import org.popcraft.chunky.util.Translator;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Chunky {
-    private static Map<String, String> translations = Collections.emptyMap();
-    private static Map<String, String> fallbackTranslations = Collections.emptyMap();
     private Platform platform;
     private Config config;
     private Map<World, GenerationTask> generationTasks;
@@ -60,27 +52,6 @@ public class Chunky {
         this.commands = commands;
     }
 
-    public Map<String, String> loadTranslation(InputStream input) {
-        if (input != null) {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
-                StringBuilder lang = new StringBuilder();
-                String s;
-                while ((s = reader.readLine()) != null) {
-                    lang.append(s);
-                }
-                return new Gson().fromJson(lang.toString(), new TypeToken<HashMap<String, String>>() {
-                }.getType());
-            } catch (Exception ignored) {
-            }
-        }
-        return Collections.emptyMap();
-    }
-
-    public static String translate(String key, Object... args) {
-        String message = translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, "Missing translation"));
-        return String.format(message, args);
-    }
-
     public Platform getPlatform() {
         return platform;
     }
@@ -95,14 +66,6 @@ public class Chunky {
 
     public Map<World, GenerationTask> getGenerationTasks() {
         return generationTasks;
-    }
-
-    public void setTranslations(Map<String, String> translations) {
-        Chunky.translations = translations;
-    }
-
-    public void setFallbackTranslations(Map<String, String> fallbackTranslations) {
-        Chunky.fallbackTranslations = fallbackTranslations;
     }
 
     public Map<String, ChunkyCommand> getCommands() {
@@ -125,5 +88,9 @@ public class Chunky {
 
     public void setPendingAction(Sender sender, Runnable action) {
         pendingActions.put(sender.getName(), new PendingAction(action));
+    }
+
+    public void setLanguage(String language) {
+        Translator.setLanguage(language);
     }
 }

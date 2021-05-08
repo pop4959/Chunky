@@ -6,7 +6,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-import static org.popcraft.chunky.Chunky.translate;
+import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class ForgeSender implements Sender {
     private CommandSource source;
@@ -30,8 +30,8 @@ public class ForgeSender implements Sender {
     }
 
     @Override
-    public void sendMessage(String key, Object... args) {
-        String text = translate(key, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§");
+    public void sendMessage(String key, boolean prefixed, Object... args) {
+        String text = translateKey(key, prefixed, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§");
         ITextComponent textComponent = new StringTextComponent(text);
         source.sendFeedback(textComponent, false);
     }

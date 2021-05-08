@@ -10,7 +10,7 @@ import net.minecraft.text.Text;
 
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
+import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class FabricSender implements Sender {
     private CommandSource source;
@@ -42,12 +42,12 @@ public class FabricSender implements Sender {
     }
 
     @Override
-    public void sendMessage(String key, Object... args) {
+    public void sendMessage(String key, boolean prefixed, Object... args) {
         final String text;
         if (isPlayer()) {
-            text = translate(key, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§");
+            text = translateKey(key, prefixed, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§");
         } else {
-            text = translate(key, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "");
+            text = translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "");
         }
         if (source instanceof ServerCommandSource) {
             ((ServerCommandSource) source).sendFeedback(new LiteralText(text), false);

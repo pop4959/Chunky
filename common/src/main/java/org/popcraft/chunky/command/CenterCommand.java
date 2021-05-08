@@ -6,8 +6,6 @@ import org.popcraft.chunky.util.Input;
 
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class CenterCommand extends ChunkyCommand {
     public CenterCommand(Chunky chunky) {
         super(chunky);
@@ -33,6 +31,6 @@ public class CenterCommand extends ChunkyCommand {
         int centerX = newX.get().intValue();
         int centerZ = newZ.get().intValue();
         chunky.getSelection().center(centerX, centerZ);
-        sender.sendMessage("format_center", translate("prefix"), centerX, centerZ);
+        sender.sendMessagePrefixed("format_center", centerX, centerZ);
     }
 }

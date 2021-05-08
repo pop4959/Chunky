@@ -6,8 +6,6 @@ import org.popcraft.chunky.util.Input;
 
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class QuietCommand extends ChunkyCommand {
     public QuietCommand(Chunky chunky) {
         super(chunky);
@@ -24,6 +22,6 @@ public class QuietCommand extends ChunkyCommand {
         }
         int quietInterval = Math.max(0, newQuiet.get());
         chunky.getOptions().setQuietInterval(quietInterval);
-        sender.sendMessage("format_quiet", translate("prefix"), quietInterval);
+        sender.sendMessagePrefixed("format_quiet", quietInterval);
     }
 }

@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class PatternCommand extends ChunkyCommand {
     private static final List<String> PATTERNS = Arrays.asList("concentric", "loop", "spiral");
 
@@ -27,7 +25,7 @@ public class PatternCommand extends ChunkyCommand {
             return;
         }
         chunky.getSelection().pattern(pattern);
-        sender.sendMessage("format_pattern", translate("prefix"), pattern);
+        sender.sendMessagePrefixed("format_pattern", pattern);
     }
 
     @Override

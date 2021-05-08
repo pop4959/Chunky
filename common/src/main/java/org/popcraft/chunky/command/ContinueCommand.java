@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class ContinueCommand extends ChunkyCommand {
     public ContinueCommand(Chunky chunky) {
         super(chunky);
@@ -33,7 +31,7 @@ public class ContinueCommand extends ChunkyCommand {
             loadTasks = chunky.getConfig().loadTasks();
         }
         if (loadTasks.size() == 0) {
-            sender.sendMessage("format_continue_no_tasks", translate("prefix"));
+            sender.sendMessagePrefixed("format_continue_no_tasks");
             return;
         }
         final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
@@ -42,9 +40,9 @@ public class ContinueCommand extends ChunkyCommand {
             if (!generationTasks.containsKey(world)) {
                 generationTasks.put(world, generationTask);
                 chunky.getPlatform().getServer().getScheduler().runTaskAsync(generationTask);
-                sender.sendMessage("format_continue", translate("prefix"), world.getName());
+                sender.sendMessagePrefixed("format_continue", world.getName());
             } else {
-                sender.sendMessage("format_started_already", translate("prefix"), world.getName());
+                sender.sendMessagePrefixed("format_started_already", world.getName());
             }
         });
     }

@@ -11,8 +11,6 @@ import org.popcraft.chunky.util.Coordinate;
 
 import java.util.Map;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class WorldBorderCommand extends ChunkyCommand {
     public WorldBorderCommand(Chunky chunky) {
         super(chunky);
@@ -24,14 +22,14 @@ public class WorldBorderCommand extends ChunkyCommand {
             chunky.getSelection().worldborder();
         }
         Selection current = chunky.getSelection().build();
-        sender.sendMessage("format_center", translate("prefix"), current.centerX(), current.centerZ());
+        sender.sendMessagePrefixed("format_center", current.centerX(), current.centerZ());
         if (current.radiusX() == current.radiusZ()) {
-            sender.sendMessage("format_radius", translate("prefix"), current.radiusX());
+            sender.sendMessagePrefixed("format_radius", current.radiusX());
         } else {
-            sender.sendMessage("format_radii", translate("prefix"), current.radiusX(), current.radiusZ());
+            sender.sendMessagePrefixed("format_radii", current.radiusX(), current.radiusZ());
         }
         if (!previous.shape().equals(current.shape())) {
-            sender.sendMessage("format_shape", translate("prefix"), current.shape());
+            sender.sendMessagePrefixed("format_shape", current.shape());
         }
     }
 

@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class StartCommand extends ChunkyCommand {
     public StartCommand(Chunky chunky) {
         super(chunky);
@@ -69,18 +67,18 @@ public class StartCommand extends ChunkyCommand {
         }
         final Selection current = chunky.getSelection().build();
         if (chunky.getGenerationTasks().containsKey(current.world())) {
-            sender.sendMessage("format_started_already", translate("prefix"), current.world().getName());
+            sender.sendMessagePrefixed("format_started_already", current.world().getName());
             return;
         }
         final Runnable startAction = () -> {
             GenerationTask generationTask = new GenerationTask(chunky, current);
             chunky.getGenerationTasks().put(current.world(), generationTask);
             chunky.getPlatform().getServer().getScheduler().runTaskAsync(generationTask);
-            sender.sendMessage("format_start", translate("prefix"), current.world().getName(), current.centerX(), current.centerZ(), Formatting.radius(current.radiusX(), current.radiusZ()));
+            sender.sendMessagePrefixed("format_start", current.world().getName(), current.centerX(), current.centerZ(), Formatting.radius(current.radiusX(), current.radiusZ()));
         };
         if (chunky.getConfig().loadTask(current.world()).isPresent()) {
             chunky.setPendingAction(sender, startAction);
-            sender.sendMessage("format_start_confirm", translate("prefix"));
+            sender.sendMessagePrefixed("format_start_confirm", "/chunky continue", "/chunky confirm");
         } else {
             startAction.run();
         }

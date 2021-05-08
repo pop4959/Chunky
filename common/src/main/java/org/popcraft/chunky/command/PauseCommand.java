@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.popcraft.chunky.Chunky.translate;
-
 public class PauseCommand extends ChunkyCommand {
     public PauseCommand(Chunky chunky) {
         super(chunky);
@@ -23,7 +21,7 @@ public class PauseCommand extends ChunkyCommand {
     public void execute(Sender sender, String[] args) {
         final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
         if (generationTasks.size() == 0) {
-            sender.sendMessage("format_pause_no_tasks", translate("prefix"));
+            sender.sendMessagePrefixed("format_pause_no_tasks");
             return;
         }
         if (args.length > 1) {
@@ -32,13 +30,13 @@ public class PauseCommand extends ChunkyCommand {
                 sender.sendMessage("help_pause");
             } else {
                 generationTasks.get(world.get()).stop(false);
-                sender.sendMessage("format_pause", translate("prefix"), world.get().getName());
+                sender.sendMessagePrefixed("format_pause", world.get().getName());
             }
             return;
         }
         for (GenerationTask generationTask : chunky.getGenerationTasks().values()) {
             generationTask.stop(false);
-            sender.sendMessage("format_pause", translate("prefix"), generationTask.getSelection().world().getName());
+            sender.sendMessagePrefixed("format_pause", generationTask.getSelection().world().getName());
         }
     }
 
