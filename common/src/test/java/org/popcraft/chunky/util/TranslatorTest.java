@@ -38,7 +38,7 @@ public class TranslatorTest {
         translate("format_confirm");
         translate("format_continue", "world");
         translate("format_continue_no_tasks");
-        translate("format_trim_confirm", "world", "square", 1, 2, "500", "/chunky confirm");
+        translate("format_trim_confirm", "world", translate("shape_square"), 1, 2, "500", "/chunky confirm");
         translate("format_pattern", "concentric");
         translate("format_pause", "world");
         translate("format_pause_no_tasks");
@@ -49,7 +49,7 @@ public class TranslatorTest {
         translate("format_reload_tasks_running");
         translate("format_shape", "square");
         translate("format_silent", "enabled");
-        translate("format_start", "world", 1, 2, 500);
+        translate("format_start", "world", translate("shape_square"), 1, 2, 500);
         translate("format_start_confirm", "/chunky continue", "chunky confirm");
         translate("format_start_disk", "10.5 GB", "20.5 GB", "/chunky confirm");
         translate("format_started_already", "world");

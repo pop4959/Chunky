@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.popcraft.chunky.util.Translator.translate;
+
 public class TrimCommand extends ChunkyCommand {
     public TrimCommand(Chunky chunky) {
         super(chunky);
@@ -76,7 +78,7 @@ public class TrimCommand extends ChunkyCommand {
         final Selection selection = chunky.getSelection().build();
         final Shape shape = ShapeFactory.getShape(selection);
         final Runnable deletionAction = () -> chunky.getPlatform().getServer().getScheduler().runTaskAsync(() -> {
-            sender.sendMessagePrefixed("format_start", selection.world().getName(), selection.centerX(), selection.centerZ(), Formatting.radius(selection.radiusX(), selection.radiusZ()));
+            sender.sendMessagePrefixed("format_start", selection.world().getName(), translate("shape_" + selection.shape()), selection.centerX(), selection.centerZ(), Formatting.radius(selection.radiusX(), selection.radiusZ()));
             final Optional<Path> regionPath = selection.world().getRegionDirectory();
             final AtomicLong deleted = new AtomicLong();
             final long startTime = System.currentTimeMillis();
@@ -91,7 +93,7 @@ public class TrimCommand extends ChunkyCommand {
             sender.sendMessagePrefixed("task_trim", deleted.get(), selection.world().getName(), String.format("%.3f", totalTime / 1e3f));
         });
         chunky.setPendingAction(sender, deletionAction);
-        sender.sendMessagePrefixed("format_trim_confirm", selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), Formatting.radius(selection.radiusX(), selection.radiusZ()), "/chunky confirm");
+        sender.sendMessagePrefixed("format_trim_confirm", selection.world().getName(), translate("shape_" + selection.shape()), selection.centerX(), selection.centerZ(), Formatting.radius(selection.radiusX(), selection.radiusZ()), "/chunky confirm");
     }
 
     private int checkRegion(final Path region, final Shape shape) {

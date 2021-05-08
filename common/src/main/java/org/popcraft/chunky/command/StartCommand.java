@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.popcraft.chunky.util.Translator.translate;
+
 public class StartCommand extends ChunkyCommand {
     public StartCommand(Chunky chunky) {
         super(chunky);
@@ -74,7 +76,7 @@ public class StartCommand extends ChunkyCommand {
             GenerationTask generationTask = new GenerationTask(chunky, current);
             chunky.getGenerationTasks().put(current.world(), generationTask);
             chunky.getPlatform().getServer().getScheduler().runTaskAsync(generationTask);
-            sender.sendMessagePrefixed("format_start", current.world().getName(), current.centerX(), current.centerZ(), Formatting.radius(current.radiusX(), current.radiusZ()));
+            sender.sendMessagePrefixed("format_start", current.world().getName(), translate("shape_" + current.shape()), current.centerX(), current.centerZ(), Formatting.radius(current.radiusX(), current.radiusZ()));
         };
         if (chunky.getConfig().loadTask(current.world()).isPresent()) {
             chunky.setPendingAction(sender, startAction);
