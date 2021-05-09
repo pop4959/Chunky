@@ -3,9 +3,9 @@ package org.popcraft.chunky.shape;
 import org.popcraft.chunky.Selection;
 
 public abstract class AbstractShape implements Shape {
-    protected int centerX, centerZ;
-    protected int diameterX, diameterZ;
-    protected int radiusX, radiusZ;
+    protected double centerX, centerZ;
+    protected double diameterX, diameterZ;
+    protected double radiusX, radiusZ;
 
     protected AbstractShape(Selection selection, boolean chunkAligned) {
         if (chunkAligned) {

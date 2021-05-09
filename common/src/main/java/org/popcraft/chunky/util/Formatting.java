@@ -19,11 +19,11 @@ public class Formatting {
         return String.format("%.1f %cB", bytes / (double) prefixValue, BINARY_PREFIXES[i]);
     }
 
-    public static String radius(int radiusX, int radiusZ) {
+    public static String radius(double radiusX, double radiusZ) {
         if (radiusX == radiusZ) {
-            return String.valueOf(radiusX);
+            return String.format("%s", radiusX);
         } else {
-            return String.format("%d, %d", radiusX, radiusZ);
+            return String.format("%s, %s", radiusX, radiusZ);
         }
     }
 }

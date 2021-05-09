@@ -6,7 +6,7 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 
@@ -51,14 +51,14 @@ public class TrimCommand extends ChunkyCommand {
             Optional<Double> centerX = Input.tryDoubleSuffixed(args[3]).filter(cx -> !Input.isPastWorldLimit(cx));
             Optional<Double> centerZ = Input.tryDoubleSuffixed(args.length > 4 ? args[4] : null).filter(cz -> !Input.isPastWorldLimit(cz));
             if (centerX.isPresent() && centerZ.isPresent()) {
-                chunky.getSelection().center(centerX.get().intValue(), centerZ.get().intValue());
+                chunky.getSelection().center(centerX.get(), centerZ.get());
             } else {
                 sender.sendMessage("help_trim");
                 return;
             }
         }
         if (args.length > 5) {
-            Optional<Integer> radiusX = Input.tryIntegerSuffixed(args[5]).filter(rx -> rx >= 0 && !Input.isPastWorldLimit(rx));
+            Optional<Double> radiusX = Input.tryDoubleSuffixed(args[5]).filter(rx -> rx >= 0 && !Input.isPastWorldLimit(rx));
             if (radiusX.isPresent()) {
                 chunky.getSelection().radius(radiusX.get());
             } else {
@@ -67,7 +67,7 @@ public class TrimCommand extends ChunkyCommand {
             }
         }
         if (args.length > 6) {
-            Optional<Integer> radiusZ = Input.tryIntegerSuffixed(args[6]).filter(rz -> rz >= 0 && !Input.isPastWorldLimit(rz));
+            Optional<Double> radiusZ = Input.tryDoubleSuffixed(args[6]).filter(rz -> rz >= 0 && !Input.isPastWorldLimit(rz));
             if (radiusZ.isPresent()) {
                 chunky.getSelection().radiusZ(radiusZ.get());
             } else {
@@ -97,12 +97,12 @@ public class TrimCommand extends ChunkyCommand {
     }
 
     private int checkRegion(final Path region, final Shape shape) {
-        Optional<Coordinate> regionCoordinate = tryRegionCoordinate(region);
+        Optional<ChunkCoordinate> regionCoordinate = tryRegionCoordinate(region);
         if (!regionCoordinate.isPresent()) {
             return 0;
         }
-        int chunkX = regionCoordinate.get().getX() << 5;
-        int chunkZ = regionCoordinate.get().getZ() << 5;
+        int chunkX = regionCoordinate.get().x << 5;
+        int chunkZ = regionCoordinate.get().z << 5;
         if (shouldDeleteRegion(shape, chunkX, chunkZ)) {
             return deleteRegion(region);
         } else {
@@ -110,7 +110,7 @@ public class TrimCommand extends ChunkyCommand {
         }
     }
 
-    private Optional<Coordinate> tryRegionCoordinate(final Path region) {
+    private Optional<ChunkCoordinate> tryRegionCoordinate(final Path region) {
         final String fileName = region.getFileName().toString();
         if (fileName == null || !fileName.startsWith("r.")) {
             return Optional.empty();
@@ -124,7 +124,7 @@ public class TrimCommand extends ChunkyCommand {
         Optional<Integer> regionX = Input.tryInteger(regionCoordinates.substring(0, separator));
         Optional<Integer> regionZ = Input.tryInteger(regionCoordinates.substring(separator + 1));
         if (regionX.isPresent() && regionZ.isPresent()) {
-            return Optional.of(new Coordinate(regionX.get(), regionZ.get()));
+            return Optional.of(new ChunkCoordinate(regionX.get(), regionZ.get()));
         }
         return Optional.empty();
     }

@@ -1,26 +1,26 @@
 package org.popcraft.chunky.util;
 
 public class Coordinate {
-    private int x, z;
+    private double x, z;
 
-    public Coordinate(int x, int z) {
+    public Coordinate(double x, double z) {
         this.x = x;
         this.z = z;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getZ() {
+    public double getZ() {
         return z;
     }
 
-    public void setZ(int z) {
+    public void setZ(double z) {
         this.z = z;
     }
 }

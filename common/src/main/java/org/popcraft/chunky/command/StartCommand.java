@@ -43,14 +43,14 @@ public class StartCommand extends ChunkyCommand {
             Optional<Double> centerX = Input.tryDoubleSuffixed(args[3]).filter(cx -> !Input.isPastWorldLimit(cx));
             Optional<Double> centerZ = Input.tryDoubleSuffixed(args.length > 4 ? args[4] : null).filter(cz -> !Input.isPastWorldLimit(cz));
             if (centerX.isPresent() && centerZ.isPresent()) {
-                chunky.getSelection().center(centerX.get().intValue(), centerZ.get().intValue());
+                chunky.getSelection().center(centerX.get(), centerZ.get());
             } else {
                 sender.sendMessage("help_start");
                 return;
             }
         }
         if (args.length > 5) {
-            Optional<Integer> radiusX = Input.tryIntegerSuffixed(args[5]).filter(rx -> rx >= 0 && !Input.isPastWorldLimit(rx));
+            Optional<Double> radiusX = Input.tryDoubleSuffixed(args[5]).filter(rx -> rx >= 0 && !Input.isPastWorldLimit(rx));
             if (radiusX.isPresent()) {
                 chunky.getSelection().radius(radiusX.get());
             } else {
@@ -59,7 +59,7 @@ public class StartCommand extends ChunkyCommand {
             }
         }
         if (args.length > 6) {
-            Optional<Integer> radiusZ = Input.tryIntegerSuffixed(args[6]).filter(rz -> rz >= 0 && !Input.isPastWorldLimit(rz));
+            Optional<Double> radiusZ = Input.tryDoubleSuffixed(args[6]).filter(rz -> rz >= 0 && !Input.isPastWorldLimit(rz));
             if (radiusZ.isPresent()) {
                 chunky.getSelection().radiusZ(radiusZ.get());
             } else {

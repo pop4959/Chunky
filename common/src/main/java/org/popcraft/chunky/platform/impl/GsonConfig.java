@@ -177,10 +177,10 @@ public class GsonConfig implements Config {
 
     public static class TaskModel {
         public Boolean cancelled;
-        public Integer radius;
-        public Integer radiusZ;
-        public Integer centerX;
-        public Integer centerZ;
+        public Double radius;
+        public Double radiusZ;
+        public Double centerX;
+        public Double centerZ;
         public String iterator;
         public String shape;
         public Long count;

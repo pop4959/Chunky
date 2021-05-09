@@ -71,11 +71,11 @@ public class SpongeConfig implements Config {
         if (taskNode.getNode("cancelled").getBoolean(true)) {
             return Optional.empty();
         }
-        int radiusX = taskNode.getNode("radius").getInt(500);
-        int radiusZ = taskNode.getNode("radiusZ").getInt(radiusX);
+        double radiusX = taskNode.getNode("radius").getDouble(500);
+        double radiusZ = taskNode.getNode("radiusZ").getDouble(radiusX);
         Selection.Builder selection = Selection.builder(world)
-                .centerX(taskNode.getNode("centerX").getInt(0))
-                .centerZ(taskNode.getNode("centerZ").getInt(0))
+                .centerX(taskNode.getNode("centerX").getDouble(0))
+                .centerZ(taskNode.getNode("centerZ").getDouble(0))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
                 .pattern(taskNode.getNode("iterator").getString("concentric"))

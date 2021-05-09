@@ -5,7 +5,7 @@ import org.popcraft.chunky.Selection;
 import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
 
 public class Diamond extends AbstractPolygon {
-    int p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
+    double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
 
     public Diamond(Selection selection, boolean chunkAligned) {
         super(selection, chunkAligned);

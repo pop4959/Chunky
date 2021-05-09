@@ -28,8 +28,8 @@ public class CenterCommand extends ChunkyCommand {
             sender.sendMessage("help_center");
             return;
         }
-        int centerX = newX.get().intValue();
-        int centerZ = newZ.get().intValue();
+        double centerX = newX.get();
+        double centerZ = newZ.get();
         chunky.getSelection().center(centerX, centerZ);
         sender.sendMessagePrefixed("format_center", centerX, centerZ);
     }

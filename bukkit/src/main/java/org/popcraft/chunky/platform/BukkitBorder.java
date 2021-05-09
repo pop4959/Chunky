@@ -12,17 +12,17 @@ public class BukkitBorder implements Border {
 
     @Override
     public Coordinate getCenter() {
-        return new Coordinate(worldBorder.getCenter().getBlockX(), worldBorder.getCenter().getBlockZ());
+        return new Coordinate(worldBorder.getCenter().getX(), worldBorder.getCenter().getZ());
     }
 
     @Override
-    public int getRadiusX() {
-        return (int) worldBorder.getSize() / 2;
+    public double getRadiusX() {
+        return worldBorder.getSize() / 2d;
     }
 
     @Override
-    public int getRadiusZ() {
-        return (int) worldBorder.getSize() / 2;
+    public double getRadiusZ() {
+        return worldBorder.getSize() / 2d;
     }
 
     @Override

@@ -12,17 +12,17 @@ public class FabricBorder implements Border {
 
     @Override
     public Coordinate getCenter() {
-        return new Coordinate((int) worldBorder.getCenterX(), (int) worldBorder.getCenterZ());
+        return new Coordinate(worldBorder.getCenterX(), worldBorder.getCenterZ());
     }
 
     @Override
-    public int getRadiusX() {
-        return (int) worldBorder.getSize() / 2;
+    public double getRadiusX() {
+        return worldBorder.getSize() / 2d;
     }
 
     @Override
-    public int getRadiusZ() {
-        return (int) worldBorder.getSize() / 2;
+    public double getRadiusZ() {
+        return worldBorder.getSize() / 2d;
     }
 
     @Override

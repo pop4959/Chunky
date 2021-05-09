@@ -14,17 +14,17 @@ public class SpongeBorder implements Border {
     @Override
     public Coordinate getCenter() {
         Vector3d center = worldBorder.getCenter();
-        return new Coordinate(center.getFloorX(), center.getFloorZ());
+        return new Coordinate(center.getX(), center.getZ());
     }
 
     @Override
-    public int getRadiusX() {
-        return (int) worldBorder.getDiameter() / 2;
+    public double getRadiusX() {
+        return worldBorder.getDiameter() / 2d;
     }
 
     @Override
-    public int getRadiusZ() {
-        return (int) worldBorder.getDiameter() / 2;
+    public double getRadiusZ() {
+        return worldBorder.getDiameter() / 2d;
     }
 
     @Override

@@ -16,19 +16,19 @@ public class RadiusCommand extends ChunkyCommand {
             sender.sendMessage("help_radius");
             return;
         }
-        Optional<Integer> newRadiusX = Input.tryIntegerSuffixed(args[1]);
+        Optional<Double> newRadiusX = Input.tryDoubleSuffixed(args[1]);
         if (!newRadiusX.isPresent() || newRadiusX.get() < 0 || Input.isPastWorldLimit(newRadiusX.get())) {
             sender.sendMessage("help_radius");
             return;
         }
-        int radiusX = newRadiusX.get();
+        double radiusX = newRadiusX.get();
         if (args.length > 2) {
-            Optional<Integer> newRadiusZ = Input.tryIntegerSuffixed(args[2]);
+            Optional<Double> newRadiusZ = Input.tryDoubleSuffixed(args[2]);
             if (!newRadiusZ.isPresent() || newRadiusZ.get() < 0 || Input.isPastWorldLimit(newRadiusZ.get())) {
                 sender.sendMessage("help_radius");
                 return;
             }
-            int radiusZ = newRadiusZ.get();
+            double radiusZ = newRadiusZ.get();
             chunky.getSelection().radiusX(radiusX).radiusZ(radiusZ);
             sender.sendMessagePrefixed("format_radii", radiusX, radiusZ);
         } else {

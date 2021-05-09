@@ -5,9 +5,9 @@ import org.popcraft.chunky.util.Coordinate;
 public interface Border {
     Coordinate getCenter();
 
-    int getRadiusX();
+    double getRadiusX();
 
-    int getRadiusZ();
+    double getRadiusZ();
 
     String getShape();
 }

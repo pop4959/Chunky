@@ -18,24 +18,24 @@ public class WorldBorderIntegration implements BorderIntegration {
             @Override
             public Coordinate getCenter() {
                 BorderData borderData = Config.Border(world);
-                return new Coordinate(Location.locToBlock(borderData.getX()), Location.locToBlock(borderData.getZ()));
+                return new Coordinate(borderData.getX(), borderData.getZ());
             }
 
             @Override
-            public int getRadiusX() {
+            public double getRadiusX() {
                 return Config.Border(world).getRadiusX();
             }
 
             @Override
-            public int getRadiusZ() {
+            public double getRadiusZ() {
                 return Config.Border(world).getRadiusZ();
             }
 
             @Override
             public String getShape() {
                 BorderData borderData = Config.Border(world);
-                int radiusX = getRadiusX();
-                int radiusZ = getRadiusZ();
+                double radiusX = getRadiusX();
+                double radiusZ = getRadiusZ();
                 boolean round = borderData.getShape() != null && borderData.getShape();
                 final String shape;
                 if (radiusX == radiusZ) {

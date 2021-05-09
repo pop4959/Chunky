@@ -79,14 +79,14 @@ public class ChunkySponge {
         CommandSpec centerCommand = CommandSpec.builder()
                 .permission("chunky.command.center")
                 .arguments(
-                        GenericArguments.integer(Text.of("x")),
-                        GenericArguments.integer(Text.of("z")))
+                        GenericArguments.doubleNum(Text.of("x")),
+                        GenericArguments.doubleNum(Text.of("z")))
                 .executor((CommandSource source, CommandContext context) -> {
                     ChunkyCommand cmd = chunky.getCommands().get("center");
                     cmd.execute(new SpongeSender(source), new String[]{
                             "center",
-                            context.<Integer>getOne(Text.of("x")).orElse(0).toString(),
-                            context.<Integer>getOne(Text.of("z")).orElse(0).toString()
+                            context.<Double>getOne(Text.of("x")).orElse(0d).toString(),
+                            context.<Double>getOne(Text.of("z")).orElse(0d).toString()
                     });
                     return CommandResult.success();
                 })
@@ -110,18 +110,18 @@ public class ChunkySponge {
                 .permission("chunky.command.corners")
                 .executor(noArgsCommand("corners"))
                 .arguments(
-                        GenericArguments.integer(Text.of("x1")),
-                        GenericArguments.integer(Text.of("z1")),
-                        GenericArguments.integer(Text.of("x2")),
-                        GenericArguments.integer(Text.of("z2")))
+                        GenericArguments.doubleNum(Text.of("x1")),
+                        GenericArguments.doubleNum(Text.of("z1")),
+                        GenericArguments.doubleNum(Text.of("x2")),
+                        GenericArguments.doubleNum(Text.of("z2")))
                 .executor((CommandSource source, CommandContext context) -> {
                     ChunkyCommand cmd = chunky.getCommands().get("corners");
                     cmd.execute(new SpongeSender(source), new String[]{
                             "corners",
-                            context.<Integer>getOne(Text.of("x1")).orElse(0).toString(),
-                            context.<Integer>getOne(Text.of("z1")).orElse(0).toString(),
-                            context.<Integer>getOne(Text.of("x2")).orElse(0).toString(),
-                            context.<Integer>getOne(Text.of("z2")).orElse(0).toString()
+                            context.<Double>getOne(Text.of("x1")).orElse(0d).toString(),
+                            context.<Double>getOne(Text.of("z1")).orElse(0d).toString(),
+                            context.<Double>getOne(Text.of("x2")).orElse(0d).toString(),
+                            context.<Double>getOne(Text.of("z2")).orElse(0d).toString()
                     });
                     return CommandResult.success();
                 })
@@ -176,12 +176,12 @@ public class ChunkySponge {
         CommandSpec radiusCommand = CommandSpec.builder()
                 .permission("chunky.command.radius")
                 .arguments(
-                        GenericArguments.integer(Text.of("radius")),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("radius"))))
+                        GenericArguments.doubleNum(Text.of("radius")),
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radius"))))
                 .executor((CommandSource source, CommandContext context) -> {
                     ChunkyCommand cmd = chunky.getCommands().get("radius");
                     final List<String> args = new ArrayList<>(Collections.singletonList("radius"));
-                    context.<Integer>getAll(Text.of("radius")).forEach(r -> args.add(String.valueOf(r)));
+                    context.<Double>getAll(Text.of("radius")).forEach(r -> args.add(String.valueOf(r)));
                     cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
                     return CommandResult.success();
                 })
@@ -215,19 +215,19 @@ public class ChunkySponge {
                 .arguments(
                         GenericArguments.optional(GenericArguments.world(Text.of("world"))),
                         GenericArguments.optional(GenericArguments.string(Text.of("shape"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("centerX"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("centerZ"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("radiusX"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("radiusZ"))))
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("centerX"))),
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("centerZ"))),
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radiusX"))),
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radiusZ"))))
                 .executor((CommandSource source, CommandContext context) -> {
                     ChunkyCommand cmd = chunky.getCommands().get("start");
                     final List<String> args = new ArrayList<>(Collections.singletonList("start"));
                     context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
                     context.<String>getOne(Text.of("shape")).ifPresent(args::add);
-                    context.<Integer>getOne(Text.of("centerX")).map(String::valueOf).ifPresent(args::add);
-                    context.<Integer>getOne(Text.of("centerZ")).map(String::valueOf).ifPresent(args::add);
-                    context.<Integer>getOne(Text.of("radiusX")).map(String::valueOf).ifPresent(args::add);
-                    context.<Integer>getOne(Text.of("radiusZ")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("centerX")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("centerZ")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("radiusX")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("radiusZ")).map(String::valueOf).ifPresent(args::add);
                     cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
                     return CommandResult.success();
                 })
@@ -237,19 +237,19 @@ public class ChunkySponge {
                 .arguments(
                         GenericArguments.optional(GenericArguments.world(Text.of("world"))),
                         GenericArguments.optional(GenericArguments.string(Text.of("shape"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("centerX"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("centerZ"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("radiusX"))),
-                        GenericArguments.optional(GenericArguments.integer(Text.of("radiusZ"))))
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("centerX"))),
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("centerZ"))),
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radiusX"))),
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radiusZ"))))
                 .executor((CommandSource source, CommandContext context) -> {
                     ChunkyCommand cmd = chunky.getCommands().get("trim");
                     final List<String> args = new ArrayList<>(Collections.singletonList("trim"));
                     context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
                     context.<String>getOne(Text.of("shape")).ifPresent(args::add);
-                    context.<Integer>getOne(Text.of("centerX")).map(String::valueOf).ifPresent(args::add);
-                    context.<Integer>getOne(Text.of("centerZ")).map(String::valueOf).ifPresent(args::add);
-                    context.<Integer>getOne(Text.of("radiusX")).map(String::valueOf).ifPresent(args::add);
-                    context.<Integer>getOne(Text.of("radiusZ")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("centerX")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("centerZ")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("radiusX")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("radiusZ")).map(String::valueOf).ifPresent(args::add);
                     cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
                     return CommandResult.success();
                 })

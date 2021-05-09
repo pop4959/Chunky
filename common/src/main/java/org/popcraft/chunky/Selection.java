@@ -6,10 +6,10 @@ import org.popcraft.chunky.util.Coordinate;
 
 public class Selection {
     private final World world;
-    private final int centerX;
-    private final int centerZ;
-    private final int radiusX;
-    private final int radiusZ;
+    private final double centerX;
+    private final double centerZ;
+    private final double radiusX;
+    private final double radiusZ;
     private final String pattern;
     private final String shape;
     private final int centerChunkX;
@@ -19,7 +19,7 @@ public class Selection {
     private final int diameterChunksX;
     private final int diameterChunksZ;
 
-    private Selection(World world, int centerX, int centerZ, int radiusX, int radiusZ, String pattern, String shape) {
+    private Selection(World world, double centerX, double centerZ, double radiusX, double radiusZ, String pattern, String shape) {
         this.world = world;
         this.centerX = centerX;
         this.centerZ = centerZ;
@@ -27,8 +27,8 @@ public class Selection {
         this.radiusZ = radiusZ;
         this.pattern = pattern;
         this.shape = shape;
-        this.centerChunkX = centerX >> 4;
-        this.centerChunkZ = centerZ >> 4;
+        this.centerChunkX = (int) centerX >> 4;
+        this.centerChunkZ = (int) centerZ >> 4;
         this.radiusChunksX = (int) Math.ceil(radiusX / 16f);
         this.radiusChunksZ = (int) Math.ceil(radiusZ / 16f);
         this.diameterChunksX = 2 * radiusChunksX + 1;
@@ -39,19 +39,19 @@ public class Selection {
         return this.world;
     }
 
-    public int centerX() {
+    public double centerX() {
         return this.centerX;
     }
 
-    public int centerZ() {
+    public double centerZ() {
         return this.centerZ;
     }
 
-    public int radiusX() {
+    public double radiusX() {
         return this.radiusX;
     }
 
-    public int radiusZ() {
+    public double radiusZ() {
         return this.radiusZ;
     }
 
@@ -93,10 +93,10 @@ public class Selection {
 
     public static final class Builder {
         private World world;
-        private int centerX = 0;
-        private int centerZ = 0;
-        private int radiusX = 500;
-        private int radiusZ = 500;
+        private double centerX = 0;
+        private double centerZ = 0;
+        private double radiusX = 500;
+        private double radiusZ = 500;
         private String pattern = "concentric";
         private String shape = "square";
 
@@ -109,34 +109,34 @@ public class Selection {
             return this;
         }
 
-        public Builder center(int centerX, int centerZ) {
+        public Builder center(double centerX, double centerZ) {
             this.centerX = centerX;
             this.centerZ = centerZ;
             return this;
         }
 
-        public Builder centerX(int centerX) {
+        public Builder centerX(double centerX) {
             this.centerX = centerX;
             return this;
         }
 
-        public Builder centerZ(int centerZ) {
+        public Builder centerZ(double centerZ) {
             this.centerZ = centerZ;
             return this;
         }
 
-        public Builder radius(int radius) {
+        public Builder radius(double radius) {
             this.radiusX = radius;
             this.radiusZ = radius;
             return this;
         }
 
-        public Builder radiusX(int radiusX) {
+        public Builder radiusX(double radiusX) {
             this.radiusX = radiusX;
             return this;
         }
 
-        public Builder radiusZ(int radiusZ) {
+        public Builder radiusZ(double radiusZ) {
             this.radiusZ = radiusZ;
             return this;
         }

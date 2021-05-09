@@ -53,7 +53,7 @@ public class SpongeWorld implements World {
     @Override
     public Coordinate getSpawnCoordinate() {
         Location<org.spongepowered.api.world.World> spawnLocation = world.getSpawnLocation();
-        return new Coordinate(spawnLocation.getBlockX(), spawnLocation.getBlockZ());
+        return new Coordinate(spawnLocation.getX(), spawnLocation.getZ());
     }
 
     @Override
