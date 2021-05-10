@@ -32,7 +32,7 @@
   "help_center": "&2chunky center <x> <z>&r - Stel de locatie van het midden blok in",
   "help_continue": "&2chunky continue&r - Voortzetten van huidige of opgeslagen taken",
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Set by corners",
-  "help_trim": "&2chunky trim&r - Delete chunks outside selection",
+  "help_trim": "&2chunky trim&r - Verwijder chunks buiten selectie",
   "help_menu": "&aChunky Commando's&r%s",
   "help_more": "Typ &a%s&r om meer te zien.",
   "help_pattern": "&bchunky pattern <pattern>&r - Stel het generatie patroon in",
@@ -55,7 +55,7 @@
   "shape_star": "ster",
   "shape_triangle": "driehoek",
   "task_trim": "Deleted %s chunks from %s in %s seconds.",
-  "task_done": "Task finished for %s. Processed: %s chunks (%s%%), Total time: %s:%s:%s",
+  "task_done": "Taak voltooid voor %s. Verwerkt: %s chunks (%s%%), Totale tijd: %s:%s:%s",
   "task_stopped": "Taak geannuleerd voor %s.",
-  "task_update": "Task running for %s. Processed: %s chunks (%s%%), ETA: %s:%s:%s, Rate: %s cps, Current: %s, %s"
+  "task_update": "Taak wordt uitgevoerd voor %s. Verwerkt: %s chunks (%s%%), ETA: %s:%s:%s, Snelheid: %s cps, Huidig: %s, %s"
 }
