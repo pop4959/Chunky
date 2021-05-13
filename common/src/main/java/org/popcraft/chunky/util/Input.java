@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Input {
+    public static final List<String> PATTERNS = Arrays.asList("concentric", "loop", "spiral");
     public static final List<String> SHAPES = Arrays.asList("circle", "diamond", "ellipse", "pentagon", "rectangle", "square", "star", "triangle");
     public static final List<String> LANGUAGES = Arrays.asList("bg", "de", "es", "fr", "nl", "pl", "pt", "ru", "tr", "zh_CN");
 

@@ -2,7 +2,6 @@ package org.popcraft.chunky;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,14 +16,14 @@ import org.popcraft.chunky.platform.ForgePlatform;
 import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
+import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
-import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
+import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static net.minecraft.command.Commands.argument;
 import static net.minecraft.command.Commands.literal;
 import static net.minecraft.command.arguments.DimensionArgument.getDimension;
@@ -60,26 +59,14 @@ public class ChunkyForge {
             commands.get(subCommand).execute(sender, args);
             return Command.SINGLE_SUCCESS;
         };
-        SuggestionProvider<CommandSource> shapeSuggestionProvider = (commandContext, suggestionsBuilder) -> {
-            List<String> suggestions = chunky.getCommands().get("shape").tabSuggestions(new ForgeSender(commandContext.getSource()), new String[]{});
-            try {
-                final String arg = commandContext.getArgument("shape", String.class);
-                suggestions.stream()
-                        .filter(s -> arg == null || s.toLowerCase().startsWith(arg.toLowerCase()))
-                        .forEach(suggestionsBuilder::suggest);
-            } catch (IllegalArgumentException ignored) {
-                suggestions.forEach(suggestionsBuilder::suggest);
-            }
-            return suggestionsBuilder.buildFuture();
-        };
         server.getCommandManager().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("chunky")
                 .then(literal("cancel")
                         .then(argument("world", getDimension())
                                 .executes(command))
                         .executes(command))
                 .then(literal("center")
-                        .then(argument("x", doubleArg())
-                                .then(argument("z", doubleArg())
+                        .then(argument("x", word())
+                                .then(argument("z", word())
                                         .executes(command))
                                 .executes(command))
                         .executes(command))
@@ -90,10 +77,10 @@ public class ChunkyForge {
                                 .executes(command))
                         .executes(command))
                 .then(literal("corners")
-                        .then(argument("x1", doubleArg())
-                                .then(argument("z1", doubleArg())
-                                        .then(argument("x2", doubleArg())
-                                                .then(argument("z2", doubleArg())
+                        .then(argument("x1", word())
+                                .then(argument("z1", word())
+                                        .then(argument("x2", word())
+                                                .then(argument("z2", word())
                                                         .executes(command))
                                                 .executes(command))
                                         .executes(command))
@@ -105,18 +92,7 @@ public class ChunkyForge {
                         .executes(command))
                 .then(literal("pattern")
                         .then(argument("pattern", string())
-                                .suggests((commandContext, suggestionsBuilder) -> {
-                                    List<String> suggestions = chunky.getCommands().get("pattern").tabSuggestions(new ForgeSender(commandContext.getSource()), new String[]{});
-                                    try {
-                                        final String arg = commandContext.getArgument("pattern", String.class);
-                                        suggestions.stream()
-                                                .filter(s -> arg == null || s.toLowerCase().startsWith(arg.toLowerCase()))
-                                                .forEach(suggestionsBuilder::suggest);
-                                    } catch (IllegalArgumentException ignored) {
-                                        suggestions.forEach(suggestionsBuilder::suggest);
-                                    }
-                                    return suggestionsBuilder.buildFuture();
-                                })
+                                .suggests(SuggestionProviders.PATTERNS)
                                 .executes(command))
                         .executes(command))
                 .then(literal("pause")
@@ -128,8 +104,8 @@ public class ChunkyForge {
                                 .executes(command))
                         .executes(command))
                 .then(literal("radius")
-                        .then(argument("radius", doubleArg())
-                                .then(argument("radius", doubleArg())
+                        .then(argument("radius", word())
+                                .then(argument("radius", word())
                                         .executes(command))
                                 .executes(command))
                         .executes(command))
@@ -137,7 +113,7 @@ public class ChunkyForge {
                         .executes(command))
                 .then(literal("shape")
                         .then(argument("shape", string())
-                                .suggests(shapeSuggestionProvider)
+                                .suggests(SuggestionProviders.SHAPES)
                                 .executes(command))
                         .executes(command))
                 .then(literal("silent")
@@ -147,30 +123,30 @@ public class ChunkyForge {
                 .then(literal("start")
                         .then(argument("world", getDimension())
                                 .then(argument("shape", string())
-                                        .then(argument("centerX", doubleArg())
-                                                .then(argument("centerZ", doubleArg())
-                                                        .then(argument("radiusX", doubleArg())
-                                                                .then(argument("radiusZ", doubleArg())
+                                        .then(argument("centerX", word())
+                                                .then(argument("centerZ", word())
+                                                        .then(argument("radiusX", word())
+                                                                .then(argument("radiusZ", word())
                                                                         .executes(command))
                                                                 .executes(command))
                                                         .executes(command))
                                                 .executes(command))
-                                        .suggests(shapeSuggestionProvider)
+                                        .suggests(SuggestionProviders.SHAPES)
                                         .executes(command))
                                 .executes(command))
                         .executes(command))
                 .then(literal("trim")
                         .then(argument("world", getDimension())
                                 .then(argument("shape", string())
-                                        .then(argument("centerX", doubleArg())
-                                                .then(argument("centerZ", doubleArg())
-                                                        .then(argument("radiusX", doubleArg())
-                                                                .then(argument("radiusZ", doubleArg())
+                                        .then(argument("centerX", word())
+                                                .then(argument("centerZ", word())
+                                                        .then(argument("radiusX", word())
+                                                                .then(argument("radiusZ", word())
                                                                         .executes(command))
                                                                 .executes(command))
                                                         .executes(command))
                                                 .executes(command))
-                                        .suggests(shapeSuggestionProvider)
+                                        .suggests(SuggestionProviders.SHAPES)
                                         .executes(command))
                                 .executes(command))
                         .executes(command))
