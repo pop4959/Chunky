@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.popcraft.chunky.util.Translator.translate;
+
 public class ShapeCommand extends ChunkyCommand {
     public ShapeCommand(Chunky chunky) {
         super(chunky);
@@ -25,7 +27,7 @@ public class ShapeCommand extends ChunkyCommand {
         }
         String shape = inputShape.get();
         chunky.getSelection().shape(shape);
-        sender.sendMessagePrefixed("format_shape", shape);
+        sender.sendMessagePrefixed("format_shape", translate("shape_" + shape));
     }
 
     @Override
