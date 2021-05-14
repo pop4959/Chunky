@@ -9,7 +9,7 @@ public class Circle extends AbstractEllipse {
 
     @Override
     public boolean isBounding(double x, double z) {
-        return Math.hypot(centerX - x, centerZ - z) < radiusX;
+        return Math.hypot(centerX - x, centerZ - z) <= radiusX;
     }
 
     @Override

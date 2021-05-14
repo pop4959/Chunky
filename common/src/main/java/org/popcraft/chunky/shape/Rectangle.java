@@ -34,7 +34,7 @@ public class Rectangle extends AbstractPolygon {
 
     @Override
     public boolean isBounding(double x, double z) {
-        return x > b1x && x < b2x && z > b1z && z < b2z;
+        return x >= b1x && x <= b2x && z >= b1z && z <= b2z;
     }
 
     @Override
