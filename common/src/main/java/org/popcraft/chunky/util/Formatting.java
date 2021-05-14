@@ -1,5 +1,7 @@
 package org.popcraft.chunky.util;
 
+import org.popcraft.chunky.Selection;
+
 public class Formatting {
     private static char[] BINARY_PREFIXES = new char[]{'K', 'M', 'G', 'T', 'P'};
 
@@ -19,11 +21,11 @@ public class Formatting {
         return String.format("%.1f %cB", bytes / (double) prefixValue, BINARY_PREFIXES[i]);
     }
 
-    public static String radius(double radiusX, double radiusZ) {
-        if (radiusX == radiusZ) {
-            return String.format("%s", radiusX);
+    public static String radius(Selection selection) {
+        if ("ellipse".equals(selection.shape()) || "rectangle".equals(selection.shape())) {
+            return String.format("%s, %s", selection.radiusX(), selection.radiusZ());
         } else {
-            return String.format("%s, %s", radiusX, radiusZ);
+            return String.format("%s", selection.radiusX());
         }
     }
 }
