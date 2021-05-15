@@ -7,6 +7,8 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
+import org.popcraft.chunky.util.Coordinate;
 
 import java.util.Optional;
 
@@ -27,6 +29,16 @@ public class FabricSender implements Sender {
     @Override
     public String getName() {
         return getPlayer().map(PlayerEntity::getName).map(Text::asString).orElse("Console");
+    }
+
+    @Override
+    public Coordinate getCoordinate() {
+        if (source instanceof ServerCommandSource) {
+            Vec3d position = ((ServerCommandSource) source).getPosition();
+            return new Coordinate((long) position.getX(), (long) position.getZ());
+        } else {
+            return new Coordinate(0, 0);
+        }
     }
 
     private Optional<ServerPlayerEntity> getPlayer() {

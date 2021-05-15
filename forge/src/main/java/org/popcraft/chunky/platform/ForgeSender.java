@@ -3,8 +3,10 @@ package org.popcraft.chunky.platform;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import org.popcraft.chunky.util.Coordinate;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
@@ -27,6 +29,12 @@ public class ForgeSender implements Sender {
         } catch (CommandSyntaxException e) {
             return "Console";
         }
+    }
+
+    @Override
+    public Coordinate getCoordinate() {
+        Vector3d pos = source.getPos();
+        return new Coordinate((long) pos.getX(), (long) pos.getZ());
     }
 
     @Override

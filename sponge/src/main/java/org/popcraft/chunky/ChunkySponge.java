@@ -79,15 +79,14 @@ public class ChunkySponge {
         CommandSpec centerCommand = CommandSpec.builder()
                 .permission("chunky.command.center")
                 .arguments(
-                        GenericArguments.doubleNum(Text.of("x")),
-                        GenericArguments.doubleNum(Text.of("z")))
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("x"))),
+                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("z"))))
                 .executor((CommandSource source, CommandContext context) -> {
                     ChunkyCommand cmd = chunky.getCommands().get("center");
-                    cmd.execute(new SpongeSender(source), new String[]{
-                            "center",
-                            context.<Double>getOne(Text.of("x")).orElse(0d).toString(),
-                            context.<Double>getOne(Text.of("z")).orElse(0d).toString()
-                    });
+                    final List<String> args = new ArrayList<>(Collections.singletonList("center"));
+                    context.<Double>getOne(Text.of("x")).map(String::valueOf).ifPresent(args::add);
+                    context.<Double>getOne(Text.of("z")).map(String::valueOf).ifPresent(args::add);
+                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
                     return CommandResult.success();
                 })
                 .build();
