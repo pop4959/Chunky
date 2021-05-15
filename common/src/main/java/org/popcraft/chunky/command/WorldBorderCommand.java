@@ -8,6 +8,7 @@ import org.popcraft.chunky.platform.Border;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.util.Formatting;
 
 import java.util.Map;
 
@@ -22,11 +23,11 @@ public class WorldBorderCommand extends ChunkyCommand {
             chunky.getSelection().worldborder();
         }
         Selection current = chunky.getSelection().build();
-        sender.sendMessagePrefixed("format_center", current.centerX(), current.centerZ());
+        sender.sendMessagePrefixed("format_center", Formatting.number(current.centerX()), Formatting.number(current.centerZ()));
         if (current.radiusX() == current.radiusZ()) {
-            sender.sendMessagePrefixed("format_radius", current.radiusX());
+            sender.sendMessagePrefixed("format_radius", Formatting.number(current.radiusX()));
         } else {
-            sender.sendMessagePrefixed("format_radii", current.radiusX(), current.radiusZ());
+            sender.sendMessagePrefixed("format_radii", Formatting.number(current.radiusX()), Formatting.number(current.radiusZ()));
         }
         if (!previous.shape().equals(current.shape())) {
             sender.sendMessagePrefixed("format_shape", current.shape());

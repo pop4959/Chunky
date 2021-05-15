@@ -2,6 +2,7 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 
 import java.util.Optional;
@@ -31,6 +32,6 @@ public class CenterCommand extends ChunkyCommand {
         double centerX = newX.get();
         double centerZ = newZ.get();
         chunky.getSelection().center(centerX, centerZ);
-        sender.sendMessagePrefixed("format_center", centerX, centerZ);
+        sender.sendMessagePrefixed("format_center", Formatting.number(centerX), Formatting.number(centerZ));
     }
 }

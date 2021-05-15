@@ -2,6 +2,7 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 
 import java.util.Optional;
@@ -30,10 +31,10 @@ public class RadiusCommand extends ChunkyCommand {
             }
             double radiusZ = newRadiusZ.get();
             chunky.getSelection().radiusX(radiusX).radiusZ(radiusZ);
-            sender.sendMessagePrefixed("format_radii", radiusX, radiusZ);
+            sender.sendMessagePrefixed("format_radii", Formatting.number(radiusX), Formatting.number(radiusZ));
         } else {
             chunky.getSelection().radius(radiusX);
-            sender.sendMessagePrefixed("format_radius", radiusX);
+            sender.sendMessagePrefixed("format_radius", Formatting.number(radiusX));
         }
     }
 }

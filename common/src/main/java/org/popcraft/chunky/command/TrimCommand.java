@@ -78,7 +78,7 @@ public class TrimCommand extends ChunkyCommand {
         final Selection selection = chunky.getSelection().build();
         final Shape shape = ShapeFactory.getShape(selection);
         final Runnable deletionAction = () -> chunky.getPlatform().getServer().getScheduler().runTaskAsync(() -> {
-            sender.sendMessagePrefixed("format_start", selection.world().getName(), translate("shape_" + selection.shape()), selection.centerX(), selection.centerZ(), Formatting.radius(selection));
+            sender.sendMessagePrefixed("format_start", selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection));
             final Optional<Path> regionPath = selection.world().getRegionDirectory();
             final AtomicLong deleted = new AtomicLong();
             final long startTime = System.currentTimeMillis();
@@ -93,7 +93,7 @@ public class TrimCommand extends ChunkyCommand {
             sender.sendMessagePrefixed("task_trim", deleted.get(), selection.world().getName(), String.format("%.3f", totalTime / 1e3f));
         });
         chunky.setPendingAction(sender, deletionAction);
-        sender.sendMessagePrefixed("format_trim_confirm", selection.world().getName(), translate("shape_" + selection.shape()), selection.centerX(), selection.centerZ(), Formatting.radius(selection), "/chunky confirm");
+        sender.sendMessagePrefixed("format_trim_confirm", selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection), "/chunky confirm");
     }
 
     private int checkRegion(final Path region, final Shape shape) {
