@@ -17,12 +17,12 @@ public class ForgeBorder implements Border {
 
     @Override
     public double getRadiusX() {
-        return worldBorder.getSize() / 2d;
+        return worldBorder.getDiameter() / 2d;
     }
 
     @Override
     public double getRadiusZ() {
-        return worldBorder.getSize() / 2d;
+        return worldBorder.getDiameter() / 2d;
     }
 
     @Override
