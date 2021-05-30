@@ -1,15 +1,11 @@
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.1.0'
-    id 'fabric-loom' version '0.6-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'maven-publish'
 }
 
-archivesBaseName = 'chunky'
-
 configurations {
-    compile.extendsFrom shadowInclude
+    implementation.extendsFrom shade
 }
 
 repositories {
@@ -17,41 +13,40 @@ repositories {
 }
 
 dependencies {
-    shadowInclude(project(':common'))
+    shade(project(':common'))
 
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
+    filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
+}
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
+java {
+    withSourcesJar()
+}
+
+tasks {
+    jar {
+        archiveClassifier.set("dev")
     }
-}
-
-shadowJar {
-    configurations = [project.configurations.shadowInclude]
-}
-
-task ramappedShadowJar(type: RemapJarTask) {
-    dependsOn tasks.shadowJar
-    input = tasks.shadowJar.archivePath
-    addNestedDependencies = true
-    archiveName = "Chunky-${version}.jar"
-}
-
-build.dependsOn ramappedShadowJar
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
-    from sourceSets.main.allSource
+    shadowJar {
+        archiveClassifier.set("shadow")
+        configurations = [project.configurations.shade]
+    }
+    remapJar {
+        archiveClassifier.set(null)
+        input.set(shadowJar.archiveFile)
+        archiveFileName.set("Chunky-${project.version}.jar")
+    }
+    build {
+        dependsOn(remapJar)
+    }
 }

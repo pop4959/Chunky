@@ -37,7 +37,7 @@ public class FabricServer implements Server {
         if (worldIdentifier == null) {
             return Optional.empty();
         }
-        ServerWorld serverWorld = server.getWorld(RegistryKey.of(Registry.DIMENSION, worldIdentifier));
+        ServerWorld serverWorld = server.getWorld(RegistryKey.of(Registry.WORLD_KEY, worldIdentifier));
         if (serverWorld == null) {
             return Optional.empty();
         }
