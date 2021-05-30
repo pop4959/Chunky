@@ -72,6 +72,21 @@ public class Input {
                 .orElse(tryDouble(input));
     }
 
+    public static Optional<Integer> trySign(String input) {
+        if (input == null || input.isEmpty()) {
+            return Optional.empty();
+        }
+        final char sign = input.charAt(0);
+        switch (sign) {
+            case '-':
+                return Optional.of(-1);
+            case '+':
+                return Optional.of(1);
+            default:
+                return Optional.empty();
+        }
+    }
+
     public static boolean isPastWorldLimit(double value) {
         return Math.abs(value) > 3e7;
     }
