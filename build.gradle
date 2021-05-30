@@ -1,23 +1,8 @@
-defaultTasks 'build'
-
 subprojects {
-    apply plugin: 'java-library'
-    apply plugin: 'maven-publish'
+    plugins.apply("java-library")
+    plugins.apply("maven-publish")
 
     group = 'org.popcraft'
-
-    def commitsSinceLastTag = {
-        def tagDescription = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'describe', '--tags'
-            standardOutput = tagDescription
-        }
-        tagDescription = tagDescription.toString()
-        if (tagDescription.indexOf('-') < 0) {
-            return 0;
-        }
-        return tagDescription.split('-')[1]
-    }
 
     project.ext.majorVersion = '1'
     project.ext.minorVersion = '2'
@@ -25,14 +10,24 @@ subprojects {
     project.ext.fullVersion = project.ext.majorVersion + '.' + project.ext.minorVersion + '.' + project.ext.patchVersion
     version = project.ext.fullVersion
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(8)
+    [tasks.withType(JavaCompile), tasks.withType(Javadoc)].forEach { type ->
+        type.configureEach {
+            it.options.encoding = "UTF-8"
         }
     }
 
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
+    java {
+        withSourcesJar()
+        def targetJava = 8
+        //targetCompatibility = JavaVersion.toVersion(targetJava)
+        //sourceCompatibility = JavaVersion.toVersion(targetJava)
+
+        // todo: When updating to Gradle 7 and Loom 0.8+, remove and replace toolchains usage
+        // here and in the fabric project build.gradle with the above commented out
+        // source and target compatibility configuration.
+        javaToolchains {
+            targetJava = JavaLanguageVersion.of(targetJava)
+        }
     }
 
     repositories {
@@ -41,4 +36,17 @@ subprojects {
             url 'https://oss.sonatype.org/content/repositories/snapshots'
         }
     }
+}
+
+String commitsSinceLastTag() {
+    def tagDescription = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = tagDescription
+    }
+    tagDescription = tagDescription.toString()
+    if (tagDescription.indexOf('-') < 0) {
+        return 0;
+    }
+    return tagDescription.split('-')[1]
 }

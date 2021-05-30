@@ -2,8 +2,8 @@ import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.PluginDependency
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id 'org.spongepowered.gradle.plugin' version '1.1.0'
+    id 'org.spongepowered.gradle.plugin' version '1.1.1'
+    id 'com.github.johnrengelman.shadow'
 }
 
 sponge {
@@ -42,7 +42,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = "Chunky-${project.ext.fullVersion}.jar"
+    archiveFileName = "Chunky-sponge-${project.ext.fullVersion}.jar"
 }
 
 artifacts {
