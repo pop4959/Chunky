@@ -15,5 +15,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '16'
+        # First build fails for some reason (bug in forgified loom?), so try twice
       - name: Build
-        run: ./gradlew build
+        run: |
+        ./gradlew build || true
+        ./gradlew build
