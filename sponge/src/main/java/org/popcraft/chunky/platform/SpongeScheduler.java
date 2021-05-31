@@ -2,7 +2,7 @@ package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.ChunkySponge;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.scheduler.ScheduledTask;
 
 public class SpongeScheduler implements Scheduler {
     private ChunkySponge plugin;
@@ -13,11 +13,11 @@ public class SpongeScheduler implements Scheduler {
 
     @Override
     public void runTaskAsync(Runnable runnable) {
-        Sponge.getScheduler().createTaskBuilder().async().execute(runnable).submit(plugin);
+        Sponge.asyncScheduler().createExecutor(plugin.getContainer()).execute(runnable);
     }
 
     @Override
     public void cancelTasks() {
-        Sponge.getScheduler().getScheduledTasks(plugin).forEach(Task::cancel);
+        Sponge.asyncScheduler().tasks(plugin.getContainer()).forEach(ScheduledTask::cancel);
     }
 }

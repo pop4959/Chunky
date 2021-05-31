@@ -1,317 +1,317 @@
 package org.popcraft.chunky;
 
 import com.google.inject.Inject;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.loader.ConfigurationLoader;
-import org.bstats.sponge.Metrics2;
-import org.popcraft.chunky.command.ChunkyCommand;
+import org.apache.logging.log4j.Logger;
 import org.popcraft.chunky.platform.SpongeConfig;
 import org.popcraft.chunky.platform.SpongePlatform;
 import org.popcraft.chunky.platform.SpongeSender;
-import org.slf4j.Logger;
 import org.spongepowered.api.Game;
-import org.spongepowered.api.Sponge;
+import org.spongepowered.api.ResourceKey;
+import org.spongepowered.api.Server;
+import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandResult;
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandExecutor;
-import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.command.parameter.CommandContext;
+import org.spongepowered.api.command.parameter.Parameter;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameStartedServerEvent;
-import org.spongepowered.api.event.game.state.GameStoppingEvent;
-import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.world.storage.WorldProperties;
+import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
+import org.spongepowered.api.event.lifecycle.LoadedGameEvent;
+import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
+import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
+import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
+import org.spongepowered.api.world.server.ServerWorld;
+import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.jvm.Plugin;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Plugin(
-        id = "chunky",
-        name = "Chunky",
-        version = "1.0-SNAPSHOT",
-        description = "Pre-generates chunks, quickly, efficiently, and safely",
-        url = "https://github.com/pop4959/Chunky",
-        authors = {
-                "pop4959"
-        }
-)
+@Plugin("chunky")
 public class ChunkySponge {
     private Chunky chunky;
-    @Inject
+    private PluginContainer container;
     private Logger logger;
     @Inject
     private Game game;
     @Inject
     @ConfigDir(sharedRoot = false)
     private Path configPath;
-    @Inject
-    @DefaultConfig(sharedRoot = true)
-    private ConfigurationLoader<CommentedConfigurationNode> configManager;
 
-    @Inject
-    public ChunkySponge(Metrics2.Factory metricsFactory) {
-        metricsFactory.make(9825);
+    @Listener
+    public void onConstructPlugin(final ConstructPluginEvent event) {
+        this.container = event.plugin();
+        this.logger = event.plugin().logger();
     }
 
     @Listener
-    public void onServerStart(GameStartedServerEvent event) {
+    public void onServerStarting(final StartingEngineEvent<Server> event) {
+    }
+
+    @Listener
+    public void onLoadedGame(final LoadedGameEvent event) {
         this.chunky = new Chunky(new SpongePlatform(this));
         chunky.setConfig(new SpongeConfig(this));
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
-        CommandSpec cancelCommand = CommandSpec.builder()
-                .permission("chunky.command.cancel")
-                .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("cancel");
-                    final List<String> args = new ArrayList<>(Collections.singletonList("cancel"));
-                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
-                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec centerCommand = CommandSpec.builder()
-                .permission("chunky.command.center")
-                .arguments(
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("x"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("z"))))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("center");
-                    final List<String> args = new ArrayList<>(Collections.singletonList("center"));
-                    context.<Double>getOne(Text.of("x")).map(String::valueOf).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("z")).map(String::valueOf).ifPresent(args::add);
-                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec confirmCommand = CommandSpec.builder()
-                .permission("chunky.command.confirm")
-                .executor(noArgsCommand("confirm"))
-                .build();
-        CommandSpec continueCommand = CommandSpec.builder()
-                .permission("chunky.command.continue")
-                .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("continue");
-                    final List<String> args = new ArrayList<>(Collections.singletonList("continue"));
-                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
-                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec cornersCommand = CommandSpec.builder()
-                .permission("chunky.command.corners")
-                .executor(noArgsCommand("corners"))
-                .arguments(
-                        GenericArguments.doubleNum(Text.of("x1")),
-                        GenericArguments.doubleNum(Text.of("z1")),
-                        GenericArguments.doubleNum(Text.of("x2")),
-                        GenericArguments.doubleNum(Text.of("z2")))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("corners");
-                    cmd.execute(new SpongeSender(source), new String[]{
-                            "corners",
-                            context.<Double>getOne(Text.of("x1")).orElse(0d).toString(),
-                            context.<Double>getOne(Text.of("z1")).orElse(0d).toString(),
-                            context.<Double>getOne(Text.of("x2")).orElse(0d).toString(),
-                            context.<Double>getOne(Text.of("z2")).orElse(0d).toString()
-                    });
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec helpCommand = CommandSpec.builder()
-                .permission("chunky.command.help")
-                .arguments(GenericArguments.optional(GenericArguments.integer(Text.of("page"))))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("help");
-                    cmd.execute(new SpongeSender(source), new String[]{
-                            "help",
-                            context.<Integer>getOne(Text.of("page")).orElse(0).toString()
-                    });
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec patternCommand = CommandSpec.builder()
-                .permission("chunky.command.pattern")
-                .arguments(GenericArguments.string(Text.of("pattern")))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("pattern");
-                    cmd.execute(new SpongeSender(source), new String[]{
-                            "pattern",
-                            context.<String>getOne(Text.of("pattern")).orElse("concentric")
-                    });
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec pauseCommand = CommandSpec.builder()
-                .permission("chunky.command.pause")
-                .arguments(GenericArguments.optional(GenericArguments.world(Text.of("world"))))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("pause");
-                    final List<String> args = new ArrayList<>(Collections.singletonList("pause"));
-                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
-                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec quietCommand = CommandSpec.builder()
-                .permission("chunky.command.quiet")
-                .arguments(GenericArguments.integer(Text.of("interval")))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("quiet");
-                    cmd.execute(new SpongeSender(source), new String[]{
-                            "quiet",
-                            context.<Integer>getOne(Text.of("interval")).orElse(1).toString()
-                    });
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec radiusCommand = CommandSpec.builder()
-                .permission("chunky.command.radius")
-                .arguments(
-                        GenericArguments.doubleNum(Text.of("radius")),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radius"))))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("radius");
-                    final List<String> args = new ArrayList<>(Collections.singletonList("radius"));
-                    context.<Double>getAll(Text.of("radius")).forEach(r -> args.add(String.valueOf(r)));
-                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec reloadCommand = CommandSpec.builder()
-                .permission("chunky.command.reload")
-                .executor(noArgsCommand("reload"))
-                .build();
-        CommandSpec shapeCommand = CommandSpec.builder()
-                .permission("chunky.command.shape")
-                .arguments(GenericArguments.string(Text.of("shape")))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("shape");
-                    cmd.execute(new SpongeSender(source), new String[]{
-                            "shape",
-                            context.<String>getOne(Text.of("shape")).orElse("square")
-                    });
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec silentCommand = CommandSpec.builder()
-                .permission("chunky.command.silent")
-                .executor(noArgsCommand("silent"))
-                .build();
-        CommandSpec spawnCommand = CommandSpec.builder()
-                .permission("chunky.command.spawn")
-                .executor(noArgsCommand("spawn"))
-                .build();
-        CommandSpec startCommand = CommandSpec.builder()
-                .permission("chunky.command.start")
-                .arguments(
-                        GenericArguments.optional(GenericArguments.world(Text.of("world"))),
-                        GenericArguments.optional(GenericArguments.string(Text.of("shape"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("centerX"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("centerZ"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radiusX"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radiusZ"))))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("start");
-                    final List<String> args = new ArrayList<>(Collections.singletonList("start"));
-                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
-                    context.<String>getOne(Text.of("shape")).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("centerX")).map(String::valueOf).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("centerZ")).map(String::valueOf).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("radiusX")).map(String::valueOf).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("radiusZ")).map(String::valueOf).ifPresent(args::add);
-                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec trimCommand = CommandSpec.builder()
-                .permission("chunky.command.trim")
-                .arguments(
-                        GenericArguments.optional(GenericArguments.world(Text.of("world"))),
-                        GenericArguments.optional(GenericArguments.string(Text.of("shape"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("centerX"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("centerZ"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radiusX"))),
-                        GenericArguments.optional(GenericArguments.doubleNum(Text.of("radiusZ"))))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("trim");
-                    final List<String> args = new ArrayList<>(Collections.singletonList("trim"));
-                    context.<WorldProperties>getOne(Text.of("world")).map(WorldProperties::getWorldName).ifPresent(args::add);
-                    context.<String>getOne(Text.of("shape")).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("centerX")).map(String::valueOf).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("centerZ")).map(String::valueOf).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("radiusX")).map(String::valueOf).ifPresent(args::add);
-                    context.<Double>getOne(Text.of("radiusZ")).map(String::valueOf).ifPresent(args::add);
-                    cmd.execute(new SpongeSender(source), args.toArray(new String[0]));
-                    return CommandResult.success();
-                })
-                .build();
-        CommandSpec worldborderCommand = CommandSpec.builder()
-                .permission("chunky.command.worldborder")
-                .executor(noArgsCommand("worldborder"))
-                .build();
-        CommandSpec worldCommand = CommandSpec.builder()
-                .permission("chunky.command.world")
-                .arguments(GenericArguments.world(Text.of("world")))
-                .executor((CommandSource source, CommandContext context) -> {
-                    ChunkyCommand cmd = chunky.getCommands().get("world");
-                    cmd.execute(new SpongeSender(source), new String[]{
-                            "world",
-                            context.<WorldProperties>getOne(Text.of("world"))
-                                    .map(WorldProperties::getWorldName)
-                                    .orElse(Sponge.getServer().getDefaultWorldName())
-                    });
-                    return CommandResult.success();
-                })
-                .build();
-        Sponge.getCommandManager().register(this, CommandSpec.builder()
-                .permission("chunky.command.base")
-                .child(cancelCommand, "cancel")
-                .child(centerCommand, "center")
-                .child(confirmCommand, "confirm")
-                .child(continueCommand, "continue")
-                .child(cornersCommand, "corners")
-                .child(helpCommand, "help")
-                .child(patternCommand, "pattern")
-                .child(pauseCommand, "pause")
-                .child(quietCommand, "quiet")
-                .child(radiusCommand, "radius")
-                .child(reloadCommand, "reload")
-                .child(shapeCommand, "shape")
-                .child(silentCommand, "silent")
-                .child(spawnCommand, "spawn")
-                .child(startCommand, "start")
-                .child(trimCommand, "trim")
-                .child(worldborderCommand, "worldborder")
-                .child(worldCommand, "world")
-                .executor(noArgsCommand("help"))
-                .build(), "chunky");
     }
 
     @Listener
-    public void onServerStop(GameStoppingEvent event) {
+    public void onServerStopping(final StoppingEngineEvent<Server> event) {
         chunky.getConfig().saveTasks();
         chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
         chunky.getPlatform().getServer().getScheduler().cancelTasks();
     }
 
-    private CommandExecutor noArgsCommand(final String name) {
-        return (CommandSource source, CommandContext context) -> {
-            ChunkyCommand cmd = chunky.getCommands().get(name);
-            cmd.execute(new SpongeSender(source), new String[]{name});
-            return CommandResult.success();
-        };
+    @Listener
+    public void onRegisterCommand(final RegisterCommandEvent<Command.Parameterized> event) {
+        Command.Parameterized cancelCommand = Command.builder()
+                .permission("chunky.command.cancel")
+                .addParameters(Parameter.world().key("world").optional().build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("cancel");
+                    ctx.one(Parameter.key("world", ServerWorld.class)).map(ServerWorld::key).map(ResourceKey::asString).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "cancel", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized centerCommand = Command.builder()
+                .permission("chunky.command.center")
+                .addParameters(Parameter.string().key("x").optional().build())
+                .addParameters(Parameter.string().key("z").optional().build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("center");
+                    ctx.one(Parameter.key("x", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("z", String.class)).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "center", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized confirmCommand = Command.builder()
+                .permission("chunky.command.confirm")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, "confirm", Collections.singletonList("confirm"));
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized continueCommand = Command.builder()
+                .permission("chunky.command.continue")
+                .addParameters(Parameter.world().key("world").optional().build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("continue");
+                    ctx.one(Parameter.key("world", ServerWorld.class)).map(ServerWorld::key).map(ResourceKey::asString).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "continue", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized cornersCommand = Command.builder()
+                .permission("chunky.command.corners")
+                .addParameter(Parameter.string().key("x1").build())
+                .addParameter(Parameter.string().key("z1").build())
+                .addParameter(Parameter.string().key("x2").build())
+                .addParameter(Parameter.string().key("z2").build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("corners");
+                    args.add(ctx.requireOne(Parameter.key("x1", String.class)));
+                    args.add(ctx.requireOne(Parameter.key("z1", String.class)));
+                    args.add(ctx.requireOne(Parameter.key("x2", String.class)));
+                    args.add(ctx.requireOne(Parameter.key("z2", String.class)));
+                    executeSpongeCommand(ctx, "corners", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized helpCommand = Command.builder()
+                .permission("chunky.command.help")
+                .addParameter(Parameter.integerNumber().key("page").optional().build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("help");
+                    ctx.one(Parameter.key("page", Integer.class)).map(String::valueOf).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "help", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized patternCommand = Command.builder()
+                .permission("chunky.command.pattern")
+                .addParameter(Parameter.string().key("pattern").build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("pattern");
+                    args.add(ctx.requireOne(Parameter.key("pattern", String.class)));
+                    executeSpongeCommand(ctx, "pattern", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized pauseCommand = Command.builder()
+                .permission("chunky.command.pause")
+                .addParameters(Parameter.world().key("world").optional().build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("pause");
+                    ctx.one(Parameter.key("world", ServerWorld.class)).map(ServerWorld::key).map(ResourceKey::asString).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "pause", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized quietCommand = Command.builder()
+                .permission("chunky.command.quiet")
+                .addParameter(Parameter.integerNumber().key("interval").build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("quiet");
+                    args.add(String.valueOf(ctx.requireOne(Parameter.key("interval", Integer.class))));
+                    executeSpongeCommand(ctx, "quiet", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized radiusCommand = Command.builder()
+                .permission("chunky.command.radius")
+                .addParameters(Parameter.string().key("radiusX").build())
+                .addParameters(Parameter.string().key("radiusZ").optional().build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("radius");
+                    args.add(ctx.requireOne(Parameter.key("radiusX", String.class)));
+                    ctx.one(Parameter.key("radiusZ", String.class)).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "radius", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized reloadCommand = Command.builder()
+                .permission("chunky.command.reload")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, "reload", Collections.singletonList("reload"));
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized shapeCommand = Command.builder()
+                .permission("chunky.command.shape")
+                .addParameter(Parameter.string().key("shape").build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("shape");
+                    args.add(ctx.requireOne(Parameter.key("shape", String.class)));
+                    executeSpongeCommand(ctx, "shape", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized silentCommand = Command.builder()
+                .permission("chunky.command.silent")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, "silent", Collections.singletonList("silent"));
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized spawnCommand = Command.builder()
+                .permission("chunky.command.spawn")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, "spawn", Collections.singletonList("spawn"));
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized startCommand = Command.builder()
+                .permission("chunky.command.start")
+                .addParameters(Parameter.world().key("world").optional().build())
+                .addParameter(Parameter.string().key("shape").optional().build())
+                .addParameters(Parameter.string().key("x").optional().build())
+                .addParameters(Parameter.string().key("z").optional().build())
+                .addParameters(Parameter.string().key("radiusX").optional().build())
+                .addParameters(Parameter.string().key("radiusZ").optional().build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("start");
+                    ctx.one(Parameter.key("world", ServerWorld.class)).map(ServerWorld::key).map(ResourceKey::asString).ifPresent(args::add);
+                    ctx.one(Parameter.key("shape", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("x", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("z", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("radiusX", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("radiusZ", String.class)).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "start", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized trimCommand = Command.builder()
+                .permission("chunky.command.trim")
+                .addParameters(Parameter.world().key("world").optional().build())
+                .addParameter(Parameter.string().key("shape").optional().build())
+                .addParameters(Parameter.string().key("x").optional().build())
+                .addParameters(Parameter.string().key("z").optional().build())
+                .addParameters(Parameter.string().key("radiusX").optional().build())
+                .addParameters(Parameter.string().key("radiusZ").optional().build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("trim");
+                    ctx.one(Parameter.key("world", ServerWorld.class)).map(ServerWorld::key).map(ResourceKey::asString).ifPresent(args::add);
+                    ctx.one(Parameter.key("shape", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("x", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("z", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("radiusX", String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key("radiusZ", String.class)).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "trim", args);
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized worldborderCommand = Command.builder()
+                .permission("chunky.command.worldborder")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, "worldborder", Collections.singletonList("worldborder"));
+                    return CommandResult.success();
+                })
+                .build();
+        Command.Parameterized worldCommand = Command.builder()
+                .permission("chunky.command.world")
+                .addParameters(Parameter.world().key("world").build())
+                .executor(ctx -> {
+                    List<String> args = new ArrayList<>();
+                    args.add("world");
+                    ctx.one(Parameter.key("world", ServerWorld.class)).map(ServerWorld::key).map(ResourceKey::asString).ifPresent(args::add);
+                    executeSpongeCommand(ctx, "world", args);
+                    return CommandResult.success();
+                })
+                .build();
+        event.register(this.container, Command.builder()
+                .permission("chunky.command.base")
+                .addChild(cancelCommand, "cancel")
+                .addChild(centerCommand, "center")
+                .addChild(confirmCommand, "confirm")
+                .addChild(continueCommand, "continue")
+                .addChild(cornersCommand, "corners")
+                .addChild(helpCommand, "help")
+                .addChild(patternCommand, "pattern")
+                .addChild(pauseCommand, "pause")
+                .addChild(quietCommand, "quiet")
+                .addChild(radiusCommand, "radius")
+                .addChild(reloadCommand, "reload")
+                .addChild(shapeCommand, "shape")
+                .addChild(silentCommand, "silent")
+                .addChild(spawnCommand, "spawn")
+                .addChild(startCommand, "start")
+                .addChild(trimCommand, "trim")
+                .addChild(worldborderCommand, "worldborder")
+                .addChild(worldCommand, "world")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, "help", Collections.emptyList());
+                    return CommandResult.success();
+                })
+                .build(), "chunky");
+    }
+
+    private void executeSpongeCommand(final CommandContext ctx, final String command, final List<String> args) {
+        final String[] argsArray = new String[args.size()];
+        chunky.getCommands().get(command).execute(new SpongeSender(ctx.cause().audience()), args.toArray(argsArray));
     }
 
     public Chunky getChunky() {
         return chunky;
+    }
+
+    public PluginContainer getContainer() {
+        return container;
     }
 
     public Logger getLogger() {
@@ -324,9 +324,5 @@ public class ChunkySponge {
 
     public Path getConfigPath() {
         return configPath;
-    }
-
-    public ConfigurationLoader<CommentedConfigurationNode> getConfigManager() {
-        return configManager;
     }
 }

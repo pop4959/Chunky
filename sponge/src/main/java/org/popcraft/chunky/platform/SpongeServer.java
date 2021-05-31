@@ -2,6 +2,7 @@ package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.integration.Integration;
+import org.spongepowered.api.ResourceKey;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,17 +28,17 @@ public class SpongeServer implements Server {
 
     @Override
     public Optional<World> getWorld(String name) {
-        return plugin.getGame().getServer().getWorld(name).map(world -> new SpongeWorld(world, plugin));
+        return plugin.getGame().server().worldManager().world(ResourceKey.resolve(name)).map(world -> new SpongeWorld(world, plugin));
     }
 
     @Override
     public List<World> getWorlds() {
-        return plugin.getGame().getServer().getWorlds().stream().map(world -> new SpongeWorld(world, plugin)).collect(Collectors.toList());
+        return plugin.getGame().server().worldManager().worlds().stream().map(world -> new SpongeWorld(world, plugin)).collect(Collectors.toList());
     }
 
     @Override
     public Sender getConsoleSender() {
-        return new SpongeSender(plugin.getGame().getServer().getConsole());
+        return new SpongeSender(plugin.getGame().server());
     }
 
     @Override

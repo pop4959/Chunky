@@ -1,12 +1,12 @@
 package org.popcraft.chunky.platform;
 
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.Input;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,22 +32,22 @@ public class SpongeConfig implements Config {
         }
         Path defaultConfigFile = new File(defaultConfigPath.toFile(), "main.conf").toPath();
         this.configLoader = HoconConfigurationLoader.builder()
-                .setPath(defaultConfigFile)
+                .path(defaultConfigFile)
                 .build();
         try {
             this.rootNode = configLoader.load();
         } catch (IOException e) {
-            this.rootNode = configLoader.createEmptyNode();
+            this.rootNode = configLoader.createNode();
             e.printStackTrace();
         }
         URL defaults = getClass().getClassLoader().getResource("main.conf");
         if (defaults != null) {
             final HoconConfigurationLoader defaultConfigLoader = HoconConfigurationLoader.builder()
-                    .setURL(defaults)
+                    .url(defaults)
                     .build();
             try {
                 CommentedConfigurationNode defaultRootNode = defaultConfigLoader.load();
-                rootNode.mergeValuesFrom(defaultRootNode);
+                rootNode.mergeFrom(defaultRootNode);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -64,24 +64,24 @@ public class SpongeConfig implements Config {
         if (this.rootNode == null) {
             return Optional.empty();
         }
-        ConfigurationNode taskNode = rootNode.getNode("config", "tasks", world.getName());
-        if (taskNode.isVirtual()) {
+        ConfigurationNode taskNode = rootNode.node("config", "tasks", world.getName());
+        if (taskNode.virtual()) {
             return Optional.empty();
         }
-        if (taskNode.getNode("cancelled").getBoolean(true)) {
+        if (taskNode.node("cancelled").getBoolean(true)) {
             return Optional.empty();
         }
-        double radiusX = taskNode.getNode("radius").getDouble(500);
-        double radiusZ = taskNode.getNode("radiusZ").getDouble(radiusX);
+        double radiusX = taskNode.node("radius").getDouble(500);
+        double radiusZ = taskNode.node("radiusZ").getDouble(radiusX);
         Selection.Builder selection = Selection.builder(world)
-                .centerX(taskNode.getNode("centerX").getDouble(0))
-                .centerZ(taskNode.getNode("centerZ").getDouble(0))
+                .centerX(taskNode.node("centerX").getDouble(0))
+                .centerZ(taskNode.node("centerZ").getDouble(0))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(taskNode.getNode("iterator").getString("concentric"))
-                .shape(taskNode.getNode("shape").getString("square"));
-        long count = taskNode.getNode("count").getInt(0);
-        long time = taskNode.getNode("time").getInt(0);
+                .pattern(taskNode.node("iterator").getString("concentric"))
+                .shape(taskNode.node("shape").getString("square"));
+        long count = taskNode.node("count").getInt(0);
+        long time = taskNode.node("time").getInt(0);
         return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time));
     }
 
@@ -95,23 +95,23 @@ public class SpongeConfig implements Config {
     @Override
     public void saveTask(GenerationTask generationTask) {
         if (this.rootNode == null) {
-            this.rootNode = configLoader.createEmptyNode();
+            this.rootNode = configLoader.createNode();
         }
         Selection selection = generationTask.getSelection();
-        ConfigurationNode taskNode = rootNode.getNode("config", "tasks", selection.world().getName());
+        ConfigurationNode taskNode = rootNode.node("config", "tasks", selection.world().getName());
         String shape = generationTask.getShape().name();
-        taskNode.getNode("cancelled").setValue(generationTask.isCancelled());
-        taskNode.getNode("radius").setValue(selection.radiusX());
-        if ("rectangle".equals(shape) || "oval".equals(shape)) {
-            taskNode.getNode("radiusZ").setValue(selection.radiusZ());
-        }
-        taskNode.getNode("centerX").setValue(selection.centerX());
-        taskNode.getNode("centerZ").setValue(selection.centerZ());
-        taskNode.getNode("iterator").setValue(generationTask.getChunkIterator().name());
-        taskNode.getNode("shape").setValue(shape);
-        taskNode.getNode("count").setValue(generationTask.getCount());
-        taskNode.getNode("time").setValue(generationTask.getTotalTime());
         try {
+            taskNode.node("cancelled").set(generationTask.isCancelled());
+            taskNode.node("radius").set(selection.radiusX());
+            if ("rectangle".equals(shape) || "oval".equals(shape)) {
+                taskNode.node("radiusZ").set(selection.radiusZ());
+            }
+            taskNode.node("centerX").set(selection.centerX());
+            taskNode.node("centerZ").set(selection.centerZ());
+            taskNode.node("iterator").set(generationTask.getChunkIterator().name());
+            taskNode.node("shape").set(shape);
+            taskNode.node("count").set(generationTask.getCount());
+            taskNode.node("time").set(generationTask.getTotalTime());
             configLoader.save(rootNode);
         } catch (IOException e) {
             e.printStackTrace();
@@ -141,7 +141,7 @@ public class SpongeConfig implements Config {
 
     @Override
     public int getVersion() {
-        return this.rootNode == null ? 0 : this.rootNode.getNode("version").getInt(0);
+        return this.rootNode == null ? 0 : this.rootNode.node("version").getInt(0);
     }
 
     @Override
@@ -149,12 +149,12 @@ public class SpongeConfig implements Config {
         if (this.rootNode == null) {
             return "en";
         }
-        return Input.checkLanguage(this.rootNode.getNode("language").getString("en"));
+        return Input.checkLanguage(this.rootNode.node("language").getString("en"));
     }
 
     @Override
     public boolean getContinueOnRestart() {
-        return this.rootNode != null && this.rootNode.getNode("continue-on-restart").getBoolean(false);
+        return this.rootNode != null && this.rootNode.node("continue-on-restart").getBoolean(false);
     }
 
     @Override
