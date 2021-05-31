@@ -25,7 +25,7 @@ processResources {
 }
 
 shadowJar {
-    archiveFileName.set("Chunky-bukkit-${project.ext.fullVersion}.jar")
+    archiveFileName.set("Chunky-Bukkit-${project.ext.fullVersion}.jar")
 
     relocate 'io.papermc.lib', 'org.popcraft.chunky.lib.paperlib'
 }

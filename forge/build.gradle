@@ -32,7 +32,7 @@ tasks {
     remapJar {
         input.set(shadowJar.archiveFile)
         archiveClassifier.set(null)
-        archiveFileName.set("Chunky-forge-${project.version}.jar")
+        archiveFileName.set("Chunky-Forge-${project.version}.jar")
     }
     shadowJar {
         archiveClassifier.set("shadow")

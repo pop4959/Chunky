@@ -39,7 +39,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName.set("Chunky-sponge-${project.version}.jar")
+    archiveFileName.set("Chunky-Sponge-${project.version}.jar")
 }
 
 artifacts {
