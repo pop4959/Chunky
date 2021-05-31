@@ -2,7 +2,7 @@ package org.popcraft.chunky;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,9 +24,9 @@ import java.util.Map;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
-import static net.minecraft.command.Commands.argument;
-import static net.minecraft.command.Commands.literal;
-import static net.minecraft.command.arguments.DimensionArgument.getDimension;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
+import static net.minecraft.commands.arguments.DimensionArgument.dimension;
 
 @Mod(ChunkyForge.MODID)
 public class ChunkyForge {
@@ -42,14 +42,14 @@ public class ChunkyForge {
     public void onServerStarting(FMLServerStartingEvent event) {
         MinecraftServer server = event.getServer();
         this.chunky = new Chunky(new ForgePlatform(this, server));
-        File configFile = new File(event.getServer().getDataDirectory(), "config/chunky.json");
+        File configFile = new File(event.getServer().getServerDirectory(), "config/chunky.json");
         chunky.setConfig(new GsonConfig(chunky, configFile));
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});
         }
-        Command<CommandSource> command = context -> {
+        Command<CommandSourceStack> command = context -> {
             Sender sender = new ForgeSender(context.getSource());
             Map<String, ChunkyCommand> commands = chunky.getCommands();
             String input = context.getInput();
@@ -59,9 +59,9 @@ public class ChunkyForge {
             commands.get(subCommand).execute(sender, args);
             return Command.SINGLE_SUCCESS;
         };
-        server.getCommandManager().getDispatcher().register(LiteralArgumentBuilder.<CommandSource>literal("chunky")
+        server.getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal("chunky")
                 .then(literal("cancel")
-                        .then(argument("world", getDimension())
+                        .then(argument("world", dimension())
                                 .executes(command))
                         .executes(command))
                 .then(literal("center")
@@ -73,7 +73,7 @@ public class ChunkyForge {
                 .then(literal("confirm")
                         .executes(command))
                 .then(literal("continue")
-                        .then(argument("world", getDimension())
+                        .then(argument("world", dimension())
                                 .executes(command))
                         .executes(command))
                 .then(literal("corners")
@@ -96,7 +96,7 @@ public class ChunkyForge {
                                 .executes(command))
                         .executes(command))
                 .then(literal("pause")
-                        .then(argument("world", getDimension())
+                        .then(argument("world", dimension())
                                 .executes(command))
                         .executes(command))
                 .then(literal("quiet")
@@ -121,7 +121,7 @@ public class ChunkyForge {
                 .then(literal("spawn")
                         .executes(command))
                 .then(literal("start")
-                        .then(argument("world", getDimension())
+                        .then(argument("world", dimension())
                                 .then(argument("shape", string())
                                         .then(argument("centerX", word())
                                                 .then(argument("centerZ", word())
@@ -136,7 +136,7 @@ public class ChunkyForge {
                                 .executes(command))
                         .executes(command))
                 .then(literal("trim")
-                        .then(argument("world", getDimension())
+                        .then(argument("world", dimension())
                                 .then(argument("shape", string())
                                         .then(argument("centerX", word())
                                                 .then(argument("centerZ", word())
@@ -153,11 +153,11 @@ public class ChunkyForge {
                 .then(literal("worldborder")
                         .executes(command))
                 .then(literal("world")
-                        .then(argument("world", getDimension())
+                        .then(argument("world", dimension())
                                 .executes(command))
                         .executes(command))
                 .executes(command)
-                .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2)));
+                .requires(serverCommandSource -> serverCommandSource.hasPermission(2)));
     }
 
     @SubscribeEvent

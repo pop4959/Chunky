@@ -10,18 +10,16 @@ configurations {
     implementation.extendsFrom shade
 }
 
+loom {
+    silentMojangMappingsLicense()
+}
+
 dependencies {
-    shade(project(":common"))
     minecraft "com.mojang:minecraft:$minecraftVersion"
-
-    //mappings minecraft.officialMojangMappings()
-    //mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
-    def mcpChannel = "snapshot"
-    def mcpVer = "20210309-1.16.5"
-    mappings "de.oceanlabs.mcp:mcp_$mcpChannel:$mcpVer"
-
+    mappings minecraft.officialMojangMappings()
     forge "net.minecraftforge:forge:$minecraftVersion-36.1.24"
+
+    shade(project(":common"))
 }
 
 java {

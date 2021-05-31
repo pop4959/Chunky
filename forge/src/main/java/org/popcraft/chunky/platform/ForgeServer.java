@@ -1,9 +1,9 @@
 package org.popcraft.chunky.platform;
 
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.integration.Integration;
 import org.popcraft.chunky.platform.impl.SimpleScheduler;
@@ -32,24 +32,24 @@ public class ForgeServer implements Server {
 
     @Override
     public Optional<World> getWorld(String name) {
-        ResourceLocation resourceLocation = ResourceLocation.tryCreate(name);
+        ResourceLocation resourceLocation = ResourceLocation.tryParse(name);
         if (resourceLocation == null) {
             return Optional.empty();
         }
-        return Optional.ofNullable(server.getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, resourceLocation)))
+        return Optional.ofNullable(server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, resourceLocation)))
                 .map(ForgeWorld::new);
     }
 
     @Override
     public List<World> getWorlds() {
         List<World> worlds = new ArrayList<>();
-        server.getWorlds().forEach(world -> worlds.add(new ForgeWorld(world)));
+        server.getAllLevels().forEach(world -> worlds.add(new ForgeWorld(world)));
         return worlds;
     }
 
     @Override
     public Sender getConsoleSender() {
-        return new ForgeSender(server.getCommandSource());
+        return new ForgeSender(server.createCommandSourceStack());
     }
 
     @Override

@@ -8,7 +8,7 @@ pluginManagement {
 
     // default plugin versions
     plugins {
-        id ("dev.architectury.loom") version "0.8.0-SNAPSHOT"
+        id("dev.architectury.loom") version "0.8.0-SNAPSHOT"
         id("com.github.johnrengelman.shadow") version "7.0.0"
     }
 }
