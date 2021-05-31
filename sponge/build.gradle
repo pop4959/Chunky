@@ -36,9 +36,6 @@ repositories {
 
 dependencies {
     implementation project(':common')
-
-    compileOnly 'org.spongepowered:spongeapi:8.0.0-SNAPSHOT'
-    annotationProcessor 'org.spongepowered:spongeapi:8.0.0-SNAPSHOT'
 }
 
 shadowJar {
