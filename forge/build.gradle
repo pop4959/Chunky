@@ -30,7 +30,7 @@ dependencies {
 
 tasks {
     shadowJar {
-        archiveFileName = "Chunky-${project.version}.jar"
+        archiveFileName.set("Chunky-Forge-${project.version}.jar")
         configurations = [project.configurations.shade]
     }
     build {
