@@ -6,6 +6,12 @@ plugins {
     id 'maven-publish'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(16)
+    }
+}
+
 archivesBaseName = 'chunky'
 
 configurations {

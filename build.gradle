@@ -25,7 +25,11 @@ subprojects {
     project.ext.fullVersion = project.ext.majorVersion + '.' + project.ext.minorVersion + '.' + project.ext.patchVersion
     version = project.ext.fullVersion
 
-    sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(8)
+        }
+    }
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'

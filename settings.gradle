@@ -15,6 +15,6 @@ include(
         'common',
         'bukkit',
         'sponge',
-        'forge',
+//        'forge',
         'fabric'
 )
