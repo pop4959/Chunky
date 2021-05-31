@@ -1,42 +1,49 @@
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.+', changing: true
-    }
-}
-
 plugins {
     id 'com.github.johnrengelman.shadow'
+    id 'dev.architectury.loom'
 }
-
-apply plugin: 'net.minecraftforge.gradle'
 
 group = 'org.popcraft'
-archivesBaseName = 'chunky'
-
-minecraft {
-    mappings channel: 'snapshot', version: '20210309-1.16.5'
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+def minecraftVersion = "1.16.5"
 
 configurations {
-    compile.extendsFrom include
+    implementation.extendsFrom shade
 }
 
 dependencies {
-    include(project(":common"))
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.13'
+    shade(project(":common"))
+    minecraft "com.mojang:minecraft:$minecraftVersion"
+
+    //mappings minecraft.officialMojangMappings()
+    //mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+    def mcpChannel = "snapshot"
+    def mcpVer = "20210309-1.16.5"
+    mappings "de.oceanlabs.mcp:mcp_$mcpChannel:$mcpVer"
+
+    forge "net.minecraftforge:forge:$minecraftVersion-36.1.24"
 }
 
-build.dependsOn shadowJar {
-    archiveFileName = "Chunky-${project.version}.jar"
-    configurations = [project.configurations.include]
+java {
+    withSourcesJar()
+}
+
+tasks {
+    remapJar {
+        input.set(shadowJar.archiveFile)
+        archiveClassifier.set(null)
+        archiveFileName.set("Chunky-forge-${project.version}.jar")
+    }
+    shadowJar {
+        archiveClassifier.set("shadow")
+        configurations = [project.configurations.shade]
+    }
+    jar {
+        archiveClassifier.set("dev")
+    }
+    build {
+        dependsOn(remapJar)
+    }
 }
 
 jar {
@@ -50,13 +57,5 @@ jar {
                 "Implementation-Vendor"   : "pop4959",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
-    }
-}
-
-afterEvaluate {
-    reobf {
-        shadowJar {
-            mappings = createMcpToSrg.output
-        }
     }
 }

@@ -1,14 +1,14 @@
-// This block is required by Fabric
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven {
-            url = 'https://maven.fabricmc.net'
-        }
+        maven { url "https://maven.fabricmc.net/" }
+        maven { url "https://maven.architectury.dev/" }
+        maven { url "https://files.minecraftforge.net/maven/" }
     }
 
     // default plugin versions
     plugins {
+        id ("dev.architectury.loom") version "0.8.0-SNAPSHOT"
         id("com.github.johnrengelman.shadow") version "7.0.0"
     }
 }
@@ -20,7 +20,7 @@ include('common')
 [
     'bukkit',
     'sponge',
-    //'forge',
+    'forge',
     'fabric'
 ].forEach {
     platform(it)
