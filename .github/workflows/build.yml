@@ -15,8 +15,16 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '16'
-        # First build fails for some reason (bug in forgified loom?), so try twice
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      # First build fails for some reason (bug in forgified loom?), so try twice
       - name: Build
         run: |
-        ./gradlew build || true
-        ./gradlew build
+          ./gradlew build || true
+          ./gradlew build
