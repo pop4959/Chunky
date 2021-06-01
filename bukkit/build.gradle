@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'com.github.johnrengelman.shadow'
 }
 
 repositories {
@@ -19,14 +19,18 @@ dependencies {
 }
 
 processResources {
-    from(sourceSets.main.resources.srcDirs) {
+    filesMatching("plugin.yml") {
         expand 'projectVersion': project.ext.fullVersion
-        include 'plugin.yml'
     }
 }
 
+jar {
+    archiveClassifier.set("unshaded")
+}
+
 shadowJar {
-    archiveFileName = "Chunky-${project.ext.fullVersion}.jar"
+    archiveClassifier.set(null)
+    archiveFileName.set("Chunky-Bukkit-${project.ext.fullVersion}.jar")
 
     relocate 'io.papermc.lib', 'org.popcraft.chunky.lib.paperlib'
 }

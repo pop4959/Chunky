@@ -1,22 +1,16 @@
 buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        mavenCentral()
-    }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.+', changing: true
     }
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'com.github.johnrengelman.shadow'
 }
 
-apply plugin: 'net.minecraftforge.gradle'
+plugins.apply("net.minecraftforge.gradle")
 
 group = 'org.popcraft'
-archivesBaseName = 'chunky'
 
 minecraft {
     mappings channel: 'snapshot', version: '20210309-1.16.5'
@@ -26,17 +20,26 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 configurations {
-    compile.extendsFrom include
+    compile.extendsFrom shade
 }
 
 dependencies {
-    include(project(":common"))
+    shade(project(":common"))
     minecraft 'net.minecraftforge:forge:1.16.5-36.1.13'
 }
 
-build.dependsOn shadowJar {
-    archiveFileName = "Chunky-${project.version}.jar"
-    configurations = [project.configurations.include]
+tasks {
+    jar {
+        archiveClassifier.set("unshaded")
+    }
+    shadowJar {
+        archiveClassifier.set(null)
+        archiveFileName.set("Chunky-Forge-${project.version}.jar")
+        configurations = [project.configurations.shade]
+    }
+    build {
+        dependsOn(shadowJar)
+    }
 }
 
 jar {

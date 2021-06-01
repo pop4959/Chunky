@@ -1,20 +1,31 @@
 // This block is required by Fabric
 pluginManagement {
     repositories {
-        jcenter()
-        maven {
-            url = 'https://maven.fabricmc.net'
-        }
         gradlePluginPortal()
+        maven { url "https://maven.fabricmc.net" }
+        maven { url "https://files.minecraftforge.net/maven" }
+    }
+
+    // default plugin versions
+    plugins {
+        id("com.github.johnrengelman.shadow") version "7.0.0"
     }
 }
 
 rootProject.name = 'chunky'
 
-include(
-        'common',
+include('common')
+
+[
         'bukkit',
         'sponge',
-//        'forge',
+        //'forge',
         'fabric'
-)
+].forEach {
+    platform(it)
+}
+
+void platform(String name) {
+    include("chunky-$name")
+    project(":chunky-$name").projectDir = file(name)
+}
