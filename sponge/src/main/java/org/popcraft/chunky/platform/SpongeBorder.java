@@ -1,8 +1,8 @@
 package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.util.Coordinate;
-import org.spongepowered.api.world.WorldBorder;
-import org.spongepowered.math.vector.Vector3d;
+import org.spongepowered.api.world.border.WorldBorder;
+import org.spongepowered.math.vector.Vector2d;
 
 public class SpongeBorder implements Border {
     private WorldBorder worldBorder;
@@ -13,8 +13,8 @@ public class SpongeBorder implements Border {
 
     @Override
     public Coordinate getCenter() {
-        Vector3d center = worldBorder.center();
-        return new Coordinate(center.x(), center.z());
+        Vector2d center = worldBorder.center();
+        return new Coordinate(center.x(), center.y());
     }
 
     @Override
