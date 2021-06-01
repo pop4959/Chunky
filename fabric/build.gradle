@@ -1,6 +1,6 @@
 plugins {
     id 'com.github.johnrengelman.shadow'
-    id 'fabric-loom' version '0.7-SNAPSHOT'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
 }
 
 configurations {
@@ -30,15 +30,8 @@ processResources {
 
 java {
     def targetJava = 16
-    //targetCompatibility = JavaVersion.toVersion(targetJava)
-    //sourceCompatibility = JavaVersion.toVersion(targetJava)
-
-    // todo: When updating to Gradle 7 and Loom 0.8+, remove and replace toolchains usage
-    // here and in the root project build.gradle with the above commented out
-    // source and target compatibility configuration.
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(targetJava)
-    }
+    targetCompatibility = JavaVersion.toVersion(targetJava)
+    sourceCompatibility = JavaVersion.toVersion(targetJava)
 }
 
 tasks {

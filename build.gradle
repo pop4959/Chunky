@@ -19,15 +19,8 @@ subprojects {
     java {
         withSourcesJar()
         def targetJava = 8
-        //targetCompatibility = JavaVersion.toVersion(targetJava)
-        //sourceCompatibility = JavaVersion.toVersion(targetJava)
-
-        // todo: When updating to Gradle 7 and Loom 0.8+, remove and replace toolchains usage
-        // here and in the fabric project build.gradle with the above commented out
-        // source and target compatibility configuration.
-        javaToolchains {
-            targetJava = JavaLanguageVersion.of(targetJava)
-        }
+        targetCompatibility = JavaVersion.toVersion(targetJava)
+        sourceCompatibility = JavaVersion.toVersion(targetJava)
     }
 
     repositories {
