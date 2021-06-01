@@ -29,7 +29,11 @@ dependencies {
 }
 
 tasks {
+    jar {
+        archiveClassifier.set("unshaded")
+    }
     shadowJar {
+        archiveClassifier.set(null)
         archiveFileName.set("Chunky-Forge-${project.version}.jar")
         configurations = [project.configurations.shade]
     }

@@ -24,7 +24,12 @@ processResources {
     }
 }
 
+jar {
+    archiveClassifier.set("unshaded")
+}
+
 shadowJar {
+    archiveClassifier.set(null)
     archiveFileName.set("Chunky-Bukkit-${project.ext.fullVersion}.jar")
 
     relocate 'io.papermc.lib', 'org.popcraft.chunky.lib.paperlib'

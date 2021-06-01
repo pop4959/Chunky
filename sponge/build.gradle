@@ -38,7 +38,12 @@ dependencies {
     implementation project(':common')
 }
 
+jar {
+    archiveClassifier.set("unshaded")
+}
+
 shadowJar {
+    archiveClassifier.set(null)
     archiveFileName.set("Chunky-Sponge-${project.version}.jar")
 }
 
