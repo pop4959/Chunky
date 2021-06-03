@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
@@ -35,7 +36,29 @@ public class FabricWorld implements World {
 
     @Override
     public boolean isChunkGenerated(int x, int z) {
-        return false;
+        if (Thread.currentThread() != serverWorld.getServer().getThread()) {
+            return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), serverWorld.getServer()).join();
+        } else {
+            final ChunkPos chunkPos = new ChunkPos(x, z);
+            ThreadedAnvilChunkStorage chunkStorage = serverWorld.getChunkManager().threadedAnvilChunkStorage;
+            ThreadedAnvilChunkStorageMixin chunkStorageMixin = (ThreadedAnvilChunkStorageMixin) chunkStorage;
+            ChunkHolder loadedChunkHolder = chunkStorageMixin.getChunkHolder(chunkPos.toLong());
+            if (loadedChunkHolder != null && loadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
+                return true;
+            }
+            ChunkHolder unloadedChunkHolder = chunkStorageMixin.getChunksToUnload().get(chunkPos.toLong());
+            if (unloadedChunkHolder != null && unloadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
+                return true;
+            }
+            NbtCompound chunkNbt = chunkStorageMixin.getUpdatedChunkNbt(chunkPos);
+            if (chunkNbt != null && chunkNbt.contains("Level", 10)) {
+                NbtCompound levelCompoundTag = chunkNbt.getCompound("Level");
+                if (levelCompoundTag.contains("Status", 8)) {
+                    return "full".equals(levelCompoundTag.getString("Status"));
+                }
+            }
+            return false;
+        }
     }
 
     @Override
