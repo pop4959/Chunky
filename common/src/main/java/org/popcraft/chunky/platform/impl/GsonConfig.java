@@ -135,17 +135,17 @@ public class GsonConfig implements Config {
 
     @Override
     public int getVersion() {
-        return this.configModel.version == null ? 0 : this.configModel.version;
+        return getConfigModel().map(configModel -> configModel.version).orElse(0);
     }
 
     @Override
     public String getLanguage() {
-        return Input.checkLanguage(this.configModel.language);
+        return getConfigModel().map(configModel -> Input.checkLanguage(configModel.language)).orElse("en");
     }
 
     @Override
     public boolean getContinueOnRestart() {
-        return this.configModel.continueOnRestart == null ? false : this.configModel.continueOnRestart;
+        return getConfigModel().map(configModel -> configModel.continueOnRestart).orElse(false);
     }
 
     @Override
