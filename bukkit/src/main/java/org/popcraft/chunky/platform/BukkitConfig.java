@@ -7,6 +7,7 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.Input;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,11 @@ public class BukkitConfig implements Config {
         plugin.getConfig().options().copyDefaults(true);
         plugin.getConfig().options().copyHeader(true);
         plugin.saveConfig();
+    }
+
+    @Override
+    public Path getDirectory() {
+        return plugin.getDataFolder().toPath();
     }
 
     @Override

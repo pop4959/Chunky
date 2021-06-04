@@ -60,6 +60,11 @@ public class SpongeConfig implements Config {
     }
 
     @Override
+    public Path getDirectory() {
+        return plugin.getConfigPath();
+    }
+
+    @Override
     public Optional<GenerationTask> loadTask(World world) {
         if (this.rootNode == null) {
             return Optional.empty();

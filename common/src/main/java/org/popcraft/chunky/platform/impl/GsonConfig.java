@@ -49,6 +49,11 @@ public class GsonConfig implements Config {
     }
 
     @Override
+    public Path getDirectory() {
+        return configPath.getParent();
+    }
+
+    @Override
     public Optional<GenerationTask> loadTask(World world) {
         if (this.configModel == null) {
             return Optional.empty();
