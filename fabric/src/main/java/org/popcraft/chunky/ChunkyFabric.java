@@ -13,6 +13,7 @@ import org.popcraft.chunky.platform.FabricPlatform;
 import org.popcraft.chunky.platform.FabricSender;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
+import org.popcraft.chunky.util.Limit;
 
 import java.io.File;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class ChunkyFabric implements ModInitializer {
             chunky.setConfig(new GsonConfig(chunky, configFile));
             chunky.setLanguage(chunky.getConfig().getLanguage());
             chunky.loadCommands();
+            Limit.set(chunky.getConfig());
             if (chunky.getConfig().getContinueOnRestart()) {
                 chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});
             }

@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.popcraft.chunky.platform.SpongeConfig;
 import org.popcraft.chunky.platform.SpongePlatform;
 import org.popcraft.chunky.platform.SpongeSender;
+import org.popcraft.chunky.util.Limit;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Server;
@@ -55,6 +56,7 @@ public class ChunkySponge {
         chunky.setConfig(new SpongeConfig(this));
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
+        Limit.set(chunky.getConfig());
     }
 
     @Listener

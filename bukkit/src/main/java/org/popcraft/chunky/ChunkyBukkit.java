@@ -12,6 +12,7 @@ import org.popcraft.chunky.platform.BukkitPlatform;
 import org.popcraft.chunky.platform.BukkitSender;
 import org.popcraft.chunky.platform.Platform;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.util.Limit;
 import org.popcraft.chunky.util.Metrics;
 import org.popcraft.chunky.util.Version;
 
@@ -32,6 +33,7 @@ public final class ChunkyBukkit extends JavaPlugin {
         chunky.setConfig(new BukkitConfig(chunky, this));
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
+        Limit.set(chunky.getConfig());
         Version currentVersion = Version.getCurrentMinecraftVersion();
         if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
             this.getLogger().severe(translate("error_version_spigot"));

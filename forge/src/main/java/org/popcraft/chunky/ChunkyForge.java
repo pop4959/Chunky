@@ -16,6 +16,7 @@ import org.popcraft.chunky.platform.ForgePlatform;
 import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
+import org.popcraft.chunky.util.Limit;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class ChunkyForge {
         chunky.setConfig(new GsonConfig(chunky, configFile));
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
+        Limit.set(chunky.getConfig());
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});
         }
