@@ -26,6 +26,7 @@
   "format_start": "Tarea iniciada para %1$s en %3$s, %4$s con un radio de %5$s.",
   "format_start_confirm": "Ya se ha iniciado una tarea para este mundo. Para continuar ejecutándola, escribe '%s'. Para iniciar una nueva tarea, escribe '%s'.",
   "format_start_disk": "El servidor solo tiene %s de espacio en disco restantes, pero el espacio estimado para esta tarea es de %s. Si aún así deseas continuar, usa '%s'.",
+  "format_start_limit": "Your host has limited the maximum pre-generation radius to %s to avoid excessive disk space usage. Reduce the radius or contact your host if you wish to have this limit removed.",
   "format_started_already": "¡Tarea ya iniciada para %s!",
   "format_world": "Mundo cambiado a %s.",
   "help_cancel": "&2chunky cancel&r - Detiene y elimina las tareas actuales o guardadas",
