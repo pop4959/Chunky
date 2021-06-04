@@ -26,6 +26,7 @@
   "format_start": "Taak begonnen voor %1$s om %3$s, %4$s met de radius %5$s.",
   "format_start_confirm": "Er is al een taak gestart voor deze wereld. Om deze taak te blijven uitvoeren, typ '%s'. Om een nieuwe taak te beginnen, typ '%s'.",
   "format_start_disk": "De server heeft nog %s schijfruimte over, maar de geschatte schijfruimte die nodig is voor de taak is %s. Als u toch wilt beginnen, typ dan '%s'.",
+  "format_start_limit": "Your host has limited the maximum pre-generation radius to %s to avoid excessive disk space usage. Reduce the radius or contact your host if you wish to have this limit removed.",
   "format_started_already": "Taak is al gestart voor %s!",
   "format_world": "Wereld veranderd naar %s.",
   "help_cancel": "&2chunky cancel&r - Stop en verwijder huidige of opgeslagen taken",
