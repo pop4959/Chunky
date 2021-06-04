@@ -26,7 +26,7 @@
   "format_start": "Aufgabe gestartet für %2$s Region in %1$s bei %3$s, %4$s mit Radius %5$s.",
   "format_start_confirm": "Eine Aufgabe für diese Welt wurde bereits gestartet. Um sie fort zu führen, schreibe '%s'. Um eine neue Aufgabe zu starten, schreibe '%s'.",
   "format_start_disk": "Der Server hat nurnoch %s Festplattenspeicher verbleibend, aber der geschätzte Speicherplatz benötigt für die Aufgabe ist %s. Wenn du trotzdem starten willst, schreibe '%s'.",
-  "format_start_limit": "Your host has limited the maximum pre-generation radius to %s to avoid excessive disk space usage. Reduce the radius or contact your host if you wish to have this limit removed.",
+  "format_start_limit": "Dein Host hat den maximalen Radius fürs generieren auf %s beschränkt, um übermässigen Speicherplatzverbrauch zu vermeiden. Verringere den Radius oder kontaktiere deinen Host wenn du dieses Limit entfernt haben willst.",
   "format_started_already": "Aufgabe für %s bereits gestartet!",
   "format_world": "Welt geändert zu %s.",
   "help_cancel": "&2chunky cancel&r - Stoppe und lösche alle momentan gespeicherten Aufgaben",
