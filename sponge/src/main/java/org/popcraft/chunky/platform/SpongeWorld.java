@@ -63,8 +63,25 @@ public class SpongeWorld implements World {
     }
 
     @Override
+    public Optional<Path> getEntitiesDirectory() {
+        return getDirectory("entities");
+    }
+
+    @Override
+    public Optional<Path> getPOIDirectory() {
+        return getDirectory("poi");
+    }
+
+    @Override
     public Optional<Path> getRegionDirectory() {
-        Path regionDirectory = world.directory().resolve("region");
+        return getDirectory("region");
+    }
+
+    private Optional<Path> getDirectory(final String name) {
+        if (name == null) {
+            return Optional.empty();
+        }
+        Path regionDirectory = world.directory().resolve("name");
         return Files.exists(regionDirectory) ? Optional.of(regionDirectory) : Optional.empty();
     }
 

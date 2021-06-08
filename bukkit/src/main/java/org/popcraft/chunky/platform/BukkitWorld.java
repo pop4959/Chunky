@@ -48,14 +48,30 @@ public class BukkitWorld implements World {
     }
 
     @Override
+    public Optional<Path> getEntitiesDirectory() {
+        return getDirectory("entities");
+    }
+
+    @Override
+    public Optional<Path> getPOIDirectory() {
+        return getDirectory("poi");
+    }
+
+    @Override
     public Optional<Path> getRegionDirectory() {
-        try {
-            return Files.walk(world.getWorldFolder().toPath())
-                    .filter(Files::isDirectory)
-                    .filter(path -> "region".equals(path.getFileName().toString()))
-                    .findFirst();
-        } catch (IOException e) {
-            e.printStackTrace();
+        return getDirectory("region");
+    }
+
+    private Optional<Path> getDirectory(final String name) {
+        if (name != null) {
+            try {
+                return Files.walk(world.getWorldFolder().toPath())
+                        .filter(Files::isDirectory)
+                        .filter(path -> name.equals(path.getFileName().toString()))
+                        .findFirst();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return Optional.empty();
     }

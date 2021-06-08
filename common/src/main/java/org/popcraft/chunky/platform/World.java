@@ -22,5 +22,9 @@ public interface World {
 
     Border getWorldBorder();
 
+    Optional<Path> getEntitiesDirectory();
+
+    Optional<Path> getPOIDirectory();
+
     Optional<Path> getRegionDirectory();
 }

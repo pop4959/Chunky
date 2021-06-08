@@ -80,14 +80,22 @@ public class TrimCommand extends ChunkyCommand {
         final Runnable deletionAction = () -> chunky.getPlatform().getServer().getScheduler().runTaskAsync(() -> {
             sender.sendMessagePrefixed("format_start", selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection));
             final Optional<Path> regionPath = selection.world().getRegionDirectory();
+            final Optional<Path> poiPath = selection.world().getPOIDirectory();
+            final Optional<Path> entitiesPath = selection.world().getEntitiesDirectory();
             final AtomicLong deleted = new AtomicLong();
             final long startTime = System.currentTimeMillis();
-            if (regionPath.isPresent()) {
-                try {
+            try {
+                if (regionPath.isPresent()) {
                     Files.walk(regionPath.get()).forEach(region -> deleted.getAndAdd(checkRegion(region, shape)));
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+                if (poiPath.isPresent()) {
+                    Files.walk(poiPath.get()).forEach(region -> checkRegion(region, shape));
+                }
+                if (entitiesPath.isPresent()) {
+                    Files.walk(entitiesPath.get()).forEach(region -> checkRegion(region, shape));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             final long totalTime = System.currentTimeMillis() - startTime;
             sender.sendMessagePrefixed("task_trim", deleted.get(), selection.world().getName(), String.format("%.3f", totalTime / 1e3f));
