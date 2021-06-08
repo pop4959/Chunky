@@ -26,6 +26,7 @@
   "format_start": "La tâche a commencé en %s pour la région %s centrée en %s, %s avec un rayon de %s.",
   "format_start_confirm": "Une tâche était déjà commencée pour ce monde. Pour continuer son exécution, tapez '%s'. Pour commencer une nouvelle tâche, tapez '%s'.",
   "format_start_disk": "Le serveur a seulement %s d'espace disque restant, mais l'espace disque estimé requis pour cette tâche est de %s. Si vous souhaitez commencer tout de même, écrivez '%s'.",
+  "format_start_limit": "Your host has limited the maximum pre-generation radius to %s to avoid excessive disk space usage. Reduce the radius or contact your host if you wish to have this limit removed.",
   "format_started_already": "La tâche a déjà commencé pour %s !",
   "format_world": "Le monde est passé à %s.",
   "help_cancel": "&2chunky cancel&r - Arrêter et supprimer les tâches en cours ou enregistrées",
