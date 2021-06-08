@@ -26,7 +26,7 @@
   "format_start": "任务开始于模式 %1$s 以间隔 %3$s, %4$s 以 %5$s 的范围进行。",
   "format_start_confirm": "该世界已经有一个已开始的预生成任务，如果您想继续该任务，请输入 '%s'。如果您想开启一项新生成任务，请输入 '%s'。",
   "format_start_disk": "服务器仅剩余磁盘空间 %s ， 但任务所需的预估磁盘空间占用是 %s。 如果您仍想继续，请输入 '%s'。",
-  "format_start_limit": "Your host has limited the maximum pre-generation radius to %s to avoid excessive disk space usage. Reduce the radius or contact your host if you wish to have this limit removed.",
+  "format_start_limit": "您的主机提供商已将最大预生成的半径限制在 %s 以避免磁盘空间的过度使用。 如果您想要解除此限制，减少您的半径大小或联系您的主机提供商。",
   "format_started_already": "任务已经持续了 %s!",
   "format_world": "世界被改变为 %s。",
   "help_cancel": "&2chunky cancel&r - 取消并删除当前正在运行或已保存的任务",
