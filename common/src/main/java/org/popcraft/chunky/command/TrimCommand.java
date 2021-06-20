@@ -163,6 +163,9 @@ public class TrimCommand extends ChunkyCommand {
     private int trimRegion(final Path region, final Shape shape, final int chunkX, final int chunkZ) {
         int deleted = 0;
         try (RandomAccessFile regionFile = new RandomAccessFile(region.toFile(), "rw")) {
+            if (regionFile.length() < 4096) {
+                return 0;
+            }
             for (int offsetX = 0; offsetX < 32; ++offsetX) {
                 for (int offsetZ = 0; offsetZ < 32; ++offsetZ) {
                     int chunkCenterX = ((chunkX + offsetX) << 4) + 8;
