@@ -3,36 +3,36 @@ package org.popcraft.chunky.util;
 import org.bukkit.Bukkit;
 
 public class Version implements Comparable<Version> {
-
     public static final Version v1_13_2 = new Version(1, 13, 2);
     public static final Version v1_15_0 = new Version(1, 15, 0);
-
     private static Version currentMinecraftVersion;
     private int major = 0, minor = 0, patch = 0;
 
-    public Version(int major, int minor, int patch) {
+    public Version(final int major, final int minor, final int patch) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
     }
 
-    public Version(String version) {
-        int dash = version.indexOf('-');
-        if (dash > -1) {
-            version = version.substring(0, dash);
+    public Version(final String version) {
+        if (version == null || version.isEmpty()) {
+            this.major = Integer.MIN_VALUE;
+            return;
         }
-        String[] semVer = version.split("\\.");
-        try {
-            if (semVer.length > 0) {
-                this.major = Integer.parseInt(semVer[0]);
-            }
-            if (semVer.length > 1) {
-                this.minor = Integer.parseInt(semVer[1]);
-            }
-            if (semVer.length > 2) {
-                this.patch = Integer.parseInt(semVer[2]);
-            }
-        } catch (NumberFormatException ignored) {
+        final int dash = version.indexOf('-');
+        if (dash < 1) {
+            this.major = Integer.MIN_VALUE;
+            return;
+        }
+        final String[] semVer = version.substring(0, dash).split("\\.");
+        if (semVer.length > 0) {
+            this.major = Input.tryInteger(semVer[0]).orElse(Integer.MIN_VALUE);
+        }
+        if (semVer.length > 1) {
+            this.minor = Input.tryInteger(semVer[1]).orElse(Integer.MIN_VALUE);
+        }
+        if (semVer.length > 2) {
+            this.patch = Input.tryInteger(semVer[2]).orElse(Integer.MIN_VALUE);
         }
     }
 
@@ -61,6 +61,10 @@ public class Version implements Comparable<Version> {
 
     public boolean isLowerThanOrEqualTo(Version o) {
         return compareTo(o) <= 0;
+    }
+
+    public boolean isValid() {
+        return major != Integer.MIN_VALUE && minor != Integer.MIN_VALUE && patch != Integer.MIN_VALUE;
     }
 
     @Override

@@ -34,13 +34,16 @@ public final class ChunkyBukkit extends JavaPlugin {
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
         Limit.set(chunky.getConfig());
-        Version currentVersion = Version.getCurrentMinecraftVersion();
+        final Version currentVersion = Version.getCurrentMinecraftVersion();
         if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
-            this.getLogger().severe(translate("error_version_spigot"));
-            this.getServer().getPluginManager().disablePlugin(this);
-        } else if (Version.v1_13_2.isHigherThan(currentVersion)) {
-            this.getLogger().severe(translate("error_version"));
-            this.getServer().getPluginManager().disablePlugin(this);
+            getLogger().severe(translate("error_version_spigot"));
+            getServer().getPluginManager().disablePlugin(this);
+        } else if (currentVersion.isValid() && Version.v1_13_2.isHigherThan(currentVersion)) {
+            getLogger().severe(translate("error_version"));
+            getServer().getPluginManager().disablePlugin(this);
+        }
+        if (!isEnabled()) {
+            return;
         }
         Platform platform = chunky.getPlatform();
         if (chunky.getConfig().getContinueOnRestart()) {
@@ -49,7 +52,7 @@ public final class ChunkyBukkit extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
             platform.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
-        Metrics metrics = new Metrics(this, 8211);
+        final Metrics metrics = new Metrics(this, 8211);
         if (metrics.isEnabled()) {
             metrics.addCustomChart(new Metrics.SimplePie("language", () -> chunky.getConfig().getLanguage()));
         }
@@ -59,11 +62,11 @@ public final class ChunkyBukkit extends JavaPlugin {
     public void onDisable() {
         chunky.getConfig().saveTasks();
         chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-        this.getServer().getScheduler().getActiveWorkers().stream()
+        getServer().getScheduler().getActiveWorkers().stream()
                 .filter(w -> w.getOwner() == this)
                 .map(BukkitWorker::getThread)
                 .forEach(Thread::interrupt);
-        this.getServer().getScheduler().cancelTasks(this);
+        getServer().getScheduler().cancelTasks(this);
     }
 
     @Override
