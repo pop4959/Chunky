@@ -44,7 +44,7 @@ jar {
 
 shadowJar {
     archiveClassifier.set(null)
-    archiveFileName.set("Chunky-Sponge-${project.version}.jar")
+    archiveFileName.set("Chunky-${project.version}.jar")
 }
 
 artifacts {

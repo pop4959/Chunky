@@ -30,7 +30,7 @@ jar {
 
 shadowJar {
     archiveClassifier.set(null)
-    archiveFileName.set("Chunky-Bukkit-${project.ext.fullVersion}.jar")
+    archiveFileName.set("Chunky-${project.ext.fullVersion}.jar")
 
     relocate 'io.papermc.lib', 'org.popcraft.chunky.lib.paperlib'
 }

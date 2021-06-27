@@ -45,7 +45,7 @@ tasks {
     remapJar {
         archiveClassifier.set(null)
         input.set(shadowJar.archiveFile)
-        archiveFileName.set("Chunky-Fabric-${project.version}.jar")
+        archiveFileName.set("Chunky-${project.version}.jar")
     }
     build {
         dependsOn(remapJar)
