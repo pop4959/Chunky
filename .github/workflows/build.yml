@@ -25,3 +25,18 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build
         run: ./gradlew build
+      - name: Upload Bukkit
+        uses: actions/upload-artifact@v2
+        with:
+          name: Bukkit
+          path: "bukkit/build/libs/Chunky-*.jar"
+      - name: Upload Fabric
+        uses: actions/upload-artifact@v2
+        with:
+          name: Fabric
+          path: "fabric/build/libs/Chunky-*.jar"
+      - name: Upload Sponge
+        uses: actions/upload-artifact@v2
+        with:
+          name: Sponge
+          path: "sponge/build/libs/Chunky-*.jar"
