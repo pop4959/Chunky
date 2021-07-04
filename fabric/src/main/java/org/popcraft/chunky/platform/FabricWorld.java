@@ -75,6 +75,7 @@ public class FabricWorld implements World {
             ChunkHolder chunkHolder = threadedAnvilChunkStorageMixin.getChunkHolder(chunkPos.toLong());
             if (chunkHolder == null) {
                 chunkFuture.complete(null);
+                serverWorld.getChunkManager().removeTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
             } else {
                 threadedAnvilChunkStorage.getChunk(chunkHolder, ChunkStatus.FULL).thenAcceptAsync(either -> {
                     chunkFuture.complete(null);
