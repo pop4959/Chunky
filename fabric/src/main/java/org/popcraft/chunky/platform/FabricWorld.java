@@ -6,9 +6,11 @@ import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.server.world.ThreadedAnvilChunkStorage;
 import net.minecraft.util.Unit;
+import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.dimension.DimensionType;
 import org.popcraft.chunky.mixin.ServerChunkManagerMixin;
 import org.popcraft.chunky.mixin.ThreadedAnvilChunkStorageMixin;
 import org.popcraft.chunky.util.Coordinate;
@@ -126,8 +128,8 @@ public class FabricWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        Path regionDirectory = ((ThreadedAnvilChunkStorageMixin) serverWorld.getChunkManager().threadedAnvilChunkStorage).getSaveDir().toPath().resolve(name);
-        return Files.exists(regionDirectory) ? Optional.of(regionDirectory) : Optional.empty();
+        Path directory = DimensionType.getSaveDirectory(serverWorld.getRegistryKey(), serverWorld.getServer().getSavePath(WorldSavePath.ROOT).toFile()).toPath().normalize().resolve(name);
+        return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
 
     @Override

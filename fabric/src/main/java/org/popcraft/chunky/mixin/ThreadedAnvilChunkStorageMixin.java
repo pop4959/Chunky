@@ -9,8 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-import java.io.File;
-
 @Mixin(ThreadedAnvilChunkStorage.class)
 public interface ThreadedAnvilChunkStorageMixin {
     @Invoker("getChunkHolder")
@@ -21,7 +19,4 @@ public interface ThreadedAnvilChunkStorageMixin {
 
     @Accessor("chunksToUnload")
     public Long2ObjectLinkedOpenHashMap<ChunkHolder> getChunksToUnload();
-
-    @Accessor("saveDir")
-    public File getSaveDir();
 }
