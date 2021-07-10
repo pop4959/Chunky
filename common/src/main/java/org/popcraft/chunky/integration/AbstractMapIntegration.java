@@ -10,6 +10,7 @@ public abstract class AbstractMapIntegration implements MapIntegration {
         if (label != null && !label.isEmpty()) {
             this.label = label;
         }
+        this.weight = Math.max(1, weight);
         if (color.length() != 6) {
             return;
         }
@@ -17,6 +18,5 @@ public abstract class AbstractMapIntegration implements MapIntegration {
             this.color = Integer.parseInt(color, 16);
         } catch (NumberFormatException ignored) {
         }
-        this.weight = weight;
     }
 }

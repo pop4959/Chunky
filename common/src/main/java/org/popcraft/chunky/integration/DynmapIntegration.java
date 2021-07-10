@@ -16,7 +16,6 @@ import java.util.Map;
 public class DynmapIntegration extends AbstractMapIntegration {
     private MarkerSet markerSet;
     private Map<World, MarkerDescription> markers;
-    private int weight = 3;
 
     public DynmapIntegration(DynmapAPI dynmapAPI) {
         this.markerSet = dynmapAPI.getMarkerAPI().createMarkerSet("chunky.markerset", this.label, null, false);

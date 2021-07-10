@@ -24,7 +24,6 @@ public class Pl3xMapIntegration extends AbstractMapIntegration {
     private Pl3xMap pl3xMap;
     private boolean hideByDefault;
     private int priority;
-    private int weight = 3;
     private Map<UUID, LayerProvider> defaultProviders = new HashMap<>();
     private static final Key WORLDBORDER_KEY = Key.of("pl3xmap-worldborder");
     private static final Key CHUNKY_KEY = Key.of("chunky");
