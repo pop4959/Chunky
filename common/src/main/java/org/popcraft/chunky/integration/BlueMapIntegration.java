@@ -67,7 +67,7 @@ public class BlueMapIntegration extends AbstractMapIntegration {
         }
         blueMapAPI.getWorld(world.getUUID()).ifPresent(blueWorld -> blueWorld.getMaps().forEach(map -> {
             ShapeMarker marker = markerSet.createShapeMarker(world.getName(), map, blueShape, world.getSeaLevel());
-            marker.setColors(this.color, new Color(0, true));
+            marker.setColors(new Color(this.color), new Color(0, true));
             marker.setLabel(this.label);
             try {
                 //noinspection JavaReflectionMemberAccess

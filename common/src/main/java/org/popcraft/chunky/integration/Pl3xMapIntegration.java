@@ -15,6 +15,7 @@ import org.popcraft.chunky.shape.AbstractPolygon;
 import org.popcraft.chunky.shape.Circle;
 import org.popcraft.chunky.shape.Shape;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -78,7 +79,7 @@ public class Pl3xMapIntegration extends AbstractMapIntegration {
             }
             MarkerOptions markerOptions = MarkerOptions.builder()
                     .stroke(true)
-                    .strokeColor(this.color)
+                    .strokeColor(new Color(this.color))
                     .strokeWeight(this.weight)
                     .fill(false)
                     .clickTooltip(this.label)
