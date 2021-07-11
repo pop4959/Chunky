@@ -16,7 +16,7 @@ public class Input {
         if (input == null || input.isEmpty()) {
             return Optional.empty();
         }
-        return chunky.getPlatform().getServer().getWorld(input);
+        return chunky.getServer().getWorld(input);
     }
 
     public static Optional<String> tryShape(String input) {

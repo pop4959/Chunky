@@ -80,7 +80,7 @@ public class StartCommand extends ChunkyCommand {
         final Runnable startAction = () -> {
             GenerationTask generationTask = new GenerationTask(chunky, current);
             chunky.getGenerationTasks().put(current.world(), generationTask);
-            chunky.getPlatform().getServer().getScheduler().runTaskAsync(generationTask);
+            chunky.getServer().getScheduler().runTaskAsync(generationTask);
             sender.sendMessagePrefixed("format_start", current.world().getName(), translate("shape_" + current.shape()), Formatting.number(current.centerX()), Formatting.number(current.centerZ()), Formatting.radius(current));
         };
         if (chunky.getConfig().loadTask(current.world()).isPresent()) {
@@ -95,7 +95,7 @@ public class StartCommand extends ChunkyCommand {
     public List<String> tabSuggestions(Sender sender, String[] args) {
         if (args.length == 2) {
             List<String> suggestions = new ArrayList<>();
-            chunky.getPlatform().getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
+            chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
             return suggestions;
         } else if (args.length == 3) {
             return Input.SHAPES;

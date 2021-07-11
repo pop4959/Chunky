@@ -81,7 +81,7 @@ public class GsonConfig implements Config {
     @Override
     public List<GenerationTask> loadTasks() {
         List<GenerationTask> generationTasks = new ArrayList<>();
-        chunky.getPlatform().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
+        chunky.getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
         return generationTasks;
     }
 

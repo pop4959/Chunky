@@ -8,9 +8,8 @@ import org.bukkit.scheduler.BukkitWorker;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.integration.WorldBorderIntegration;
 import org.popcraft.chunky.platform.BukkitConfig;
-import org.popcraft.chunky.platform.BukkitPlatform;
 import org.popcraft.chunky.platform.BukkitSender;
-import org.popcraft.chunky.platform.Platform;
+import org.popcraft.chunky.platform.BukkitServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Limit;
 import org.popcraft.chunky.util.Metrics;
@@ -29,7 +28,7 @@ public final class ChunkyBukkit extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.chunky = new Chunky(new BukkitPlatform(this));
+        this.chunky = new Chunky(new BukkitServer(this));
         chunky.setConfig(new BukkitConfig(chunky, this));
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
@@ -45,12 +44,11 @@ public final class ChunkyBukkit extends JavaPlugin {
         if (!isEnabled()) {
             return;
         }
-        Platform platform = chunky.getPlatform();
         if (chunky.getConfig().getContinueOnRestart()) {
-            getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get("continue").execute(platform.getServer().getConsoleSender(), new String[]{}));
+            getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{}));
         }
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
-            platform.getServer().getIntegrations().put("border", new WorldBorderIntegration());
+            chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
         final Metrics metrics = new Metrics(this, 8211);
         if (metrics.isEnabled()) {

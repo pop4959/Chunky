@@ -93,7 +93,7 @@ public class SpongeConfig implements Config {
     @Override
     public List<GenerationTask> loadTasks() {
         List<GenerationTask> generationTasks = new ArrayList<>();
-        plugin.getChunky().getPlatform().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
+        plugin.getChunky().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
         return generationTasks;
     }
 

@@ -2,8 +2,8 @@ package org.popcraft.chunky;
 
 import org.popcraft.chunky.command.*;
 import org.popcraft.chunky.platform.Config;
-import org.popcraft.chunky.platform.Platform;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.platform.Server;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.PendingAction;
 import org.popcraft.chunky.util.Translator;
@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Chunky {
-    private Platform platform;
+    private Server server;
     private Config config;
     private Map<World, GenerationTask> generationTasks;
     private Map<String, ChunkyCommand> commands;
@@ -22,10 +22,10 @@ public class Chunky {
     private Options options;
     private final Map<String, PendingAction> pendingActions = new HashMap<>();
 
-    public Chunky(Platform platform) {
-        this.platform = platform;
+    public Chunky(Server server) {
+        this.server = server;
         this.generationTasks = new ConcurrentHashMap<>();
-        this.selection = Selection.builder(platform.getServer().getWorlds().get(0));
+        this.selection = Selection.builder(server.getWorlds().get(0));
         this.options = new Options();
     }
 
@@ -52,8 +52,8 @@ public class Chunky {
         this.commands = commands;
     }
 
-    public Platform getPlatform() {
-        return platform;
+    public Server getServer() {
+        return server;
     }
 
     public Config getConfig() {

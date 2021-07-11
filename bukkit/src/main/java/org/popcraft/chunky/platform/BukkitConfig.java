@@ -57,7 +57,7 @@ public class BukkitConfig implements Config {
     @Override
     public synchronized List<GenerationTask> loadTasks() {
         List<GenerationTask> generationTasks = new ArrayList<>();
-        chunky.getPlatform().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
+        chunky.getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
         return generationTasks;
     }
 

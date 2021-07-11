@@ -77,7 +77,7 @@ public class GenerationTask implements Runnable {
         this.progress.seconds = time - this.progress.hours * 3600 - this.progress.minutes * 60;
         this.progress.chunkX = chunkX;
         this.progress.chunkZ = chunkZ;
-        this.progress.sendUpdate(chunky.getPlatform().getServer().getConsoleSender());
+        this.progress.sendUpdate(chunky.getServer().getConsoleSender());
     }
 
     @Override
@@ -106,7 +106,7 @@ public class GenerationTask implements Runnable {
             });
         }
         if (stopped) {
-            chunky.getPlatform().getServer().getConsoleSender().sendMessagePrefixed("task_stopped", selection.world().getName());
+            chunky.getServer().getConsoleSender().sendMessagePrefixed("task_stopped", selection.world().getName());
         } else {
             this.cancelled = true;
         }

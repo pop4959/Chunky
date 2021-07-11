@@ -15,7 +15,7 @@ public class ReloadCommand extends ChunkyCommand {
             sender.sendMessagePrefixed("format_reload_tasks_running");
             return;
         }
-        Config config = chunky.getPlatform().getServer().getConfig();
+        Config config = chunky.getServer().getConfig();
         config.reload();
         chunky.setLanguage(config.getLanguage());
         sender.sendMessagePrefixed("format_reload");

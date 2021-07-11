@@ -9,8 +9,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
-import org.popcraft.chunky.platform.FabricPlatform;
 import org.popcraft.chunky.platform.FabricSender;
+import org.popcraft.chunky.platform.FabricServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
 import org.popcraft.chunky.util.Limit;
@@ -31,20 +31,20 @@ public class ChunkyFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
-            this.chunky = new Chunky(new FabricPlatform(this, minecraftServer));
+            this.chunky = new Chunky(new FabricServer(this, minecraftServer));
             File configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "chunky.json");
             chunky.setConfig(new GsonConfig(chunky, configFile));
             chunky.setLanguage(chunky.getConfig().getLanguage());
             chunky.loadCommands();
             Limit.set(chunky.getConfig());
             if (chunky.getConfig().getContinueOnRestart()) {
-                chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});
+                chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{});
             }
         });
         ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> {
             chunky.getConfig().saveTasks();
             chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-            chunky.getPlatform().getServer().getScheduler().cancelTasks();
+            chunky.getServer().getScheduler().cancelTasks();
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             Command<ServerCommandSource> command = context -> {

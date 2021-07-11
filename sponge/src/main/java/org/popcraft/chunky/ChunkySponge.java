@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import org.apache.logging.log4j.Logger;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 import org.popcraft.chunky.platform.SpongeConfig;
-import org.popcraft.chunky.platform.SpongePlatform;
 import org.popcraft.chunky.platform.SpongeSender;
+import org.popcraft.chunky.platform.SpongeServer;
 import org.popcraft.chunky.util.Limit;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.ResourceKey;
@@ -53,7 +53,7 @@ public class ChunkySponge {
 
     @Listener
     public void onLoadedGame(final LoadedGameEvent event) {
-        this.chunky = new Chunky(new SpongePlatform(this));
+        this.chunky = new Chunky(new SpongeServer(this));
         chunky.setConfig(new SpongeConfig(this));
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
@@ -64,7 +64,7 @@ public class ChunkySponge {
     public void onServerStopping(final StoppingEngineEvent<Server> event) {
         chunky.getConfig().saveTasks();
         chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-        chunky.getPlatform().getServer().getScheduler().cancelTasks();
+        chunky.getServer().getScheduler().cancelTasks();
     }
 
     @Listener

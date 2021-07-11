@@ -35,7 +35,7 @@ public class WorldBorderCommand extends ChunkyCommand {
     }
 
     boolean setBorderViaIntegration(World world) {
-        Map<String, Integration> integrations = chunky.getPlatform().getServer().getIntegrations();
+        Map<String, Integration> integrations = chunky.getServer().getIntegrations();
         if (integrations.containsKey("border")) {
             BorderIntegration worldborder = (BorderIntegration) integrations.get("border");
             String worldName = world.getName();
