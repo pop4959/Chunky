@@ -2,6 +2,7 @@ package org.popcraft.chunky;
 
 import com.google.inject.Inject;
 import org.apache.logging.log4j.Logger;
+import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 import org.popcraft.chunky.platform.SpongeConfig;
 import org.popcraft.chunky.platform.SpongePlatform;
 import org.popcraft.chunky.platform.SpongeSender;
@@ -70,7 +71,8 @@ public class ChunkySponge {
     public void onRegisterCommand(final RegisterCommandEvent<Command.Parameterized> event) {
         Command.Parameterized cancelCommand = Command.builder()
                 .permission("chunky.command.cancel")
-                .addParameters(Parameter.world().key("world").optional().build())
+                .addParameters(Parameter.world().key("world").terminal().build())
+                .terminal(true)
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("cancel");
@@ -81,8 +83,11 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized centerCommand = Command.builder()
                 .permission("chunky.command.center")
-                .addParameters(Parameter.string().key("x").optional().build())
-                .addParameters(Parameter.string().key("z").optional().build())
+                .addParameters(
+                        Parameter.string().key("x").terminal().build(),
+                        Parameter.string().key("z").terminal().build()
+                )
+                .terminal(true)
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("center");
@@ -101,7 +106,8 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized continueCommand = Command.builder()
                 .permission("chunky.command.continue")
-                .addParameters(Parameter.world().key("world").optional().build())
+                .addParameters(Parameter.world().key("world").terminal().build())
+                .terminal(true)
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("continue");
@@ -112,10 +118,12 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized cornersCommand = Command.builder()
                 .permission("chunky.command.corners")
-                .addParameter(Parameter.string().key("x1").build())
-                .addParameter(Parameter.string().key("z1").build())
-                .addParameter(Parameter.string().key("x2").build())
-                .addParameter(Parameter.string().key("z2").build())
+                .addParameters(
+                        Parameter.string().key("x1").build(),
+                        Parameter.string().key("z1").build(),
+                        Parameter.string().key("x2").build(),
+                        Parameter.string().key("z2").build()
+                )
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("corners");
@@ -129,7 +137,8 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized helpCommand = Command.builder()
                 .permission("chunky.command.help")
-                .addParameter(Parameter.integerNumber().key("page").optional().build())
+                .addParameters(Parameter.integerNumber().key("page").terminal().build())
+                .terminal(true)
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("help");
@@ -140,7 +149,7 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized patternCommand = Command.builder()
                 .permission("chunky.command.pattern")
-                .addParameter(Parameter.string().key("pattern").build())
+                .addParameters(Parameter.string().key("pattern").completer(SuggestionProviders.PATTERNS).build())
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("pattern");
@@ -151,7 +160,8 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized pauseCommand = Command.builder()
                 .permission("chunky.command.pause")
-                .addParameters(Parameter.world().key("world").optional().build())
+                .addParameters(Parameter.world().key("world").terminal().build())
+                .terminal(true)
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("pause");
@@ -162,7 +172,7 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized quietCommand = Command.builder()
                 .permission("chunky.command.quiet")
-                .addParameter(Parameter.integerNumber().key("interval").build())
+                .addParameters(Parameter.integerNumber().key("interval").build())
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("quiet");
@@ -173,8 +183,10 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized radiusCommand = Command.builder()
                 .permission("chunky.command.radius")
-                .addParameters(Parameter.string().key("radiusX").build())
-                .addParameters(Parameter.string().key("radiusZ").optional().build())
+                .addParameters(
+                        Parameter.string().key("radiusX").terminal().build(),
+                        Parameter.string().key("radiusZ").terminal().build()
+                )
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("radius");
@@ -193,7 +205,7 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized shapeCommand = Command.builder()
                 .permission("chunky.command.shape")
-                .addParameter(Parameter.string().key("shape").build())
+                .addParameters(Parameter.string().key("shape").completer(SuggestionProviders.SHAPES).build())
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("shape");
@@ -218,12 +230,15 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized startCommand = Command.builder()
                 .permission("chunky.command.start")
-                .addParameters(Parameter.world().key("world").optional().build())
-                .addParameter(Parameter.string().key("shape").optional().build())
-                .addParameters(Parameter.string().key("x").optional().build())
-                .addParameters(Parameter.string().key("z").optional().build())
-                .addParameters(Parameter.string().key("radiusX").optional().build())
-                .addParameters(Parameter.string().key("radiusZ").optional().build())
+                .addParameters(
+                        Parameter.world().key("world").terminal().build(),
+                        Parameter.string().key("shape").terminal().completer(SuggestionProviders.SHAPES).build(),
+                        Parameter.string().key("x").terminal().build(),
+                        Parameter.string().key("z").terminal().build(),
+                        Parameter.string().key("radiusX").terminal().build(),
+                        Parameter.string().key("radiusZ").terminal().build()
+                )
+                .terminal(true)
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("start");
@@ -239,12 +254,15 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized trimCommand = Command.builder()
                 .permission("chunky.command.trim")
-                .addParameters(Parameter.world().key("world").optional().build())
-                .addParameter(Parameter.string().key("shape").optional().build())
-                .addParameters(Parameter.string().key("x").optional().build())
-                .addParameters(Parameter.string().key("z").optional().build())
-                .addParameters(Parameter.string().key("radiusX").optional().build())
-                .addParameters(Parameter.string().key("radiusZ").optional().build())
+                .addParameters(
+                        Parameter.world().key("world").terminal().build(),
+                        Parameter.string().key("shape").terminal().completer(SuggestionProviders.SHAPES).build(),
+                        Parameter.string().key("x").terminal().build(),
+                        Parameter.string().key("z").terminal().build(),
+                        Parameter.string().key("radiusX").terminal().build(),
+                        Parameter.string().key("radiusZ").terminal().build()
+                )
+                .terminal(true)
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add("trim");
