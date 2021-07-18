@@ -50,6 +50,7 @@ public class Chunky {
         commands.put("trim", new TrimCommand(this));
         commands.put("worldborder", new WorldBorderCommand(this));
         commands.put("world", new WorldCommand(this));
+        commands.put("status", new StatusCommand(this));
         this.commands = commands;
     }
 
