@@ -43,6 +43,9 @@ permissions:
   chunky.command.pause:
     default: op
     children: [chunky.command]
+  chunky.command.progress:
+    default: op
+    children: [chunky.command]
   chunky.command.quiet:
     default: op
     children: [chunky.command]
@@ -82,6 +85,7 @@ permissions:
       - chunky.command.help
       - chunky.command.pattern
       - chunky.command.pause
+      - chunky.command.progress
       - chunky.command.quiet
       - chunky.command.radius
       - chunky.command.reload

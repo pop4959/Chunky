@@ -39,6 +39,7 @@ public class Chunky {
         commands.put("help", new HelpCommand(this));
         commands.put("pattern", new PatternCommand(this));
         commands.put("pause", new PauseCommand(this));
+        commands.put("progress", new ProgressCommand(this));
         commands.put("quiet", new QuietCommand(this));
         commands.put("radius", new RadiusCommand(this));
         commands.put("reload", new ReloadCommand(this));

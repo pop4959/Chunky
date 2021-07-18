@@ -170,6 +170,13 @@ public class ChunkySponge {
                     return CommandResult.success();
                 })
                 .build();
+        Command.Parameterized progressCommand = Command.builder()
+                .permission("chunky.command.progress")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, "progress", Collections.singletonList("progress"));
+                    return CommandResult.success();
+                })
+                .build();
         Command.Parameterized quietCommand = Command.builder()
                 .permission("chunky.command.quiet")
                 .addParameters(Parameter.integerNumber().key("interval").build())
@@ -304,6 +311,7 @@ public class ChunkySponge {
                 .addChild(helpCommand, "help")
                 .addChild(patternCommand, "pattern")
                 .addChild(pauseCommand, "pause")
+                .addChild(progressCommand, "progress")
                 .addChild(quietCommand, "quiet")
                 .addChild(radiusCommand, "radius")
                 .addChild(reloadCommand, "reload")

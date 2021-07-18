@@ -42,8 +42,7 @@ public class GenerationTask implements Runnable {
         this.progress = new Progress(selection.world().getName());
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private void printUpdate(int chunkX, int chunkZ) {
+    private void update(int chunkX, int chunkZ) {
         if (stopped) {
             return;
         }
@@ -55,10 +54,6 @@ public class GenerationTask implements Runnable {
             chunkUpdateTimes.poll();
         }
         final long chunksLeft = totalChunks.get() - finishedChunks.get();
-        if (chunksLeft > 0 && (chunky.getOptions().isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getOptions().getQuietInterval())) {
-            return;
-        }
-        printTime.set(currentTime);
         final long oldestTime = chunkUpdateTimes.peek();
         final double timeDiff = (currentTime - oldestTime) / 1e3;
         if (chunksLeft > 0 && timeDiff < 1e-1) {
@@ -77,6 +72,10 @@ public class GenerationTask implements Runnable {
         this.progress.seconds = time - this.progress.hours * 3600 - this.progress.minutes * 60;
         this.progress.chunkX = chunkX;
         this.progress.chunkZ = chunkZ;
+        if (chunksLeft > 0 && (chunky.getOptions().isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getOptions().getQuietInterval())) {
+            return;
+        }
+        printTime.set(currentTime);
         this.progress.sendUpdate(chunky.getServer().getConsoleSender());
     }
 
@@ -91,7 +90,7 @@ public class GenerationTask implements Runnable {
             final int chunkCenterX = (chunkCoord.x << 4) + 8;
             final int chunkCenterZ = (chunkCoord.z << 4) + 8;
             if (!shape.isBounding(chunkCenterX, chunkCenterZ) || selection.world().isChunkGenerated(chunkCoord.x, chunkCoord.z)) {
-                printUpdate(chunkCoord.x, chunkCoord.z);
+                update(chunkCoord.x, chunkCoord.z);
                 continue;
             }
             try {
@@ -102,7 +101,7 @@ public class GenerationTask implements Runnable {
             }
             selection.world().getChunkAtAsync(chunkCoord.x, chunkCoord.z).thenRun(() -> {
                 working.release();
-                printUpdate(chunkCoord.x, chunkCoord.z);
+                update(chunkCoord.x, chunkCoord.z);
             });
         }
         if (stopped) {
@@ -152,7 +151,7 @@ public class GenerationTask implements Runnable {
         private final String world;
         private long chunkCount;
         private boolean complete;
-        private double percentComplete;
+        private float percentComplete;
         private long hours, minutes, seconds;
         private double rate;
         private int chunkX, chunkZ;
@@ -161,7 +160,47 @@ public class GenerationTask implements Runnable {
             this.world = world;
         }
 
-        private void sendUpdate(final Sender sender) {
+        public String getWorld() {
+            return world;
+        }
+
+        public long getChunkCount() {
+            return chunkCount;
+        }
+
+        public boolean isComplete() {
+            return complete;
+        }
+
+        public float getPercentComplete() {
+            return percentComplete;
+        }
+
+        public long getHours() {
+            return hours;
+        }
+
+        public long getMinutes() {
+            return minutes;
+        }
+
+        public long getSeconds() {
+            return seconds;
+        }
+
+        public double getRate() {
+            return rate;
+        }
+
+        public int getChunkX() {
+            return chunkX;
+        }
+
+        public int getChunkZ() {
+            return chunkZ;
+        }
+
+        public void sendUpdate(final Sender sender) {
             if (this.complete) {
                 sender.sendMessagePrefixed("task_done", world, chunkCount, String.format("%.2f", percentComplete), String.format("%01d", hours), String.format("%02d", minutes), String.format("%02d", seconds));
             } else {

@@ -5,10 +5,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
+import org.popcraft.chunky.listeners.BossBarProgress;
 import org.popcraft.chunky.platform.FabricSender;
 import org.popcraft.chunky.platform.FabricServer;
 import org.popcraft.chunky.platform.Sender;
@@ -46,6 +48,7 @@ public class ChunkyFabric implements ModInitializer {
             chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
             chunky.getServer().getScheduler().cancelTasks();
         });
+        ServerTickEvents.END_SERVER_TICK.register(server -> BossBarProgress.tick(chunky, server));
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             Command<ServerCommandSource> command = context -> {
                 Sender sender = new FabricSender(context.getSource());
@@ -96,6 +99,8 @@ public class ChunkyFabric implements ModInitializer {
                     .then(literal("pause")
                             .then(argument("world", dimension())
                                     .executes(command))
+                            .executes(command))
+                    .then(literal("progress")
                             .executes(command))
                     .then(literal("quiet")
                             .then(argument("interval", integer())
