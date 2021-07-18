@@ -301,6 +301,13 @@ public class ChunkySponge {
                     return CommandResult.success();
                 })
                 .build();
+        Command.Parameterized statusCommand = Command.builder()
+                .permission("chunky.command.status")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, "status", Collections.singletonList("status"));
+                    return CommandResult.success();
+                })
+                .build();
         event.register(this.container, Command.builder()
                 .permission("chunky.command.base")
                 .addChild(cancelCommand, "cancel")
@@ -322,6 +329,7 @@ public class ChunkySponge {
                 .addChild(trimCommand, "trim")
                 .addChild(worldborderCommand, "worldborder")
                 .addChild(worldCommand, "world")
+                .addChild(statusCommand, "status")
                 .executor(ctx -> {
                     executeSpongeCommand(ctx, "help", Collections.emptyList());
                     return CommandResult.success();

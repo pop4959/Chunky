@@ -159,6 +159,8 @@ public class ChunkyFabric implements ModInitializer {
                             .then(argument("world", dimension())
                                     .executes(command))
                             .executes(command))
+                    .then(literal("status")
+                            .executes(command))
                     .executes(command)
                     .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2)));
         });

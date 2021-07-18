@@ -158,6 +158,8 @@ public class ChunkyForge {
                         .then(argument("world", getDimension())
                                 .executes(command))
                         .executes(command))
+                .then(literal("status"))
+                        .executes(command)
                 .executes(command)
                 .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2)));
     }
