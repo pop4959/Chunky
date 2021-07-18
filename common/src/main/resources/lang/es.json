@@ -16,6 +16,7 @@
   "format_pattern": "Patrón cambiado a %s.",
   "format_pause": "Tarea pausada para %s.",
   "format_pause_no_tasks": "No hay tareas que pausar.",
+  "format_progress_no_tasks": "No tasks running.",
   "format_quiet": "Reportado silencioso establecido a cada %s segundos.",
   "format_radii": "Radio de x cambiado a %s, y el de z a %s.",
   "format_radius": "Radio cambiado a %s.",
