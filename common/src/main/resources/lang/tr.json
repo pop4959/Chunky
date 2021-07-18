@@ -16,6 +16,7 @@
   "format_pattern": "Pattern changed to %s.",
   "format_pause": "fonksiyon %s için durduruldu.",
   "format_pause_no_tasks": "No tasks to pause.",
+  "format_progress_no_tasks": "No tasks running.",
   "format_quiet": "Sessiz aralık %s saniye olarak yarlandı.",
   "format_radii": "Radius changed for x to %s, and for z to %s.",
   "format_radius": "Yarıçap %s olarak ayarlandı.",
