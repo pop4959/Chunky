@@ -1,10 +1,10 @@
 {
-  "command_no_permission": "&cYou do not have permission for this command.",
+  "command_no_permission": "&cBu komutu kullanmak için yetkiniz yok.",
   "disabled": "de-aktif",
   "enabled": "aktif",
   "error_version": "Bu eklenti, 1.13'ün altındaki Minecraft sürümleriyle uyumlu değildir.",
   "error_version_spigot": "Bu eklenti Spigot 1.13 ile uyumlu değil!",
-  "format_cancel": "Task cancelled for %s.",
+  "format_cancel": "Fonksiyon %s için durduruldu.",
   "format_cancel_all": "Tüm fonksiyonlar iptal ediliyor.",
   "format_cancel_confirm": "Cancelled tasks cannot be continued. If you are sure you want to cancel, type '%s'.",
   "format_cancel_no_tasks": "No tasks to cancel.",
