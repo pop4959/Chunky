@@ -3,12 +3,14 @@ package org.popcraft.chunky.platform;
 import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.server.ChunkHolder;
 import net.minecraft.world.server.ChunkManager;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.server.TicketType;
+import net.minecraft.world.storage.FolderName;
 import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.util.Coordinate;
 
@@ -83,9 +85,25 @@ public class ForgeWorld implements World {
     }
 
     @Override
+    public Optional<Path> getEntitiesDirectory() {
+        return getDirectory("entities");
+    }
+
+    @Override
+    public Optional<Path> getPOIDirectory() {
+        return getDirectory("poi");
+    }
+
+    @Override
     public Optional<Path> getRegionDirectory() {
-        ChunkManager chunkManager = world.getChunkProvider().chunkManager;
-        Path regionDirectory = chunkManager.dimensionDirectory.toPath().resolve("region");
-        return Files.exists(regionDirectory) ? Optional.of(regionDirectory) : Optional.empty();
+        return getDirectory("region");
+    }
+
+    private Optional<Path> getDirectory(final String name) {
+        if (name == null) {
+            return Optional.empty();
+        }
+        Path directory = DimensionType.getDimensionFolder(world.getDimensionKey(), world.getServer().func_240776_a_(FolderName.DOT).toFile()).toPath().normalize().resolve(name);
+        return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
 }

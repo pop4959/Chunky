@@ -35,6 +35,11 @@ jobs:
         with:
           name: Fabric
           path: "fabric/build/libs/Chunky-*.jar"
+      - name: Upload Forge
+        uses: actions/upload-artifact@v2
+        with:
+          name: Forge
+          path: "forge/build/libs/Chunky-*.jar"
       - name: Upload Sponge
         uses: actions/upload-artifact@v2
         with:

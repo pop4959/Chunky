@@ -12,8 +12,8 @@ import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.popcraft.chunky.command.ChunkyCommand;
-import org.popcraft.chunky.platform.ForgePlatform;
 import org.popcraft.chunky.platform.ForgeSender;
+import org.popcraft.chunky.platform.ForgeServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
 import org.popcraft.chunky.util.Limit;
@@ -42,14 +42,14 @@ public class ChunkyForge {
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         MinecraftServer server = event.getServer();
-        this.chunky = new Chunky(new ForgePlatform(this, server));
+        this.chunky = new Chunky(new ForgeServer(this, server));
         File configFile = new File(event.getServer().getDataDirectory(), "config/chunky.json");
         chunky.setConfig(new GsonConfig(chunky, configFile));
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
         Limit.set(chunky.getConfig());
         if (chunky.getConfig().getContinueOnRestart()) {
-            chunky.getCommands().get("continue").execute(chunky.getPlatform().getServer().getConsoleSender(), new String[]{});
+            chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{});
         }
         Command<CommandSource> command = context -> {
             Sender sender = new ForgeSender(context.getSource());
@@ -166,7 +166,7 @@ public class ChunkyForge {
     public void onServerStopping(FMLServerStoppingEvent event) {
         chunky.getConfig().saveTasks();
         chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-        chunky.getPlatform().getServer().getScheduler().cancelTasks();
+        chunky.getServer().getScheduler().cancelTasks();
     }
 
     public Chunky getChunky() {

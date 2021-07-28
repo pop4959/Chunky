@@ -1,11 +1,11 @@
-name: Chunky
-version: ${projectVersion}
-main: org.popcraft.chunky.ChunkyBukkit
-api-version: "1.13"
+name: ${name}
+version: ${version}
+main: ${group}.chunky.ChunkyBukkit
+api-version: 1.13
 softdepend: [dynmap, BlueMap, Pl3xMap, WorldBorder]
 load: POSTWORLD
-authors: [pop4959]
-description: Pre-generates chunks, quickly, efficiently, and safely
+authors: [${author}]
+description: ${description}
 website: https://www.spigotmc.org/resources/chunky.81534/
 commands:
   chunky:
