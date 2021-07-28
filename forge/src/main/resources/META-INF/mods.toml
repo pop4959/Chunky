@@ -1,17 +1,15 @@
 modLoader="javafml"
 loaderVersion="[36,)"
 license="GNU GPLv3"
-issueTrackerURL="https://github.com/pop4959/Chunky/issues"
+issueTrackerURL="${github}/issues"
 [[mods]]
-modId="chunky"
-version="${file.jarVersion}"
-displayName="Chunky"
-displayURL="https://github.com/pop4959/Chunky"
+modId="${id}"
+version="${version}"
+displayName="${name}"
+displayURL="${github}"
 logoFile="icon.png"
-authors="pop4959"
-description='''
-Pre-generates chunks, quickly, efficiently, and safely
-'''
+authors="${author}"
+description="${description}"
 [[dependencies.chunky]]
    modId="forge"
    mandatory=true

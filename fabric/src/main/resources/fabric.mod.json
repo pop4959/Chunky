@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "id": "chunky",
+  "id": "${id}",
   "version": "${version}",
-  "name": "Chunky",
-  "description": "Pre-generates chunks, quickly, efficiently, and safely",
+  "name": "${name}",
+  "description": "${description}",
   "authors": [
-    "pop4959"
+    "${author}"
   ],
   "contact": {
     "website": "https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator",
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator",
-    "repo": "https://github.com/pop4959/Chunky",
-    "sources": "https://github.com/pop4959/Chunky",
-    "issues": "https://github.com/pop4959/Chunky/issues"
+    "repo": "${github}",
+    "sources": "${github}",
+    "issues": "${github}/issues"
   },
   "license": "GPLv3",
   "icon": "assets/chunky/icon.png",
@@ -31,7 +31,8 @@
   "depends": {
     "fabricloader": ">=0.11.3",
     "fabric": "*",
-    "minecraft": ">=1.17.0"
+    "minecraft": ">=1.17.0",
+    "java": ">=16"
   },
   "custom": {
     "modmenu": {
