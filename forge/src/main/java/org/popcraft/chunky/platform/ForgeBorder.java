@@ -1,6 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import net.minecraft.world.border.WorldBorder;
+import net.minecraft.world.level.border.WorldBorder;
 import org.popcraft.chunky.util.Coordinate;
 
 public class ForgeBorder implements Border {
@@ -17,12 +17,12 @@ public class ForgeBorder implements Border {
 
     @Override
     public double getRadiusX() {
-        return worldBorder.getDiameter() / 2d;
+        return worldBorder.getSize() / 2d;
     }
 
     @Override
     public double getRadiusZ() {
-        return worldBorder.getDiameter() / 2d;
+        return worldBorder.getSize() / 2d;
     }
 
     @Override

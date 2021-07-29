@@ -1,31 +1,31 @@
 package org.popcraft.chunky.platform;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import org.popcraft.chunky.util.Coordinate;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class ForgeSender implements Sender {
-    private CommandSource source;
+    private CommandSourceStack source;
 
-    public ForgeSender(CommandSource source) {
+    public ForgeSender(CommandSourceStack source) {
         this.source = source;
     }
 
     @Override
     public boolean isPlayer() {
-        return source.getEntity() instanceof ServerPlayerEntity;
+        return source.getEntity() instanceof ServerPlayer;
     }
 
     @Override
     public String getName() {
         try {
-            return source.asPlayer().getName().getString();
+            return source.getPlayerOrException().getName().getString();
         } catch (CommandSyntaxException e) {
             return "Console";
         }
@@ -33,14 +33,14 @@ public class ForgeSender implements Sender {
 
     @Override
     public Coordinate getCoordinate() {
-        Vector3d pos = source.getPos();
-        return new Coordinate((long) pos.getX(), (long) pos.getZ());
+        Vec3 pos = source.getPosition();
+        return new Coordinate((long) pos.x(), (long) pos.z());
     }
 
     @Override
     public void sendMessage(String key, boolean prefixed, Object... args) {
         String text = translateKey(key, prefixed, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§");
-        ITextComponent textComponent = new StringTextComponent(text);
-        source.sendFeedback(textComponent, false);
+        Component textComponent = new TextComponent(text);
+        source.sendSuccess(textComponent, false);
     }
 }

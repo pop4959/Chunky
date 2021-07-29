@@ -1,10 +1,10 @@
 plugins {
-    id("dev.architectury.loom") version "0.7.2-SNAPSHOT"
+    id("dev.architectury.loom") version "0.7.3-SNAPSHOT"
 }
 
 dependencies {
     minecraft(group = "com.mojang", name = "minecraft", version = "1.16.5")
-    mappings(group = "de.oceanlabs.mcp", name = "mcp_snapshot", version = "20210309-1.16.5")
+    mappings(minecraft.officialMojangMappings())
     forge(group = "net.minecraftforge", name = "forge", version = "1.16.5-36.1.13")
     implementation(project(":chunky-common"))
 }
