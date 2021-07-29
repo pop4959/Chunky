@@ -1,16 +1,16 @@
 package org.popcraft.chunky.platform;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.util.Unit;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.border.WorldBorder;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.server.ChunkHolder;
-import net.minecraft.world.server.ChunkManager;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.server.TicketType;
-import net.minecraft.world.storage.FolderName;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.storage.LevelResource;
 import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.util.Coordinate;
 
@@ -21,18 +21,18 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class ForgeWorld implements World {
-    private ServerWorld world;
+    private ServerLevel world;
     private WorldBorder worldBorder;
     private static final TicketType<Unit> CHUNKY = TicketType.create(ChunkyForge.MODID, (unit, unit2) -> 0);
 
-    public ForgeWorld(ServerWorld world) {
+    public ForgeWorld(ServerLevel world) {
         this.world = world;
         this.worldBorder = world.getWorldBorder();
     }
 
     @Override
     public String getName() {
-        return world.getDimensionKey().getLocation().toString();
+        return world.dimension().location().toString();
     }
 
     @Override
@@ -42,21 +42,21 @@ public class ForgeWorld implements World {
 
     @Override
     public CompletableFuture<Void> getChunkAtAsync(int x, int z) {
-        if (Thread.currentThread() != world.getServer().getExecutionThread()) {
+        if (Thread.currentThread() != world.getServer().getRunningThread()) {
             return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), world.getServer()).join();
         } else {
             final CompletableFuture<Void> chunkFuture = new CompletableFuture<>();
             final ChunkPos chunkPos = new ChunkPos(x, z);
-            world.getChunkProvider().registerTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
-            world.getChunkProvider().func_217235_l();
-            ChunkManager chunkManager = world.getChunkProvider().chunkManager;
-            ChunkHolder chunkHolder = chunkManager.func_219219_b(chunkPos.asLong());
+            world.getChunkSource().addRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
+            world.getChunkSource().runDistanceManagerUpdates();
+            ChunkMap chunkManager = world.getChunkSource().chunkMap;
+            ChunkHolder chunkHolder = chunkManager.getVisibleChunkIfPresent(chunkPos.toLong());
             if (chunkHolder == null) {
                 chunkFuture.complete(null);
             } else {
-                chunkManager.func_219244_a(chunkHolder, ChunkStatus.FULL).thenAcceptAsync(either -> {
+                chunkManager.schedule(chunkHolder, ChunkStatus.FULL).thenAcceptAsync(either -> {
                     chunkFuture.complete(null);
-                    world.getChunkProvider().releaseTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
+                    world.getChunkSource().removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
                 }, world.getServer());
             }
             return chunkFuture;
@@ -75,7 +75,7 @@ public class ForgeWorld implements World {
 
     @Override
     public Coordinate getSpawnCoordinate() {
-        BlockPos spawnPoint = world.getSpawnPoint();
+        BlockPos spawnPoint = world.getSharedSpawnPos();
         return new Coordinate(spawnPoint.getX(), spawnPoint.getZ());
     }
 
@@ -103,7 +103,7 @@ public class ForgeWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        Path directory = DimensionType.getDimensionFolder(world.getDimensionKey(), world.getServer().func_240776_a_(FolderName.DOT).toFile()).toPath().normalize().resolve(name);
+        Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT).toFile()).toPath().normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
 }
