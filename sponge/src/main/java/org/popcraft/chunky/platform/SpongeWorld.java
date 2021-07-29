@@ -1,8 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.util.Coordinate;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.math.vector.Vector3i;
 
@@ -14,11 +12,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class SpongeWorld implements World {
     private ServerWorld world;
-    private ChunkySponge plugin;
 
-    public SpongeWorld(ServerWorld world, ChunkySponge plugin) {
+    public SpongeWorld(ServerWorld world) {
         this.world = world;
-        this.plugin = plugin;
     }
 
     @Override
@@ -28,17 +24,13 @@ public class SpongeWorld implements World {
 
     @Override
     public boolean isChunkGenerated(int x, int z) {
-        return false;
+        return world.hasChunk(x, 0, z);
     }
 
     @Override
     public CompletableFuture<Void> getChunkAtAsync(int x, int z) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        Sponge.game().asyncScheduler().createExecutor(plugin.getContainer()).execute(() -> {
-            world.loadChunk(x, 0, z, true);
-            future.complete(null);
-        });
-        return future;
+        world.loadChunk(x, 0, z, true);
+        return CompletableFuture.completedFuture(null);
     }
 
     @Override

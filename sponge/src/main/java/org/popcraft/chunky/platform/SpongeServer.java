@@ -2,6 +2,7 @@ package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.integration.Integration;
+import org.popcraft.chunky.platform.impl.SimpleScheduler;
 import org.spongepowered.api.ResourceKey;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class SpongeServer implements Server {
     public SpongeServer(ChunkySponge plugin) {
         this.plugin = plugin;
         this.integrations = new HashMap<>();
-        this.scheduler = new SpongeScheduler(plugin);
+        this.scheduler = new SimpleScheduler();
     }
 
     @Override
@@ -28,12 +29,12 @@ public class SpongeServer implements Server {
 
     @Override
     public Optional<World> getWorld(String name) {
-        return plugin.getGame().server().worldManager().world(ResourceKey.resolve(name)).map(world -> new SpongeWorld(world, plugin));
+        return plugin.getGame().server().worldManager().world(ResourceKey.resolve(name)).map(SpongeWorld::new);
     }
 
     @Override
     public List<World> getWorlds() {
-        return plugin.getGame().server().worldManager().worlds().stream().map(world -> new SpongeWorld(world, plugin)).collect(Collectors.toList());
+        return plugin.getGame().server().worldManager().worlds().stream().map(SpongeWorld::new).collect(Collectors.toList());
     }
 
     @Override
