@@ -73,7 +73,7 @@ public class SpongeWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        Path regionDirectory = world.directory().resolve("name");
+        Path regionDirectory = world.directory().resolve(name);
         return Files.exists(regionDirectory) ? Optional.of(regionDirectory) : Optional.empty();
     }
 
