@@ -16,6 +16,7 @@
   "format_pattern": "Patroon gewijzigd naar %s.",
   "format_pause": "taak gepauzeerd voor %s.",
   "format_pause_no_tasks": "Geen taken om te pauzeren.",
+  "format_progress_no_tasks": "No tasks running.",
   "format_quiet": "Stille interval ingesteld op %s seconden.",
   "format_radii": "Radius veranderd voor x naar %s, en voor z naar %s.",
   "format_radius": "Straal veranderd naar %s.",

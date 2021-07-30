@@ -16,6 +16,7 @@
   "format_pattern": "Le modèle a été changé en %s.",
   "format_pause": "Tâche interrompue pour %s.",
   "format_pause_no_tasks": "Aucune tâche à mettre en pause.",
+  "format_progress_no_tasks": "No tasks running.",
   "format_quiet": "Intervalle de silence réglé à %s secondes.",
   "format_radii": "Rayon changé pour x=%s, et pour z=%s.",
   "format_radius": "Rayon modifié à %s.",

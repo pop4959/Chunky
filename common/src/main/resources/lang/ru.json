@@ -16,6 +16,7 @@
   "format_pattern": "Паттерн изменен на %s.",
   "format_pause": "Задача для %s приостановлена.",
   "format_pause_no_tasks": "Нет задач для приостановки.",
+  "format_progress_no_tasks": "Выполняемых задач нет.",
   "format_quiet": "Интервал тихой работы установлен на %s секунд.",
   "format_radii": "Радиус изменен по оси X на %s, и по оси Z на %s.",
   "format_radius": "Радиус изменен на %s.",

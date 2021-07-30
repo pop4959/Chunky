@@ -16,6 +16,7 @@
   "format_pattern": "Padrão alterado para %s.",
   "format_pause": "Tarefa pausada para %s.",
   "format_pause_no_tasks": "Nenhuma tarefa a ser pausada.",
+  "format_progress_no_tasks": "No tasks running.",
   "format_quiet": "Intervalo silencioso definido para %s segundos.",
   "format_radii": "Raio alterado de x para %s, e de z para %s.",
   "format_radius": "O raio mudou para %s.",

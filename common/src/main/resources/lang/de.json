@@ -16,6 +16,7 @@
   "format_pattern": "Muster geändert zu %s.",
   "format_pause": "Aufgabe pausiert für %s.",
   "format_pause_no_tasks": "Keine aufgaben zum pausieren.",
+  "format_progress_no_tasks": "No tasks running.",
   "format_quiet": "Stummer Intervall auf %s Sekunden gesetzt.",
   "format_radii": "Radius geändert zu %s für x und %s für z.",
   "format_radius": "Radius geändert zu %s.",

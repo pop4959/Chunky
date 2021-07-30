@@ -16,6 +16,7 @@
   "format_pattern": "预生成方案改为 %s。",
   "format_pause": "任务暂停了 %s。",
   "format_pause_no_tasks": "没有预生成任务可以暂停",
+  "format_progress_no_tasks": "没有在运行的任务。",
   "format_quiet": "静止间隔设置为%s秒。",
   "format_radii": "对 x 的半径已更改为 %s, 对 z 的半径已更改为 %s。",
   "format_radius": "生成范围半径已更改为 %s。",
