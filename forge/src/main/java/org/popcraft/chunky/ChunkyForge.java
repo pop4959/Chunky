@@ -5,13 +5,16 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.popcraft.chunky.command.ChunkyCommand;
+import org.popcraft.chunky.listeners.BossBarProgress;
 import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.ForgeServer;
 import org.popcraft.chunky.platform.Sender;
@@ -101,6 +104,8 @@ public class ChunkyForge {
                         .then(argument("world", dimension())
                                 .executes(command))
                         .executes(command))
+                .then(literal("progress")
+                        .executes(command))
                 .then(literal("quiet")
                         .then(argument("interval", integer())
                                 .executes(command))
@@ -167,6 +172,16 @@ public class ChunkyForge {
         chunky.getConfig().saveTasks();
         chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
         chunky.getServer().getScheduler().cancelTasks();
+    }
+
+    @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            if (server != null) {
+                BossBarProgress.tick(chunky, server);
+            }
+        }
     }
 
     public Chunky getChunky() {
