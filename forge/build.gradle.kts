@@ -5,7 +5,7 @@ plugins {
 dependencies {
     minecraft(group = "com.mojang", name = "minecraft", version = "1.16.5")
     mappings(minecraft.officialMojangMappings())
-    forge(group = "net.minecraftforge", name = "forge", version = "1.16.5-36.1.13")
+    forge(group = "net.minecraftforge", name = "forge", version = "1.16.5-36.2.0")
     implementation(project(":chunky-common"))
 }
 
