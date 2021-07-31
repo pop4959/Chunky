@@ -1,8 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
@@ -10,47 +8,33 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.popcraft.chunky.util.Coordinate;
 
-import java.util.Optional;
-
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class FabricSender implements Sender {
-    private CommandSource source;
+    private ServerCommandSource source;
 
-    public FabricSender(CommandSource source) {
+    public FabricSender(ServerCommandSource source) {
         this.source = source;
     }
 
     @Override
     public boolean isPlayer() {
-        return getPlayer().isPresent();
+        return source.getEntity() instanceof ServerPlayerEntity;
     }
 
     @Override
     public String getName() {
-        return getPlayer().map(PlayerEntity::getName).map(Text::asString).orElse("Console");
+        try {
+            return source.getPlayer().getName().getString();
+        } catch (CommandSyntaxException e) {
+            return "Console";
+        }
     }
 
     @Override
     public Coordinate getCoordinate() {
-        if (source instanceof ServerCommandSource) {
-            Vec3d position = ((ServerCommandSource) source).getPosition();
-            return new Coordinate((long) position.getX(), (long) position.getZ());
-        } else {
-            return new Coordinate(0, 0);
-        }
-    }
-
-    private Optional<ServerPlayerEntity> getPlayer() {
-        if (!(source instanceof ServerCommandSource)) {
-            return Optional.empty();
-        }
-        ServerCommandSource serverCommandSource = (ServerCommandSource) source;
-        Entity entity = serverCommandSource.getEntity();
-        if (entity == null) {
-            return Optional.empty();
-        }
-        return Optional.of((ServerPlayerEntity) entity);
+        Vec3d pos = source.getPosition();
+        return new Coordinate((long) pos.getX(), (long) pos.getZ());
     }
 
     @Override
@@ -61,8 +45,7 @@ public class FabricSender implements Sender {
         } else {
             text = translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "");
         }
-        if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(new LiteralText(text), false);
-        }
+        Text textComponent = new LiteralText(text);
+        source.sendFeedback(textComponent, false);
     }
 }
