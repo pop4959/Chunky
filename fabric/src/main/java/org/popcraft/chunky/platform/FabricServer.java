@@ -1,7 +1,6 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
@@ -37,11 +36,8 @@ public class FabricServer implements Server {
         if (worldIdentifier == null) {
             return Optional.empty();
         }
-        ServerWorld serverWorld = server.getWorld(RegistryKey.of(Registry.WORLD_KEY, worldIdentifier));
-        if (serverWorld == null) {
-            return Optional.empty();
-        }
-        return Optional.of(new FabricWorld(serverWorld));
+        return Optional.ofNullable(server.getWorld(RegistryKey.of(Registry.WORLD_KEY, worldIdentifier)))
+                .map(FabricWorld::new);
     }
 
     @Override
