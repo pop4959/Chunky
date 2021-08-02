@@ -6,8 +6,11 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
 import org.popcraft.chunky.util.ChunkCoordinate;
+import org.popcraft.chunky.util.Pair;
+import org.popcraft.chunky.util.RegionCache;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -22,9 +25,10 @@ public class GenerationTask implements Runnable {
     private final AtomicLong printTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
     private final AtomicLong totalChunks = new AtomicLong();
-    private final ConcurrentLinkedQueue<Long> chunkUpdateTimes = new ConcurrentLinkedQueue<>();
+    private final Deque<Pair<Long, AtomicLong>> updateSamples = new ConcurrentLinkedDeque<>();
     private static final int MAX_WORKING = 50;
     private final Progress progress;
+    private final RegionCache.WorldState worldState;
 
     public GenerationTask(Chunky chunky, Selection selection, long count, long time) {
         this(chunky, selection);
@@ -40,43 +44,58 @@ public class GenerationTask implements Runnable {
         this.shape = ShapeFactory.getShape(selection);
         this.totalChunks.set(chunkIterator.total());
         this.progress = new Progress(selection.world().getName());
+        this.worldState = chunky.getRegionCache().getWorld(selection.world().getName());
     }
 
-    private void update(int chunkX, int chunkZ) {
+    private void update(int chunkX, int chunkZ, boolean generated) {
         if (stopped) {
             return;
         }
-        this.progress.chunkCount = finishedChunks.addAndGet(1);
-        this.progress.percentComplete = 100f * this.progress.chunkCount / totalChunks.get();
+        if (generated) {
+            worldState.setGenerated(chunkX, chunkZ);
+        }
+        progress.chunkCount = finishedChunks.addAndGet(1);
+        progress.percentComplete = 100f * progress.chunkCount / totalChunks.get();
         final long currentTime = System.currentTimeMillis();
-        chunkUpdateTimes.add(currentTime);
-        while (currentTime - chunkUpdateTimes.peek() > 1e4) {
-            chunkUpdateTimes.poll();
+        final Pair<Long, AtomicLong> bin = updateSamples.peekLast();
+        if (bin != null && currentTime - bin.left() < 2e3) {
+            bin.right().addAndGet(1);
+        } else if (updateSamples.add(Pair.of(currentTime, new AtomicLong(1)))) {
+            while (!updateSamples.isEmpty() && currentTime - updateSamples.peek().left() > 1e4) {
+                updateSamples.poll();
+            }
         }
         final long chunksLeft = totalChunks.get() - finishedChunks.get();
-        final long oldestTime = chunkUpdateTimes.peek();
-        final double timeDiff = (currentTime - oldestTime) / 1e3;
+        final Pair<Long, AtomicLong> oldest = updateSamples.peek();
+        if (oldest == null) {
+            return;
+        }
+        final double timeDiff = (currentTime - oldest.left()) / 1e3;
         if (chunksLeft > 0 && timeDiff < 1e-1) {
             return;
         }
-        this.progress.rate = chunkUpdateTimes.size() / timeDiff;
+        long sampleCount = 0;
+        for (Pair<Long, AtomicLong> b : updateSamples) {
+            sampleCount += b.right().get();
+        }
+        progress.rate = sampleCount / timeDiff;
         final long time;
         if (chunksLeft == 0) {
             time = (prevTime + (currentTime - startTime.get())) / 1000;
-            this.progress.complete = true;
+            progress.complete = true;
         } else {
-            time = (long) (chunksLeft / this.progress.rate);
+            time = (long) (chunksLeft / progress.rate);
         }
-        this.progress.hours = time / 3600;
-        this.progress.minutes = (time - this.progress.hours * 3600) / 60;
-        this.progress.seconds = time - this.progress.hours * 3600 - this.progress.minutes * 60;
-        this.progress.chunkX = chunkX;
-        this.progress.chunkZ = chunkZ;
+        progress.hours = time / 3600;
+        progress.minutes = (time - progress.hours * 3600) / 60;
+        progress.seconds = time - progress.hours * 3600 - progress.minutes * 60;
+        progress.chunkX = chunkX;
+        progress.chunkZ = chunkZ;
         if (chunksLeft > 0 && (chunky.getOptions().isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getOptions().getQuietInterval())) {
             return;
         }
         printTime.set(currentTime);
-        this.progress.sendUpdate(chunky.getServer().getConsoleSender());
+        progress.sendUpdate(chunky.getServer().getConsoleSender());
     }
 
     @Override
@@ -86,11 +105,15 @@ public class GenerationTask implements Runnable {
         final Semaphore working = new Semaphore(MAX_WORKING);
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
-            final ChunkCoordinate chunkCoord = chunkIterator.next();
-            final int chunkCenterX = (chunkCoord.x << 4) + 8;
-            final int chunkCenterZ = (chunkCoord.z << 4) + 8;
-            if (!shape.isBounding(chunkCenterX, chunkCenterZ) || selection.world().isChunkGenerated(chunkCoord.x, chunkCoord.z)) {
-                update(chunkCoord.x, chunkCoord.z);
+            final ChunkCoordinate chunk = chunkIterator.next();
+            final int chunkCenterX = (chunk.x << 4) + 8;
+            final int chunkCenterZ = (chunk.z << 4) + 8;
+            if (!shape.isBounding(chunkCenterX, chunkCenterZ) || worldState.isGenerated(chunk.x, chunk.z)) {
+                update(chunk.x, chunk.z, false);
+                continue;
+            }
+            if (selection.world().isChunkGenerated(chunk.x, chunk.z)) {
+                update(chunk.x, chunk.z, true);
                 continue;
             }
             try {
@@ -99,15 +122,15 @@ public class GenerationTask implements Runnable {
                 stop(cancelled);
                 break;
             }
-            selection.world().getChunkAtAsync(chunkCoord.x, chunkCoord.z).thenRun(() -> {
+            selection.world().getChunkAtAsync(chunk.x, chunk.z).thenRun(() -> {
                 working.release();
-                update(chunkCoord.x, chunkCoord.z);
+                update(chunk.x, chunk.z, true);
             });
         }
         if (stopped) {
             chunky.getServer().getConsoleSender().sendMessagePrefixed("task_stopped", selection.world().getName());
         } else {
-            this.cancelled = true;
+            cancelled = true;
         }
         chunky.getConfig().saveTask(this);
         chunky.getGenerationTasks().remove(selection.world());
@@ -201,7 +224,7 @@ public class GenerationTask implements Runnable {
         }
 
         public void sendUpdate(final Sender sender) {
-            if (this.complete) {
+            if (complete) {
                 sender.sendMessagePrefixed("task_done", world, chunkCount, String.format("%.2f", percentComplete), String.format("%01d", hours), String.format("%02d", minutes), String.format("%02d", seconds));
             } else {
                 sender.sendMessagePrefixed("task_update", world, chunkCount, String.format("%.2f", percentComplete), String.format("%01d", hours), String.format("%02d", minutes), String.format("%02d", seconds), String.format("%.1f", rate), chunkX, chunkZ);

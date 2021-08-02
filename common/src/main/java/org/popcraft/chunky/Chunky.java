@@ -6,6 +6,7 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.Server;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.PendingAction;
+import org.popcraft.chunky.util.RegionCache;
 import org.popcraft.chunky.util.Translator;
 
 import java.util.HashMap;
@@ -21,12 +22,14 @@ public class Chunky {
     private Selection.Builder selection;
     private Options options;
     private final Map<String, PendingAction> pendingActions = new HashMap<>();
+    private final RegionCache regionCache;
 
     public Chunky(Server server) {
         this.server = server;
         this.generationTasks = new ConcurrentHashMap<>();
         this.selection = Selection.builder(server.getWorlds().get(0));
         this.options = new Options();
+        this.regionCache = new RegionCache();
     }
 
     public void loadCommands() {
@@ -93,5 +96,9 @@ public class Chunky {
 
     public void setLanguage(String language) {
         Translator.setLanguage(language);
+    }
+
+    public RegionCache getRegionCache() {
+        return regionCache;
     }
 }
