@@ -4,7 +4,6 @@ import io.papermc.lib.PaperLib;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitWorker;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.integration.WorldBorderIntegration;
 import org.popcraft.chunky.platform.BukkitConfig;
@@ -60,11 +59,7 @@ public final class ChunkyBukkit extends JavaPlugin {
     public void onDisable() {
         chunky.getConfig().saveTasks();
         chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-        getServer().getScheduler().getActiveWorkers().stream()
-                .filter(w -> w.getOwner() == this)
-                .map(BukkitWorker::getThread)
-                .forEach(Thread::interrupt);
-        getServer().getScheduler().cancelTasks(this);
+        chunky.getServer().getScheduler().cancelTasks();
     }
 
     @Override

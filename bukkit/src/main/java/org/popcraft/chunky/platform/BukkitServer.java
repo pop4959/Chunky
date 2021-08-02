@@ -3,6 +3,7 @@ package org.popcraft.chunky.platform;
 import org.bukkit.Bukkit;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.integration.Integration;
+import org.popcraft.chunky.platform.impl.SimpleScheduler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class BukkitServer implements Server {
     public BukkitServer(ChunkyBukkit plugin) {
         this.plugin = plugin;
         this.integrations = new HashMap<>();
-        this.scheduler = new BukkitScheduler(plugin);
+        this.scheduler = new SimpleScheduler();
     }
 
     @Override
