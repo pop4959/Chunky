@@ -92,7 +92,7 @@ public class ForgeWorld implements World {
                 chunkFuture.complete(null);
                 world.getChunkSource().removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
             } else {
-                chunkManager.schedule(chunkHolder, ChunkStatus.FULL).thenAcceptAsync(either -> {
+                chunkHolder.getOrScheduleFuture(ChunkStatus.FULL, chunkManager).thenAcceptAsync(either -> {
                     chunkFuture.complete(null);
                     world.getChunkSource().removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
                 }, world.getServer());
