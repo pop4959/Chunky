@@ -1,6 +1,8 @@
 package org.popcraft.chunky;
 
 import io.papermc.lib.PaperLib;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,7 +13,6 @@ import org.popcraft.chunky.platform.BukkitSender;
 import org.popcraft.chunky.platform.BukkitServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Limit;
-import org.popcraft.chunky.util.Metrics;
 import org.popcraft.chunky.util.Version;
 
 import java.util.ArrayList;
@@ -50,9 +51,7 @@ public final class ChunkyBukkit extends JavaPlugin {
             chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
         final Metrics metrics = new Metrics(this, 8211);
-        if (metrics.isEnabled()) {
-            metrics.addCustomChart(new Metrics.SimplePie("language", () -> chunky.getConfig().getLanguage()));
-        }
+        metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
     }
 
     @Override
