@@ -99,7 +99,7 @@ public class GsonConfig implements Config {
         String shape = generationTask.getShape().name();
         taskModel.cancelled = generationTask.isCancelled();
         taskModel.radius = selection.radiusX();
-        if ("rectangle".equals(shape) || "oval".equals(shape)) {
+        if ("rectangle".equals(shape) || "ellipse".equals(shape)) {
             taskModel.radiusZ = selection.radiusZ();
         }
         taskModel.centerX = selection.centerX();

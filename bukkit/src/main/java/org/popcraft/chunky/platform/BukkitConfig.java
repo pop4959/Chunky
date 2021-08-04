@@ -69,7 +69,7 @@ public class BukkitConfig implements Config {
         String shape = generationTask.getShape().name();
         config.set(world_key + "cancelled", generationTask.isCancelled());
         config.set(world_key + "radius", selection.radiusX());
-        if ("rectangle".equals(shape) || "oval".equals(shape)) {
+        if ("rectangle".equals(shape) || "ellipse".equals(shape)) {
             config.set(world_key + "z-radius", selection.radiusZ());
         }
         config.set(world_key + "x-center", selection.centerX());

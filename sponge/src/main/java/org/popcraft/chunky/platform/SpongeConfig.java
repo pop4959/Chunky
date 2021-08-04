@@ -108,7 +108,7 @@ public class SpongeConfig implements Config {
         try {
             taskNode.node("cancelled").set(generationTask.isCancelled());
             taskNode.node("radius").set(selection.radiusX());
-            if ("rectangle".equals(shape) || "oval".equals(shape)) {
+            if ("rectangle".equals(shape) || "ellipse".equals(shape)) {
                 taskNode.node("radiusZ").set(selection.radiusZ());
             }
             taskNode.node("centerX").set(selection.centerX());
