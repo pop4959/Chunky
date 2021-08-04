@@ -69,7 +69,7 @@ public class SpongeConfig implements Config {
         if (this.rootNode == null) {
             return Optional.empty();
         }
-        ConfigurationNode taskNode = rootNode.node("config", "tasks", world.getName());
+        ConfigurationNode taskNode = rootNode.node("tasks", world.getName());
         if (taskNode.virtual()) {
             return Optional.empty();
         }
@@ -103,7 +103,7 @@ public class SpongeConfig implements Config {
             this.rootNode = configLoader.createNode();
         }
         Selection selection = generationTask.getSelection();
-        ConfigurationNode taskNode = rootNode.node("config", "tasks", selection.world().getName());
+        ConfigurationNode taskNode = rootNode.node("tasks", selection.world().getName());
         String shape = generationTask.getShape().name();
         try {
             taskNode.node("cancelled").set(generationTask.isCancelled());
@@ -146,7 +146,7 @@ public class SpongeConfig implements Config {
 
     @Override
     public int getVersion() {
-        return this.rootNode == null ? 0 : this.rootNode.node("version").getInt(0);
+        return this.rootNode == null ? 0 : this.rootNode.node("config", "version").getInt(0);
     }
 
     @Override
@@ -154,12 +154,12 @@ public class SpongeConfig implements Config {
         if (this.rootNode == null) {
             return "en";
         }
-        return Input.checkLanguage(this.rootNode.node("language").getString("en"));
+        return Input.checkLanguage(this.rootNode.node("config", "language").getString("en"));
     }
 
     @Override
     public boolean getContinueOnRestart() {
-        return this.rootNode != null && this.rootNode.node("continue-on-restart").getBoolean(false);
+        return this.rootNode != null && this.rootNode.node("config", "continue-on-restart").getBoolean(false);
     }
 
     @Override
