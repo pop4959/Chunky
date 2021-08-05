@@ -10,7 +10,6 @@ import java.util.Optional;
 public class Input {
     public static final List<String> PATTERNS = Arrays.asList("concentric", "loop", "spiral");
     public static final List<String> SHAPES = Arrays.asList("circle", "diamond", "ellipse", "pentagon", "rectangle", "square", "star", "triangle");
-    public static final List<String> LANGUAGES = Arrays.asList("bg", "de", "es", "fr", "nl", "pl", "pt", "ru", "tr", "zh_CN");
 
     public static Optional<World> tryWorld(Chunky chunky, String input) {
         if (input == null || input.isEmpty()) {
@@ -92,7 +91,7 @@ public class Input {
     }
 
     public static String checkLanguage(String language) {
-        return LANGUAGES.contains(language) ? language : "en";
+        return Translator.isValidLanguage(language) ? language : "en";
     }
 
     private static Optional<Integer> suffixValue(char suffix) {

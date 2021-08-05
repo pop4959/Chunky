@@ -15,21 +15,21 @@ public class HelpCommand extends ChunkyCommand {
     public HelpCommand(Chunky chunky) {
         super(chunky);
         this.helpMessages = new ArrayList<>();
-        helpMessages.add(translate("help_start"));
-        helpMessages.add(translate("help_pause"));
-        helpMessages.add(translate("help_continue"));
-        helpMessages.add(translate("help_cancel"));
-        helpMessages.add(translate("help_world"));
-        helpMessages.add(translate("help_worldborder"));
-        helpMessages.add(translate("help_center"));
-        helpMessages.add(translate("help_spawn"));
-        helpMessages.add(translate("help_radius"));
-        helpMessages.add(translate("help_corners"));
-        helpMessages.add(translate("help_shape"));
-        helpMessages.add(translate("help_pattern"));
-        helpMessages.add(translate("help_silent"));
-        helpMessages.add(translate("help_quiet"));
-        helpMessages.add(translate("help_reload"));
+        helpMessages.add("help_start");
+        helpMessages.add("help_pause");
+        helpMessages.add("help_continue");
+        helpMessages.add("help_cancel");
+        helpMessages.add("help_world");
+        helpMessages.add("help_worldborder");
+        helpMessages.add("help_center");
+        helpMessages.add("help_spawn");
+        helpMessages.add("help_radius");
+        helpMessages.add("help_corners");
+        helpMessages.add("help_shape");
+        helpMessages.add("help_pattern");
+        helpMessages.add("help_silent");
+        helpMessages.add("help_quiet");
+        helpMessages.add("help_reload");
     }
 
     @Override
@@ -41,13 +41,13 @@ public class HelpCommand extends ChunkyCommand {
             int helpIndexFirst = 8 * pageIndex;
             int helpIndexLast = Math.min(helpIndexFirst + 8, helpMessages.size());
             for (int i = helpIndexFirst; i < helpIndexLast; ++i) {
-                help.append('\n').append(helpMessages.get(i));
+                help.append('\n').append(translate(helpMessages.get(i)));
             }
             if (pageIndex != pageIndexLast) {
                 help.append('\n').append(translate("help_more", "/chunky help " + (pageIndex + 2)));
             }
         } else {
-            helpMessages.forEach(message -> help.append('\n').append(message));
+            helpMessages.forEach(message -> help.append('\n').append(translate(message)));
         }
         sender.sendMessage("help_menu", help.toString());
     }

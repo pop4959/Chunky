@@ -23,6 +23,10 @@ public class Translator {
         translations = load(language);
     }
 
+    public static boolean isValidLanguage(String language) {
+        return Translator.class.getClassLoader().getResource("lang/" + language + ".json") != null;
+    }
+
     public static String translateKey(String key, boolean prefixed, Object... args) {
         StringBuilder translation = new StringBuilder();
         String message = translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, "Missing translation"));
