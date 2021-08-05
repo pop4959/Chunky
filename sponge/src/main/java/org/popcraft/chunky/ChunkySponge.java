@@ -58,6 +58,9 @@ public class ChunkySponge {
         chunky.setLanguage(chunky.getConfig().getLanguage());
         chunky.loadCommands();
         Limit.set(chunky.getConfig());
+        if (chunky.getConfig().getContinueOnRestart()) {
+            chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{});
+        }
     }
 
     @Listener
