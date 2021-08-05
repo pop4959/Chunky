@@ -47,30 +47,28 @@ public class GenerationTask implements Runnable {
         this.worldState = chunky.getRegionCache().getWorld(selection.world().getName());
     }
 
-    private void update(int chunkX, int chunkZ, boolean generated) {
+    private void update(int chunkX, int chunkZ, boolean loaded) {
         if (stopped) {
             return;
-        }
-        if (generated) {
-            worldState.setGenerated(chunkX, chunkZ);
         }
         progress.chunkCount = finishedChunks.addAndGet(1);
         progress.percentComplete = 100f * progress.chunkCount / totalChunks.get();
         final long currentTime = System.currentTimeMillis();
         final Pair<Long, AtomicLong> bin = updateSamples.peekLast();
-        if (bin != null && currentTime - bin.left() < 2e3) {
-            bin.right().addAndGet(1);
-        } else if (updateSamples.add(Pair.of(currentTime, new AtomicLong(1)))) {
-            while (!updateSamples.isEmpty() && currentTime - updateSamples.peek().left() > 1e4) {
-                updateSamples.poll();
+        if (loaded) {
+            worldState.setGenerated(chunkX, chunkZ);
+            if (bin != null && currentTime - bin.left() < 2e3) {
+                bin.right().addAndGet(1);
+            } else if (updateSamples.add(Pair.of(currentTime, new AtomicLong(1)))) {
+                while (!updateSamples.isEmpty() && currentTime - updateSamples.peek().left() > 1e4) {
+                    updateSamples.poll();
+                }
             }
         }
-        final long chunksLeft = totalChunks.get() - finishedChunks.get();
         final Pair<Long, AtomicLong> oldest = updateSamples.peek();
-        if (oldest == null) {
-            return;
-        }
-        final double timeDiff = (currentTime - oldest.left()) / 1e3;
+        final long oldestTime = oldest == null ? currentTime : oldest.left();
+        final long chunksLeft = totalChunks.get() - finishedChunks.get();
+        final double timeDiff = (currentTime - oldestTime) / 1e3;
         if (chunksLeft > 0 && timeDiff < 1e-1) {
             return;
         }
@@ -78,7 +76,7 @@ public class GenerationTask implements Runnable {
         for (Pair<Long, AtomicLong> b : updateSamples) {
             sampleCount += b.right().get();
         }
-        progress.rate = sampleCount / timeDiff;
+        progress.rate = timeDiff > 0 ? sampleCount / timeDiff : 0;
         final long time;
         if (chunksLeft == 0) {
             time = (prevTime + (currentTime - startTime.get())) / 1000;
