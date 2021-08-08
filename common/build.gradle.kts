@@ -1,5 +1,6 @@
 repositories {
     mavenCentral()
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.mikeprimm.com")
     maven("https://repo.pl3x.net")
     maven("https://jitpack.io")
