@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ForgeServer implements Server {
-    private ChunkyForge plugin;
-    private MinecraftServer server;
-    private Scheduler scheduler;
+    private final ChunkyForge plugin;
+    private final MinecraftServer server;
+    private final Scheduler scheduler;
 
     public ForgeServer(ChunkyForge plugin, MinecraftServer server) {
         this.plugin = plugin;

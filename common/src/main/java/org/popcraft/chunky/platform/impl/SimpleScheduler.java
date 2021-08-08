@@ -8,12 +8,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class SimpleScheduler implements Scheduler {
-    private ExecutorService executor;
+    private final ExecutorService executor;
     private final ThreadGroup tasks = new ThreadGroup("tasks");
 
     public SimpleScheduler() {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, Integer.MAX_VALUE, 5, TimeUnit.MINUTES, new SynchronousQueue<>());
-        threadPoolExecutor.setThreadFactory((runnable) -> {
+        threadPoolExecutor.setThreadFactory(runnable -> {
             Thread thread = new Thread(tasks, runnable);
             thread.setDaemon(true);
             return thread;

@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class BukkitConfig implements Config {
+    private static final String TASKS_KEY = "tasks.";
     private final Chunky chunky;
     private final JavaPlugin plugin;
-    private static final String TASKS_KEY = "tasks.";
 
     public BukkitConfig(Chunky chunky, JavaPlugin plugin) {
         this.chunky = chunky;
@@ -36,21 +36,21 @@ public class BukkitConfig implements Config {
         if (config.getConfigurationSection(TASKS_KEY + world.getName()) == null) {
             return Optional.empty();
         }
-        String world_key = TASKS_KEY + world.getName() + ".";
-        if (config.getBoolean(world_key + "cancelled", false)) {
+        String worldKey = TASKS_KEY + world.getName() + ".";
+        if (config.getBoolean(worldKey + "cancelled", false)) {
             return Optional.empty();
         }
-        double radiusX = config.getDouble(world_key + "radius", 500);
-        double radiusZ = config.getDouble(world_key + "z-radius", radiusX);
+        double radiusX = config.getDouble(worldKey + "radius", 500);
+        double radiusZ = config.getDouble(worldKey + "z-radius", radiusX);
         Selection.Builder selection = Selection.builder(world)
-                .centerX(config.getDouble(world_key + "x-center", 0))
-                .centerZ(config.getDouble(world_key + "z-center", 0))
+                .centerX(config.getDouble(worldKey + "x-center", 0))
+                .centerZ(config.getDouble(worldKey + "z-center", 0))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(config.getString(world_key + "iterator", "loop"))
-                .shape(config.getString(world_key + "shape", "square"));
-        long count = config.getLong(world_key + "count", 0);
-        long time = config.getLong(world_key + "time", 0);
+                .pattern(config.getString(worldKey + "iterator", "loop"))
+                .shape(config.getString(worldKey + "shape", "square"));
+        long count = config.getLong(worldKey + "count", 0);
+        long time = config.getLong(worldKey + "time", 0);
         return Optional.of(new GenerationTask(chunky, selection.build(), count, time));
     }
 
@@ -65,19 +65,19 @@ public class BukkitConfig implements Config {
     public synchronized void saveTask(GenerationTask generationTask) {
         FileConfiguration config = plugin.getConfig();
         Selection selection = generationTask.getSelection();
-        String world_key = TASKS_KEY + selection.world().getName() + ".";
+        String worldKey = TASKS_KEY + selection.world().getName() + ".";
         String shape = generationTask.getShape().name();
-        config.set(world_key + "cancelled", generationTask.isCancelled());
-        config.set(world_key + "radius", selection.radiusX());
+        config.set(worldKey + "cancelled", generationTask.isCancelled());
+        config.set(worldKey + "radius", selection.radiusX());
         if ("rectangle".equals(shape) || "ellipse".equals(shape)) {
-            config.set(world_key + "z-radius", selection.radiusZ());
+            config.set(worldKey + "z-radius", selection.radiusZ());
         }
-        config.set(world_key + "x-center", selection.centerX());
-        config.set(world_key + "z-center", selection.centerZ());
-        config.set(world_key + "iterator", generationTask.getChunkIterator().name());
-        config.set(world_key + "shape", shape);
-        config.set(world_key + "count", generationTask.getCount());
-        config.set(world_key + "time", generationTask.getTotalTime());
+        config.set(worldKey + "x-center", selection.centerX());
+        config.set(worldKey + "z-center", selection.centerZ());
+        config.set(worldKey + "iterator", generationTask.getChunkIterator().name());
+        config.set(worldKey + "shape", shape);
+        config.set(worldKey + "count", generationTask.getCount());
+        config.set(worldKey + "time", generationTask.getTotalTime());
         plugin.saveConfig();
     }
 

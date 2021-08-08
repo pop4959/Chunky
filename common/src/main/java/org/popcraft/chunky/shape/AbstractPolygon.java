@@ -3,7 +3,7 @@ package org.popcraft.chunky.shape;
 import org.popcraft.chunky.Selection;
 
 public abstract class AbstractPolygon extends AbstractShape {
-    public AbstractPolygon(Selection selection, boolean chunkAligned) {
+    protected AbstractPolygon(Selection selection, boolean chunkAligned) {
         super(selection, chunkAligned);
     }
 

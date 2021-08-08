@@ -3,7 +3,7 @@ package org.popcraft.chunky.shape;
 import org.popcraft.chunky.Selection;
 
 public abstract class AbstractEllipse extends AbstractShape {
-    public AbstractEllipse(Selection selection, boolean chunkAligned) {
+    protected AbstractEllipse(Selection selection, boolean chunkAligned) {
         super(selection, chunkAligned);
     }
 

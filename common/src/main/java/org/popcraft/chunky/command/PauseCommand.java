@@ -20,7 +20,7 @@ public class PauseCommand extends ChunkyCommand {
 
     public void execute(Sender sender, String[] args) {
         final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
-        if (generationTasks.size() == 0) {
+        if (generationTasks.isEmpty()) {
             sender.sendMessagePrefixed("format_pause_no_tasks");
             return;
         }

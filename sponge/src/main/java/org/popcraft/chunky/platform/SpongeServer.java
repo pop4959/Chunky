@@ -12,9 +12,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SpongeServer implements Server {
-    private ChunkySponge plugin;
-    private Map<String, Integration> integrations;
-    private Scheduler scheduler;
+    private final ChunkySponge plugin;
+    private final Map<String, Integration> integrations;
+    private final Scheduler scheduler;
 
     public SpongeServer(ChunkySponge plugin) {
         this.plugin = plugin;

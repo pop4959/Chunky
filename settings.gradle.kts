@@ -10,11 +10,11 @@ pluginManagement {
 rootProject.name = "chunky"
 
 sequenceOf(
-        "common",
-        "bukkit",
-        "fabric",
-        "forge",
-        "sponge"
+    "common",
+    "bukkit",
+    "fabric",
+    "forge",
+    "sponge"
 ).forEach {
     include("${rootProject.name}-$it")
     project(":${rootProject.name}-$it").projectDir = file(it)

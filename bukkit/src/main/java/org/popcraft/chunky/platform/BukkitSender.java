@@ -9,7 +9,7 @@ import org.popcraft.chunky.util.Coordinate;
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class BukkitSender implements Sender {
-    CommandSender sender;
+    final CommandSender sender;
 
     public BukkitSender(CommandSender sender) {
         this.sender = sender;

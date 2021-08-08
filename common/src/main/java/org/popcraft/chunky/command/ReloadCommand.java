@@ -11,7 +11,7 @@ public class ReloadCommand extends ChunkyCommand {
 
     @Override
     public void execute(Sender sender, String[] args) {
-        if (chunky.getGenerationTasks().size() > 0) {
+        if (!chunky.getGenerationTasks().isEmpty()) {
             sender.sendMessagePrefixed("format_reload_tasks_running");
             return;
         }

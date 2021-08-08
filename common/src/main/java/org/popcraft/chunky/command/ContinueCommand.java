@@ -30,7 +30,7 @@ public class ContinueCommand extends ChunkyCommand {
         } else {
             loadTasks = chunky.getConfig().loadTasks();
         }
-        if (loadTasks.size() == 0) {
+        if (loadTasks.isEmpty()) {
             sender.sendMessagePrefixed("format_continue_no_tasks");
             return;
         }

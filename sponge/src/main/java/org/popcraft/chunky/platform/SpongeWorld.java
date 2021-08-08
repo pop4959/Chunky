@@ -11,10 +11,12 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class SpongeWorld implements World {
-    private ServerWorld world;
+    private final ServerWorld world;
+    private final Border worldBorder;
 
     public SpongeWorld(ServerWorld world) {
         this.world = world;
+        this.worldBorder = new SpongeBorder(world.border());
     }
 
     @Override
@@ -51,7 +53,7 @@ public class SpongeWorld implements World {
 
     @Override
     public Border getWorldBorder() {
-        return new SpongeBorder(world.border());
+        return worldBorder;
     }
 
     @Override

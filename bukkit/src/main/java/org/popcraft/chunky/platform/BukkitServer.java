@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class BukkitServer implements Server {
-    private ChunkyBukkit plugin;
-    private Map<String, Integration> integrations;
-    private Scheduler scheduler;
+    private final ChunkyBukkit plugin;
+    private final Map<String, Integration> integrations;
+    private final Scheduler scheduler;
 
     public BukkitServer(ChunkyBukkit plugin) {
         this.plugin = plugin;

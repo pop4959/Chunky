@@ -15,7 +15,7 @@ public class ShapeUtil {
      * @return Whether point C can be considered inside of line AB.
      */
     public static boolean insideLine(double ax, double az, double bx, double bz, double cx, double cz) {
-        // Compute whether the point is inside of the line using a cross product
+        // Compute whether the point is inside the line using a cross product
         return (bx - ax) * (cz - az) > (bz - az) * (cx - ax);
     }
 

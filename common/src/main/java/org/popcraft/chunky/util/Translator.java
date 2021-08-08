@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Translator {
-    private static Map<String, String> translations = Collections.emptyMap();
     private static final Map<String, String> fallbackTranslations;
+    private static Map<String, String> translations = Collections.emptyMap();
 
     static {
         fallbackTranslations = load("en");

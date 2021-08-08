@@ -4,10 +4,10 @@ import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.ChunkCoordinate;
 
 public class Loop2ChunkIterator implements ChunkIterator {
+    private final int x1, x2, z1, z2;
+    private final long diameterChunksZ;
+    private final long total;
     private int x, z;
-    private int x1, x2, z1, z2;
-    private long diameterChunksZ;
-    private long total;
     private boolean hasNext = true;
 
     public Loop2ChunkIterator(Selection selection, long count) {

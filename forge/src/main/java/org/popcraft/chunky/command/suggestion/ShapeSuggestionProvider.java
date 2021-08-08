@@ -4,10 +4,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import net.minecraft.commands.CommandSourceStack;
 import org.popcraft.chunky.util.Input;
 
 import java.util.concurrent.CompletableFuture;
-import net.minecraft.commands.CommandSourceStack;
 
 public class ShapeSuggestionProvider implements SuggestionProvider<CommandSourceStack> {
     @Override

@@ -10,10 +10,11 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 public class BukkitWorld implements World {
-    private org.bukkit.World world;
-    private Border worldBorder;
+    private final org.bukkit.World world;
+    private final Border worldBorder;
 
     public BukkitWorld(org.bukkit.World world) {
         this.world = world;
@@ -43,6 +44,17 @@ public class BukkitWorld implements World {
     }
 
     @Override
+    public int getSeaLevel() {
+        return world.getSeaLevel();
+    }
+
+    @Override
+    public Coordinate getSpawnCoordinate() {
+        Location spawnLocation = world.getSpawnLocation();
+        return new Coordinate(spawnLocation.getX(), spawnLocation.getZ());
+    }
+
+    @Override
     public Border getWorldBorder() {
         return worldBorder;
     }
@@ -64,9 +76,8 @@ public class BukkitWorld implements World {
 
     private Optional<Path> getDirectory(final String name) {
         if (name != null) {
-            try {
-                return Files.walk(world.getWorldFolder().toPath())
-                        .filter(Files::isDirectory)
+            try (Stream<Path> paths = Files.walk(world.getWorldFolder().toPath())) {
+                return paths.filter(Files::isDirectory)
                         .filter(path -> name.equals(path.getFileName().toString()))
                         .findFirst();
             } catch (IOException e) {
@@ -74,17 +85,6 @@ public class BukkitWorld implements World {
             }
         }
         return Optional.empty();
-    }
-
-    @Override
-    public Coordinate getSpawnCoordinate() {
-        Location spawnLocation = world.getSpawnLocation();
-        return new Coordinate(spawnLocation.getX(), spawnLocation.getZ());
-    }
-
-    @Override
-    public int getSeaLevel() {
-        return world.getSeaLevel();
     }
 
     @Override

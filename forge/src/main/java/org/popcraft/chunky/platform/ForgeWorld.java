@@ -22,9 +22,9 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class ForgeWorld implements World {
-    private ServerLevel world;
-    private Border worldBorder;
     private static final TicketType<Unit> CHUNKY = TicketType.create(ChunkyForge.MODID, (unit, unit2) -> 0);
+    private final ServerLevel world;
+    private final Border worldBorder;
 
     public ForgeWorld(ServerLevel world) {
         this.world = world;
@@ -68,7 +68,7 @@ public class ForgeWorld implements World {
     }
 
     private ChunkStatus getLastAvailableStatus(ChunkHolder chunkHolder) {
-        for(int i = ChunkHolder.CHUNK_STATUSES.size() - 1; i >= 0; --i) {
+        for (int i = ChunkHolder.CHUNK_STATUSES.size() - 1; i >= 0; --i) {
             final ChunkStatus chunkStatus = ChunkHolder.CHUNK_STATUSES.get(i);
             if (chunkHolder.getFutureIfPresentUnchecked(chunkStatus).getNow(ChunkHolder.UNLOADED_CHUNK).left().isPresent()) {
                 return chunkStatus;

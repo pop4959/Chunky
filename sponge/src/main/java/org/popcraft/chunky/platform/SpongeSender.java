@@ -11,7 +11,7 @@ import java.util.Optional;
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class SpongeSender implements Sender {
-    private Audience audience;
+    private final Audience audience;
 
     public SpongeSender(Audience audience) {
         this.audience = audience;

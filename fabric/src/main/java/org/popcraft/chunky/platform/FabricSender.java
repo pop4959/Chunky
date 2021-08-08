@@ -3,7 +3,6 @@ package org.popcraft.chunky.platform;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.popcraft.chunky.util.Coordinate;
@@ -11,7 +10,7 @@ import org.popcraft.chunky.util.Coordinate;
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class FabricSender implements Sender {
-    private ServerCommandSource source;
+    private final ServerCommandSource source;
 
     public FabricSender(ServerCommandSource source) {
         this.source = source;
@@ -34,7 +33,7 @@ public class FabricSender implements Sender {
     @Override
     public Coordinate getCoordinate() {
         Vec3d pos = source.getPosition();
-        return new Coordinate((long) pos.getX(), (long) pos.getZ());
+        return new Coordinate(pos.getX(), pos.getZ());
     }
 
     @Override
@@ -45,7 +44,6 @@ public class FabricSender implements Sender {
         } else {
             text = translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "");
         }
-        Text textComponent = new LiteralText(text);
-        source.sendFeedback(textComponent, false);
+        source.sendFeedback(Text.of(text), false);
     }
 }

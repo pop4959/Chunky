@@ -3,8 +3,8 @@ package org.popcraft.chunky.shape;
 import org.popcraft.chunky.Selection;
 
 public class Rectangle extends AbstractPolygon {
-    double b1x, b1z, b2x, b2z;
-    double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
+    final double b1x, b1z, b2x, b2z;
+    final double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
 
     protected Rectangle(Selection selection, boolean chunkAligned) {
         super(selection, chunkAligned);

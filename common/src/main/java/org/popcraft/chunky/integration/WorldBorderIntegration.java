@@ -2,7 +2,6 @@ package org.popcraft.chunky.integration;
 
 import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
-import org.bukkit.Location;
 import org.popcraft.chunky.platform.Border;
 import org.popcraft.chunky.util.Coordinate;
 

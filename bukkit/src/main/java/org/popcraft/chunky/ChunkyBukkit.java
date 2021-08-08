@@ -35,10 +35,10 @@ public final class ChunkyBukkit extends JavaPlugin {
         Limit.set(chunky.getConfig());
         final Version currentVersion = Version.getCurrentMinecraftVersion();
         if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
-            getLogger().severe(translate("error_version_spigot"));
+            getLogger().severe(() -> translate("error_version_spigot"));
             getServer().getPluginManager().disablePlugin(this);
         } else if (currentVersion.isValid() && Version.v1_13_2.isHigherThan(currentVersion)) {
-            getLogger().severe(translate("error_version"));
+            getLogger().severe(() -> translate("error_version"));
             getServer().getPluginManager().disablePlugin(this);
         }
         if (!isEnabled()) {
@@ -61,6 +61,7 @@ public final class ChunkyBukkit extends JavaPlugin {
         chunky.getServer().getScheduler().cancelTasks();
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Sender bukkitSender = new BukkitSender(sender);
@@ -77,6 +78,7 @@ public final class ChunkyBukkit extends JavaPlugin {
         return true;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length < 1) {

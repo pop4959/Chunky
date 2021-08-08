@@ -4,7 +4,7 @@ import net.minecraft.world.level.border.WorldBorder;
 import org.popcraft.chunky.util.Coordinate;
 
 public class ForgeBorder implements Border {
-    private WorldBorder worldBorder;
+    private final WorldBorder worldBorder;
 
     public ForgeBorder(WorldBorder worldBorder) {
         this.worldBorder = worldBorder;

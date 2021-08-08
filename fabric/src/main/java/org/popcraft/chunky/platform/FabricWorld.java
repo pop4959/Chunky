@@ -22,9 +22,9 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class FabricWorld implements World {
-    private ServerWorld serverWorld;
-    private Border worldBorder;
     private static final ChunkTicketType<Unit> CHUNKY = ChunkTicketType.create("chunky", (unit, unit2) -> 0);
+    private final ServerWorld serverWorld;
+    private final Border worldBorder;
 
     public FabricWorld(ServerWorld serverWorld) {
         this.serverWorld = serverWorld;

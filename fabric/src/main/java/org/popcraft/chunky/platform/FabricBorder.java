@@ -4,7 +4,7 @@ import net.minecraft.world.border.WorldBorder;
 import org.popcraft.chunky.util.Coordinate;
 
 public class FabricBorder implements Border {
-    private WorldBorder worldBorder;
+    private final WorldBorder worldBorder;
 
     public FabricBorder(WorldBorder worldBorder) {
         this.worldBorder = worldBorder;

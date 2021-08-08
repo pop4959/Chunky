@@ -120,7 +120,7 @@ public class TrimCommand extends ChunkyCommand {
 
     private Optional<ChunkCoordinate> tryRegionCoordinate(final Path region) {
         final String fileName = region.getFileName().toString();
-        if (fileName == null || !fileName.startsWith("r.")) {
+        if (!fileName.startsWith("r.")) {
             return Optional.empty();
         }
         final int extension = fileName.indexOf(".mca");

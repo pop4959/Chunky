@@ -14,16 +14,16 @@ tasks {
     processResources {
         filesMatching("plugin.yml") {
             expand(
-                    "name" to rootProject.name.capitalize(),
-                    "version" to project.version,
-                    "group" to project.group,
-                    "author" to project.property("author"),
-                    "description" to project.property("description"),
+                "name" to rootProject.name.capitalize(),
+                "version" to project.version,
+                "group" to project.group,
+                "author" to project.property("author"),
+                "description" to project.property("description"),
             )
         }
     }
     shadowJar {
-        minimize() {
+        minimize {
             exclude(project(":chunky-common"))
         }
         relocate("io.papermc.lib", "${project.group}.${rootProject.name}.lib.paperlib")

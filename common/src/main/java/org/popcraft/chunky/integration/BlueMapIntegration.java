@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlueMapIntegration extends AbstractMapIntegration {
-    private BlueMapAPI blueMapAPI;
-    private List<Runnable> pendingMarkers = new ArrayList<>();
     private static final String MARKERSET_ID = "chunky";
+    private final List<Runnable> pendingMarkers = new ArrayList<>();
+    private BlueMapAPI blueMapAPI;
 
     public BlueMapIntegration() {
         BlueMapAPI.onEnable(blueMap -> {
@@ -70,7 +70,6 @@ public class BlueMapIntegration extends AbstractMapIntegration {
             marker.setColors(new Color(this.color), new Color(0, true));
             marker.setLabel(this.label);
             try {
-                //noinspection JavaReflectionMemberAccess
                 ShapeMarker.class.getMethod("setLineWidth", int.class).invoke(marker, this.weight);
             } catch (Exception ignored) {
             }
@@ -89,9 +88,7 @@ public class BlueMapIntegration extends AbstractMapIntegration {
         try {
             final MarkerAPI markerAPI = blueMapAPI.getMarkerAPI();
             final MarkerSet markerSet = markerAPI.createMarkerSet(MARKERSET_ID);
-            blueMapAPI.getWorld(world.getUUID()).ifPresent(blueWorld -> blueWorld.getMaps().forEach(map -> {
-                markerSet.removeMarker(world.getName());
-            }));
+            blueMapAPI.getWorld(world.getUUID()).ifPresent(blueWorld -> blueWorld.getMaps().forEach(map -> markerSet.removeMarker(world.getName())));
             markerAPI.save();
         } catch (IOException ignored) {
         }
