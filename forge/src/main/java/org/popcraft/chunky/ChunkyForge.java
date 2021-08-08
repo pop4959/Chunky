@@ -11,16 +11,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.popcraft.chunky.command.ChunkyCommand;
+import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 import org.popcraft.chunky.listeners.BossBarProgress;
 import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.ForgeServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
 import org.popcraft.chunky.util.Limit;
-import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 
 import java.io.File;
 import java.util.Map;
@@ -35,7 +33,6 @@ import static net.minecraft.commands.arguments.DimensionArgument.dimension;
 @Mod(ChunkyForge.MODID)
 public class ChunkyForge {
     public static final String MODID = "chunky";
-    private static final Logger LOGGER = LogManager.getLogger();
     private Chunky chunky;
 
     public ChunkyForge() {
@@ -64,7 +61,7 @@ public class ChunkyForge {
             commands.get(subCommand).execute(sender, args);
             return Command.SINGLE_SUCCESS;
         };
-        server.getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal("chunky")
+        server.getCommands().getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal(MODID)
                 .then(literal("cancel")
                         .then(argument("world", dimension())
                                 .executes(command))

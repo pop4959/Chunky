@@ -21,12 +21,12 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Pl3xMapIntegration extends AbstractMapIntegration {
-    private Pl3xMap pl3xMap;
-    private boolean hideByDefault;
-    private int priority;
-    private Map<UUID, LayerProvider> defaultProviders = new HashMap<>();
     private static final Key WORLDBORDER_KEY = Key.of("pl3xmap-worldborder");
     private static final Key CHUNKY_KEY = Key.of("chunky");
+    private final Pl3xMap pl3xMap;
+    private final Map<UUID, LayerProvider> defaultProviders = new HashMap<>();
+    private boolean hideByDefault;
+    private int priority;
 
     public Pl3xMapIntegration(Pl3xMap pl3xMap) {
         this.pl3xMap = pl3xMap;

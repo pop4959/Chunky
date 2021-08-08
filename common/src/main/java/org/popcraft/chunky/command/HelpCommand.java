@@ -10,7 +10,7 @@ import java.util.List;
 import static org.popcraft.chunky.util.Translator.translate;
 
 public class HelpCommand extends ChunkyCommand {
-    private List<String> helpMessages;
+    private final List<String> helpMessages;
 
     public HelpCommand(Chunky chunky) {
         super(chunky);

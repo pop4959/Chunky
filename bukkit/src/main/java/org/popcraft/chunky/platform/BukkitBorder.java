@@ -4,7 +4,7 @@ import org.bukkit.WorldBorder;
 import org.popcraft.chunky.util.Coordinate;
 
 public class BukkitBorder implements Border {
-    WorldBorder worldBorder;
+    final WorldBorder worldBorder;
 
     public BukkitBorder(WorldBorder worldBorder) {
         this.worldBorder = worldBorder;

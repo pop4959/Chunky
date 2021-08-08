@@ -4,12 +4,12 @@ import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.ChunkCoordinate;
 
 public class ConcentricChunkIterator implements ChunkIterator {
+    private final int xCenter, zCenter;
+    private final int radiusChunks;
+    private final long total;
     private int x, z;
-    private int xCenter, zCenter;
     private int annulus, span;
     private int down, left, up, right;
-    private int radiusChunks;
-    private long total;
     private boolean hasNext = true;
 
     public ConcentricChunkIterator(Selection selection, long count) {
@@ -25,7 +25,7 @@ public class ConcentricChunkIterator implements ChunkIterator {
         this.x += annulus;
         this.z += annulus;
         this.span = 2 * annulus;
-        long perimeterCount = count - (diameterFinished * diameterFinished) + 1;
+        long perimeterCount = count - ((long) diameterFinished * diameterFinished) + 1;
         this.down += Math.min(span, perimeterCount);
         perimeterCount -= Math.min(span, perimeterCount);
         this.left += Math.min(span, perimeterCount);

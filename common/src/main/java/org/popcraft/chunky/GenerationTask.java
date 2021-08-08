@@ -15,20 +15,20 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GenerationTask implements Runnable {
+    private static final int MAX_WORKING = 50;
     private final Chunky chunky;
     private final Selection selection;
-    private ChunkIterator chunkIterator;
     private final Shape shape;
-    private boolean stopped, cancelled;
-    private long prevTime;
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong printTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
     private final AtomicLong totalChunks = new AtomicLong();
     private final Deque<Pair<Long, AtomicLong>> updateSamples = new ConcurrentLinkedDeque<>();
-    private static final int MAX_WORKING = 50;
     private final Progress progress;
     private final RegionCache.WorldState worldState;
+    private ChunkIterator chunkIterator;
+    private boolean stopped, cancelled;
+    private long prevTime;
 
     public GenerationTask(Chunky chunky, Selection selection, long count, long time) {
         this(chunky, selection);

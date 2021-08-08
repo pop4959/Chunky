@@ -19,7 +19,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
 import org.spongepowered.api.event.lifecycle.LoadedGameEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
-import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
 import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
 import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.plugin.PluginContainer;
@@ -45,10 +44,6 @@ public class ChunkySponge {
     public void onConstructPlugin(final ConstructPluginEvent event) {
         this.container = event.plugin();
         this.logger = event.plugin().logger();
-    }
-
-    @Listener
-    public void onServerStarting(final StartingEngineEvent<Server> event) {
     }
 
     @Listener

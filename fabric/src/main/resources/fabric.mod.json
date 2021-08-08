@@ -18,9 +18,6 @@
   "icon": "assets/chunky/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "org.popcraft.chunky.client.ChunkyFabricClient"
-    ],
     "main": [
       "org.popcraft.chunky.ChunkyFabric"
     ]

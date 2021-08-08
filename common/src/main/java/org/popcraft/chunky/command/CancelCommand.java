@@ -20,7 +20,7 @@ public class CancelCommand extends ChunkyCommand {
 
     public void execute(Sender sender, String[] args) {
         final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
-        if (generationTasks.size() == 0 && chunky.getConfig().loadTasks().size() == 0) {
+        if (generationTasks.isEmpty() && chunky.getConfig().loadTasks().isEmpty()) {
             sender.sendMessagePrefixed("format_cancel_no_tasks");
             return;
         }

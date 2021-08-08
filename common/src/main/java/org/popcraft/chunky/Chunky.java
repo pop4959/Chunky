@@ -15,14 +15,14 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Chunky {
-    private Server server;
-    private Config config;
-    private Map<World, GenerationTask> generationTasks;
-    private Map<String, ChunkyCommand> commands;
-    private Selection.Builder selection;
-    private Options options;
+    private final Server server;
+    private final Map<World, GenerationTask> generationTasks;
+    private final Selection.Builder selection;
+    private final Options options;
     private final Map<String, PendingAction> pendingActions = new HashMap<>();
     private final RegionCache regionCache;
+    private Config config;
+    private Map<String, ChunkyCommand> commands;
 
     public Chunky(Server server) {
         this.server = server;
@@ -33,27 +33,27 @@ public class Chunky {
     }
 
     public void loadCommands() {
-        final Map<String, ChunkyCommand> commands = new HashMap<>();
-        commands.put("cancel", new CancelCommand(this));
-        commands.put("center", new CenterCommand(this));
-        commands.put("confirm", new ConfirmCommand(this));
-        commands.put("continue", new ContinueCommand(this));
-        commands.put("corners", new CornersCommand(this));
-        commands.put("help", new HelpCommand(this));
-        commands.put("pattern", new PatternCommand(this));
-        commands.put("pause", new PauseCommand(this));
-        commands.put("progress", new ProgressCommand(this));
-        commands.put("quiet", new QuietCommand(this));
-        commands.put("radius", new RadiusCommand(this));
-        commands.put("reload", new ReloadCommand(this));
-        commands.put("shape", new ShapeCommand(this));
-        commands.put("silent", new SilentCommand(this));
-        commands.put("spawn", new SpawnCommand(this));
-        commands.put("start", new StartCommand(this));
-        commands.put("trim", new TrimCommand(this));
-        commands.put("worldborder", new WorldBorderCommand(this));
-        commands.put("world", new WorldCommand(this));
-        this.commands = commands;
+        final Map<String, ChunkyCommand> commandMap = new HashMap<>();
+        commandMap.put("cancel", new CancelCommand(this));
+        commandMap.put("center", new CenterCommand(this));
+        commandMap.put("confirm", new ConfirmCommand(this));
+        commandMap.put("continue", new ContinueCommand(this));
+        commandMap.put("corners", new CornersCommand(this));
+        commandMap.put("help", new HelpCommand(this));
+        commandMap.put("pattern", new PatternCommand(this));
+        commandMap.put("pause", new PauseCommand(this));
+        commandMap.put("progress", new ProgressCommand(this));
+        commandMap.put("quiet", new QuietCommand(this));
+        commandMap.put("radius", new RadiusCommand(this));
+        commandMap.put("reload", new ReloadCommand(this));
+        commandMap.put("shape", new ShapeCommand(this));
+        commandMap.put("silent", new SilentCommand(this));
+        commandMap.put("spawn", new SpawnCommand(this));
+        commandMap.put("start", new StartCommand(this));
+        commandMap.put("trim", new TrimCommand(this));
+        commandMap.put("worldborder", new WorldBorderCommand(this));
+        commandMap.put("world", new WorldCommand(this));
+        this.commands = commandMap;
     }
 
     public Server getServer() {

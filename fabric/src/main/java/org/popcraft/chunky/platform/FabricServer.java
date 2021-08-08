@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class FabricServer implements Server {
-    private ChunkyFabric plugin;
-    private MinecraftServer server;
-    private Scheduler scheduler;
+    private final ChunkyFabric plugin;
+    private final MinecraftServer server;
+    private final Scheduler scheduler;
 
     public FabricServer(ChunkyFabric plugin, MinecraftServer server) {
         this.plugin = plugin;

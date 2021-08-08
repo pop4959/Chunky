@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class ChunkyCommand {
     protected final Chunky chunky;
 
-    public ChunkyCommand(Chunky chunky) {
+    protected ChunkyCommand(Chunky chunky) {
         this.chunky = chunky;
     }
 

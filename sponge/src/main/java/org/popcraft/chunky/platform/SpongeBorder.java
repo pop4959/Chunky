@@ -5,7 +5,7 @@ import org.spongepowered.api.world.border.WorldBorder;
 import org.spongepowered.math.vector.Vector2d;
 
 public class SpongeBorder implements Border {
-    private WorldBorder worldBorder;
+    private final WorldBorder worldBorder;
 
     public SpongeBorder(WorldBorder worldBorder) {
         this.worldBorder = worldBorder;

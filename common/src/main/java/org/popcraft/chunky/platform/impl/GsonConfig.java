@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class GsonConfig implements Config {
     private final Chunky chunky;
@@ -135,24 +136,24 @@ public class GsonConfig implements Config {
 
     @Override
     public int getVersion() {
-        return getConfigModel().map(configModel -> configModel.version).orElse(0);
+        return getConfigModel().map(model -> model.version).orElse(0);
     }
 
     @Override
     public String getLanguage() {
-        return getConfigModel().map(configModel -> Input.checkLanguage(configModel.language)).orElse("en");
+        return getConfigModel().map(model -> Input.checkLanguage(model.language)).orElse("en");
     }
 
     @Override
     public boolean getContinueOnRestart() {
-        return getConfigModel().map(configModel -> configModel.continueOnRestart).orElse(false);
+        return getConfigModel().map(model -> model.continueOnRestart).orElse(false);
     }
 
     @Override
     public void reload() {
         StringBuilder configBuilder = new StringBuilder();
-        try {
-            Files.lines(configPath).forEach(configBuilder::append);
+        try (Stream<String> input = Files.lines(configPath)) {
+            input.forEach(configBuilder::append);
         } catch (IOException e) {
             e.printStackTrace();
         }

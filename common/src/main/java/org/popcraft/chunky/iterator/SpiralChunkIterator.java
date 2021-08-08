@@ -4,12 +4,12 @@ import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.ChunkCoordinate;
 
 public class SpiralChunkIterator implements ChunkIterator {
+    private static final int RIGHT = 0, DOWN = 1, LEFT = 2, UP = 3;
+    private final int stopX, stopZ;
+    private final long total;
     private int x, z;
-    private int stopX, stopZ;
     private int span = 1, spanCount, spanProgress;
     private int direction;
-    private long total;
-    private final static int RIGHT = 0, DOWN = 1, LEFT = 2, UP = 3;
     private boolean hasNext = true;
 
     public SpiralChunkIterator(Selection selection, long count) {
@@ -27,7 +27,7 @@ public class SpiralChunkIterator implements ChunkIterator {
         int radiusFinished = diameterFinished / 2;
         this.x += radiusFinished + 1;
         this.z += radiusFinished;
-        long perimeterCount = count - diameterFinished * diameterFinished;
+        long perimeterCount = count - (long) diameterFinished * diameterFinished;
         long spanned;
         spanned = Math.min(span, perimeterCount);
         this.z -= spanned;
@@ -109,6 +109,8 @@ public class SpiralChunkIterator implements ChunkIterator {
             case UP:
                 z += 1;
                 break;
+            default:
+                throw new IllegalStateException("Invalid direction");
         }
         ++spanProgress;
         if (spanProgress == span) {
