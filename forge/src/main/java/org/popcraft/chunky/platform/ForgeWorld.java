@@ -44,11 +44,11 @@ public class ForgeWorld implements World {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             ChunkMap chunkStorage = world.getChunkSource().chunkMap;
             ChunkHolder loadedChunkHolder = chunkStorage.getVisibleChunkIfPresent(chunkPos.toLong());
-            if (loadedChunkHolder != null && getLastAvailableStatus(loadedChunkHolder) == ChunkStatus.FULL) {
+            if (loadedChunkHolder != null && loadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
                 return true;
             }
             ChunkHolder unloadedChunkHolder = chunkStorage.pendingUnloads.get(chunkPos.toLong());
-            if (unloadedChunkHolder != null && getLastAvailableStatus(unloadedChunkHolder) == ChunkStatus.FULL) {
+            if (unloadedChunkHolder != null && unloadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
                 return true;
             }
             CompoundTag chunkNbt;
@@ -65,16 +65,6 @@ public class ForgeWorld implements World {
             }
             return false;
         }
-    }
-
-    private ChunkStatus getLastAvailableStatus(ChunkHolder chunkHolder) {
-        for (int i = ChunkHolder.CHUNK_STATUSES.size() - 1; i >= 0; --i) {
-            final ChunkStatus chunkStatus = ChunkHolder.CHUNK_STATUSES.get(i);
-            if (chunkHolder.getFutureIfPresentUnchecked(chunkStatus).getNow(ChunkHolder.UNLOADED_CHUNK).left().isPresent()) {
-                return chunkStatus;
-            }
-        }
-        return null;
     }
 
     @Override
