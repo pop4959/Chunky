@@ -9,8 +9,11 @@ import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.Translator;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -20,15 +23,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class GsonConfig implements Config {
-    private final Chunky chunky;
+    private final Supplier<Chunky> chunky;
     private final Gson gson;
     private final Path configPath;
     private ConfigModel configModel;
 
-    public GsonConfig(Chunky chunky, File configFile) {
+    public GsonConfig(Supplier<Chunky> chunky, File configFile) {
         this.chunky = chunky;
         this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.configPath = configFile.toPath();
@@ -47,6 +51,7 @@ public class GsonConfig implements Config {
         } else {
             reload();
         }
+        Translator.setLanguage(getLanguage());
     }
 
     @Override
@@ -76,13 +81,13 @@ public class GsonConfig implements Config {
                 .shape(taskModel.shape);
         long count = taskModel.count;
         long time = taskModel.time;
-        return Optional.of(new GenerationTask(chunky, selection.build(), count, time));
+        return Optional.of(new GenerationTask(chunky.get(), selection.build(), count, time));
     }
 
     @Override
     public List<GenerationTask> loadTasks() {
         List<GenerationTask> generationTasks = new ArrayList<>();
-        chunky.getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
+        chunky.get().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
         return generationTasks;
     }
 
@@ -115,7 +120,7 @@ public class GsonConfig implements Config {
 
     @Override
     public void saveTasks() {
-        chunky.getGenerationTasks().values().forEach(this::saveTask);
+        chunky.get().getGenerationTasks().values().forEach(this::saveTask);
     }
 
     @Override
@@ -162,7 +167,7 @@ public class GsonConfig implements Config {
     }
 
     public void saveConfig() {
-        try (Writer writer = Files.newBufferedWriter(configPath)) {
+        try (Writer writer = new BufferedWriter(new FileWriter(configPath.toFile()))) {
             gson.toJson(configModel, new TypeToken<ConfigModel>() {
             }.getType(), writer);
         } catch (IOException e) {

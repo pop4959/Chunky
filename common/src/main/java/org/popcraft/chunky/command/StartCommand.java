@@ -7,7 +7,6 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
-import org.popcraft.chunky.util.Limit;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,8 +72,8 @@ public class StartCommand extends ChunkyCommand {
             sender.sendMessagePrefixed("format_started_already", current.world().getName());
             return;
         }
-        if (current.radiusX() > Limit.get()) {
-            sender.sendMessagePrefixed("format_start_limit", Formatting.number(Limit.get()));
+        if (current.radiusX() > chunky.getLimit()) {
+            sender.sendMessagePrefixed("format_start_limit", Formatting.number(chunky.getLimit()));
             return;
         }
         final Runnable startAction = () -> {

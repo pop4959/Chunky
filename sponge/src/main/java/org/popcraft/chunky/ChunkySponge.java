@@ -6,7 +6,6 @@ import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 import org.popcraft.chunky.platform.SpongeConfig;
 import org.popcraft.chunky.platform.SpongeSender;
 import org.popcraft.chunky.platform.SpongeServer;
-import org.popcraft.chunky.util.Limit;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Server;
@@ -48,11 +47,7 @@ public class ChunkySponge {
 
     @Listener
     public void onLoadedGame(final LoadedGameEvent event) {
-        this.chunky = new Chunky(new SpongeServer(this));
-        chunky.setConfig(new SpongeConfig(this));
-        chunky.setLanguage(chunky.getConfig().getLanguage());
-        chunky.loadCommands();
-        Limit.set(chunky.getConfig());
+        this.chunky = new Chunky(new SpongeServer(this), new SpongeConfig(this));
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{});
         }

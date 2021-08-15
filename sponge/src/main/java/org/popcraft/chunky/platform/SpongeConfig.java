@@ -4,6 +4,7 @@ import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.Translator;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
@@ -57,6 +58,7 @@ public class SpongeConfig implements Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Translator.setLanguage(getLanguage());
     }
 
     @Override

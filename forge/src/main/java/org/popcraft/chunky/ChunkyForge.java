@@ -18,7 +18,6 @@ import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.ForgeServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
-import org.popcraft.chunky.util.Limit;
 
 import java.io.File;
 import java.util.Map;
@@ -42,12 +41,8 @@ public class ChunkyForge {
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         MinecraftServer server = event.getServer();
-        this.chunky = new Chunky(new ForgeServer(this, server));
         File configFile = new File(event.getServer().getServerDirectory(), "config/chunky.json");
-        chunky.setConfig(new GsonConfig(chunky, configFile));
-        chunky.setLanguage(chunky.getConfig().getLanguage());
-        chunky.loadCommands();
-        Limit.set(chunky.getConfig());
+        this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(() -> chunky, configFile));
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{});
         }

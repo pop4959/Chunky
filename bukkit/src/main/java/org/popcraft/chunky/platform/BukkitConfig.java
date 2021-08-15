@@ -1,11 +1,11 @@
 package org.popcraft.chunky.platform;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.Translator;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -14,15 +14,14 @@ import java.util.Optional;
 
 public class BukkitConfig implements Config {
     private static final String TASKS_KEY = "tasks.";
-    private final Chunky chunky;
-    private final JavaPlugin plugin;
+    private final ChunkyBukkit plugin;
 
-    public BukkitConfig(Chunky chunky, JavaPlugin plugin) {
-        this.chunky = chunky;
+    public BukkitConfig(ChunkyBukkit plugin) {
         this.plugin = plugin;
         plugin.getConfig().options().copyDefaults(true);
         plugin.getConfig().options().copyHeader(true);
         plugin.saveConfig();
+        Translator.setLanguage(getLanguage());
     }
 
     @Override
@@ -51,13 +50,13 @@ public class BukkitConfig implements Config {
                 .shape(config.getString(worldKey + "shape", "square"));
         long count = config.getLong(worldKey + "count", 0);
         long time = config.getLong(worldKey + "time", 0);
-        return Optional.of(new GenerationTask(chunky, selection.build(), count, time));
+        return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time));
     }
 
     @Override
     public synchronized List<GenerationTask> loadTasks() {
         List<GenerationTask> generationTasks = new ArrayList<>();
-        chunky.getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
+        plugin.getChunky().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
         return generationTasks;
     }
 
@@ -83,7 +82,7 @@ public class BukkitConfig implements Config {
 
     @Override
     public synchronized void saveTasks() {
-        chunky.getGenerationTasks().values().forEach(this::saveTask);
+        plugin.getChunky().getGenerationTasks().values().forEach(this::saveTask);
     }
 
     @Override

@@ -15,7 +15,6 @@ import org.popcraft.chunky.platform.FabricSender;
 import org.popcraft.chunky.platform.FabricServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
-import org.popcraft.chunky.util.Limit;
 
 import java.io.File;
 import java.util.Map;
@@ -33,12 +32,8 @@ public class ChunkyFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
-            this.chunky = new Chunky(new FabricServer(this, minecraftServer));
             File configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "chunky.json");
-            chunky.setConfig(new GsonConfig(chunky, configFile));
-            chunky.setLanguage(chunky.getConfig().getLanguage());
-            chunky.loadCommands();
-            Limit.set(chunky.getConfig());
+            this.chunky = new Chunky(new FabricServer(this, minecraftServer), new GsonConfig(() -> chunky, configFile));
             if (chunky.getConfig().getContinueOnRestart()) {
                 chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{});
             }
