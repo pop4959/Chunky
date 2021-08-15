@@ -117,6 +117,7 @@ public class GenerationTask implements Runnable {
             try {
                 working.acquire();
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 stop(cancelled);
                 break;
             }

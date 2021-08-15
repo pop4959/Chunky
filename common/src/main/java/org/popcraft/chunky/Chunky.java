@@ -7,6 +7,7 @@ import org.popcraft.chunky.platform.Server;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.PendingAction;
 import org.popcraft.chunky.util.RegionCache;
+import org.popcraft.chunky.util.TaskScheduler;
 import org.popcraft.chunky.util.Translator;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Chunky {
     private final Server server;
+    private final TaskScheduler scheduler = new TaskScheduler();
     private final Map<World, GenerationTask> generationTasks;
     private final Selection.Builder selection;
     private final Options options;
@@ -54,6 +56,16 @@ public class Chunky {
         commandMap.put("worldborder", new WorldBorderCommand(this));
         commandMap.put("world", new WorldCommand(this));
         this.commands = commandMap;
+    }
+
+    public void disable() {
+        getConfig().saveTasks();
+        getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
+        getScheduler().cancelTasks();
+    }
+
+    public TaskScheduler getScheduler() {
+        return scheduler;
     }
 
     public Server getServer() {

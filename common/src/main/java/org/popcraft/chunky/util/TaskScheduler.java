@@ -1,20 +1,21 @@
-package org.popcraft.chunky.platform.impl;
+package org.popcraft.chunky.util;
 
-import org.popcraft.chunky.platform.Scheduler;
-
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class SimpleScheduler implements Scheduler {
+public class TaskScheduler {
     private final ExecutorService executor;
-    private final ThreadGroup tasks = new ThreadGroup("tasks");
+    private final Set<Future<?>> futures = ConcurrentHashMap.newKeySet();
 
-    public SimpleScheduler() {
+    public TaskScheduler() {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, Integer.MAX_VALUE, 5, TimeUnit.MINUTES, new SynchronousQueue<>());
         threadPoolExecutor.setThreadFactory(runnable -> {
-            Thread thread = new Thread(tasks, runnable);
+            Thread thread = new Thread(runnable);
             thread.setDaemon(true);
             return thread;
         });
@@ -23,13 +24,15 @@ public class SimpleScheduler implements Scheduler {
         this.executor = threadPoolExecutor;
     }
 
-    @Override
-    public void runTaskAsync(Runnable runnable) {
-        executor.submit(runnable);
+    public void runTask(Runnable runnable) {
+        futures.add(executor.submit(runnable));
+        futures.removeIf(Future::isDone);
     }
 
-    @Override
     public void cancelTasks() {
-        tasks.interrupt();
+        for (Future<?> future : futures) {
+            future.cancel(true);
+        }
+        futures.clear();
     }
 }

@@ -6,7 +6,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import org.popcraft.chunky.ChunkyFabric;
 import org.popcraft.chunky.integration.Integration;
-import org.popcraft.chunky.platform.impl.SimpleScheduler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,12 +16,10 @@ import java.util.Optional;
 public class FabricServer implements Server {
     private final ChunkyFabric plugin;
     private final MinecraftServer server;
-    private final Scheduler scheduler;
 
     public FabricServer(ChunkyFabric plugin, MinecraftServer server) {
         this.plugin = plugin;
         this.server = server;
-        this.scheduler = new SimpleScheduler();
     }
 
     @Override
@@ -50,11 +47,6 @@ public class FabricServer implements Server {
     @Override
     public Sender getConsoleSender() {
         return new FabricSender(server.getCommandSource());
-    }
-
-    @Override
-    public Scheduler getScheduler() {
-        return scheduler;
     }
 
     @Override

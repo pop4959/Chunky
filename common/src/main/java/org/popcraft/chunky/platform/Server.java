@@ -15,7 +15,5 @@ public interface Server {
 
     Sender getConsoleSender();
 
-    Scheduler getScheduler();
-
     Config getConfig();
 }

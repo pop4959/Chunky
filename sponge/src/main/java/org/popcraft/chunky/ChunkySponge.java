@@ -60,9 +60,7 @@ public class ChunkySponge {
 
     @Listener
     public void onServerStopping(final StoppingEngineEvent<Server> event) {
-        chunky.getConfig().saveTasks();
-        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-        chunky.getServer().getScheduler().cancelTasks();
+        chunky.disable();
     }
 
     @Listener

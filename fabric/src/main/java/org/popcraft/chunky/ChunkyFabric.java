@@ -43,11 +43,7 @@ public class ChunkyFabric implements ModInitializer {
                 chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{});
             }
         });
-        ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> {
-            chunky.getConfig().saveTasks();
-            chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-            chunky.getServer().getScheduler().cancelTasks();
-        });
+        ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> chunky.disable());
         ServerTickEvents.END_SERVER_TICK.register(server -> BossBarProgress.tick(chunky, server));
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             Command<ServerCommandSource> command = context -> {

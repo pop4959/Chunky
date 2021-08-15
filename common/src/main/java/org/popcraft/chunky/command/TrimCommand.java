@@ -77,7 +77,7 @@ public class TrimCommand extends ChunkyCommand {
         }
         final Selection selection = chunky.getSelection().build();
         final Shape shape = ShapeFactory.getShape(selection);
-        final Runnable deletionAction = () -> chunky.getServer().getScheduler().runTaskAsync(() -> {
+        final Runnable deletionAction = () -> chunky.getScheduler().runTask(() -> {
             sender.sendMessagePrefixed("format_start", selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection));
             final Optional<Path> regionPath = selection.world().getRegionDirectory();
             final Optional<Path> poiPath = selection.world().getPOIDirectory();

@@ -56,9 +56,7 @@ public final class ChunkyBukkit extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        chunky.getConfig().saveTasks();
-        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-        chunky.getServer().getScheduler().cancelTasks();
+        chunky.disable();
     }
 
     @SuppressWarnings("NullableProblems")

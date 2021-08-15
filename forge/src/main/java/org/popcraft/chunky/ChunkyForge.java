@@ -166,9 +166,7 @@ public class ChunkyForge {
 
     @SubscribeEvent
     public void onServerStopping(FMLServerStoppingEvent event) {
-        chunky.getConfig().saveTasks();
-        chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-        chunky.getServer().getScheduler().cancelTasks();
+        chunky.disable();
     }
 
     @SubscribeEvent

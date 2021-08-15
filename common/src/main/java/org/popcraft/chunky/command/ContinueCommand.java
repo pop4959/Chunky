@@ -39,7 +39,7 @@ public class ContinueCommand extends ChunkyCommand {
             World world = generationTask.getSelection().world();
             if (!generationTasks.containsKey(world)) {
                 generationTasks.put(world, generationTask);
-                chunky.getServer().getScheduler().runTaskAsync(generationTask);
+                chunky.getScheduler().runTask(generationTask);
                 sender.sendMessagePrefixed("format_continue", world.getName());
             } else {
                 sender.sendMessagePrefixed("format_started_already", world.getName());

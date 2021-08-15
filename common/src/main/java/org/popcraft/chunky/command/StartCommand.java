@@ -80,7 +80,7 @@ public class StartCommand extends ChunkyCommand {
         final Runnable startAction = () -> {
             GenerationTask generationTask = new GenerationTask(chunky, current);
             chunky.getGenerationTasks().put(current.world(), generationTask);
-            chunky.getServer().getScheduler().runTaskAsync(generationTask);
+            chunky.getScheduler().runTask(generationTask);
             sender.sendMessagePrefixed("format_start", current.world().getName(), translate("shape_" + current.shape()), Formatting.number(current.centerX()), Formatting.number(current.centerZ()), Formatting.radius(current));
         };
         if (chunky.getConfig().loadTask(current.world()).isPresent()) {
