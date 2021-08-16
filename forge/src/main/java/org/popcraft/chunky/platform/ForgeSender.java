@@ -2,7 +2,7 @@ package org.popcraft.chunky.platform;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.popcraft.chunky.util.Coordinate;
@@ -38,7 +38,12 @@ public class ForgeSender implements Sender {
 
     @Override
     public void sendMessage(String key, boolean prefixed, Object... args) {
-        String text = translateKey(key, prefixed, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§");
-        source.sendSuccess(new TextComponent(text), false);
+        final String text;
+        if (isPlayer()) {
+            text = translateKey(key, prefixed, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§");
+        } else {
+            text = translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "");
+        }
+        source.sendSuccess(Component.nullToEmpty(text), false);
     }
 }

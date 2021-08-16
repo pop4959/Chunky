@@ -1,6 +1,6 @@
 package org.popcraft.chunky.listeners;
 
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.bossevents.CustomBossEvent;
@@ -35,7 +35,7 @@ public class BossBarProgress {
             if (barExists) {
                 bossBar = bossBarManager.get(barId);
             } else {
-                bossBar = bossBarManager.create(barId, new TextComponent(barId.toString()));
+                bossBar = bossBarManager.create(barId, Component.nullToEmpty(barId.toString()));
                 if (DimensionType.OVERWORLD_EFFECTS.equals(worldId)) {
                     bossBar.setColor(BossEvent.BossBarColor.GREEN);
                 } else if (DimensionType.NETHER_EFFECTS.equals(worldId)) {
@@ -66,13 +66,13 @@ public class BossBarProgress {
                 }
             }
             final GenerationTask.Progress progress = task.getProgress();
-            bossBar.setName(new TextComponent(String.format("%s | %s%% | %s:%s:%s",
+            bossBar.setName(Component.nullToEmpty(String.format("%s | %s%% | %s:%s:%s",
                     worldId,
                     String.format("%.2f", progress.getPercentComplete()),
                     String.format("%01d", progress.getHours()),
                     String.format("%02d", progress.getMinutes()),
                     String.format("%02d", progress.getSeconds()))));
-            bossBar.setPercent(task.getProgress().getPercentComplete() / 100f);
+            bossBar.setProgress(task.getProgress().getPercentComplete() / 100f);
         }
     }
 }
