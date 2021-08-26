@@ -41,11 +41,11 @@ public class BukkitConfig implements Config {
         if (config.getBoolean(worldKey + "cancelled", false)) {
             return Optional.empty();
         }
-        double radiusX = config.getDouble(worldKey + "radius", 500);
+        double radiusX = config.getDouble(worldKey + "radius", Selection.DEFAULT_RADIUS);
         double radiusZ = config.getDouble(worldKey + "z-radius", radiusX);
         Selection.Builder selection = Selection.builder(world)
-                .centerX(config.getDouble(worldKey + "x-center", 0))
-                .centerZ(config.getDouble(worldKey + "z-center", 0))
+                .centerX(config.getDouble(worldKey + "x-center", Selection.DEFAULT_CENTER_X))
+                .centerZ(config.getDouble(worldKey + "z-center", Selection.DEFAULT_CENTER_Z))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
                 .pattern(config.getString(worldKey + "iterator", PatternType.CONCENTRIC))

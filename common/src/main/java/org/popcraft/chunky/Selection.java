@@ -7,6 +7,9 @@ import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Coordinate;
 
 public class Selection {
+    public static final double DEFAULT_CENTER_X = 0d;
+    public static final double DEFAULT_CENTER_Z = 0d;
+    public static final double DEFAULT_RADIUS = 500d;
     private final World world;
     private final double centerX;
     private final double centerZ;
@@ -35,6 +38,10 @@ public class Selection {
         this.radiusChunksZ = (int) Math.ceil(radiusZ / 16f);
         this.diameterChunksX = 2 * radiusChunksX + 1;
         this.diameterChunksZ = 2 * radiusChunksZ + 1;
+    }
+
+    public static Builder builder(World world) {
+        return new Builder(world);
     }
 
     public World world() {
@@ -89,16 +96,12 @@ public class Selection {
         return this.diameterChunksZ;
     }
 
-    public static Builder builder(World world) {
-        return new Builder(world);
-    }
-
     public static final class Builder {
         private World world;
-        private double centerX = 0;
-        private double centerZ = 0;
-        private double radiusX = 500;
-        private double radiusZ = 500;
+        private double centerX = DEFAULT_CENTER_X;
+        private double centerZ = DEFAULT_CENTER_Z;
+        private double radiusX = DEFAULT_RADIUS;
+        private double radiusZ = DEFAULT_RADIUS;
         private String pattern = PatternType.CONCENTRIC;
         private String shape = ShapeType.SQUARE;
 
