@@ -3,6 +3,7 @@ package org.popcraft.chunky.platform;
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
@@ -86,7 +87,7 @@ public class SpongeConfig implements Config {
                 .centerZ(taskNode.node("centerZ").getDouble(0))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(taskNode.node("iterator").getString("concentric"))
+                .pattern(taskNode.node("iterator").getString(PatternType.CONCENTRIC))
                 .shape(taskNode.node("shape").getString(ShapeType.SQUARE));
         long count = taskNode.node("count").getInt(0);
         long time = taskNode.node("time").getInt(0);

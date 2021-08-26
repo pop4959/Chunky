@@ -91,6 +91,6 @@ public class ConcentricChunkIterator implements ChunkIterator {
 
     @Override
     public String name() {
-        return "concentric";
+        return PatternType.CONCENTRIC;
     }
 }

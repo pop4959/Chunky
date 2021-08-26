@@ -14,11 +14,11 @@ public class ChunkIteratorFactory {
                 break;
         }
         switch (selection.pattern()) {
-            case "loop":
+            case PatternType.LOOP:
                 return new Loop2ChunkIterator(selection, count);
-            case "spiral":
+            case PatternType.SPIRAL:
                 return new SpiralChunkIterator(selection, count);
-            case "concentric":
+            case PatternType.CONCENTRIC:
             default:
                 return new ConcentricChunkIterator(selection, count);
         }

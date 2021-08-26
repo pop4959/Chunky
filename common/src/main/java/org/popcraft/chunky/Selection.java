@@ -1,5 +1,6 @@
 package org.popcraft.chunky;
 
+import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.platform.Border;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.ShapeType;
@@ -98,7 +99,7 @@ public class Selection {
         private double centerZ = 0;
         private double radiusX = 500;
         private double radiusZ = 500;
-        private String pattern = "concentric";
+        private String pattern = PatternType.CONCENTRIC;
         private String shape = ShapeType.SQUARE;
 
         private Builder(World world) {

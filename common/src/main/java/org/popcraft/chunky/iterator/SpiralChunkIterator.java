@@ -128,6 +128,6 @@ public class SpiralChunkIterator implements ChunkIterator {
 
     @Override
     public String name() {
-        return "spiral";
+        return PatternType.SPIRAL;
     }
 }

@@ -5,7 +5,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.CommandSourceStack;
-import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.iterator.PatternType;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -14,13 +14,13 @@ public class PatternSuggestionProvider implements SuggestionProvider<CommandSour
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         try {
             final String input = context.getArgument("pattern", String.class);
-            Input.PATTERNS.forEach(pattern -> {
+            PatternType.ALL.forEach(pattern -> {
                 if (pattern.contains(input.toLowerCase())) {
                     builder.suggest(pattern);
                 }
             });
         } catch (IllegalArgumentException e) {
-            Input.PATTERNS.forEach(builder::suggest);
+            PatternType.ALL.forEach(builder::suggest);
         }
         return builder.buildFuture();
     }

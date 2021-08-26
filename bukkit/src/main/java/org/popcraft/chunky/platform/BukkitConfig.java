@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
@@ -47,7 +48,7 @@ public class BukkitConfig implements Config {
                 .centerZ(config.getDouble(worldKey + "z-center", 0))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(config.getString(worldKey + "iterator", "loop"))
+                .pattern(config.getString(worldKey + "iterator", PatternType.CONCENTRIC))
                 .shape(config.getString(worldKey + "shape", ShapeType.SQUARE));
         long count = config.getLong(worldKey + "count", 0);
         long time = config.getLong(worldKey + "time", 0);
