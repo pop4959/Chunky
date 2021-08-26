@@ -3,6 +3,9 @@ package org.popcraft.chunky.shape;
 import org.popcraft.chunky.Selection;
 
 public class ShapeFactory {
+    private ShapeFactory() {
+    }
+
     public static Shape getShape(Selection selection) {
         return getShape(selection, true);
     }

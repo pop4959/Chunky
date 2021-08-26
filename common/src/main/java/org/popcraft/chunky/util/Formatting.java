@@ -9,6 +9,9 @@ public class Formatting {
     private static final ThreadLocal<DecimalFormat> NUMBER_FORMAT = ThreadLocal.withInitial(() -> new DecimalFormat("#.##"));
     private static final char[] BINARY_PREFIXES = new char[]{'K', 'M', 'G', 'T', 'P'};
 
+    private Formatting() {
+    }
+
     public static String bytes(long bytes) {
         long value = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
         if (value < 1024) {

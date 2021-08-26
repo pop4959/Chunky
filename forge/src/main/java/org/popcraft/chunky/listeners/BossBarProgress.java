@@ -14,6 +14,9 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.ForgeWorld;
 
 public class BossBarProgress {
+    private BossBarProgress() {
+    }
+
     public static void tick(final Chunky chunky, final MinecraftServer server) {
         final int quietInterval = Math.max(1, chunky.getOptions().getQuietInterval() * 20);
         if (server.getTickCount() % quietInterval != 0) {

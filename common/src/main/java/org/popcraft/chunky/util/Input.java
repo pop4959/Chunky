@@ -8,6 +8,9 @@ import org.popcraft.chunky.shape.ShapeType;
 import java.util.Optional;
 
 public class Input {
+    private Input() {
+    }
+
     public static Optional<World> tryWorld(Chunky chunky, String input) {
         if (input == null || input.isEmpty()) {
             return Optional.empty();

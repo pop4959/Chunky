@@ -4,6 +4,9 @@ import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.shape.ShapeType;
 
 public class ChunkIteratorFactory {
+    private ChunkIteratorFactory() {
+    }
+
     public static ChunkIterator getChunkIterator(Selection selection, long count) {
         switch (selection.shape()) {
             case ShapeType.RECTANGLE:

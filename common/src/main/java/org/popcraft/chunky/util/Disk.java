@@ -13,6 +13,9 @@ public class Disk {
     private static final long ESTIMATED_SPACE_PER_CHUNK = 7031L;
     private static final double PERCENT_OVERESTIMATE = 1.05d;
 
+    private Disk() {
+    }
+
     public static long estimatedSpace(Selection selection) {
         long diameterChunksX = selection.diameterChunksX();
         long diameterChunksZ = selection.diameterChunksZ();
