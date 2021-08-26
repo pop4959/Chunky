@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.world.level.border.WorldBorder;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Coordinate;
 
 public class ForgeBorder implements Border {
@@ -27,6 +28,6 @@ public class ForgeBorder implements Border {
 
     @Override
     public String getShape() {
-        return "square";
+        return ShapeType.SQUARE;
     }
 }

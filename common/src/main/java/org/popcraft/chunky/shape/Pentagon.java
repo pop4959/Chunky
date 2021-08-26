@@ -43,6 +43,6 @@ public class Pentagon extends AbstractPolygon {
 
     @Override
     public String name() {
-        return "pentagon";
+        return ShapeType.PENTAGON;
     }
 }

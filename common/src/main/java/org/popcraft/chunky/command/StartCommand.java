@@ -5,6 +5,7 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 
@@ -97,7 +98,7 @@ public class StartCommand extends ChunkyCommand {
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
             return suggestions;
         } else if (args.length == 3) {
-            return Input.SHAPES;
+            return ShapeType.ALL;
         }
         return Collections.emptyList();
     }

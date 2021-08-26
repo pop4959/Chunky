@@ -2,6 +2,7 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 
@@ -39,10 +40,10 @@ public class CornersCommand extends ChunkyCommand {
         String shape;
         if (radiusX == radiusZ) {
             sender.sendMessagePrefixed("format_radius", Formatting.number(radiusX));
-            shape = "square";
+            shape = ShapeType.SQUARE;
         } else {
             sender.sendMessagePrefixed("format_radii", Formatting.number(radiusX), Formatting.number(radiusZ));
-            shape = "rectangle";
+            shape = ShapeType.RECTANGLE;
         }
         chunky.getSelection().shape(shape);
         sender.sendMessagePrefixed("format_shape", shape);

@@ -39,6 +39,6 @@ public class Square extends AbstractPolygon {
 
     @Override
     public String name() {
-        return "square";
+        return ShapeType.SQUARE;
     }
 }

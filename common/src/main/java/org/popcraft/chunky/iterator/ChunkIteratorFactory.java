@@ -1,13 +1,14 @@
 package org.popcraft.chunky.iterator;
 
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.shape.ShapeType;
 
 public class ChunkIteratorFactory {
     public static ChunkIterator getChunkIterator(Selection selection, long count) {
         switch (selection.shape()) {
-            case "rectangle":
-            case "oval":
-            case "ellipse":
+            case ShapeType.RECTANGLE:
+            case ShapeType.ELLIPSE:
+            case ShapeType.OVAL:
                 return new Loop2ChunkIterator(selection, count);
             default:
                 break;

@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
 
@@ -47,7 +48,7 @@ public class BukkitConfig implements Config {
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
                 .pattern(config.getString(worldKey + "iterator", "loop"))
-                .shape(config.getString(worldKey + "shape", "square"));
+                .shape(config.getString(worldKey + "shape", ShapeType.SQUARE));
         long count = config.getLong(worldKey + "count", 0);
         long time = config.getLong(worldKey + "time", 0);
         return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time));
@@ -68,7 +69,7 @@ public class BukkitConfig implements Config {
         String shape = generationTask.getShape().name();
         config.set(worldKey + "cancelled", generationTask.isCancelled());
         config.set(worldKey + "radius", selection.radiusX());
-        if ("rectangle".equals(shape) || "ellipse".equals(shape)) {
+        if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape)) {
             config.set(worldKey + "z-radius", selection.radiusZ());
         }
         config.set(worldKey + "x-center", selection.centerX());

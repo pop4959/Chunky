@@ -2,6 +2,7 @@ package org.popcraft.chunky.util;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.shape.ShapeType;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +11,6 @@ import java.util.Optional;
 
 public class Input {
     public static final List<String> PATTERNS = Collections.unmodifiableList(Arrays.asList("concentric", "loop", "spiral"));
-    public static final List<String> SHAPES = Collections.unmodifiableList(Arrays.asList("circle", "diamond", "ellipse", "pentagon", "rectangle", "square", "star", "triangle"));
 
     public static Optional<World> tryWorld(Chunky chunky, String input) {
         if (input == null || input.isEmpty()) {
@@ -24,7 +24,7 @@ public class Input {
             return Optional.empty();
         }
         String inputLower = input.toLowerCase();
-        if (SHAPES.contains(inputLower)) {
+        if (ShapeType.ALL.contains(inputLower)) {
             return Optional.of(inputLower);
         }
         return Optional.empty();

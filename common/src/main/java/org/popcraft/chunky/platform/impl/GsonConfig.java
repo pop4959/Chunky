@@ -8,6 +8,7 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
 
@@ -105,7 +106,7 @@ public class GsonConfig implements Config {
         String shape = generationTask.getShape().name();
         taskModel.cancelled = generationTask.isCancelled();
         taskModel.radius = selection.radiusX();
-        if ("rectangle".equals(shape) || "ellipse".equals(shape)) {
+        if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape)) {
             taskModel.radiusZ = selection.radiusZ();
         }
         taskModel.centerX = selection.centerX();

@@ -1,6 +1,7 @@
 package org.popcraft.chunky.util;
 
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.shape.ShapeType;
 
 import java.text.DecimalFormat;
 
@@ -25,7 +26,7 @@ public class Formatting {
     }
 
     public static String radius(Selection selection) {
-        if ("ellipse".equals(selection.shape()) || "rectangle".equals(selection.shape())) {
+        if (ShapeType.RECTANGLE.equals(selection.shape()) || ShapeType.ELLIPSE.equals(selection.shape())) {
             return String.format("%s, %s", number(selection.radiusX()), number(selection.radiusZ()));
         } else {
             return String.format("%s", number(selection.radiusX()));

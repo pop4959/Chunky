@@ -3,6 +3,7 @@ package org.popcraft.chunky.platform;
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -86,7 +87,7 @@ public class SpongeConfig implements Config {
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
                 .pattern(taskNode.node("iterator").getString("concentric"))
-                .shape(taskNode.node("shape").getString("square"));
+                .shape(taskNode.node("shape").getString(ShapeType.SQUARE));
         long count = taskNode.node("count").getInt(0);
         long time = taskNode.node("time").getInt(0);
         return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time));
@@ -110,7 +111,7 @@ public class SpongeConfig implements Config {
         try {
             taskNode.node("cancelled").set(generationTask.isCancelled());
             taskNode.node("radius").set(selection.radiusX());
-            if ("rectangle".equals(shape) || "ellipse".equals(shape)) {
+            if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape)) {
                 taskNode.node("radiusZ").set(selection.radiusZ());
             }
             taskNode.node("centerX").set(selection.centerX());

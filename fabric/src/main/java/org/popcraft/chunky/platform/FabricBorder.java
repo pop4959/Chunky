@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.world.border.WorldBorder;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Coordinate;
 
 public class FabricBorder implements Border {
@@ -27,6 +28,6 @@ public class FabricBorder implements Border {
 
     @Override
     public String getShape() {
-        return "square";
+        return ShapeType.SQUARE;
     }
 }

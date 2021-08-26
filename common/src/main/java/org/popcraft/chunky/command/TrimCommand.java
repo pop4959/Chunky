@@ -6,6 +6,7 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
@@ -194,7 +195,7 @@ public class TrimCommand extends ChunkyCommand {
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
             return suggestions;
         } else if (args.length == 3) {
-            return Input.SHAPES;
+            return ShapeType.ALL;
         }
         return Collections.emptyList();
     }

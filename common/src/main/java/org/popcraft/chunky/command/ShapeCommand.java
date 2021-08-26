@@ -2,6 +2,7 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 
 import java.util.Collections;
@@ -33,7 +34,7 @@ public class ShapeCommand extends ChunkyCommand {
     @Override
     public List<String> tabSuggestions(Sender sender, String[] args) {
         if (args.length == 2) {
-            return Input.SHAPES;
+            return ShapeType.ALL;
         }
         return Collections.emptyList();
     }

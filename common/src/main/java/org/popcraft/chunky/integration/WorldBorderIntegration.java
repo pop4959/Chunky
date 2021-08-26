@@ -3,6 +3,7 @@ package org.popcraft.chunky.integration;
 import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
 import org.popcraft.chunky.platform.Border;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Coordinate;
 
 public class WorldBorderIntegration implements BorderIntegration {
@@ -38,9 +39,9 @@ public class WorldBorderIntegration implements BorderIntegration {
                 boolean round = borderData.getShape() == null ? Config.ShapeRound() : borderData.getShape();
                 final String shape;
                 if (radiusX == radiusZ) {
-                    shape = round ? "circle" : "square";
+                    shape = round ? ShapeType.CIRCLE : ShapeType.SQUARE;
                 } else {
-                    shape = round ? "ellipse" : "rectangle";
+                    shape = round ? ShapeType.ELLIPSE : ShapeType.RECTANGLE;
                 }
                 return shape;
             }
