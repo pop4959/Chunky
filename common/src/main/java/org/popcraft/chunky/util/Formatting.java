@@ -6,7 +6,7 @@ import org.popcraft.chunky.shape.ShapeType;
 import java.text.DecimalFormat;
 
 public class Formatting {
-    private static final ThreadLocal<DecimalFormat> NUMBER_FORMAT = ThreadLocal.withInitial(() -> new DecimalFormat("#.##"));
+    private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("#.##");
     private static final char[] BINARY_PREFIXES = new char[]{'K', 'M', 'G', 'T', 'P'};
 
     private Formatting() {
@@ -36,7 +36,7 @@ public class Formatting {
         }
     }
 
-    public static String number(double number) {
-        return NUMBER_FORMAT.get().format(number);
+    public static synchronized String number(double number) {
+        return NUMBER_FORMAT.format(number);
     }
 }
