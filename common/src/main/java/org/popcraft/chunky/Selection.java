@@ -96,6 +96,7 @@ public class Selection {
         return this.diameterChunksZ;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static final class Builder {
         private World world;
         private double centerX = DEFAULT_CENTER_X;
