@@ -85,7 +85,7 @@ public final class ChunkyBukkit extends JavaPlugin {
         if (args.length == 1) {
             commands.keySet().stream().filter(name -> sender.hasPermission(COMMAND_PERMISSION_KEY + name)).forEach(suggestions::add);
         } else if (commands.containsKey(args[0].toLowerCase()) && sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
-            suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(new BukkitSender(sender), args));
+            suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(args));
         }
         return suggestions.stream()
                 .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))

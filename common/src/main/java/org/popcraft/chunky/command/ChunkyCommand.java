@@ -15,7 +15,8 @@ public abstract class ChunkyCommand {
 
     public abstract void execute(Sender sender, String[] args);
 
-    public List<String> tabSuggestions(Sender sender, String[] args) {
+    @SuppressWarnings("unused")
+    public List<String> tabSuggestions(String[] args) {
         return Collections.emptyList();
     }
 }

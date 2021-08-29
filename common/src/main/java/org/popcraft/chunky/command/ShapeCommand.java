@@ -33,7 +33,7 @@ public class ShapeCommand extends ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(Sender sender, String[] args) {
+    public List<String> tabSuggestions(String[] args) {
         if (args.length == 2) {
             return ShapeType.ALL;
         }

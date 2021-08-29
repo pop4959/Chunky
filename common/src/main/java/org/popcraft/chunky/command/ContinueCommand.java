@@ -49,7 +49,7 @@ public class ContinueCommand extends ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(Sender sender, String[] args) {
+    public List<String> tabSuggestions(String[] args) {
         if (args.length == 2) {
             List<String> suggestions = new ArrayList<>();
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
