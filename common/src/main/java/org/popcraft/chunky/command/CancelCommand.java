@@ -5,6 +5,7 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,18 +22,18 @@ public class CancelCommand extends ChunkyCommand {
     public void execute(Sender sender, String[] args) {
         final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
         if (generationTasks.isEmpty() && chunky.getConfig().loadTasks().isEmpty()) {
-            sender.sendMessagePrefixed("format_cancel_no_tasks");
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_NO_TASKS);
             return;
         }
         final Runnable cancelAction;
         if (args.length > 1) {
             final Optional<World> world = Input.tryWorld(chunky, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
             if (!world.isPresent()) {
-                sender.sendMessage("help_cancel");
+                sender.sendMessage(TranslationKey.HELP_CANCEL);
                 return;
             }
             cancelAction = () -> {
-                sender.sendMessagePrefixed("format_cancel", world.get().getName());
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL, world.get().getName());
                 chunky.getConfig().cancelTask(world.get());
                 if (chunky.getGenerationTasks().containsKey(world.get())) {
                     chunky.getGenerationTasks().remove(world.get()).stop(true);
@@ -40,7 +41,7 @@ public class CancelCommand extends ChunkyCommand {
             };
         } else {
             cancelAction = () -> {
-                sender.sendMessagePrefixed("format_cancel_all");
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_ALL);
                 chunky.getConfig().cancelTasks();
                 chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true));
                 chunky.getGenerationTasks().clear();
@@ -48,7 +49,7 @@ public class CancelCommand extends ChunkyCommand {
             };
         }
         chunky.setPendingAction(sender, cancelAction);
-        sender.sendMessagePrefixed("format_cancel_confirm", "/chunky confirm");
+        sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_CONFIRM, "/chunky confirm");
     }
 
     @Override

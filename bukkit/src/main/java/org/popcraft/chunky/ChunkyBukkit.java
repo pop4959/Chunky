@@ -13,6 +13,7 @@ import org.popcraft.chunky.platform.BukkitConfig;
 import org.popcraft.chunky.platform.BukkitSender;
 import org.popcraft.chunky.platform.BukkitServer;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.util.TranslationKey;
 import org.popcraft.chunky.util.Version;
 
 import java.util.ArrayList;
@@ -32,10 +33,10 @@ public final class ChunkyBukkit extends JavaPlugin {
         this.chunky = new Chunky(new BukkitServer(this), new BukkitConfig(this));
         final Version currentVersion = Version.getCurrentMinecraftVersion();
         if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
-            getLogger().severe(() -> translate("error_version_spigot"));
+            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION_SPIGOT));
             getServer().getPluginManager().disablePlugin(this);
         } else if (currentVersion.isValid() && Version.v1_13_2.isHigherThan(currentVersion)) {
-            getLogger().severe(() -> translate("error_version"));
+            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
             getServer().getPluginManager().disablePlugin(this);
         }
         if (!isEnabled()) {
@@ -65,7 +66,7 @@ public final class ChunkyBukkit extends JavaPlugin {
             if (sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
                 commands.get(args[0].toLowerCase()).execute(bukkitSender, args);
             } else {
-                bukkitSender.sendMessage("command_no_permission");
+                bukkitSender.sendMessage(TranslationKey.COMMAND_NO_PERMISSION);
             }
         } else {
             commands.get(CommandLiteral.HELP).execute(bukkitSender, new String[]{});

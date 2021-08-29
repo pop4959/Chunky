@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,16 +19,16 @@ public class WorldCommand extends ChunkyCommand {
 
     public void execute(Sender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("help_world");
+            sender.sendMessage(TranslationKey.HELP_WORLD);
             return;
         }
         Optional<World> newWorld = Input.tryWorld(chunky, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
         if (!newWorld.isPresent()) {
-            sender.sendMessage("help_world");
+            sender.sendMessage(TranslationKey.HELP_WORLD);
             return;
         }
         chunky.getSelection().world(newWorld.get());
-        sender.sendMessagePrefixed("format_world", newWorld.get().getName());
+        sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLD, newWorld.get().getName());
     }
 
     @Override

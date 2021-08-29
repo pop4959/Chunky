@@ -5,6 +5,7 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Coordinate;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.Optional;
 
@@ -32,14 +33,14 @@ public class CenterCommand extends ChunkyCommand {
             centerX = newX.get();
             centerZ = newZ.get();
         } else {
-            sender.sendMessage("help_center");
+            sender.sendMessage(TranslationKey.HELP_CENTER);
             return;
         }
         if (Input.isPastWorldLimit(centerX) || Input.isPastWorldLimit(centerZ)) {
-            sender.sendMessage("help_center");
+            sender.sendMessage(TranslationKey.HELP_CENTER);
             return;
         }
         chunky.getSelection().center(centerX, centerZ);
-        sender.sendMessagePrefixed("format_center", Formatting.number(centerX), Formatting.number(centerZ));
+        sender.sendMessagePrefixed(TranslationKey.FORMAT_CENTER, Formatting.number(centerX), Formatting.number(centerZ));
     }
 }

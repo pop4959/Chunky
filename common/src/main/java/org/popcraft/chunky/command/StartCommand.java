@@ -8,6 +8,7 @@ import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +28,7 @@ public class StartCommand extends ChunkyCommand {
             if (world.isPresent()) {
                 chunky.getSelection().world(world.get());
             } else {
-                sender.sendMessage("help_start");
+                sender.sendMessage(TranslationKey.HELP_START);
                 return;
             }
         }
@@ -36,7 +37,7 @@ public class StartCommand extends ChunkyCommand {
             if (shape.isPresent()) {
                 chunky.getSelection().shape(shape.get());
             } else {
-                sender.sendMessage("help_start");
+                sender.sendMessage(TranslationKey.HELP_START);
                 return;
             }
         }
@@ -46,7 +47,7 @@ public class StartCommand extends ChunkyCommand {
             if (centerX.isPresent() && centerZ.isPresent()) {
                 chunky.getSelection().center(centerX.get(), centerZ.get());
             } else {
-                sender.sendMessage("help_start");
+                sender.sendMessage(TranslationKey.HELP_START);
                 return;
             }
         }
@@ -55,7 +56,7 @@ public class StartCommand extends ChunkyCommand {
             if (radiusX.isPresent()) {
                 chunky.getSelection().radius(radiusX.get());
             } else {
-                sender.sendMessage("help_start");
+                sender.sendMessage(TranslationKey.HELP_START);
                 return;
             }
         }
@@ -64,28 +65,28 @@ public class StartCommand extends ChunkyCommand {
             if (radiusZ.isPresent()) {
                 chunky.getSelection().radiusZ(radiusZ.get());
             } else {
-                sender.sendMessage("help_start");
+                sender.sendMessage(TranslationKey.HELP_START);
                 return;
             }
         }
         final Selection current = chunky.getSelection().build();
         if (chunky.getGenerationTasks().containsKey(current.world())) {
-            sender.sendMessagePrefixed("format_started_already", current.world().getName());
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_STARTED_ALREADY, current.world().getName());
             return;
         }
         if (current.radiusX() > chunky.getLimit()) {
-            sender.sendMessagePrefixed("format_start_limit", Formatting.number(chunky.getLimit()));
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_START_LIMIT, Formatting.number(chunky.getLimit()));
             return;
         }
         final Runnable startAction = () -> {
             GenerationTask generationTask = new GenerationTask(chunky, current);
             chunky.getGenerationTasks().put(current.world(), generationTask);
             chunky.getScheduler().runTask(generationTask);
-            sender.sendMessagePrefixed("format_start", current.world().getName(), translate("shape_" + current.shape()), Formatting.number(current.centerX()), Formatting.number(current.centerZ()), Formatting.radius(current));
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_START, current.world().getName(), translate("shape_" + current.shape()), Formatting.number(current.centerX()), Formatting.number(current.centerZ()), Formatting.radius(current));
         };
         if (chunky.getConfig().loadTask(current.world()).isPresent()) {
             chunky.setPendingAction(sender, startAction);
-            sender.sendMessagePrefixed("format_start_confirm", "/chunky continue", "/chunky confirm");
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_START_CONFIRM, "/chunky continue", "/chunky confirm");
         } else {
             startAction.run();
         }
