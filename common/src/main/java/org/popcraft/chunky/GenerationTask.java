@@ -133,7 +133,7 @@ public class GenerationTask implements Runnable {
             cancelled = true;
         }
         chunky.getConfig().saveTask(this);
-        chunky.getGenerationTasks().remove(selection.world());
+        chunky.getGenerationTasks().remove(selection.world().getName());
         Thread.currentThread().setName(poolThreadName);
     }
 

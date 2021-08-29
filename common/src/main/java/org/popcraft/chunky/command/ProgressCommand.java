@@ -15,14 +15,14 @@ public class ProgressCommand extends ChunkyCommand {
 
     @Override
     public void execute(Sender sender, String[] args) {
-        final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
+        final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
         if (generationTasks.isEmpty()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_PROGRESS_NO_TASKS);
             return;
         }
         for (World world : chunky.getServer().getWorlds()) {
-            if (generationTasks.containsKey(world)) {
-                generationTasks.get(world).getProgress().sendUpdate(sender);
+            if (generationTasks.containsKey(world.getName())) {
+                generationTasks.get(world.getName()).getProgress().sendUpdate(sender);
             }
         }
     }

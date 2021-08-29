@@ -131,16 +131,4 @@ public class FabricWorld implements World {
         Path directory = DimensionType.getSaveDirectory(serverWorld.getRegistryKey(), serverWorld.getServer().getSavePath(WorldSavePath.ROOT).toFile()).toPath().normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        return serverWorld.equals(((FabricWorld) o).serverWorld);
-    }
-
-    @Override
-    public int hashCode() {
-        return serverWorld.hashCode();
-    }
 }

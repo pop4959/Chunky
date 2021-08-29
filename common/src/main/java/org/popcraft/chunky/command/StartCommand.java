@@ -70,7 +70,7 @@ public class StartCommand extends ChunkyCommand {
             }
         }
         final Selection current = chunky.getSelection().build();
-        if (chunky.getGenerationTasks().containsKey(current.world())) {
+        if (chunky.getGenerationTasks().containsKey(current.world().getName())) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_STARTED_ALREADY, current.world().getName());
             return;
         }
@@ -80,7 +80,7 @@ public class StartCommand extends ChunkyCommand {
         }
         final Runnable startAction = () -> {
             GenerationTask generationTask = new GenerationTask(chunky, current);
-            chunky.getGenerationTasks().put(current.world(), generationTask);
+            chunky.getGenerationTasks().put(current.world().getName(), generationTask);
             chunky.getScheduler().runTask(generationTask);
             sender.sendMessagePrefixed(TranslationKey.FORMAT_START, current.world().getName(), translate("shape_" + current.shape()), Formatting.number(current.centerX()), Formatting.number(current.centerZ()), Formatting.radius(current));
         };

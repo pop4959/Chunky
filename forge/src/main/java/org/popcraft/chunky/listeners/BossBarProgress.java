@@ -12,6 +12,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.ForgeWorld;
+import org.popcraft.chunky.platform.World;
 
 public class BossBarProgress {
     private BossBarProgress() {
@@ -29,7 +30,8 @@ public class BossBarProgress {
                 continue;
             }
             final CustomBossEvents bossBarManager = server.getCustomBossEvents();
-            final GenerationTask task = chunky.getGenerationTasks().get(new ForgeWorld(world));
+            final World forgeWorld = new ForgeWorld(world);
+            final GenerationTask task = chunky.getGenerationTasks().get(forgeWorld.getName());
             final boolean barExists = bossBarManager.get(barId) != null;
             if (task == null && !barExists) {
                 continue;

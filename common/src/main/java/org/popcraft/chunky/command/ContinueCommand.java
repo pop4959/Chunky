@@ -35,11 +35,11 @@ public class ContinueCommand extends ChunkyCommand {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CONTINUE_NO_TASKS);
             return;
         }
-        final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
+        final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
         loadTasks.forEach(generationTask -> {
             World world = generationTask.getSelection().world();
-            if (!generationTasks.containsKey(world)) {
-                generationTasks.put(world, generationTask);
+            if (!generationTasks.containsKey(world.getName())) {
+                generationTasks.put(world.getName(), generationTask);
                 chunky.getScheduler().runTask(generationTask);
                 sender.sendMessagePrefixed(TranslationKey.FORMAT_CONTINUE, world.getName());
             } else {

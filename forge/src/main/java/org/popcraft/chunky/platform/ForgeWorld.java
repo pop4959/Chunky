@@ -134,16 +134,4 @@ public class ForgeWorld implements World {
         Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT).toFile()).toPath().normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        return world.equals(((ForgeWorld) o).world);
-    }
-
-    @Override
-    public int hashCode() {
-        return world.hashCode();
-    }
 }

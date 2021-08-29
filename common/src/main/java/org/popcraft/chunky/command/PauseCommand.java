@@ -20,17 +20,17 @@ public class PauseCommand extends ChunkyCommand {
     }
 
     public void execute(Sender sender, String[] args) {
-        final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
+        final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
         if (generationTasks.isEmpty()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_PAUSE_NO_TASKS);
             return;
         }
         if (args.length > 1) {
             final Optional<World> world = Input.tryWorld(chunky, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
-            if (!world.isPresent() || !generationTasks.containsKey(world.get())) {
+            if (!world.isPresent() || !generationTasks.containsKey(world.get().getName())) {
                 sender.sendMessage(TranslationKey.HELP_PAUSE);
             } else {
-                generationTasks.get(world.get()).stop(false);
+                generationTasks.get(world.get().getName()).stop(false);
                 sender.sendMessagePrefixed(TranslationKey.FORMAT_PAUSE, world.get().getName());
             }
             return;

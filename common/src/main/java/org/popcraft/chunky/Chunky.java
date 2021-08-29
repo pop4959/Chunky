@@ -4,7 +4,6 @@ import org.popcraft.chunky.command.*;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.Server;
-import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.PendingAction;
 import org.popcraft.chunky.util.RegionCache;
@@ -26,7 +25,7 @@ public class Chunky {
     private final Config config;
     private final Selection.Builder selection;
     private final TaskScheduler scheduler = new TaskScheduler();
-    private final Map<World, GenerationTask> generationTasks = new ConcurrentHashMap<>();
+    private final Map<String, GenerationTask> generationTasks = new ConcurrentHashMap<>();
     private final Options options = new Options();
     private final Map<String, PendingAction> pendingActions = new HashMap<>();
     private final RegionCache regionCache = new RegionCache();
@@ -94,7 +93,7 @@ public class Chunky {
         return config;
     }
 
-    public Map<World, GenerationTask> getGenerationTasks() {
+    public Map<String, GenerationTask> getGenerationTasks() {
         return generationTasks;
     }
 

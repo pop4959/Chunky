@@ -20,7 +20,7 @@ public class CancelCommand extends ChunkyCommand {
     }
 
     public void execute(Sender sender, String[] args) {
-        final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
+        final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
         if (generationTasks.isEmpty() && chunky.getConfig().loadTasks().isEmpty()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_NO_TASKS);
             return;
@@ -35,8 +35,8 @@ public class CancelCommand extends ChunkyCommand {
             cancelAction = () -> {
                 sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL, world.get().getName());
                 chunky.getConfig().cancelTask(world.get());
-                if (chunky.getGenerationTasks().containsKey(world.get())) {
-                    chunky.getGenerationTasks().remove(world.get()).stop(true);
+                if (chunky.getGenerationTasks().containsKey(world.get().getName())) {
+                    chunky.getGenerationTasks().remove(world.get().getName()).stop(true);
                 }
             };
         } else {
