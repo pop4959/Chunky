@@ -180,22 +180,129 @@ public class GsonConfig implements Config {
         return Optional.ofNullable(configModel);
     }
 
+    @SuppressWarnings("unused")
     public static class ConfigModel {
-        public Integer version;
-        public String language;
-        public Boolean continueOnRestart;
-        public Map<String, TaskModel> tasks;
+        private Integer version;
+        private String language;
+        private Boolean continueOnRestart;
+        private Map<String, TaskModel> tasks;
+
+        public Integer getVersion() {
+            return version;
+        }
+
+        public void setVersion(Integer version) {
+            this.version = version;
+        }
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(String language) {
+            this.language = language;
+        }
+
+        public Boolean getContinueOnRestart() {
+            return continueOnRestart;
+        }
+
+        public void setContinueOnRestart(Boolean continueOnRestart) {
+            this.continueOnRestart = continueOnRestart;
+        }
+
+        public Map<String, TaskModel> getTasks() {
+            return tasks;
+        }
+
+        public void setTasks(Map<String, TaskModel> tasks) {
+            this.tasks = tasks;
+        }
     }
 
+
+    @SuppressWarnings("unused")
     public static class TaskModel {
-        public Boolean cancelled;
-        public Double radius;
-        public Double radiusZ;
-        public Double centerX;
-        public Double centerZ;
-        public String iterator;
-        public String shape;
-        public Long count;
-        public Long time;
+        private Boolean cancelled;
+        private Double radius;
+        private Double radiusZ;
+        private Double centerX;
+        private Double centerZ;
+        private String iterator;
+        private String shape;
+        private Long count;
+        private Long time;
+
+        public Boolean getCancelled() {
+            return cancelled;
+        }
+
+        public void setCancelled(Boolean cancelled) {
+            this.cancelled = cancelled;
+        }
+
+        public Double getRadius() {
+            return radius;
+        }
+
+        public void setRadius(Double radius) {
+            this.radius = radius;
+        }
+
+        public Double getRadiusZ() {
+            return radiusZ;
+        }
+
+        public void setRadiusZ(Double radiusZ) {
+            this.radiusZ = radiusZ;
+        }
+
+        public Double getCenterX() {
+            return centerX;
+        }
+
+        public void setCenterX(Double centerX) {
+            this.centerX = centerX;
+        }
+
+        public Double getCenterZ() {
+            return centerZ;
+        }
+
+        public void setCenterZ(Double centerZ) {
+            this.centerZ = centerZ;
+        }
+
+        public String getIterator() {
+            return iterator;
+        }
+
+        public void setIterator(String iterator) {
+            this.iterator = iterator;
+        }
+
+        public String getShape() {
+            return shape;
+        }
+
+        public void setShape(String shape) {
+            this.shape = shape;
+        }
+
+        public Long getCount() {
+            return count;
+        }
+
+        public void setCount(Long count) {
+            this.count = count;
+        }
+
+        public Long getTime() {
+            return time;
+        }
+
+        public void setTime(Long time) {
+            this.time = time;
+        }
     }
 }

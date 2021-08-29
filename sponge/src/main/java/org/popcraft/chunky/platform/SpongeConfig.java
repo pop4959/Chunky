@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class SpongeConfig implements Config {
+    private static final String CONFIG_FILE = "main.conf";
+    private static final String ROOT_CONFIG_NODE = "config";
     private final ChunkySponge plugin;
     private final HoconConfigurationLoader configLoader;
     private CommentedConfigurationNode rootNode;
@@ -33,7 +35,7 @@ public class SpongeConfig implements Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Path defaultConfigFile = new File(defaultConfigPath.toFile(), "main.conf").toPath();
+        Path defaultConfigFile = new File(defaultConfigPath.toFile(), CONFIG_FILE).toPath();
         this.configLoader = HoconConfigurationLoader.builder()
                 .path(defaultConfigFile)
                 .build();
@@ -43,7 +45,7 @@ public class SpongeConfig implements Config {
             this.rootNode = configLoader.createNode();
             e.printStackTrace();
         }
-        URL defaults = getClass().getClassLoader().getResource("main.conf");
+        URL defaults = getClass().getClassLoader().getResource(CONFIG_FILE);
         if (defaults != null) {
             final HoconConfigurationLoader defaultConfigLoader = HoconConfigurationLoader.builder()
                     .url(defaults)
@@ -150,7 +152,7 @@ public class SpongeConfig implements Config {
 
     @Override
     public int getVersion() {
-        return this.rootNode == null ? 0 : this.rootNode.node("config", "version").getInt(0);
+        return this.rootNode == null ? 0 : this.rootNode.node(ROOT_CONFIG_NODE, "version").getInt(0);
     }
 
     @Override
@@ -158,12 +160,12 @@ public class SpongeConfig implements Config {
         if (this.rootNode == null) {
             return "en";
         }
-        return Input.checkLanguage(this.rootNode.node("config", "language").getString("en"));
+        return Input.checkLanguage(this.rootNode.node(ROOT_CONFIG_NODE, "language").getString("en"));
     }
 
     @Override
     public boolean getContinueOnRestart() {
-        return this.rootNode != null && this.rootNode.node("config", "continue-on-restart").getBoolean(false);
+        return this.rootNode != null && this.rootNode.node(ROOT_CONFIG_NODE, "continue-on-restart").getBoolean(false);
     }
 
     @Override
