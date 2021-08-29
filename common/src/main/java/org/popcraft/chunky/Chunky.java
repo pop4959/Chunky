@@ -43,25 +43,25 @@ public class Chunky {
 
     private Map<String, ChunkyCommand> loadCommands() {
         final Map<String, ChunkyCommand> commandMap = new HashMap<>();
-        commandMap.put("cancel", new CancelCommand(this));
-        commandMap.put("center", new CenterCommand(this));
-        commandMap.put("confirm", new ConfirmCommand(this));
-        commandMap.put("continue", new ContinueCommand(this));
-        commandMap.put("corners", new CornersCommand(this));
-        commandMap.put("help", new HelpCommand(this));
-        commandMap.put("pattern", new PatternCommand(this));
-        commandMap.put("pause", new PauseCommand(this));
-        commandMap.put("progress", new ProgressCommand(this));
-        commandMap.put("quiet", new QuietCommand(this));
-        commandMap.put("radius", new RadiusCommand(this));
-        commandMap.put("reload", new ReloadCommand(this));
-        commandMap.put("shape", new ShapeCommand(this));
-        commandMap.put("silent", new SilentCommand(this));
-        commandMap.put("spawn", new SpawnCommand(this));
-        commandMap.put("start", new StartCommand(this));
-        commandMap.put("trim", new TrimCommand(this));
-        commandMap.put("worldborder", new WorldBorderCommand(this));
-        commandMap.put("world", new WorldCommand(this));
+        commandMap.put(CommandLiteral.CANCEL, new CancelCommand(this));
+        commandMap.put(CommandLiteral.CENTER, new CenterCommand(this));
+        commandMap.put(CommandLiteral.CONFIRM, new ConfirmCommand(this));
+        commandMap.put(CommandLiteral.CONTINUE, new ContinueCommand(this));
+        commandMap.put(CommandLiteral.CORNERS, new CornersCommand(this));
+        commandMap.put(CommandLiteral.HELP, new HelpCommand(this));
+        commandMap.put(CommandLiteral.PATTERN, new PatternCommand(this));
+        commandMap.put(CommandLiteral.PAUSE, new PauseCommand(this));
+        commandMap.put(CommandLiteral.PROGRESS, new ProgressCommand(this));
+        commandMap.put(CommandLiteral.QUIET, new QuietCommand(this));
+        commandMap.put(CommandLiteral.RADIUS, new RadiusCommand(this));
+        commandMap.put(CommandLiteral.RELOAD, new ReloadCommand(this));
+        commandMap.put(CommandLiteral.SHAPE, new ShapeCommand(this));
+        commandMap.put(CommandLiteral.SILENT, new SilentCommand(this));
+        commandMap.put(CommandLiteral.SPAWN, new SpawnCommand(this));
+        commandMap.put(CommandLiteral.START, new StartCommand(this));
+        commandMap.put(CommandLiteral.TRIM, new TrimCommand(this));
+        commandMap.put(CommandLiteral.WORLDBORDER, new WorldBorderCommand(this));
+        commandMap.put(CommandLiteral.WORLD, new WorldCommand(this));
         return commandMap;
     }
 
