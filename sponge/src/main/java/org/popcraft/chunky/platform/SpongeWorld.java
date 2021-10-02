@@ -78,16 +78,4 @@ public class SpongeWorld implements World {
         Path regionDirectory = world.directory().resolve(name);
         return Files.exists(regionDirectory) ? Optional.of(regionDirectory) : Optional.empty();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        return world.equals(((SpongeWorld) o).world);
-    }
-
-    @Override
-    public int hashCode() {
-        return world.hashCode();
-    }
 }

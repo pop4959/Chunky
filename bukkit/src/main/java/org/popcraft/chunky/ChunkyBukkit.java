@@ -7,11 +7,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.command.ChunkyCommand;
+import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.integration.WorldBorderIntegration;
 import org.popcraft.chunky.platform.BukkitConfig;
 import org.popcraft.chunky.platform.BukkitSender;
 import org.popcraft.chunky.platform.BukkitServer;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.util.TranslationKey;
 import org.popcraft.chunky.util.Version;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 import static org.popcraft.chunky.util.Translator.translate;
 
 public final class ChunkyBukkit extends JavaPlugin {
+    private static final String COMMAND_PERMISSION_KEY = "chunky.command.";
     private Chunky chunky;
 
     @Override
@@ -30,17 +33,17 @@ public final class ChunkyBukkit extends JavaPlugin {
         this.chunky = new Chunky(new BukkitServer(this), new BukkitConfig(this));
         final Version currentVersion = Version.getCurrentMinecraftVersion();
         if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
-            getLogger().severe(() -> translate("error_version_spigot"));
+            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION_SPIGOT));
             getServer().getPluginManager().disablePlugin(this);
         } else if (currentVersion.isValid() && Version.v1_13_2.isHigherThan(currentVersion)) {
-            getLogger().severe(() -> translate("error_version"));
+            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
             getServer().getPluginManager().disablePlugin(this);
         }
         if (!isEnabled()) {
             return;
         }
         if (chunky.getConfig().getContinueOnRestart()) {
-            getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get("continue").execute(chunky.getServer().getConsoleSender(), new String[]{}));
+            getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsoleSender(), new String[]{}));
         }
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
             chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
@@ -60,13 +63,13 @@ public final class ChunkyBukkit extends JavaPlugin {
         Sender bukkitSender = new BukkitSender(sender);
         Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
-            if (sender.hasPermission("chunky.command." + args[0].toLowerCase())) {
+            if (sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
                 commands.get(args[0].toLowerCase()).execute(bukkitSender, args);
             } else {
-                bukkitSender.sendMessage("command_no_permission");
+                bukkitSender.sendMessage(TranslationKey.COMMAND_NO_PERMISSION);
             }
         } else {
-            commands.get("help").execute(bukkitSender, new String[]{});
+            commands.get(CommandLiteral.HELP).execute(bukkitSender, new String[]{});
         }
         return true;
     }
@@ -80,9 +83,9 @@ public final class ChunkyBukkit extends JavaPlugin {
         final List<String> suggestions = new ArrayList<>();
         Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length == 1) {
-            commands.keySet().stream().filter(name -> sender.hasPermission("chunky.command." + name)).forEach(suggestions::add);
-        } else if (commands.containsKey(args[0].toLowerCase()) && sender.hasPermission("chunky.command." + args[0].toLowerCase())) {
-            suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(new BukkitSender(sender), args));
+            commands.keySet().stream().filter(name -> sender.hasPermission(COMMAND_PERMISSION_KEY + name)).forEach(suggestions::add);
+        } else if (commands.containsKey(args[0].toLowerCase()) && sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
+            suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(args));
         }
         return suggestions.stream()
                 .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))

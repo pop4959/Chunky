@@ -72,6 +72,6 @@ public class Star extends AbstractPolygon {
 
     @Override
     public String name() {
-        return "star";
+        return ShapeType.STAR;
     }
 }

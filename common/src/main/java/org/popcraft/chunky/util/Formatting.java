@@ -1,12 +1,16 @@
 package org.popcraft.chunky.util;
 
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.shape.ShapeType;
 
 import java.text.DecimalFormat;
 
 public class Formatting {
-    private static final ThreadLocal<DecimalFormat> NUMBER_FORMAT = ThreadLocal.withInitial(() -> new DecimalFormat("#.##"));
+    private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("#.##");
     private static final char[] BINARY_PREFIXES = new char[]{'K', 'M', 'G', 'T', 'P'};
+
+    private Formatting() {
+    }
 
     public static String bytes(long bytes) {
         long value = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
@@ -25,14 +29,14 @@ public class Formatting {
     }
 
     public static String radius(Selection selection) {
-        if ("ellipse".equals(selection.shape()) || "rectangle".equals(selection.shape())) {
+        if (ShapeType.RECTANGLE.equals(selection.shape()) || ShapeType.ELLIPSE.equals(selection.shape())) {
             return String.format("%s, %s", number(selection.radiusX()), number(selection.radiusZ()));
         } else {
             return String.format("%s", number(selection.radiusX()));
         }
     }
 
-    public static String number(double number) {
-        return NUMBER_FORMAT.get().format(number);
+    public static synchronized String number(double number) {
+        return NUMBER_FORMAT.format(number);
     }
 }

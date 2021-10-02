@@ -1,8 +1,9 @@
 package org.popcraft.chunky.integration;
 
 public abstract class AbstractMapIntegration implements MapIntegration {
+    protected static final int DEFAULT_COLOR = 0xFF0000;
     protected String label = "World Border";
-    protected int color = 0xFF0000;
+    protected int color = DEFAULT_COLOR;
     protected int weight = 3;
 
     @Override
@@ -17,6 +18,7 @@ public abstract class AbstractMapIntegration implements MapIntegration {
         try {
             this.color = Integer.parseInt(color, 16);
         } catch (NumberFormatException ignored) {
+            this.color = DEFAULT_COLOR;
         }
     }
 }

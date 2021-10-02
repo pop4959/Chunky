@@ -19,6 +19,9 @@ public class Translator {
         fallbackTranslations = load("en");
     }
 
+    private Translator() {
+    }
+
     public static void setLanguage(String language) {
         translations = load(language);
     }

@@ -5,6 +5,7 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ public class ContinueCommand extends ChunkyCommand {
         if (args.length > 1) {
             final Optional<World> world = Input.tryWorld(chunky, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
             if (!world.isPresent()) {
-                sender.sendMessage("help_continue");
+                sender.sendMessage(TranslationKey.HELP_CONTINUE);
                 return;
             }
             loadTasks = chunky.getConfig().loadTask(world.get()).map(Collections::singletonList).orElse(Collections.emptyList());
@@ -31,24 +32,24 @@ public class ContinueCommand extends ChunkyCommand {
             loadTasks = chunky.getConfig().loadTasks();
         }
         if (loadTasks.isEmpty()) {
-            sender.sendMessagePrefixed("format_continue_no_tasks");
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_CONTINUE_NO_TASKS);
             return;
         }
-        final Map<World, GenerationTask> generationTasks = chunky.getGenerationTasks();
+        final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
         loadTasks.forEach(generationTask -> {
             World world = generationTask.getSelection().world();
-            if (!generationTasks.containsKey(world)) {
-                generationTasks.put(world, generationTask);
+            if (!generationTasks.containsKey(world.getName())) {
+                generationTasks.put(world.getName(), generationTask);
                 chunky.getScheduler().runTask(generationTask);
-                sender.sendMessagePrefixed("format_continue", world.getName());
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_CONTINUE, world.getName());
             } else {
-                sender.sendMessagePrefixed("format_started_already", world.getName());
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_STARTED_ALREADY, world.getName());
             }
         });
     }
 
     @Override
-    public List<String> tabSuggestions(Sender sender, String[] args) {
+    public List<String> tabSuggestions(String[] args) {
         if (args.length == 2) {
             List<String> suggestions = new ArrayList<>();
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));

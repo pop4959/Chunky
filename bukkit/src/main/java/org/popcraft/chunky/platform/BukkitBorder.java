@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import org.bukkit.WorldBorder;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Coordinate;
 
 public class BukkitBorder implements Border {
@@ -27,6 +28,6 @@ public class BukkitBorder implements Border {
 
     @Override
     public String getShape() {
-        return "square";
+        return ShapeType.SQUARE;
     }
 }

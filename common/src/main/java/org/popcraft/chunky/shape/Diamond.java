@@ -45,6 +45,6 @@ public class Diamond extends AbstractPolygon {
 
     @Override
     public String name() {
-        return "diamond";
+        return ShapeType.DIAMOND;
     }
 }

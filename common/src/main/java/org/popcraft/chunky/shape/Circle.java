@@ -14,6 +14,6 @@ public class Circle extends AbstractEllipse {
 
     @Override
     public String name() {
-        return "circle";
+        return ShapeType.CIRCLE;
     }
 }

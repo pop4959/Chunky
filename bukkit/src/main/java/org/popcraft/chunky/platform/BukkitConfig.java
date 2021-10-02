@@ -4,6 +4,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.iterator.PatternType;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
 
@@ -39,15 +41,15 @@ public class BukkitConfig implements Config {
         if (config.getBoolean(worldKey + "cancelled", false)) {
             return Optional.empty();
         }
-        double radiusX = config.getDouble(worldKey + "radius", 500);
+        double radiusX = config.getDouble(worldKey + "radius", Selection.DEFAULT_RADIUS);
         double radiusZ = config.getDouble(worldKey + "z-radius", radiusX);
         Selection.Builder selection = Selection.builder(world)
-                .centerX(config.getDouble(worldKey + "x-center", 0))
-                .centerZ(config.getDouble(worldKey + "z-center", 0))
+                .centerX(config.getDouble(worldKey + "x-center", Selection.DEFAULT_CENTER_X))
+                .centerZ(config.getDouble(worldKey + "z-center", Selection.DEFAULT_CENTER_Z))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(config.getString(worldKey + "iterator", "loop"))
-                .shape(config.getString(worldKey + "shape", "square"));
+                .pattern(config.getString(worldKey + "iterator", PatternType.CONCENTRIC))
+                .shape(config.getString(worldKey + "shape", ShapeType.SQUARE));
         long count = config.getLong(worldKey + "count", 0);
         long time = config.getLong(worldKey + "time", 0);
         return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time));
@@ -68,7 +70,7 @@ public class BukkitConfig implements Config {
         String shape = generationTask.getShape().name();
         config.set(worldKey + "cancelled", generationTask.isCancelled());
         config.set(worldKey + "radius", selection.radiusX());
-        if ("rectangle".equals(shape) || "ellipse".equals(shape)) {
+        if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape)) {
             config.set(worldKey + "z-radius", selection.radiusZ());
         }
         config.set(worldKey + "x-center", selection.centerX());

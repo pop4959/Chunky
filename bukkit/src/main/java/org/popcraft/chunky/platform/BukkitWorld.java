@@ -86,16 +86,4 @@ public class BukkitWorld implements World {
         }
         return Optional.empty();
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        return world.equals(((BukkitWorld) o).world);
-    }
-
-    @Override
-    public int hashCode() {
-        return world.hashCode();
-    }
 }

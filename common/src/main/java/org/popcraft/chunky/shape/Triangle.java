@@ -40,6 +40,6 @@ public class Triangle extends AbstractPolygon {
 
     @Override
     public String name() {
-        return "triangle";
+        return ShapeType.TRIANGLE;
     }
 }

@@ -2,6 +2,8 @@ package org.popcraft.chunky.util;
 
 import org.bukkit.Bukkit;
 
+import java.util.Objects;
+
 public class Version implements Comparable<Version> {
     public static final Version v1_13_2 = new Version(1, 13, 2);
     public static final Version v1_15_0 = new Version(1, 15, 0);
@@ -76,5 +78,18 @@ public class Version implements Comparable<Version> {
             return this.minor - o.minor;
         }
         return this.patch - o.patch;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Version version = (Version) o;
+        return major == version.major && minor == version.minor && patch == version.patch;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(major, minor, patch);
     }
 }

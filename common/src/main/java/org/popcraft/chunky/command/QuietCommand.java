@@ -3,6 +3,7 @@ package org.popcraft.chunky.command;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.Optional;
 
@@ -17,11 +18,11 @@ public class QuietCommand extends ChunkyCommand {
             newQuiet = Input.tryInteger(args[1]);
         }
         if (!newQuiet.isPresent()) {
-            sender.sendMessage("help_quiet");
+            sender.sendMessage(TranslationKey.HELP_QUIET);
             return;
         }
         int quietInterval = Math.max(0, newQuiet.get());
         chunky.getOptions().setQuietInterval(quietInterval);
-        sender.sendMessagePrefixed("format_quiet", quietInterval);
+        sender.sendMessagePrefixed(TranslationKey.FORMAT_QUIET, quietInterval);
     }
 }

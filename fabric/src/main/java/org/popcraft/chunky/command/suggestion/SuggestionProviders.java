@@ -11,4 +11,7 @@ public class SuggestionProviders {
         PATTERNS = new PatternSuggestionProvider();
         SHAPES = new ShapeSuggestionProvider();
     }
+
+    private SuggestionProviders() {
+    }
 }

@@ -4,7 +4,6 @@ import org.popcraft.chunky.command.*;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.Server;
-import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.PendingAction;
 import org.popcraft.chunky.util.RegionCache;
@@ -26,7 +25,7 @@ public class Chunky {
     private final Config config;
     private final Selection.Builder selection;
     private final TaskScheduler scheduler = new TaskScheduler();
-    private final Map<World, GenerationTask> generationTasks = new ConcurrentHashMap<>();
+    private final Map<String, GenerationTask> generationTasks = new ConcurrentHashMap<>();
     private final Options options = new Options();
     private final Map<String, PendingAction> pendingActions = new HashMap<>();
     private final RegionCache regionCache = new RegionCache();
@@ -43,25 +42,25 @@ public class Chunky {
 
     private Map<String, ChunkyCommand> loadCommands() {
         final Map<String, ChunkyCommand> commandMap = new HashMap<>();
-        commandMap.put("cancel", new CancelCommand(this));
-        commandMap.put("center", new CenterCommand(this));
-        commandMap.put("confirm", new ConfirmCommand(this));
-        commandMap.put("continue", new ContinueCommand(this));
-        commandMap.put("corners", new CornersCommand(this));
-        commandMap.put("help", new HelpCommand(this));
-        commandMap.put("pattern", new PatternCommand(this));
-        commandMap.put("pause", new PauseCommand(this));
-        commandMap.put("progress", new ProgressCommand(this));
-        commandMap.put("quiet", new QuietCommand(this));
-        commandMap.put("radius", new RadiusCommand(this));
-        commandMap.put("reload", new ReloadCommand(this));
-        commandMap.put("shape", new ShapeCommand(this));
-        commandMap.put("silent", new SilentCommand(this));
-        commandMap.put("spawn", new SpawnCommand(this));
-        commandMap.put("start", new StartCommand(this));
-        commandMap.put("trim", new TrimCommand(this));
-        commandMap.put("worldborder", new WorldBorderCommand(this));
-        commandMap.put("world", new WorldCommand(this));
+        commandMap.put(CommandLiteral.CANCEL, new CancelCommand(this));
+        commandMap.put(CommandLiteral.CENTER, new CenterCommand(this));
+        commandMap.put(CommandLiteral.CONFIRM, new ConfirmCommand(this));
+        commandMap.put(CommandLiteral.CONTINUE, new ContinueCommand(this));
+        commandMap.put(CommandLiteral.CORNERS, new CornersCommand(this));
+        commandMap.put(CommandLiteral.HELP, new HelpCommand(this));
+        commandMap.put(CommandLiteral.PATTERN, new PatternCommand(this));
+        commandMap.put(CommandLiteral.PAUSE, new PauseCommand(this));
+        commandMap.put(CommandLiteral.PROGRESS, new ProgressCommand(this));
+        commandMap.put(CommandLiteral.QUIET, new QuietCommand(this));
+        commandMap.put(CommandLiteral.RADIUS, new RadiusCommand(this));
+        commandMap.put(CommandLiteral.RELOAD, new ReloadCommand(this));
+        commandMap.put(CommandLiteral.SHAPE, new ShapeCommand(this));
+        commandMap.put(CommandLiteral.SILENT, new SilentCommand(this));
+        commandMap.put(CommandLiteral.SPAWN, new SpawnCommand(this));
+        commandMap.put(CommandLiteral.START, new StartCommand(this));
+        commandMap.put(CommandLiteral.TRIM, new TrimCommand(this));
+        commandMap.put(CommandLiteral.WORLDBORDER, new WorldBorderCommand(this));
+        commandMap.put(CommandLiteral.WORLD, new WorldCommand(this));
         return commandMap;
     }
 
@@ -94,7 +93,7 @@ public class Chunky {
         return config;
     }
 
-    public Map<World, GenerationTask> getGenerationTasks() {
+    public Map<String, GenerationTask> getGenerationTasks() {
         return generationTasks;
     }
 

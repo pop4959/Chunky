@@ -39,6 +39,6 @@ public class Rectangle extends AbstractPolygon {
 
     @Override
     public String name() {
-        return "rectangle";
+        return ShapeType.RECTANGLE;
     }
 }

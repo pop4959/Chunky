@@ -8,6 +8,7 @@ import org.popcraft.chunky.shape.ShapeFactory;
 import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Pair;
 import org.popcraft.chunky.util.RegionCache;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -127,12 +128,12 @@ public class GenerationTask implements Runnable {
             });
         }
         if (stopped) {
-            chunky.getServer().getConsoleSender().sendMessagePrefixed("task_stopped", selection.world().getName());
+            chunky.getServer().getConsoleSender().sendMessagePrefixed(TranslationKey.TASK_STOPPED, selection.world().getName());
         } else {
             cancelled = true;
         }
         chunky.getConfig().saveTask(this);
-        chunky.getGenerationTasks().remove(selection.world());
+        chunky.getGenerationTasks().remove(selection.world().getName());
         Thread.currentThread().setName(poolThreadName);
     }
 
@@ -224,9 +225,9 @@ public class GenerationTask implements Runnable {
 
         public void sendUpdate(final Sender sender) {
             if (complete) {
-                sender.sendMessagePrefixed("task_done", world, chunkCount, String.format("%.2f", percentComplete), String.format("%01d", hours), String.format("%02d", minutes), String.format("%02d", seconds));
+                sender.sendMessagePrefixed(TranslationKey.TASK_DONE, world, chunkCount, String.format("%.2f", percentComplete), String.format("%01d", hours), String.format("%02d", minutes), String.format("%02d", seconds));
             } else {
-                sender.sendMessagePrefixed("task_update", world, chunkCount, String.format("%.2f", percentComplete), String.format("%01d", hours), String.format("%02d", minutes), String.format("%02d", seconds), String.format("%.1f", rate), chunkX, chunkZ);
+                sender.sendMessagePrefixed(TranslationKey.TASK_UPDATE, world, chunkCount, String.format("%.2f", percentComplete), String.format("%01d", hours), String.format("%02d", minutes), String.format("%02d", seconds), String.format("%.1f", rate), chunkX, chunkZ);
             }
         }
     }

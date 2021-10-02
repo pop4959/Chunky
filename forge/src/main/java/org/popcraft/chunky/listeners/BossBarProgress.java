@@ -12,8 +12,12 @@ import net.minecraft.world.level.dimension.DimensionType;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.ForgeWorld;
+import org.popcraft.chunky.platform.World;
 
 public class BossBarProgress {
+    private BossBarProgress() {
+    }
+
     public static void tick(final Chunky chunky, final MinecraftServer server) {
         final int quietInterval = Math.max(1, chunky.getOptions().getQuietInterval() * 20);
         if (server.getTickCount() % quietInterval != 0) {
@@ -26,7 +30,8 @@ public class BossBarProgress {
                 continue;
             }
             final CustomBossEvents bossBarManager = server.getCustomBossEvents();
-            final GenerationTask task = chunky.getGenerationTasks().get(new ForgeWorld(world));
+            final World forgeWorld = new ForgeWorld(world);
+            final GenerationTask task = chunky.getGenerationTasks().get(forgeWorld.getName());
             final boolean barExists = bossBarManager.get(barId) != null;
             if (task == null && !barExists) {
                 continue;

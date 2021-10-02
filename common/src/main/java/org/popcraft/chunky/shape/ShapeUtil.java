@@ -3,6 +3,9 @@ package org.popcraft.chunky.shape;
 import java.util.Optional;
 
 public class ShapeUtil {
+    private ShapeUtil() {
+    }
+
     /**
      * Checks if a point C is inside (to the left of) the line defined by point A and B.
      *

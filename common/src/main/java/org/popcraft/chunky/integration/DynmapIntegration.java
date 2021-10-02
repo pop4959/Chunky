@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class DynmapIntegration extends AbstractMapIntegration {
     private final MarkerSet markerSet;
-    private final Map<World, MarkerDescription> markers;
+    private final Map<String, MarkerDescription> markers;
 
     public DynmapIntegration(DynmapAPI dynmapAPI) {
         this.markerSet = dynmapAPI.getMarkerAPI().createMarkerSet("chunky.markerset", this.label, null, false);
@@ -30,7 +30,7 @@ public class DynmapIntegration extends AbstractMapIntegration {
             AreaMarker marker = markerSet.createAreaMarker(null, this.label, false, world.getName(), polygon.pointsX(), polygon.pointsZ(), false);
             marker.setLineStyle(this.weight, 1f, color);
             marker.setFillStyle(0f, 0x000000);
-            markers.put(world, marker);
+            markers.put(world.getName(), marker);
         } else if (shape instanceof AbstractEllipse) {
             AbstractEllipse ellipse = (AbstractEllipse) shape;
             double[] center = ellipse.getCenter();
@@ -38,13 +38,13 @@ public class DynmapIntegration extends AbstractMapIntegration {
             CircleMarker marker = markerSet.createCircleMarker(null, this.label, false, world.getName(), center[0], world.getSeaLevel(), center[1], radii[0], radii[1], false);
             marker.setLineStyle(this.weight, 1f, color);
             marker.setFillStyle(0f, 0x000000);
-            markers.put(world, marker);
+            markers.put(world.getName(), marker);
         }
     }
 
     @Override
     public void removeShapeMarker(World world) {
-        MarkerDescription marker = markers.remove(world);
+        MarkerDescription marker = markers.remove(world.getName());
         if (marker != null) {
             marker.deleteMarker();
         }

@@ -62,6 +62,6 @@ public class Loop2ChunkIterator implements ChunkIterator {
 
     @Override
     public String name() {
-        return "loop";
+        return PatternType.LOOP;
     }
 }

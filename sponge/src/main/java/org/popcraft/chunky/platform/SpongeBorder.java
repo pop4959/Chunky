@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Coordinate;
 import org.spongepowered.api.world.border.WorldBorder;
 import org.spongepowered.math.vector.Vector2d;
@@ -29,6 +30,6 @@ public class SpongeBorder implements Border {
 
     @Override
     public String getShape() {
-        return "square";
+        return ShapeType.SQUARE;
     }
 }

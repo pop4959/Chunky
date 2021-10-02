@@ -6,9 +6,11 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -34,7 +36,7 @@ public class TrimCommand extends ChunkyCommand {
             if (world.isPresent()) {
                 chunky.getSelection().world(world.get());
             } else {
-                sender.sendMessage("help_trim");
+                sender.sendMessage(TranslationKey.HELP_TRIM);
                 return;
             }
         }
@@ -43,7 +45,7 @@ public class TrimCommand extends ChunkyCommand {
             if (shape.isPresent()) {
                 chunky.getSelection().shape(shape.get());
             } else {
-                sender.sendMessage("help_trim");
+                sender.sendMessage(TranslationKey.HELP_TRIM);
                 return;
             }
         }
@@ -53,7 +55,7 @@ public class TrimCommand extends ChunkyCommand {
             if (centerX.isPresent() && centerZ.isPresent()) {
                 chunky.getSelection().center(centerX.get(), centerZ.get());
             } else {
-                sender.sendMessage("help_trim");
+                sender.sendMessage(TranslationKey.HELP_TRIM);
                 return;
             }
         }
@@ -62,7 +64,7 @@ public class TrimCommand extends ChunkyCommand {
             if (radiusX.isPresent()) {
                 chunky.getSelection().radius(radiusX.get());
             } else {
-                sender.sendMessage("help_trim");
+                sender.sendMessage(TranslationKey.HELP_TRIM);
                 return;
             }
         }
@@ -71,14 +73,14 @@ public class TrimCommand extends ChunkyCommand {
             if (radiusZ.isPresent()) {
                 chunky.getSelection().radiusZ(radiusZ.get());
             } else {
-                sender.sendMessage("help_trim");
+                sender.sendMessage(TranslationKey.HELP_TRIM);
                 return;
             }
         }
         final Selection selection = chunky.getSelection().build();
         final Shape shape = ShapeFactory.getShape(selection);
         final Runnable deletionAction = () -> chunky.getScheduler().runTask(() -> {
-            sender.sendMessagePrefixed("format_start", selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection));
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_START, selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection));
             final Optional<Path> regionPath = selection.world().getRegionDirectory();
             final Optional<Path> poiPath = selection.world().getPOIDirectory();
             final Optional<Path> entitiesPath = selection.world().getEntitiesDirectory();
@@ -98,10 +100,10 @@ public class TrimCommand extends ChunkyCommand {
                 e.printStackTrace();
             }
             final long totalTime = System.currentTimeMillis() - startTime;
-            sender.sendMessagePrefixed("task_trim", deleted.get(), selection.world().getName(), String.format("%.3f", totalTime / 1e3f));
+            sender.sendMessagePrefixed(TranslationKey.TASK_TRIM, deleted.get(), selection.world().getName(), String.format("%.3f", totalTime / 1e3f));
         });
         chunky.setPendingAction(sender, deletionAction);
-        sender.sendMessagePrefixed("format_trim_confirm", selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection), "/chunky confirm");
+        sender.sendMessagePrefixed(TranslationKey.FORMAT_TRIM_CONFIRM, selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection), "/chunky confirm");
     }
 
     private int checkRegion(final Path region, final Shape shape) {
@@ -188,13 +190,13 @@ public class TrimCommand extends ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(Sender sender, String[] args) {
+    public List<String> tabSuggestions(String[] args) {
         if (args.length == 2) {
             List<String> suggestions = new ArrayList<>();
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
             return suggestions;
         } else if (args.length == 3) {
-            return Input.SHAPES;
+            return ShapeType.ALL;
         }
         return Collections.emptyList();
     }

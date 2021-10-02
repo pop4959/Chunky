@@ -14,6 +14,6 @@ public class Ellipse extends AbstractEllipse {
 
     @Override
     public String name() {
-        return "ellipse";
+        return ShapeType.ELLIPSE;
     }
 }

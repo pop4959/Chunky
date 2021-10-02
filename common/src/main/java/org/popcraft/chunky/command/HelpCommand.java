@@ -3,6 +3,7 @@ package org.popcraft.chunky.command;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,21 +16,21 @@ public class HelpCommand extends ChunkyCommand {
     public HelpCommand(Chunky chunky) {
         super(chunky);
         this.helpMessages = new ArrayList<>();
-        helpMessages.add("help_start");
-        helpMessages.add("help_pause");
-        helpMessages.add("help_continue");
-        helpMessages.add("help_cancel");
-        helpMessages.add("help_world");
-        helpMessages.add("help_worldborder");
-        helpMessages.add("help_center");
-        helpMessages.add("help_spawn");
-        helpMessages.add("help_radius");
-        helpMessages.add("help_corners");
-        helpMessages.add("help_shape");
-        helpMessages.add("help_pattern");
-        helpMessages.add("help_silent");
-        helpMessages.add("help_quiet");
-        helpMessages.add("help_reload");
+        helpMessages.add(TranslationKey.HELP_START);
+        helpMessages.add(TranslationKey.HELP_PAUSE);
+        helpMessages.add(TranslationKey.HELP_CONTINUE);
+        helpMessages.add(TranslationKey.HELP_CANCEL);
+        helpMessages.add(TranslationKey.HELP_WORLD);
+        helpMessages.add(TranslationKey.HELP_WORLDBORDER);
+        helpMessages.add(TranslationKey.HELP_CENTER);
+        helpMessages.add(TranslationKey.HELP_SPAWN);
+        helpMessages.add(TranslationKey.HELP_RADIUS);
+        helpMessages.add(TranslationKey.HELP_CORNERS);
+        helpMessages.add(TranslationKey.HELP_SHAPE);
+        helpMessages.add(TranslationKey.HELP_PATTERN);
+        helpMessages.add(TranslationKey.HELP_SILENT);
+        helpMessages.add(TranslationKey.HELP_QUIET);
+        helpMessages.add(TranslationKey.HELP_RELOAD);
     }
 
     @Override
@@ -44,11 +45,11 @@ public class HelpCommand extends ChunkyCommand {
                 help.append('\n').append(translate(helpMessages.get(i)));
             }
             if (pageIndex != pageIndexLast) {
-                help.append('\n').append(translate("help_more", "/chunky help " + (pageIndex + 2)));
+                help.append('\n').append(translate(TranslationKey.HELP_MORE, "/chunky help " + (pageIndex + 2)));
             }
         } else {
             helpMessages.forEach(message -> help.append('\n').append(translate(message)));
         }
-        sender.sendMessage("help_menu", help.toString());
+        sender.sendMessage(TranslationKey.HELP_MENU, help.toString());
     }
 }
