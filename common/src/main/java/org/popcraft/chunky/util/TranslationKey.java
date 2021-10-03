@@ -1,11 +1,24 @@
 package org.popcraft.chunky.util;
 
 public class TranslationKey {
+    public static final String BORDER_DEPENDENCY_UPDATE = "border_dependency_update";
+    public static final String BORDER_LOAD_FAILED = "border_load_failed";
+    public static final String BORDER_SAVE_FAILED = "border_save_failed";
     public static final String COMMAND_NO_PERMISSION = "command_no_permission";
     public static final String DISABLED = "disabled";
     public static final String ENABLED = "enabled";
     public static final String ERROR_VERSION = "error_version";
     public static final String ERROR_VERSION_SPIGOT = "error_version_spigot";
+    public static final String FORMAT_BORDER_ADD = "format_border_add";
+    public static final String FORMAT_BORDER_BYPASS = "format_border_bypass";
+    public static final String FORMAT_BORDER_BYPASS_NO_TARGET = "format_border_bypass_no_target";
+    public static final String FORMAT_BORDER_LIST = "format_border_list";
+    public static final String FORMAT_BORDER_LIST_BORDER = "format_border_list_border";
+    public static final String FORMAT_BORDER_LIST_NONE = "format_border_list_none";
+    public static final String FORMAT_BORDER_LOAD = "format_border_load";
+    public static final String FORMAT_BORDER_NO_BORDER = "format_border_no_border";
+    public static final String FORMAT_BORDER_REMOVE = "format_border_remove";
+    public static final String FORMAT_BORDER_WRAP = "format_border_wrap";
     public static final String FORMAT_CANCEL = "format_cancel";
     public static final String FORMAT_CANCEL_ALL = "format_cancel_all";
     public static final String FORMAT_CANCEL_CONFIRM = "format_cancel_confirm";
@@ -32,6 +45,7 @@ public class TranslationKey {
     public static final String FORMAT_START_LIMIT = "format_start_limit";
     public static final String FORMAT_STARTED_ALREADY = "format_started_already";
     public static final String FORMAT_WORLD = "format_world";
+    public static final String HELP_BORDER = "help_border";
     public static final String HELP_CANCEL = "help_cancel";
     public static final String HELP_CENTER = "help_center";
     public static final String HELP_CONTINUE = "help_continue";
