@@ -43,7 +43,7 @@
   "format_start_limit": "Verten har begrenset maksimal forhåndsgenerasjons radius til %s for å unngå for mye bruk av diskplassen. Reduser radiusen eller kontakt verten din hvis du ønsker å fjerne denne grensen.",
   "format_started_already": "Oppgaven har allerede startet for %s!",
   "format_world": "Verden endret til %s.",
-  "help_border": "&2%s <add|remove|list>&r - Manage custom world borders",
+  "help_border": "&2chunky border <add|remove|list>&r - Manage custom world borders",
   "help_cancel": "&2chunky cancel&r - Stopp og slett gjeldende eller lagrede oppgaver",
   "help_center": "&2chunky center <x> <z>&r - Sett blokklokasjon i midten",
   "help_continue": "&2chunky continue&r - Fortsett gjeldende eller lagrede oppgaver",
