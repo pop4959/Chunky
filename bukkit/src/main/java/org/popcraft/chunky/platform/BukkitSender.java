@@ -6,6 +6,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.popcraft.chunky.util.Coordinate;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class BukkitSender implements Sender {
@@ -23,6 +26,15 @@ public class BukkitSender implements Sender {
     @Override
     public String getName() {
         return sender.getName();
+    }
+
+    @Override
+    public Optional<UUID> getUUID() {
+        if (sender instanceof Player) {
+            return Optional.of(((Player) sender).getUniqueId());
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override

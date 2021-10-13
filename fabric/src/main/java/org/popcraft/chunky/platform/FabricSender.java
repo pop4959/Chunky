@@ -7,6 +7,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.popcraft.chunky.util.Coordinate;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class FabricSender implements Sender {
@@ -27,6 +30,15 @@ public class FabricSender implements Sender {
             return source.getPlayer().getName().getString();
         } catch (CommandSyntaxException e) {
             return "Console";
+        }
+    }
+
+    @Override
+    public Optional<UUID> getUUID() {
+        try {
+            return Optional.of(source.getPlayer().getUuid());
+        } catch (CommandSyntaxException e) {
+            return Optional.empty();
         }
     }
 

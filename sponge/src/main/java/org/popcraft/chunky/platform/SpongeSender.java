@@ -7,6 +7,7 @@ import org.popcraft.chunky.util.Coordinate;
 import org.spongepowered.api.entity.living.player.Player;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
@@ -25,6 +26,11 @@ public class SpongeSender implements Sender {
     @Override
     public String getName() {
         return getPlayer().map(Player::name).orElse("Console");
+    }
+
+    @Override
+    public Optional<UUID> getUUID() {
+        return getPlayer().map(Player::uniqueId);
     }
 
     @Override

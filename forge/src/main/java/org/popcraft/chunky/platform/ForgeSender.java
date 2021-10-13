@@ -7,6 +7,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.popcraft.chunky.util.Coordinate;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class ForgeSender implements Sender {
@@ -27,6 +30,15 @@ public class ForgeSender implements Sender {
             return source.getPlayerOrException().getName().getString();
         } catch (CommandSyntaxException e) {
             return "Console";
+        }
+    }
+
+    @Override
+    public Optional<UUID> getUUID() {
+        try {
+            return Optional.of(source.getPlayerOrException().getUUID());
+        } catch (CommandSyntaxException e) {
+            return Optional.empty();
         }
     }
 
