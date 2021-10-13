@@ -43,7 +43,7 @@
   "format_start_limit": "您的主机提供商已将最大预生成的半径限制在 %s 以避免磁盘空间的过度使用。 如果您想要解除此限制，减少您的半径大小或联系您的主机提供商。",
   "format_started_already": "任务已经持续了 %s!",
   "format_world": "世界被改变为 %s。",
-  "help_border": "&2%s <add|remove|list>&r - Manage custom world borders",
+  "help_border": "&2chunky border <add|remove|list>&r - Manage custom world borders",
   "help_cancel": "&2chunky cancel&r - 取消并删除当前正在运行或已保存的任务",
   "help_center": "&2chunky center <x> <z>&r - 设置预生成中心的位置",
   "help_continue": "&2chunky continue&r - 继续当前任务或已保存的任务",
