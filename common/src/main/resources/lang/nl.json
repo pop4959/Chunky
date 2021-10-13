@@ -43,7 +43,7 @@
   "format_start_limit": "Your host has limited the maximum pre-generation radius to %s to avoid excessive disk space usage. Reduce the radius or contact your host if you wish to have this limit removed.",
   "format_started_already": "Taak is al gestart voor %s!",
   "format_world": "Wereld veranderd naar %s.",
-  "help_border": "&2%s <add|remove|list>&r - Manage custom world borders",
+  "help_border": "&2chunky border <add|remove|list>&r - Manage custom world borders",
   "help_cancel": "&2chunky cancel&r - Stop en verwijder huidige of opgeslagen taken",
   "help_center": "&2chunky center <x> <z>&r - Stel de locatie van het midden blok in",
   "help_continue": "&2chunky continue&r - Voortzetten van huidige of opgeslagen taken",
