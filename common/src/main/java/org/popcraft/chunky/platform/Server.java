@@ -15,5 +15,7 @@ public interface Server {
 
     Sender getConsoleSender();
 
+    Optional<Sender> getPlayer(String name);
+
     Config getConfig();
 }

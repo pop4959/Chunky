@@ -40,6 +40,11 @@ public class SpongeServer implements Server {
     }
 
     @Override
+    public Optional<Sender> getPlayer(String name) {
+        return plugin.getGame().server().player(name).map(SpongeSender::new);
+    }
+
+    @Override
     public Config getConfig() {
         return plugin.getChunky().getConfig();
     }

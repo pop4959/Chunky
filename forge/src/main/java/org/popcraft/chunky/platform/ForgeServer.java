@@ -4,6 +4,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.integration.Integration;
 
@@ -47,6 +48,11 @@ public class ForgeServer implements Server {
     @Override
     public Sender getConsoleSender() {
         return new ForgeSender(server.createCommandSourceStack());
+    }
+
+    @Override
+    public Optional<Sender> getPlayer(String name) {
+        return Optional.ofNullable(server.getPlayerList().getPlayerByName(name)).map(ServerPlayer::createCommandSourceStack).map(ForgeSender::new);
     }
 
     @Override

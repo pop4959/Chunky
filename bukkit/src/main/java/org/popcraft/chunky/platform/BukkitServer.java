@@ -1,6 +1,5 @@
 package org.popcraft.chunky.platform;
 
-import org.bukkit.Bukkit;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.integration.Integration;
 
@@ -26,20 +25,25 @@ public class BukkitServer implements Server {
 
     @Override
     public Optional<World> getWorld(String name) {
-        org.bukkit.World world = Bukkit.getWorld(name);
+        org.bukkit.World world = plugin.getServer().getWorld(name);
         return Optional.ofNullable(world == null ? null : new BukkitWorld(world));
     }
 
     @Override
     public List<World> getWorlds() {
         List<World> worlds = new ArrayList<>();
-        Bukkit.getWorlds().forEach(world -> worlds.add(new BukkitWorld(world)));
+        plugin.getServer().getWorlds().forEach(world -> worlds.add(new BukkitWorld(world)));
         return worlds;
     }
 
     @Override
     public Sender getConsoleSender() {
-        return new BukkitSender(Bukkit.getConsoleSender());
+        return new BukkitSender(plugin.getServer().getConsoleSender());
+    }
+
+    @Override
+    public Optional<Sender> getPlayer(String name) {
+        return Optional.ofNullable(plugin.getServer().getPlayer(name)).map(BukkitSender::new);
     }
 
     @Override
