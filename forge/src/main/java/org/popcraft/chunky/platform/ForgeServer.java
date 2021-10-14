@@ -9,10 +9,12 @@ import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.integration.Integration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ForgeServer implements Server {
     private final ChunkyForge plugin;
@@ -48,6 +50,11 @@ public class ForgeServer implements Server {
     @Override
     public Sender getConsoleSender() {
         return new ForgeSender(server.createCommandSourceStack());
+    }
+
+    @Override
+    public Collection<Sender> getPlayers() {
+        return server.getPlayerList().getPlayers().stream().map(ServerPlayer::createCommandSourceStack).map(ForgeSender::new).collect(Collectors.toList());
     }
 
     @Override

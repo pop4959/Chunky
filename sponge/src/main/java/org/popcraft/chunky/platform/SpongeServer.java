@@ -4,6 +4,7 @@ import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.integration.Integration;
 import org.spongepowered.api.ResourceKey;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,11 @@ public class SpongeServer implements Server {
     @Override
     public Sender getConsoleSender() {
         return new SpongeSender(plugin.getGame().server());
+    }
+
+    @Override
+    public Collection<Sender> getPlayers() {
+        return plugin.getGame().server().onlinePlayers().stream().map(SpongeSender::new).collect(Collectors.toList());
     }
 
     @Override

@@ -4,10 +4,12 @@ import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.integration.Integration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BukkitServer implements Server {
     private final ChunkyBukkit plugin;
@@ -39,6 +41,11 @@ public class BukkitServer implements Server {
     @Override
     public Sender getConsoleSender() {
         return new BukkitSender(plugin.getServer().getConsoleSender());
+    }
+
+    @Override
+    public Collection<Sender> getPlayers() {
+        return plugin.getServer().getOnlinePlayers().stream().map(BukkitSender::new).collect(Collectors.toList());
     }
 
     @Override

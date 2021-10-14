@@ -9,10 +9,12 @@ import org.popcraft.chunky.ChunkyFabric;
 import org.popcraft.chunky.integration.Integration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FabricServer implements Server {
     private final ChunkyFabric plugin;
@@ -48,6 +50,11 @@ public class FabricServer implements Server {
     @Override
     public Sender getConsoleSender() {
         return new FabricSender(server.getCommandSource());
+    }
+
+    @Override
+    public Collection<Sender> getPlayers() {
+        return server.getPlayerManager().getPlayerList().stream().map(ServerPlayerEntity::getCommandSource).map(FabricSender::new).collect(Collectors.toList());
     }
 
     @Override
