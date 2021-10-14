@@ -22,13 +22,29 @@ public class WorldBorderIntegration implements BorderIntegration {
             }
 
             @Override
+            public void setCenter(Coordinate coordinate) {
+                Config.Border(world).setX(coordinate.getX());
+                Config.Border(world).setZ(coordinate.getZ());
+            }
+
+            @Override
             public double getRadiusX() {
                 return Config.Border(world).getRadiusX();
             }
 
             @Override
+            public void setRadiusX(double radiusX) {
+                Config.Border(world).setRadiusX((int) radiusX);
+            }
+
+            @Override
             public double getRadiusZ() {
                 return Config.Border(world).getRadiusZ();
+            }
+
+            @Override
+            public void setRadiusZ(double radiusZ) {
+                Config.Border(world).setRadiusZ((int) radiusZ);
             }
 
             @Override

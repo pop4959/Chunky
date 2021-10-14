@@ -16,7 +16,7 @@ public class SpongeWorld implements World {
 
     public SpongeWorld(ServerWorld world) {
         this.world = world;
-        this.worldBorder = new SpongeBorder(world.border());
+        this.worldBorder = new SpongeBorder(world);
     }
 
     @Override

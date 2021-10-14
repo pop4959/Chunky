@@ -17,13 +17,28 @@ public class ForgeBorder implements Border {
     }
 
     @Override
+    public void setCenter(Coordinate coordinate) {
+        worldBorder.setCenter(coordinate.getX(), coordinate.getZ());
+    }
+
+    @Override
     public double getRadiusX() {
         return worldBorder.getSize() / 2d;
     }
 
     @Override
+    public void setRadiusX(double radiusX) {
+        worldBorder.setSize(radiusX * 2);
+    }
+
+    @Override
     public double getRadiusZ() {
         return worldBorder.getSize() / 2d;
+    }
+
+    @Override
+    public void setRadiusZ(double radiusZ) {
+        worldBorder.setSize(radiusZ * 2);
     }
 
     @Override
