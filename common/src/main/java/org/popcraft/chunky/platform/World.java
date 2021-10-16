@@ -1,6 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.platform.util.Location;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -18,7 +18,7 @@ public interface World {
 
     int getSeaLevel();
 
-    Coordinate getSpawnCoordinate();
+    Location getSpawn();
 
     Border getWorldBorder();
 

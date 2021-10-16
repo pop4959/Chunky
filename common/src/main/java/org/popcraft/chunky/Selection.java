@@ -3,6 +3,7 @@ package org.popcraft.chunky;
 import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.platform.Border;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Coordinate;
 
@@ -158,7 +159,7 @@ public class Selection {
         }
 
         public Builder spawn() {
-            Coordinate spawn = world.getSpawnCoordinate();
+            Location spawn = world.getSpawn();
             this.centerX = spawn.getX();
             this.centerZ = spawn.getZ();
             return this;

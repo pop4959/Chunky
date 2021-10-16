@@ -1,14 +1,11 @@
 package org.popcraft.chunky.platform;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-import org.popcraft.chunky.util.Coordinate;
-
-import java.util.Optional;
-import java.util.UUID;
+import org.popcraft.chunky.platform.util.Location;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
@@ -26,36 +23,23 @@ public class ForgeSender implements Sender {
 
     @Override
     public String getName() {
-        try {
-            return source.getPlayerOrException().getName().getString();
-        } catch (CommandSyntaxException e) {
-            return "Console";
-        }
+        return source.getTextName();
     }
 
     @Override
-    public Optional<UUID> getUUID() {
-        try {
-            return Optional.of(source.getPlayerOrException().getUUID());
-        } catch (CommandSyntaxException e) {
-            return Optional.empty();
-        }
+    public World getWorld() {
+        return new ForgeWorld(source.getLevel());
     }
 
     @Override
-    public Coordinate getCoordinate() {
+    public Location getLocation() {
         Vec3 pos = source.getPosition();
-        return new Coordinate(pos.x(), pos.z());
+        Vec2 rot = source.getRotation();
+        return new Location(getWorld(), pos.x(), pos.y(), pos.z(), rot.x, rot.y);
     }
 
     @Override
     public void sendMessage(String key, boolean prefixed, Object... args) {
-        final String text;
-        if (isPlayer()) {
-            text = translateKey(key, prefixed, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§");
-        } else {
-            text = translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "");
-        }
-        source.sendSuccess(Component.nullToEmpty(text), false);
+        source.sendSuccess(Component.nullToEmpty(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
     }
 }

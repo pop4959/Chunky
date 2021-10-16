@@ -1,6 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.platform.util.Location;
 import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.math.vector.Vector3i;
 
@@ -46,9 +46,9 @@ public class SpongeWorld implements World {
     }
 
     @Override
-    public Coordinate getSpawnCoordinate() {
-        Vector3i spawnLocation = world.properties().spawnPosition();
-        return new Coordinate(spawnLocation.x(), spawnLocation.z());
+    public Location getSpawn() {
+        Vector3i spawn = world.properties().spawnPosition();
+        return new Location(this, spawn.x(), spawn.y(), spawn.z(), 0, 0);
     }
 
     @Override

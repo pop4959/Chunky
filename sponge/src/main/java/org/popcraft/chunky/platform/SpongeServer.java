@@ -36,18 +36,18 @@ public class SpongeServer implements Server {
     }
 
     @Override
-    public Sender getConsoleSender() {
+    public Sender getConsole() {
         return new SpongeSender(plugin.getGame().server());
     }
 
     @Override
-    public Collection<Sender> getPlayers() {
-        return plugin.getGame().server().onlinePlayers().stream().map(SpongeSender::new).collect(Collectors.toList());
+    public Collection<Player> getPlayers() {
+        return plugin.getGame().server().onlinePlayers().stream().map(SpongePlayer::new).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Sender> getPlayer(String name) {
-        return plugin.getGame().server().player(name).map(SpongeSender::new);
+    public Optional<Player> getPlayer(String name) {
+        return plugin.getGame().server().player(name).map(SpongePlayer::new);
     }
 
     @Override

@@ -13,7 +13,7 @@ import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.dimension.DimensionType;
 import org.popcraft.chunky.mixin.ServerChunkManagerMixin;
 import org.popcraft.chunky.mixin.ThreadedAnvilChunkStorageMixin;
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.platform.util.Location;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -99,9 +99,10 @@ public class FabricWorld implements World {
     }
 
     @Override
-    public Coordinate getSpawnCoordinate() {
-        BlockPos spawnPos = serverWorld.getSpawnPos();
-        return new Coordinate(spawnPos.getX(), spawnPos.getZ());
+    public Location getSpawn() {
+        final BlockPos pos = serverWorld.getSpawnPos();
+        final float angle = serverWorld.getSpawnAngle();
+        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), 0, angle);
     }
 
     @Override

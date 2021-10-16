@@ -2,7 +2,7 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
@@ -26,7 +26,7 @@ public class CenterCommand extends ChunkyCommand {
         final double centerX;
         final double centerZ;
         if (!newX.isPresent() && !newZ.isPresent()) {
-            Coordinate coordinate = sender.getCoordinate();
+            Location coordinate = sender.getLocation();
             centerX = coordinate.getX();
             centerZ = coordinate.getZ();
         } else if (newX.isPresent() && newZ.isPresent()) {

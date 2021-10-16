@@ -1,7 +1,6 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
@@ -48,18 +47,18 @@ public class FabricServer implements Server {
     }
 
     @Override
-    public Sender getConsoleSender() {
+    public Sender getConsole() {
         return new FabricSender(server.getCommandSource());
     }
 
     @Override
-    public Collection<Sender> getPlayers() {
-        return server.getPlayerManager().getPlayerList().stream().map(ServerPlayerEntity::getCommandSource).map(FabricSender::new).collect(Collectors.toList());
+    public Collection<Player> getPlayers() {
+        return server.getPlayerManager().getPlayerList().stream().map(FabricPlayer::new).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Sender> getPlayer(String name) {
-        return Optional.ofNullable(server.getPlayerManager().getPlayer(name)).map(ServerPlayerEntity::getCommandSource).map(FabricSender::new);
+    public Optional<Player> getPlayer(String name) {
+        return Optional.ofNullable(server.getPlayerManager().getPlayer(name)).map(FabricPlayer::new);
     }
 
     @Override

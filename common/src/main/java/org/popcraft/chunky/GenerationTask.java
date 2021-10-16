@@ -94,7 +94,7 @@ public class GenerationTask implements Runnable {
             return;
         }
         printTime.set(currentTime);
-        progress.sendUpdate(chunky.getServer().getConsoleSender());
+        progress.sendUpdate(chunky.getServer().getConsole());
     }
 
     @Override
@@ -128,7 +128,7 @@ public class GenerationTask implements Runnable {
             });
         }
         if (stopped) {
-            chunky.getServer().getConsoleSender().sendMessagePrefixed(TranslationKey.TASK_STOPPED, selection.world().getName());
+            chunky.getServer().getConsole().sendMessagePrefixed(TranslationKey.TASK_STOPPED, selection.world().getName());
         } else {
             cancelled = true;
         }

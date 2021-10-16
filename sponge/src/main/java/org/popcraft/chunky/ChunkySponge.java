@@ -50,7 +50,7 @@ public class ChunkySponge {
     public void onLoadedGame(final LoadedGameEvent event) {
         this.chunky = new Chunky(new SpongeServer(this), new SpongeConfig(this));
         if (chunky.getConfig().getContinueOnRestart()) {
-            chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsoleSender(), new String[]{});
+            chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
         }
     }
 

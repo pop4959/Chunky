@@ -14,11 +14,11 @@ public interface Server {
 
     List<World> getWorlds();
 
-    Sender getConsoleSender();
+    Sender getConsole();
 
-    Collection<Sender> getPlayers();
+    Collection<Player> getPlayers();
 
-    Optional<Sender> getPlayer(String name);
+    Optional<Player> getPlayer(String name);
 
     Config getConfig();
 }

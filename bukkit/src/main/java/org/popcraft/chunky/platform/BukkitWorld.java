@@ -1,8 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import io.papermc.lib.PaperLib;
-import org.bukkit.Location;
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.platform.util.Location;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,9 +48,9 @@ public class BukkitWorld implements World {
     }
 
     @Override
-    public Coordinate getSpawnCoordinate() {
-        Location spawnLocation = world.getSpawnLocation();
-        return new Coordinate(spawnLocation.getX(), spawnLocation.getZ());
+    public Location getSpawn() {
+        org.bukkit.Location spawnLocation = world.getSpawnLocation();
+        return new Location(this, spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), spawnLocation.getPitch(), spawnLocation.getYaw());
     }
 
     @Override

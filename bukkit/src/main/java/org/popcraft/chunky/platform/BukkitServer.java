@@ -39,18 +39,18 @@ public class BukkitServer implements Server {
     }
 
     @Override
-    public Sender getConsoleSender() {
+    public Sender getConsole() {
         return new BukkitSender(plugin.getServer().getConsoleSender());
     }
 
     @Override
-    public Collection<Sender> getPlayers() {
-        return plugin.getServer().getOnlinePlayers().stream().map(BukkitSender::new).collect(Collectors.toList());
+    public Collection<Player> getPlayers() {
+        return plugin.getServer().getOnlinePlayers().stream().map(BukkitPlayer::new).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Sender> getPlayer(String name) {
-        return Optional.ofNullable(plugin.getServer().getPlayer(name)).map(BukkitSender::new);
+    public Optional<Player> getPlayer(String name) {
+        return Optional.ofNullable(plugin.getServer().getPlayer(name)).map(BukkitPlayer::new);
     }
 
     @Override

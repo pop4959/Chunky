@@ -12,7 +12,7 @@ import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.LevelResource;
 import org.popcraft.chunky.ChunkyForge;
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.platform.util.Location;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -102,9 +102,10 @@ public class ForgeWorld implements World {
     }
 
     @Override
-    public Coordinate getSpawnCoordinate() {
-        BlockPos spawnPoint = world.getSharedSpawnPos();
-        return new Coordinate(spawnPoint.getX(), spawnPoint.getZ());
+    public Location getSpawn() {
+        final BlockPos pos = world.getSharedSpawnPos();
+        final float rot = world.getSharedSpawnAngle();
+        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), 0, rot);
     }
 
     @Override

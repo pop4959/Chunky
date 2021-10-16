@@ -36,7 +36,7 @@ public class ChunkyFabric implements ModInitializer {
             File configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "chunky.json");
             this.chunky = new Chunky(new FabricServer(this, minecraftServer), new GsonConfig(() -> chunky, configFile));
             if (chunky.getConfig().getContinueOnRestart()) {
-                chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsoleSender(), new String[]{});
+                chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
             }
         });
         ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> chunky.disable());

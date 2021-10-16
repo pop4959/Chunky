@@ -45,7 +45,7 @@ public class ChunkyForge {
         File configFile = new File(event.getServer().getServerDirectory(), "config/chunky.json");
         this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(() -> chunky, configFile));
         if (chunky.getConfig().getContinueOnRestart()) {
-            chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsoleSender(), new String[]{});
+            chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
         }
         Command<CommandSourceStack> command = context -> {
             Sender sender = new ForgeSender(context.getSource());
