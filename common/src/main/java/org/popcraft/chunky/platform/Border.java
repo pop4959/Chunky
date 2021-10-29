@@ -1,19 +1,13 @@
 package org.popcraft.chunky.platform;
 
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.platform.util.Vector2;
 
 public interface Border {
-    Coordinate getCenter();
-
-    void setCenter(Coordinate coordinate);
+    Vector2 getCenter();
 
     double getRadiusX();
 
-    void setRadiusX(double radiusX);
-
     double getRadiusZ();
-
-    void setRadiusZ(double radiusZ);
 
     String getShape();
 }

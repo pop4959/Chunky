@@ -1,15 +1,19 @@
 package org.popcraft.chunky.platform;
 
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.popcraft.chunky.platform.util.Location;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.world.server.ServerLocation;
 import org.spongepowered.math.vector.Vector3d;
 
 import java.util.UUID;
 
-public class SpongePlayer extends SpongeSender implements Player {
-    private final org.spongepowered.api.entity.living.player.Player player;
+import static org.popcraft.chunky.util.Translator.translateKey;
 
-    public SpongePlayer(org.spongepowered.api.entity.living.player.Player player) {
+public class SpongePlayer extends SpongeSender implements Player {
+    private final ServerPlayer player;
+
+    public SpongePlayer(ServerPlayer player) {
         super(player);
         this.player = player;
     }
@@ -39,5 +43,16 @@ public class SpongePlayer extends SpongeSender implements Player {
     @Override
     public UUID getUUID() {
         return player.uniqueId();
+    }
+
+    @Override
+    public void teleport(Location location) {
+        player.setLocation(ServerLocation.of(((SpongeWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ()));
+        player.setRotation(Vector3d.from(location.getYaw(), location.getPitch(), 0));
+    }
+
+    @Override
+    public void sendActionBar(String key) {
+        player.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize(translateKey(key, false)));
     }
 }

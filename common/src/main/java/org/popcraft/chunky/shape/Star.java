@@ -1,6 +1,10 @@
 package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.platform.util.Vector2;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
 import static org.popcraft.chunky.shape.ShapeUtil.intersection;
@@ -21,31 +25,37 @@ public class Star extends AbstractPolygon {
         this.p4z = centerZ + radiusX * Math.sin(Math.toRadians(270));
         this.p5x = centerX + radiusX * Math.cos(Math.toRadians(342));
         this.p5z = centerZ + radiusX * Math.sin(Math.toRadians(342));
-        double[] i1 = intersection(p1x, p1z, p3x, p3z, p2x, p2z, p5x, p5z).orElse(new double[]{p1x, p1z});
-        double[] i2 = intersection(p1x, p1z, p3x, p3z, p2x, p2z, p4x, p4z).orElse(new double[]{p2x, p2z});
-        double[] i3 = intersection(p2x, p2z, p4x, p4z, p3x, p3z, p5x, p5z).orElse(new double[]{p3x, p3z});
-        double[] i4 = intersection(p3x, p3z, p5x, p5z, p1x, p1z, p4x, p4z).orElse(new double[]{p4x, p4z});
-        double[] i5 = intersection(p1x, p1z, p4x, p4z, p2x, p2z, p5x, p5z).orElse(new double[]{p5x, p5z});
-        this.i1x = i1[0];
-        this.i1z = i1[1];
-        this.i2x = i2[0];
-        this.i2z = i2[1];
-        this.i3x = i3[0];
-        this.i3z = i3[1];
-        this.i4x = i4[0];
-        this.i4z = i4[1];
-        this.i5x = i5[0];
-        this.i5z = i5[1];
+        final Vector2 i1 = intersection(p1x, p1z, p3x, p3z, p2x, p2z, p5x, p5z).orElse(Vector2.of(p1x, p1z));
+        final Vector2 i2 = intersection(p1x, p1z, p3x, p3z, p2x, p2z, p4x, p4z).orElse(Vector2.of(p2x, p2z));
+        final Vector2 i3 = intersection(p2x, p2z, p4x, p4z, p3x, p3z, p5x, p5z).orElse(Vector2.of(p3x, p3z));
+        final Vector2 i4 = intersection(p3x, p3z, p5x, p5z, p1x, p1z, p4x, p4z).orElse(Vector2.of(p4x, p4z));
+        final Vector2 i5 = intersection(p1x, p1z, p4x, p4z, p2x, p2z, p5x, p5z).orElse(Vector2.of(p5x, p5z));
+        this.i1x = i1.getX();
+        this.i1z = i1.getZ();
+        this.i2x = i2.getX();
+        this.i2z = i2.getZ();
+        this.i3x = i3.getX();
+        this.i3z = i3.getZ();
+        this.i4x = i4.getX();
+        this.i4z = i4.getZ();
+        this.i5x = i5.getX();
+        this.i5z = i5.getZ();
     }
 
     @Override
-    public double[] pointsX() {
-        return new double[]{p1x, i1x, p2x, i2x, p3x, i3x, p4x, i4x, p5x, i5x};
-    }
-
-    @Override
-    public double[] pointsZ() {
-        return new double[]{p1z, i1z, p2z, i2z, p3z, i3z, p4z, i4z, p5z, i5z};
+    public List<Vector2> points() {
+        return Arrays.asList(
+                Vector2.of(p1x, p1z),
+                Vector2.of(i1x, i1z),
+                Vector2.of(p2x, p2z),
+                Vector2.of(i2x, i2z),
+                Vector2.of(p3x, p3z),
+                Vector2.of(i3x, i3z),
+                Vector2.of(p4x, p4z),
+                Vector2.of(i4x, i4z),
+                Vector2.of(p5x, p5z),
+                Vector2.of(i5x, i5z)
+        );
     }
 
     @Override

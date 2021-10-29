@@ -1,6 +1,7 @@
 package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.platform.util.Vector2;
 
 public abstract class AbstractShape implements Shape {
     protected final double centerX, centerZ;
@@ -25,7 +26,7 @@ public abstract class AbstractShape implements Shape {
         }
     }
 
-    public double[] getCenter() {
-        return new double[]{centerX, centerZ};
+    public Vector2 center() {
+        return Vector2.of(centerX, centerZ);
     }
 }

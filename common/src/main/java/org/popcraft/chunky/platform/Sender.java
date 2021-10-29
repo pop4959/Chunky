@@ -11,6 +11,8 @@ public interface Sender {
 
     Location getLocation();
 
+    boolean hasPermission(String permission);
+
     void sendMessage(String key, boolean prefixed, Object... args);
 
     default void sendMessage(String key, Object... args) {

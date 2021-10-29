@@ -33,16 +33,30 @@ public class FabricPlayer extends FabricSender implements Player {
 
     @Override
     public Location getLocation() {
-        return new Location(getWorld(), player.getX(), player.getY(), player.getZ(), player.getPitch(), player.getYaw());
+        return new Location(getWorld(), player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch());
     }
 
     @Override
     public void sendMessage(String key, boolean prefixed, Object... args) {
-        player.sendMessage(Text.of(translateKey(key, prefixed, args).replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§")), false);
+        player.sendMessage(formatColored(translateKey(key, prefixed, args)), false);
     }
 
     @Override
     public UUID getUUID() {
         return player.getUuid();
+    }
+
+    @Override
+    public void teleport(Location location) {
+        player.teleport(((FabricWorld) location.getWorld()).getServerWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+    }
+
+    @Override
+    public void sendActionBar(String key) {
+        player.sendMessage(formatColored(translateKey(key, false)), true);
+    }
+
+    private Text formatColored(String message) {
+        return Text.of(message.replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§"));
     }
 }

@@ -1,6 +1,10 @@
 package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.platform.util.Vector2;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
 
@@ -20,13 +24,13 @@ public class Diamond extends AbstractPolygon {
     }
 
     @Override
-    public double[] pointsX() {
-        return new double[]{p1x, p2x, p3x, p4x};
-    }
-
-    @Override
-    public double[] pointsZ() {
-        return new double[]{p1z, p2z, p3z, p4z};
+    public List<Vector2> points() {
+        return Arrays.asList(
+                Vector2.of(p1x, p1z),
+                Vector2.of(p2x, p2z),
+                Vector2.of(p3x, p3z),
+                Vector2.of(p4x, p4z)
+        );
     }
 
     @Override

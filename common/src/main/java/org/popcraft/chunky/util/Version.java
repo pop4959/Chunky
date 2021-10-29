@@ -1,13 +1,10 @@
 package org.popcraft.chunky.util;
 
-import org.bukkit.Bukkit;
-
 import java.util.Objects;
 
 public class Version implements Comparable<Version> {
-    public static final Version v1_13_2 = new Version(1, 13, 2);
-    public static final Version v1_15_0 = new Version(1, 15, 0);
-    private static Version currentMinecraftVersion;
+    public static final Version INVALID = new Version(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+    public static final Version MINECRAFT_1_13_2 = new Version(1, 13, 2);
     private int major = 0, minor = 0, patch = 0;
 
     public Version(final int major, final int minor, final int patch) {
@@ -21,12 +18,7 @@ public class Version implements Comparable<Version> {
             this.major = Integer.MIN_VALUE;
             return;
         }
-        final int dash = version.indexOf('-');
-        if (dash < 1) {
-            this.major = Integer.MIN_VALUE;
-            return;
-        }
-        final String[] semVer = version.substring(0, dash).split("\\.");
+        final String[] semVer = version.split("\\.");
         if (semVer.length > 0) {
             this.major = Input.tryInteger(semVer[0]).orElse(Integer.MIN_VALUE);
         }
@@ -38,11 +30,8 @@ public class Version implements Comparable<Version> {
         }
     }
 
-    public static Version getCurrentMinecraftVersion() {
-        if (currentMinecraftVersion == null) {
-            currentMinecraftVersion = new Version(Bukkit.getBukkitVersion());
-        }
-        return currentMinecraftVersion;
+    public Version(final String version, boolean minecraft) {
+        this(minecraft && version.indexOf('-') > -1 ? version.substring(0, version.indexOf('-')) : version);
     }
 
     public boolean isEqualTo(Version o) {

@@ -39,6 +39,11 @@ public class ForgeSender implements Sender {
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        return source.hasPermission(2);
+    }
+
+    @Override
     public void sendMessage(String key, boolean prefixed, Object... args) {
         source.sendSuccess(Component.nullToEmpty(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
     }

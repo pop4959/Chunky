@@ -3,8 +3,8 @@ package org.popcraft.chunky.integration;
 import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
 import org.popcraft.chunky.platform.Border;
+import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.ShapeType;
-import org.popcraft.chunky.util.Coordinate;
 
 public class WorldBorderIntegration implements BorderIntegration {
     @Override
@@ -16,15 +16,9 @@ public class WorldBorderIntegration implements BorderIntegration {
     public Border getBorder(String world) {
         return new Border() {
             @Override
-            public Coordinate getCenter() {
+            public Vector2 getCenter() {
                 BorderData borderData = Config.Border(world);
-                return new Coordinate(borderData.getX(), borderData.getZ());
-            }
-
-            @Override
-            public void setCenter(Coordinate coordinate) {
-                Config.Border(world).setX(coordinate.getX());
-                Config.Border(world).setZ(coordinate.getZ());
+                return Vector2.of(borderData.getX(), borderData.getZ());
             }
 
             @Override
@@ -33,18 +27,8 @@ public class WorldBorderIntegration implements BorderIntegration {
             }
 
             @Override
-            public void setRadiusX(double radiusX) {
-                Config.Border(world).setRadiusX((int) radiusX);
-            }
-
-            @Override
             public double getRadiusZ() {
                 return Config.Border(world).getRadiusZ();
-            }
-
-            @Override
-            public void setRadiusZ(double radiusZ) {
-                Config.Border(world).setRadiusZ((int) radiusZ);
             }
 
             @Override

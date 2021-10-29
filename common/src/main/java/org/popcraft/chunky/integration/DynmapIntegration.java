@@ -6,11 +6,13 @@ import org.dynmap.markers.CircleMarker;
 import org.dynmap.markers.MarkerDescription;
 import org.dynmap.markers.MarkerSet;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.AbstractEllipse;
 import org.popcraft.chunky.shape.AbstractPolygon;
 import org.popcraft.chunky.shape.Shape;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DynmapIntegration extends AbstractMapIntegration {
@@ -26,16 +28,25 @@ public class DynmapIntegration extends AbstractMapIntegration {
     public void addShapeMarker(World world, Shape shape) {
         removeShapeMarker(world);
         if (shape instanceof AbstractPolygon) {
-            AbstractPolygon polygon = (AbstractPolygon) shape;
-            AreaMarker marker = markerSet.createAreaMarker(null, this.label, false, world.getName(), polygon.pointsX(), polygon.pointsZ(), false);
+            final AbstractPolygon polygon = (AbstractPolygon) shape;
+            final List<Vector2> points = polygon.points();
+            final int size = points.size();
+            final double[] pointsX = new double[size];
+            final double[] pointsZ = new double[size];
+            for (int i = 0; i < size; ++i) {
+                final Vector2 point = points.get(i);
+                pointsX[i] = point.getX();
+                pointsZ[i] = point.getZ();
+            }
+            final AreaMarker marker = markerSet.createAreaMarker(null, this.label, false, world.getName(), pointsX, pointsZ, false);
             marker.setLineStyle(this.weight, 1f, color);
             marker.setFillStyle(0f, 0x000000);
             markers.put(world.getName(), marker);
         } else if (shape instanceof AbstractEllipse) {
-            AbstractEllipse ellipse = (AbstractEllipse) shape;
-            double[] center = ellipse.getCenter();
-            double[] radii = ellipse.getRadii();
-            CircleMarker marker = markerSet.createCircleMarker(null, this.label, false, world.getName(), center[0], world.getSeaLevel(), center[1], radii[0], radii[1], false);
+            final AbstractEllipse ellipse = (AbstractEllipse) shape;
+            final Vector2 center = ellipse.center();
+            final Vector2 radii = ellipse.radii();
+            final CircleMarker marker = markerSet.createCircleMarker(null, this.label, false, world.getName(), center.getX(), world.getSeaLevel(), center.getZ(), radii.getX(), radii.getZ(), false);
             marker.setLineStyle(this.weight, 1f, color);
             marker.setFillStyle(0f, 0x000000);
             markers.put(world.getName(), marker);

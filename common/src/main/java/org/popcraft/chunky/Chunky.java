@@ -1,6 +1,7 @@
 package org.popcraft.chunky;
 
 import org.popcraft.chunky.command.*;
+import org.popcraft.chunky.event.EventBus;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.Server;
@@ -9,6 +10,7 @@ import org.popcraft.chunky.util.PendingAction;
 import org.popcraft.chunky.util.RegionCache;
 import org.popcraft.chunky.util.TaskScheduler;
 import org.popcraft.chunky.util.Translator;
+import org.popcraft.chunky.util.Version;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Chunky {
     private final Server server;
     private final Config config;
+    private final EventBus eventBus;
     private final Selection.Builder selection;
     private final TaskScheduler scheduler = new TaskScheduler();
     private final Map<String, GenerationTask> generationTasks = new ConcurrentHashMap<>();
@@ -30,14 +33,38 @@ public class Chunky {
     private final Map<String, PendingAction> pendingActions = new HashMap<>();
     private final RegionCache regionCache = new RegionCache();
     private final double limit;
+    private final Version version;
     private final Map<String, ChunkyCommand> commands;
 
     public Chunky(Server server, Config config) {
         this.server = server;
         this.config = config;
+        this.eventBus = new EventBus();
         this.selection = Selection.builder(server.getWorlds().get(0));
         this.limit = loadLimit().orElse(Double.MAX_VALUE);
+        this.version = loadVersion();
         this.commands = loadCommands();
+    }
+
+    private Optional<Double> loadLimit() {
+        final Path limitFile = config.getDirectory().resolve(".chunky.properties");
+        try (final InputStream input = Files.newInputStream(limitFile)) {
+            final Properties properties = new Properties();
+            properties.load(input);
+            return Input.tryDouble(properties.getProperty("radius-limit"));
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+    }
+
+    private Version loadVersion() {
+        try (final InputStream input = getClass().getClassLoader().getResourceAsStream("version.properties")) {
+            final Properties properties = new Properties();
+            properties.load(input);
+            return new Version(properties.getProperty("version"));
+        } catch (IOException e) {
+            return Version.INVALID;
+        }
     }
 
     private Map<String, ChunkyCommand> loadCommands() {
@@ -64,17 +91,6 @@ public class Chunky {
         return commandMap;
     }
 
-    private Optional<Double> loadLimit() {
-        final Path limitFile = config.getDirectory().resolve(".chunky.properties");
-        try (final InputStream input = Files.newInputStream(limitFile)) {
-            final Properties properties = new Properties();
-            properties.load(input);
-            return Input.tryDouble(properties.getProperty("radius-limit"));
-        } catch (IOException e) {
-            return Optional.empty();
-        }
-    }
-
     public void disable() {
         getConfig().saveTasks();
         getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
@@ -91,6 +107,10 @@ public class Chunky {
 
     public Config getConfig() {
         return config;
+    }
+
+    public EventBus getEventBus() {
+        return eventBus;
     }
 
     public Map<String, GenerationTask> getGenerationTasks() {
@@ -129,5 +149,9 @@ public class Chunky {
 
     public double getLimit() {
         return limit;
+    }
+
+    public Version getVersion() {
+        return version;
     }
 }

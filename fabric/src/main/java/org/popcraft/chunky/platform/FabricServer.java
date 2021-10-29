@@ -31,11 +31,8 @@ public class FabricServer implements Server {
 
     @Override
     public Optional<World> getWorld(String name) {
-        Identifier worldIdentifier = Identifier.tryParse(name);
-        if (worldIdentifier == null) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(server.getWorld(RegistryKey.of(Registry.WORLD_KEY, worldIdentifier)))
+        return Optional.ofNullable(Identifier.tryParse(name))
+                .map(worldIdentifier -> server.getWorld(RegistryKey.of(Registry.WORLD_KEY, worldIdentifier)))
                 .map(FabricWorld::new);
     }
 

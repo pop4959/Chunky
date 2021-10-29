@@ -31,11 +31,8 @@ public class ForgeServer implements Server {
 
     @Override
     public Optional<World> getWorld(String name) {
-        ResourceLocation resourceLocation = ResourceLocation.tryParse(name);
-        if (resourceLocation == null) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, resourceLocation)))
+        return Optional.ofNullable(ResourceLocation.tryParse(name))
+                .map(resourceLocation -> server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, resourceLocation)))
                 .map(ForgeWorld::new);
     }
 

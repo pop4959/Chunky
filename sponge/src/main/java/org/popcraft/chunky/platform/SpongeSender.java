@@ -6,24 +6,26 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.popcraft.chunky.platform.util.Location;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.service.permission.Subject;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class SpongeSender implements Sender {
-    private final Audience audience;
+    private final Object source;
 
-    public SpongeSender(Audience audience) {
-        this.audience = audience;
+    public SpongeSender(Object source) {
+        this.source = source;
     }
 
     @Override
     public boolean isPlayer() {
-        return audience instanceof Player;
+        return source instanceof Player;
     }
 
     @Override
     public String getName() {
-        return "Console";
+        return source instanceof User ? ((User) source).name() : "Console";
     }
 
     @Override
@@ -37,7 +39,14 @@ public class SpongeSender implements Sender {
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        return source instanceof Subject && ((Subject) source).hasPermission(permission);
+    }
+
+    @Override
     public void sendMessage(String key, boolean prefixed, Object... args) {
-        audience.sendMessage(Identity.nil(), LegacyComponentSerializer.legacyAmpersand().deserialize(translateKey(key, prefixed, args)));
+        if (source instanceof Audience) {
+            ((Audience) source).sendMessage(Identity.nil(), LegacyComponentSerializer.legacyAmpersand().deserialize(translateKey(key, prefixed, args)));
+        }
     }
 }

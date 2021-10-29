@@ -3,13 +3,16 @@ package org.popcraft.chunky;
 import io.papermc.lib.PaperLib;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.integration.WorldBorderIntegration;
 import org.popcraft.chunky.platform.BukkitConfig;
+import org.popcraft.chunky.platform.BukkitPlayer;
 import org.popcraft.chunky.platform.BukkitSender;
 import org.popcraft.chunky.platform.BukkitServer;
 import org.popcraft.chunky.platform.Sender;
@@ -31,11 +34,11 @@ public final class ChunkyBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         this.chunky = new Chunky(new BukkitServer(this), new BukkitConfig(this));
-        final Version currentVersion = Version.getCurrentMinecraftVersion();
-        if (Version.v1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
+        final Version currentVersion = new Version(Bukkit.getBukkitVersion(), true);
+        if (Version.MINECRAFT_1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
             getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION_SPIGOT));
             getServer().getPluginManager().disablePlugin(this);
-        } else if (currentVersion.isValid() && Version.v1_13_2.isHigherThan(currentVersion)) {
+        } else if (currentVersion.isValid() && Version.MINECRAFT_1_13_2.isHigherThan(currentVersion)) {
             getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
             getServer().getPluginManager().disablePlugin(this);
         }
@@ -60,7 +63,7 @@ public final class ChunkyBukkit extends JavaPlugin {
     @SuppressWarnings("NullableProblems")
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Sender bukkitSender = new BukkitSender(sender);
+        Sender bukkitSender = sender instanceof Player ? new BukkitPlayer((Player) sender) : new BukkitSender(sender);
         Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
             if (sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {

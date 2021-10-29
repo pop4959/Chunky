@@ -39,6 +39,11 @@ public class FabricSender implements Sender {
     }
 
     @Override
+    public boolean hasPermission(String permission) {
+        return source.hasPermissionLevel(2);
+    }
+
+    @Override
     public void sendMessage(String key, boolean prefixed, Object... args) {
         source.sendFeedback(Text.of(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
     }

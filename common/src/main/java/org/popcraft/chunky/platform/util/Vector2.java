@@ -1,51 +1,45 @@
 package org.popcraft.chunky.platform.util;
 
-public class Vector3 {
+public class Vector2 {
     private double x;
-    private double y;
     private double z;
 
-    public Vector3(double x, double y, double z) {
+    public Vector2(double x, double z) {
         this.x = x;
-        this.y = y;
         this.z = z;
     }
 
-    public static Vector3 of(double x, double y, double z) {
-        return new Vector3(x, y, z);
+    public static Vector2 of(double x, double z) {
+        return new Vector2(x, z);
     }
 
-    public Vector3 add(Vector3 other) {
+    public Vector2 add(Vector2 other) {
         x += other.x;
-        y += other.y;
         z += other.z;
         return this;
     }
 
-    public Vector3 multiply(double value) {
+    public Vector2 multiply(double value) {
         x *= value;
-        y *= value;
         z *= value;
         return this;
     }
 
-    public Vector3 normalize() {
+    public Vector2 normalize() {
         final double length = length();
         x /= length;
-        y /= length;
         z /= length;
         return this;
     }
 
-    public double distance(Vector3 other) {
+    public double distance(Vector2 other) {
         return Math.sqrt(distanceSquared(other));
     }
 
-    public double distanceSquared(Vector3 other) {
+    public double distanceSquared(Vector2 other) {
         final double dx = this.x - other.x;
-        final double dy = this.y - other.y;
         final double dz = this.z - other.z;
-        return dx * dx + dy * dy + dz * dz;
+        return dx * dx + dz * dz;
     }
 
     public double length() {
@@ -53,7 +47,7 @@ public class Vector3 {
     }
 
     public double lengthSquared() {
-        return x * x + y * y + z * z;
+        return x * x + z * z;
     }
 
     public double getX() {
@@ -62,14 +56,6 @@ public class Vector3 {
 
     public void setX(double x) {
         this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
     }
 
     public double getZ() {

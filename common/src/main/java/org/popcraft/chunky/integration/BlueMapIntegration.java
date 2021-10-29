@@ -6,6 +6,7 @@ import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import de.bluecolored.bluemap.api.marker.MarkerSet;
 import de.bluecolored.bluemap.api.marker.ShapeMarker;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.AbstractEllipse;
 import org.popcraft.chunky.shape.AbstractPolygon;
 import org.popcraft.chunky.shape.Shape;
@@ -45,23 +46,21 @@ public class BlueMapIntegration extends AbstractMapIntegration {
         markerSet.setLabel(this.label);
         de.bluecolored.bluemap.api.marker.Shape blueShape;
         if (shape instanceof AbstractPolygon) {
-            AbstractPolygon polygon = (AbstractPolygon) shape;
-            double[] pointsX = polygon.pointsX();
-            double[] pointsZ = polygon.pointsZ();
-            if (pointsX.length != pointsZ.length) {
-                return;
-            }
-            Vector2d[] points = new Vector2d[pointsX.length];
-            for (int i = 0; i < pointsX.length; ++i) {
-                points[i] = new Vector2d(pointsX[i], pointsZ[i]);
+            final AbstractPolygon polygon = (AbstractPolygon) shape;
+            final List<Vector2> polygonPoints = polygon.points();
+            final int size = polygonPoints.size();
+            Vector2d[] points = new Vector2d[size];
+            for (int i = 0; i < size; ++i) {
+                final Vector2 p = polygonPoints.get(i);
+                points[i] = Vector2d.from(p.getX(), p.getZ());
             }
             blueShape = new de.bluecolored.bluemap.api.marker.Shape(points);
         } else if (shape instanceof AbstractEllipse) {
-            AbstractEllipse ellipse = (AbstractEllipse) shape;
-            double[] center = ellipse.getCenter();
-            double[] radii = ellipse.getRadii();
-            Vector2d centerPos = new Vector2d(center[0], center[1]);
-            blueShape = de.bluecolored.bluemap.api.marker.Shape.createEllipse(centerPos, radii[0], radii[1], 100);
+            final AbstractEllipse ellipse = (AbstractEllipse) shape;
+            final Vector2 center = ellipse.center();
+            final Vector2 radii = ellipse.radii();
+            final Vector2d centerPos = Vector2d.from(center.getX(), center.getZ());
+            blueShape = de.bluecolored.bluemap.api.marker.Shape.createEllipse(centerPos, radii.getX(), radii.getZ(), 100);
         } else {
             return;
         }

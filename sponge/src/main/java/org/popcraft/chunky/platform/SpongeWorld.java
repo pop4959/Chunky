@@ -1,7 +1,17 @@
 package org.popcraft.chunky.platform;
 
+import net.kyori.adventure.key.InvalidKeyException;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.popcraft.chunky.platform.util.Location;
+import org.popcraft.chunky.platform.util.Vector3;
+import org.spongepowered.api.ResourceKey;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.registry.RegistryKey;
+import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.world.server.ServerWorld;
+import org.spongepowered.math.vector.Vector3d;
 import org.spongepowered.math.vector.Vector3i;
 
 import java.nio.file.Files;
@@ -57,6 +67,28 @@ public class SpongeWorld implements World {
     }
 
     @Override
+    public int getElevation(int x, int z) {
+        return world.highestYAt(x, z);
+    }
+
+    @Override
+    public void playEffect(Player player, String effect) {
+        final Location location = player.getLocation();
+        final Vector3d vector = Vector3d.from(location.getX(), location.getY(), location.getZ());
+        RegistryKey.of(RegistryTypes.PARTICLE_TYPE, ResourceKey.resolve(effect)).asDefaultedReference(Sponge::game).find().ifPresent(particleType -> world.spawnParticles(ParticleEffect.builder().type(particleType).build(), vector));
+    }
+
+    @Override
+    public void playSound(Player player, String sound) {
+        final Location location = player.getLocation();
+        try {
+            //noinspection PatternValidation
+            world.playSound(Sound.sound(Key.key(sound), Sound.Source.MASTER, 2f, 1f), location.getX(), location.getY(), location.getZ());
+        } catch (final InvalidKeyException ignored) {
+        }
+    }
+
+    @Override
     public Optional<Path> getEntitiesDirectory() {
         return getDirectory("entities");
     }
@@ -77,5 +109,9 @@ public class SpongeWorld implements World {
         }
         Path regionDirectory = world.directory().resolve(name);
         return Files.exists(regionDirectory) ? Optional.of(regionDirectory) : Optional.empty();
+    }
+
+    public ServerWorld getWorld() {
+        return world;
     }
 }

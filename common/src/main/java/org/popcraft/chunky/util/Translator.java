@@ -44,6 +44,10 @@ public class Translator {
         return translateKey(key, false, args);
     }
 
+    public static void addCustomTranslation(String key, String message) {
+        fallbackTranslations.put(key, message);
+    }
+
     private static Map<String, String> load(String language) {
         InputStream input = Translator.class.getClassLoader().getResourceAsStream("lang/" + language + ".json");
         if (input != null) {

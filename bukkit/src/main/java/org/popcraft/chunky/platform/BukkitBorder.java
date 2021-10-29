@@ -1,8 +1,8 @@
 package org.popcraft.chunky.platform;
 
 import org.bukkit.WorldBorder;
+import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.ShapeType;
-import org.popcraft.chunky.util.Coordinate;
 
 public class BukkitBorder implements Border {
     final WorldBorder worldBorder;
@@ -12,13 +12,8 @@ public class BukkitBorder implements Border {
     }
 
     @Override
-    public Coordinate getCenter() {
-        return new Coordinate(worldBorder.getCenter().getX(), worldBorder.getCenter().getZ());
-    }
-
-    @Override
-    public void setCenter(Coordinate coordinate) {
-        worldBorder.setCenter(coordinate.getX(), coordinate.getZ());
+    public Vector2 getCenter() {
+        return Vector2.of(worldBorder.getCenter().getX(), worldBorder.getCenter().getZ());
     }
 
     @Override
@@ -27,18 +22,8 @@ public class BukkitBorder implements Border {
     }
 
     @Override
-    public void setRadiusX(double radiusX) {
-        worldBorder.setSize(radiusX * 2);
-    }
-
-    @Override
     public double getRadiusZ() {
         return worldBorder.getSize() / 2d;
-    }
-
-    @Override
-    public void setRadiusZ(double radiusZ) {
-        worldBorder.setSize(radiusZ * 2);
     }
 
     @Override

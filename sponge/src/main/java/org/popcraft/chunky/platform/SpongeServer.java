@@ -37,7 +37,7 @@ public class SpongeServer implements Server {
 
     @Override
     public Sender getConsole() {
-        return new SpongeSender(plugin.getGame().server());
+        return new SpongeSender(plugin.getGame().systemSubject());
     }
 
     @Override

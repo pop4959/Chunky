@@ -10,6 +10,7 @@ import net.pl3x.map.api.SimpleLayerProvider;
 import net.pl3x.map.api.marker.Marker;
 import net.pl3x.map.api.marker.MarkerOptions;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.AbstractEllipse;
 import org.popcraft.chunky.shape.AbstractPolygon;
 import org.popcraft.chunky.shape.Circle;
@@ -17,8 +18,10 @@ import org.popcraft.chunky.shape.Shape;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Pl3xMapIntegration extends AbstractMapIntegration {
     private static final Key WORLDBORDER_KEY = Key.of("pl3xmap-worldborder");
@@ -51,27 +54,18 @@ public class Pl3xMapIntegration extends AbstractMapIntegration {
             chunkyLayerProvider.clearMarkers();
             final Marker marker;
             if (shape instanceof AbstractPolygon) {
-                AbstractPolygon polygon = (AbstractPolygon) shape;
-                double[] pointsX = polygon.pointsX();
-                double[] pointsZ = polygon.pointsZ();
-                if (pointsX.length != pointsZ.length) {
-                    return;
-                }
-                Point[] points = new Point[pointsX.length + 1];
-                for (int i = 0; i < pointsX.length; ++i) {
-                    points[i] = Point.of(pointsX[i], pointsZ[i]);
-                }
-                points[pointsX.length] = Point.of(pointsX[0], pointsZ[0]);
+                final AbstractPolygon polygon = (AbstractPolygon) shape;
+                final List<Point> points = polygon.points().stream().map(point -> Point.of(point.getX(), point.getZ())).collect(Collectors.toList());
                 marker = Marker.polyline(points);
             } else if (shape instanceof AbstractEllipse) {
-                AbstractEllipse ellipse = (AbstractEllipse) shape;
-                double[] center = ellipse.getCenter();
-                double[] radii = ellipse.getRadii();
-                Point centerPoint = Point.of(center[0], center[1]);
+                final AbstractEllipse ellipse = (AbstractEllipse) shape;
+                final Vector2 center = ellipse.center();
+                final Vector2 radii = ellipse.radii();
+                final Point centerPoint = Point.of(center.getX(), center.getZ());
                 if (ellipse instanceof Circle) {
-                    marker = Marker.circle(centerPoint, radii[0]);
+                    marker = Marker.circle(centerPoint, radii.getX());
                 } else {
-                    marker = ellipse(centerPoint, radii[0], radii[1]);
+                    marker = ellipse(centerPoint, radii.getX(), radii.getZ());
                 }
             } else {
                 return;

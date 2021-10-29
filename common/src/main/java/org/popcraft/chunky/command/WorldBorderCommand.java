@@ -7,7 +7,7 @@ import org.popcraft.chunky.integration.Integration;
 import org.popcraft.chunky.platform.Border;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
-import org.popcraft.chunky.util.Coordinate;
+import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.TranslationKey;
 
@@ -42,7 +42,7 @@ public class WorldBorderCommand extends ChunkyCommand {
             String worldName = world.getName();
             if (worldborder.hasBorder(worldName)) {
                 Border border = worldborder.getBorder(worldName);
-                Coordinate center = border.getCenter();
+                Vector2 center = border.getCenter();
                 chunky.getSelection().center(center.getX(), center.getZ())
                         .radiusX(border.getRadiusX()).radiusZ(border.getRadiusZ())
                         .shape(border.getShape());

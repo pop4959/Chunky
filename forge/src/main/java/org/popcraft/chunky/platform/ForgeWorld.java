@@ -1,18 +1,24 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
 import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.platform.util.Location;
+import org.popcraft.chunky.platform.util.Vector3;
+import org.popcraft.chunky.util.Input;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -105,12 +111,34 @@ public class ForgeWorld implements World {
     public Location getSpawn() {
         final BlockPos pos = world.getSharedSpawnPos();
         final float rot = world.getSharedSpawnAngle();
-        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), 0, rot);
+        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), rot, 0);
     }
 
     @Override
     public Border getWorldBorder() {
         return worldBorder;
+    }
+
+    @Override
+    public int getElevation(int x, int z) {
+        return world.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
+    }
+
+    @Override
+    public void playEffect(Player player, String effect) {
+        final Location location = player.getLocation();
+        final BlockPos pos = new BlockPos(location.getX(), location.getY(), location.getZ());
+        Input.tryInteger(effect).ifPresent(eventId -> world.levelEvent(eventId, pos, 0));
+    }
+
+    @Override
+    public void playSound(Player player, String sound) {
+        final Location location = player.getLocation();
+        final net.minecraft.world.entity.player.Player minecraftPlayer = world.getServer().getPlayerList().getPlayer(player.getUUID());
+        if (minecraftPlayer != null) {
+            //noinspection deprecation
+            Registry.SOUND_EVENT.getOptional(ResourceLocation.tryParse(sound)).ifPresent(soundEvent -> world.playSound(minecraftPlayer, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
+        }
     }
 
     @Override
@@ -134,5 +162,9 @@ public class ForgeWorld implements World {
         }
         Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT).toFile()).toPath().normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
+    }
+
+    public ServerLevel getWorld() {
+        return world;
     }
 }

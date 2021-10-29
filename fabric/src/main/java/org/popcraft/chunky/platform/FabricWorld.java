@@ -5,15 +5,21 @@ import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.server.world.ThreadedAnvilChunkStorage;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Unit;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.dimension.DimensionType;
 import org.popcraft.chunky.mixin.ServerChunkManagerMixin;
 import org.popcraft.chunky.mixin.ThreadedAnvilChunkStorageMixin;
 import org.popcraft.chunky.platform.util.Location;
+import org.popcraft.chunky.platform.util.Vector3;
+import org.popcraft.chunky.util.Input;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -102,12 +108,30 @@ public class FabricWorld implements World {
     public Location getSpawn() {
         final BlockPos pos = serverWorld.getSpawnPos();
         final float angle = serverWorld.getSpawnAngle();
-        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), 0, angle);
+        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), angle, 0);
     }
 
     @Override
     public Border getWorldBorder() {
         return worldBorder;
+    }
+
+    @Override
+    public int getElevation(int x, int z) {
+        return serverWorld.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
+    }
+
+    @Override
+    public void playEffect(Player player, String effect) {
+        final Location location = player.getLocation();
+        final BlockPos pos = new BlockPos(location.getX(), location.getY(), location.getZ());
+        Input.tryInteger(effect).ifPresent(eventId -> serverWorld.syncWorldEvent(eventId, pos, 0));
+    }
+
+    @Override
+    public void playSound(Player player, String sound) {
+        final Location location = player.getLocation();
+        Registry.SOUND_EVENT.getOrEmpty(Identifier.tryParse(sound)).ifPresent(soundEvent -> serverWorld.playSound(location.getX(), location.getY(), location.getZ(), soundEvent, SoundCategory.MASTER, 2f, 1f, true));
     }
 
     @Override
@@ -131,5 +155,9 @@ public class FabricWorld implements World {
         }
         Path directory = DimensionType.getSaveDirectory(serverWorld.getRegistryKey(), serverWorld.getServer().getSavePath(WorldSavePath.ROOT).toFile()).toPath().normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
+    }
+
+    public ServerWorld getServerWorld() {
+        return serverWorld;
     }
 }

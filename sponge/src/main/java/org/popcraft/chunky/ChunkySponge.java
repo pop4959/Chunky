@@ -323,7 +323,7 @@ public class ChunkySponge {
 
     private void executeSpongeCommand(final CommandContext ctx, final String command, final List<String> args) {
         final String[] argsArray = new String[args.size()];
-        chunky.getCommands().get(command).execute(new SpongeSender(ctx.cause().audience()), args.toArray(argsArray));
+        chunky.getCommands().get(command).execute(new SpongeSender(ctx.cause().root()), args.toArray(argsArray));
     }
 
     public Chunky getChunky() {
