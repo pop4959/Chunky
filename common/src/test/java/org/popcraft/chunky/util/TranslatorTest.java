@@ -17,20 +17,36 @@ public class TranslatorTest {
         testTranslation("es");
         testTranslation("fr");
         testTranslation("nl");
+        testTranslation("no");
         testTranslation("pl");
         testTranslation("pt");
         testTranslation("ru");
         testTranslation("tr");
+        testTranslation("vi");
         testTranslation("zh_CN");
+        testTranslation("zh_HK");
     }
 
     private void testTranslation(String language) {
         setLanguage(language);
+        translate(TranslationKey.BORDER_DEPENDENCY_UPDATE);
+        translate(TranslationKey.BORDER_LOAD_FAILED);
+        translate(TranslationKey.BORDER_SAVE_FAILED);
         translate(TranslationKey.COMMAND_NO_PERMISSION);
         translate(TranslationKey.DISABLED);
         translate(TranslationKey.ENABLED);
         translate(TranslationKey.ERROR_VERSION);
         translate(TranslationKey.ERROR_VERSION_SPIGOT);
+        translate(TranslationKey.FORMAT_BORDER_ADD, "square", "world", Formatting.number(1), Formatting.number(2), Formatting.number(500));
+        translate(TranslationKey.FORMAT_BORDER_BYPASS, "enabled", "pop4959");
+        translate(TranslationKey.FORMAT_BORDER_BYPASS_NO_TARGET, "pop4959");
+        translate(TranslationKey.FORMAT_BORDER_LIST);
+        translate(TranslationKey.FORMAT_BORDER_LIST_BORDER, "world", "square", Formatting.number(1), Formatting.number(2), Formatting.number(500));
+        translate(TranslationKey.FORMAT_BORDER_LIST_NONE);
+        translate(TranslationKey.FORMAT_BORDER_LOAD, "world");
+        translate(TranslationKey.FORMAT_BORDER_NO_BORDER, "world");
+        translate(TranslationKey.FORMAT_BORDER_REMOVE, "world");
+        translate(TranslationKey.FORMAT_BORDER_WRAP, "enabled", "world");
         translate(TranslationKey.FORMAT_CANCEL, "world");
         translate(TranslationKey.FORMAT_CANCEL_ALL);
         translate(TranslationKey.FORMAT_CANCEL_CONFIRM, "/chunky confirm");
@@ -55,6 +71,7 @@ public class TranslatorTest {
         translate(TranslationKey.FORMAT_START_DISK, "10.5 GB", "20.5 GB", "/chunky confirm");
         translate(TranslationKey.FORMAT_STARTED_ALREADY, "world");
         translate(TranslationKey.FORMAT_WORLD, "world");
+        translate(TranslationKey.HELP_BORDER);
         translate(TranslationKey.HELP_CANCEL);
         translate(TranslationKey.HELP_CENTER);
         translate(TranslationKey.HELP_CONTINUE);
@@ -73,7 +90,6 @@ public class TranslatorTest {
         translate(TranslationKey.HELP_START);
         translate(TranslationKey.HELP_WORLD);
         translate(TranslationKey.HELP_WORLDBORDER);
-        translate("prefix");
         translate(TranslationKey.SHAPE_CIRCLE);
         translate(TranslationKey.SHAPE_DIAMOND);
         translate(TranslationKey.SHAPE_ELLIPSE);
@@ -86,6 +102,7 @@ public class TranslatorTest {
         translate(TranslationKey.TASK_DONE, "world", 5000, String.format("%.2f", 50f), "0", "01", "15");
         translate(TranslationKey.TASK_STOPPED, "world");
         translate(TranslationKey.TASK_UPDATE, "world", 5000, String.format("%.2f", 50f), "0", "00", "01", String.format("%.1f", 40f), 70, 70);
+        translate("prefix");
         translate("null");
     }
 }
