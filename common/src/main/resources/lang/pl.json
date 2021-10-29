@@ -43,7 +43,7 @@
   "format_start_limit": "Your host has limited the maximum pre-generation radius to %s to avoid excessive disk space usage. Reduce the radius or contact your host if you wish to have this limit removed.",
   "format_started_already": "Zadanie jest już rozpoczęte dla %s!",
   "format_world": "Świat zmieniony na %s.",
-  "help_border": "&2%s <add|remove|list>&r - Manage custom world borders",
+  "help_border": "&2chunky border <add|remove|list>&r - Manage custom world borders",
   "help_cancel": "&2chunky cancel&r - Anuluje i usuwa obecne lub zapisane zadania",
   "help_center": "&2chunky center <x> <z>&r - Ustawia lokalizację środka mapy",
   "help_continue": "&2chunky continue&r - Kontynuuje obecne lub zapisane zadanie",

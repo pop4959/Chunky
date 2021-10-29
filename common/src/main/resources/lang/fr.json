@@ -43,7 +43,7 @@
   "format_start_limit": "Votre hôte a limité le rayon de pré-génération maximum à %s pour éviter une utilisation excessive de l'espace disque. Réduisez le rayon ou contactez votre hôte si vous souhaitez que cette limite soit supprimée.",
   "format_started_already": "La tâche a déjà commencé pour %s !",
   "format_world": "Le monde est passé à %s.",
-  "help_border": "&2%s <add|remove|list>&r - Manage custom world borders",
+  "help_border": "&2chunky border <add|remove|list>&r - Manage custom world borders",
   "help_cancel": "&2chunky cancel&r - Arrêter et supprimer les tâches en cours ou enregistrées",
   "help_center": "&2chunky center <x> <z>&r - Définir l'emplacement du bloc central",
   "help_continue": "&2chunky continue&r - Poursuivre les tâches en cours ou sauvegardées",

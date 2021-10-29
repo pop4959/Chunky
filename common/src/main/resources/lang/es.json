@@ -43,7 +43,7 @@
   "format_start_limit": "Tu proveedor de servicio ha limitado el radio máximo de pre-generación a %s para evitar un uso excesivo de espacio en disco. Reduce el radio o ponte en contacto con tu proveedor necesitas eliminar este límite.",
   "format_started_already": "¡Tarea ya iniciada para %s!",
   "format_world": "Mundo cambiado a %s.",
-  "help_border": "&2%s <add|remove|list>&r - Manage custom world borders",
+  "help_border": "&2chunky border <add|remove|list>&r - Manage custom world borders",
   "help_cancel": "&2chunky cancel&r - Detiene y elimina las tareas actuales o guardadas",
   "help_center": "&2chunky center <x> <z>&r - Establece el centro",
   "help_continue": "&2chunky continue&r - Continua con las tareas actuales o guardadas",
