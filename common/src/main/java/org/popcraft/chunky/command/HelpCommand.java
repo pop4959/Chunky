@@ -30,6 +30,8 @@ public class HelpCommand extends ChunkyCommand {
         helpMessages.add(TranslationKey.HELP_PATTERN);
         helpMessages.add(TranslationKey.HELP_SILENT);
         helpMessages.add(TranslationKey.HELP_QUIET);
+        helpMessages.add(TranslationKey.HELP_TRIM);
+        helpMessages.add(TranslationKey.HELP_PROGRESS);
         helpMessages.add(TranslationKey.HELP_RELOAD);
     }
 

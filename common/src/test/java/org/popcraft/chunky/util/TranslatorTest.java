@@ -81,6 +81,7 @@ public class TranslatorTest {
         translate(TranslationKey.HELP_MORE, "/chunky help 2");
         translate(TranslationKey.HELP_PATTERN);
         translate(TranslationKey.HELP_PAUSE);
+        translate(TranslationKey.HELP_PROGRESS);
         translate(TranslationKey.HELP_QUIET);
         translate(TranslationKey.HELP_RADIUS);
         translate(TranslationKey.HELP_RELOAD);

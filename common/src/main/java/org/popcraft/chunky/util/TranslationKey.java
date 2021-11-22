@@ -55,6 +55,7 @@ public class TranslationKey {
     public static final String HELP_MORE = "help_more";
     public static final String HELP_PATTERN = "help_pattern";
     public static final String HELP_PAUSE = "help_pause";
+    public static final String HELP_PROGRESS = "help_progress";
     public static final String HELP_QUIET = "help_quiet";
     public static final String HELP_RADIUS = "help_radius";
     public static final String HELP_RELOAD = "help_reload";
