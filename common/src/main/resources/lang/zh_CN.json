@@ -1,5 +1,5 @@
 {
-  "border_dependency_update": "Chunky needs to be updated in order to use ChunkyBorder!",
+  "border_dependency_update": "在使用 ChunkyBorder 前您应该先更新 Chunky 的版本!",
   "border_load_failed": "No saved borders found.",
   "border_save_failed": "Unable to save borders.",
   "command_no_permission": "&c您没有足够权限来使用此指令。",
