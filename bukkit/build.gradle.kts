@@ -4,7 +4,7 @@ repositories {
 
 dependencies {
     compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.17.1-R0.1-SNAPSHOT")
-    implementation(group = "io.papermc", name = "paperlib", version = "1.0.6")
+    implementation(group = "io.papermc", name = "paperlib", version = "1.0.8-SNAPSHOT")
     implementation(group = "org.bstats", name = "bstats-bukkit", version = "2.2.1")
     implementation(project(":chunky-common"))
 }
