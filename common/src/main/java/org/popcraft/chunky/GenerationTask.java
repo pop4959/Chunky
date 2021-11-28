@@ -6,6 +6,7 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
 import org.popcraft.chunky.util.ChunkCoordinate;
+import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Pair;
 import org.popcraft.chunky.util.RegionCache;
 import org.popcraft.chunky.util.TranslationKey;
@@ -16,7 +17,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GenerationTask implements Runnable {
-    private static final int MAX_WORKING = 50;
+    private static final int MAX_WORKING_COUNT = Input.tryInteger(System.getProperty("chunky.maxWorkingCount")).orElse(50);
     private final Chunky chunky;
     private final Selection selection;
     private final Shape shape;
@@ -101,7 +102,7 @@ public class GenerationTask implements Runnable {
     public void run() {
         final String poolThreadName = Thread.currentThread().getName();
         Thread.currentThread().setName(String.format("Chunky-%s Thread", selection.world().getName()));
-        final Semaphore working = new Semaphore(MAX_WORKING);
+        final Semaphore working = new Semaphore(MAX_WORKING_COUNT);
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             final ChunkCoordinate chunk = chunkIterator.next();
