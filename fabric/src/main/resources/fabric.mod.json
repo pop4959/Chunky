@@ -26,10 +26,10 @@
     "chunky.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.12.5",
     "fabric": "*",
-    "minecraft": ">=1.17.0",
-    "java": ">=16"
+    "minecraft": ">=1.18-rc.3",
+    "java": ">=17"
   },
   "custom": {
     "modmenu": {

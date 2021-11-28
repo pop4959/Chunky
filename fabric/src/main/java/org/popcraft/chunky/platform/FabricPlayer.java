@@ -28,7 +28,7 @@ public class FabricPlayer extends FabricSender implements Player {
 
     @Override
     public World getWorld() {
-        return new FabricWorld(player.getServerWorld());
+        return new FabricWorld(player.getWorld());
     }
 
     @Override

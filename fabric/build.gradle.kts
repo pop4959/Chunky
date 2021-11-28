@@ -1,21 +1,21 @@
 plugins {
-    id("fabric-loom") version "0.9-SNAPSHOT"
+    id("fabric-loom") version "0.10-SNAPSHOT"
 }
 
 val shade: Configuration by configurations.creating
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.17.1")
-    mappings(group = "net.fabricmc", name = "yarn", version = "1.17.1+build.31", classifier = "v2")
-    modImplementation(group = "net.fabricmc", name = "fabric-loader", version = "0.11.6")
-    modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.37.1+1.17")
+    minecraft(group = "com.mojang", name = "minecraft", version = "1.18-rc3")
+    mappings(group = "net.fabricmc", name = "yarn", version = "1.18-rc3+build.2", classifier = "v2")
+    modImplementation(group = "net.fabricmc", name = "fabric-loader", version = "0.12.5")
+    modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.43.1+1.18")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(16))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 

@@ -59,11 +59,8 @@ public class FabricWorld implements World {
                 return true;
             }
             NbtCompound chunkNbt = chunkStorageMixin.getUpdatedChunkNbt(chunkPos);
-            if (chunkNbt != null && chunkNbt.contains("Level", 10)) {
-                NbtCompound levelCompoundTag = chunkNbt.getCompound("Level");
-                if (levelCompoundTag.contains("Status", 8)) {
-                    return "full".equals(levelCompoundTag.getString("Status"));
-                }
+            if (chunkNbt != null && chunkNbt.contains("Status", 8)) {
+                return "full".equals(chunkNbt.getString("Status"));
             }
             return false;
         }
@@ -153,7 +150,7 @@ public class FabricWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        Path directory = DimensionType.getSaveDirectory(serverWorld.getRegistryKey(), serverWorld.getServer().getSavePath(WorldSavePath.ROOT).toFile()).toPath().normalize().resolve(name);
+        Path directory = DimensionType.getSaveDirectory(serverWorld.getRegistryKey(), serverWorld.getServer().getSavePath(WorldSavePath.ROOT)).normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
 
