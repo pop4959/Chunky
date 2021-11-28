@@ -13,8 +13,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: '16'
+          distribution: 'temurin'
+          java-version: '17'
       - uses: actions/cache@v2
         with:
           path: |
