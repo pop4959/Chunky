@@ -9,7 +9,7 @@
   "error_version_spigot": "Ce plugin n'est pas compatible avec Spigot 1.13 !",
   "format_border_add": "Ajout de la bordure du monde %s pour %s avec pour centre %s, %s, et de rayon %s.",
   "format_border_bypass": "Contournement de bordure temporaire %s pour %s.",
-  "format_border_bypass_no_target": "Cannot find a player by the name %s.",
+  "format_border_bypass_no_target": "Aucun joueur ne répondant au nom de %s n'a été trouvé.",
   "format_border_list": "Bordures du monde",
   "format_border_list_border": "%s: %s with center %s, %s and radius %s.",
   "format_border_list_none": "Il n'y a pas de bordures de monde.",
