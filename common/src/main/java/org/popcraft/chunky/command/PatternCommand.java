@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.popcraft.chunky.util.Translator.translate;
+
 public class PatternCommand extends ChunkyCommand {
     public PatternCommand(Chunky chunky) {
         super(chunky);
@@ -27,7 +29,7 @@ public class PatternCommand extends ChunkyCommand {
         }
         String pattern = inputPattern.get();
         chunky.getSelection().pattern(pattern);
-        sender.sendMessagePrefixed(TranslationKey.FORMAT_PATTERN, pattern);
+        sender.sendMessagePrefixed(TranslationKey.FORMAT_PATTERN, translate("pattern_" + pattern));
     }
 
     @Override
