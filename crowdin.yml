@@ -4,6 +4,7 @@ files:
     languages_mapping:
       locale_with_underscore:
         bg: bg
+        cs: cs
         de: de
         es-ES: es
         fr: fr
