@@ -1,20 +1,20 @@
 plugins {
-    id("dev.architectury.loom") version "0.7.4-SNAPSHOT"
+    id("dev.architectury.loom") version "0.10.0-SNAPSHOT"
 }
 
 val shade: Configuration by configurations.creating
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.17.1")
-    mappings(minecraft.officialMojangMappings())
-    forge(group = "net.minecraftforge", name = "forge", version = "1.17.1-37.0.33")
+    minecraft(group = "com.mojang", name = "minecraft", version = "1.18")
+    mappings(loom.officialMojangMappings())
+    forge(group = "net.minecraftforge", name = "forge", version = "1.18-38.0.5")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(16))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 

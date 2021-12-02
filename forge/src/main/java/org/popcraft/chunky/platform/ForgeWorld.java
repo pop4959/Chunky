@@ -63,11 +63,8 @@ public class ForgeWorld implements World {
             } catch (IOException e) {
                 return false;
             }
-            if (chunkNbt != null && chunkNbt.contains("Level", 10)) {
-                CompoundTag levelCompoundTag = chunkNbt.getCompound("Level");
-                if (levelCompoundTag.contains("Status", 8)) {
-                    return "full".equals(levelCompoundTag.getString("Status"));
-                }
+            if (chunkNbt != null && chunkNbt.contains("Status", 8)) {
+                return "full".equals(chunkNbt.getString("Status"));
             }
             return false;
         }
@@ -160,7 +157,7 @@ public class ForgeWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT).toFile()).toPath().normalize().resolve(name);
+        Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT)).normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
 
