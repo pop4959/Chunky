@@ -123,7 +123,7 @@ public class GenerationTask implements Runnable {
                 stop(cancelled);
                 break;
             }
-            selection.world().getChunkAtAsync(chunk.x, chunk.z).thenRun(() -> {
+            selection.world().getChunkAtAsync(chunk.x, chunk.z).whenComplete((ignored, throwable) -> {
                 working.release();
                 update(chunk.x, chunk.z, true);
             });

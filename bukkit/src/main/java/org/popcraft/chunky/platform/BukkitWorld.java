@@ -34,9 +34,7 @@ public class BukkitWorld implements World {
 
     @Override
     public CompletableFuture<Void> getChunkAtAsync(int x, int z) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        PaperLib.getChunkAtAsync(world, x, z).thenRun(() -> future.complete(null));
-        return future;
+        return CompletableFuture.allOf(PaperLib.getChunkAtAsync(world, x, z));
     }
 
     @Override

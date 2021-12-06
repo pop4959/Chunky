@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundSource;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
 import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.platform.util.Location;
-import org.popcraft.chunky.platform.util.Vector3;
 import org.popcraft.chunky.util.Input;
 
 import java.io.IOException;
@@ -75,21 +75,14 @@ public class ForgeWorld implements World {
         if (Thread.currentThread() != world.getServer().getRunningThread()) {
             return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), world.getServer()).join();
         } else {
-            final CompletableFuture<Void> chunkFuture = new CompletableFuture<>();
             final ChunkPos chunkPos = new ChunkPos(x, z);
-            world.getChunkSource().addRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
-            world.getChunkSource().runDistanceManagerUpdates();
-            ChunkMap chunkManager = world.getChunkSource().chunkMap;
-            ChunkHolder chunkHolder = chunkManager.getVisibleChunkIfPresent(chunkPos.toLong());
-            if (chunkHolder == null) {
-                chunkFuture.complete(null);
-                world.getChunkSource().removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
-            } else {
-                chunkHolder.getOrScheduleFuture(ChunkStatus.FULL, chunkManager).thenAcceptAsync(either -> {
-                    chunkFuture.complete(null);
-                    world.getChunkSource().removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
-                }, world.getServer());
-            }
+            final ServerChunkCache serverChunkCache = world.getChunkSource();
+            serverChunkCache.addRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
+            serverChunkCache.runDistanceManagerUpdates();
+            final ChunkMap chunkManager = serverChunkCache.chunkMap;
+            final ChunkHolder chunkHolder = chunkManager.getVisibleChunkIfPresent(chunkPos.toLong());
+            final CompletableFuture<Void> chunkFuture = chunkHolder == null ? CompletableFuture.completedFuture(null) : CompletableFuture.allOf(chunkHolder.getOrScheduleFuture(ChunkStatus.FULL, chunkManager));
+            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
             return chunkFuture;
         }
     }

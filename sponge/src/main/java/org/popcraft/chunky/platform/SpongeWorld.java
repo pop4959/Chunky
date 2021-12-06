@@ -41,8 +41,7 @@ public class SpongeWorld implements World {
 
     @Override
     public CompletableFuture<Void> getChunkAtAsync(int x, int z) {
-        world.loadChunk(x, 0, z, true);
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.allOf(CompletableFuture.completedFuture(world.loadChunk(x, 0, z, true)));
     }
 
     @Override
