@@ -18,9 +18,10 @@ public class BukkitSender implements Sender {
     static {
         boolean rgbSupported;
         try {
+            Class.forName("net.md_5.bungee.api.ChatColor");
             ChatColor.class.getMethod("of", String.class);
             rgbSupported = true;
-        } catch (NoSuchMethodException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
             rgbSupported = false;
         }
         RGB_COLORS_SUPPORTED = rgbSupported;
@@ -73,6 +74,6 @@ public class BukkitSender implements Sender {
                 rgbMatcher = RGB_PATTERN.matcher(message);
             }
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return org.bukkit.ChatColor.translateAlternateColorCodes('&', message);
     }
 }
