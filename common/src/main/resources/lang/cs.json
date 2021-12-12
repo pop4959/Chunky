@@ -2,7 +2,7 @@
   "border_dependency_update": "Chunky musí být aktualizovaný, aby bylo možné používat ChunkyBorder!",
   "border_load_failed": "Nenalezeny žádné uložené hranice.",
   "border_save_failed": "Nelze uložit hranice.",
-  "command_no_permission": "§4Nemáš oprávnění k použití tohoto příkazu.",
+  "command_no_permission": "&cNemáš oprávnění k použití tohoto příkazu.",
   "disabled": "vypnuto",
   "enabled": "zapnuto",
   "error_version": "Tento plugin není kompatibilní s Minecraft verzi nižší než 1.13.",
