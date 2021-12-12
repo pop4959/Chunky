@@ -12,6 +12,7 @@ public class TranslatorTest {
     @Test
     public void testTranslations() {
         testTranslation("bg");
+        testTranslation("cs");
         testTranslation("de");
         testTranslation("en");
         testTranslation("es");
