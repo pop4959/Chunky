@@ -1,5 +1,5 @@
 {
-  "border_dependency_update": "Chunky needs to be updated in order to use ChunkyBorder!",
+  "border_dependency_update": "Chunky wymaga aktualizacji aby korzystać z ChunkyBorder!",
   "border_load_failed": "No saved borders found.",
   "border_save_failed": "Unable to save borders.",
   "command_no_permission": "&cNie masz uprawnień, żeby użyć tej komendy.",
