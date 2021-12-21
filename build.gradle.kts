@@ -14,6 +14,11 @@ subprojects {
     group = "${project.property("group")}"
     version = "${project.property("version")}.${commitsSinceLastTag()}"
 
+    repositories {
+        mavenCentral()
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    }
+
     java {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(8))
