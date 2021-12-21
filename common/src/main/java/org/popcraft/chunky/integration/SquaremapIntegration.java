@@ -1,46 +1,49 @@
 package org.popcraft.chunky.integration;
 
-import net.pl3x.map.api.Key;
-import net.pl3x.map.api.LayerProvider;
-import net.pl3x.map.api.MapWorld;
-import net.pl3x.map.api.Pl3xMap;
-import net.pl3x.map.api.Point;
-import net.pl3x.map.api.Registry;
-import net.pl3x.map.api.SimpleLayerProvider;
-import net.pl3x.map.api.marker.Marker;
-import net.pl3x.map.api.marker.MarkerOptions;
+import org.bukkit.Bukkit;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.AbstractEllipse;
 import org.popcraft.chunky.shape.AbstractPolygon;
 import org.popcraft.chunky.shape.Circle;
 import org.popcraft.chunky.shape.Shape;
+import xyz.jpenilla.squaremap.api.BukkitAdapter;
+import xyz.jpenilla.squaremap.api.Key;
+import xyz.jpenilla.squaremap.api.LayerProvider;
+import xyz.jpenilla.squaremap.api.MapWorld;
+import xyz.jpenilla.squaremap.api.Point;
+import xyz.jpenilla.squaremap.api.Registry;
+import xyz.jpenilla.squaremap.api.SimpleLayerProvider;
+import xyz.jpenilla.squaremap.api.Squaremap;
+import xyz.jpenilla.squaremap.api.WorldIdentifier;
+import xyz.jpenilla.squaremap.api.marker.Marker;
+import xyz.jpenilla.squaremap.api.marker.MarkerOptions;
 
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Pl3xMapIntegration extends AbstractMapIntegration {
-    private static final Key WORLDBORDER_KEY = Key.of("pl3xmap-worldborder");
+public class SquaremapIntegration extends AbstractMapIntegration {
+    private static final Key WORLDBORDER_KEY = Key.of("squaremap-worldborder");
     private static final Key CHUNKY_KEY = Key.of("chunky");
-    private final Pl3xMap pl3xMap;
-    private final Map<UUID, LayerProvider> defaultProviders = new HashMap<>();
+    private final Squaremap squaremap;
+    private final Map<String, LayerProvider> defaultProviders = new HashMap<>();
     private boolean hideByDefault;
     private int priority;
 
-    public Pl3xMapIntegration(Pl3xMap pl3xMap) {
-        this.pl3xMap = pl3xMap;
+    public SquaremapIntegration(Squaremap squaremap) {
+        this.squaremap = squaremap;
     }
 
     @Override
     public void addShapeMarker(final World world, final Shape shape) {
-        pl3xMap.getWorldIfEnabled(world.getUUID()).ifPresent(pl3xWorld -> {
-            Registry<LayerProvider> layerRegistry = pl3xWorld.layerRegistry();
+        getBukkitWorldIdentifier(world).flatMap(squaremap::getWorldIfEnabled).ifPresent(squaremapWorld -> {
+            Registry<LayerProvider> layerRegistry = squaremapWorld.layerRegistry();
             if (layerRegistry.hasEntry(WORLDBORDER_KEY)) {
-                defaultProviders.put(pl3xWorld.uuid(), layerRegistry.get(WORLDBORDER_KEY));
+                defaultProviders.put(squaremapWorld.identifier().asString(), layerRegistry.get(WORLDBORDER_KEY));
                 layerRegistry.unregister(WORLDBORDER_KEY);
             }
             if (!layerRegistry.hasEntry(CHUNKY_KEY)) {
@@ -84,18 +87,18 @@ public class Pl3xMapIntegration extends AbstractMapIntegration {
 
     @Override
     public void removeShapeMarker(final World world) {
-        pl3xMap.getWorldIfEnabled(world.getUUID()).ifPresent(this::unregisterLayer);
+        getBukkitWorldIdentifier(world).flatMap(squaremap::getWorldIfEnabled).ifPresent(this::unregisterLayer);
     }
 
     @Override
     public void removeAllShapeMarkers() {
-        pl3xMap.mapWorlds().forEach(this::unregisterLayer);
+        squaremap.mapWorlds().forEach(this::unregisterLayer);
     }
 
     private void unregisterLayer(MapWorld mapWorld) {
         Registry<LayerProvider> layerRegistry = mapWorld.layerRegistry();
         if (!layerRegistry.hasEntry(WORLDBORDER_KEY)) {
-            LayerProvider defaultProvider = defaultProviders.get(mapWorld.uuid());
+            LayerProvider defaultProvider = defaultProviders.get(mapWorld.identifier().asString());
             if (defaultProvider != null) {
                 layerRegistry.register(WORLDBORDER_KEY, defaultProvider);
             }
@@ -124,5 +127,13 @@ public class Pl3xMapIntegration extends AbstractMapIntegration {
         }
         points[numPoints] = Point.of(center.x(), center.z() + radiusZ);
         return Marker.polyline(points);
+    }
+
+    private Optional<WorldIdentifier> getBukkitWorldIdentifier(final World world) {
+        org.bukkit.World bukkitWorld = Bukkit.getWorld(world.getUUID());
+        if (bukkitWorld == null) {
+            return Optional.empty();
+        }
+        return Optional.of(BukkitAdapter.worldIdentifier(bukkitWorld));
     }
 }
