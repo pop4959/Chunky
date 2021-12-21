@@ -59,6 +59,8 @@ public class SquaremapIntegration extends AbstractMapIntegration {
             if (shape instanceof AbstractPolygon) {
                 final AbstractPolygon polygon = (AbstractPolygon) shape;
                 final List<Point> points = polygon.points().stream().map(point -> Point.of(point.getX(), point.getZ())).collect(Collectors.toList());
+                final Vector2 lastPoint = polygon.points().get(0);
+                points.add(Point.of(lastPoint.getX(), lastPoint.getZ()));
                 marker = Marker.polyline(points);
             } else if (shape instanceof AbstractEllipse) {
                 final AbstractEllipse ellipse = (AbstractEllipse) shape;
