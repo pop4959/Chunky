@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.stream.Stream;
 
 public class BukkitWorld implements World {
@@ -29,7 +30,11 @@ public class BukkitWorld implements World {
 
     @Override
     public boolean isChunkGenerated(int x, int z) {
-        return PaperLib.isPaper() && PaperLib.isChunkGenerated(world, x, z);
+        try {
+            return PaperLib.isPaper() && PaperLib.isChunkGenerated(world, x, z);
+        } catch (CompletionException e) {
+            return false;
+        }
     }
 
     @Override
