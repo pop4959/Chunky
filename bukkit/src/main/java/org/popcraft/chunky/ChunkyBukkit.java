@@ -7,6 +7,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandLiteral;
@@ -27,7 +32,7 @@ import java.util.stream.Collectors;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
-public final class ChunkyBukkit extends JavaPlugin {
+public final class ChunkyBukkit extends JavaPlugin implements Listener {
     private static final String COMMAND_PERMISSION_KEY = "chunky.command.";
     private Chunky chunky;
 
@@ -53,10 +58,12 @@ public final class ChunkyBukkit extends JavaPlugin {
         }
         final Metrics metrics = new Metrics(this, 8211);
         metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
+        getServer().getPluginManager().registerEvents(this, this);
     }
 
     @Override
     public void onDisable() {
+        HandlerList.unregisterAll((Plugin) this);
         chunky.disable();
     }
 
@@ -97,5 +104,10 @@ public final class ChunkyBukkit extends JavaPlugin {
 
     public Chunky getChunky() {
         return chunky;
+    }
+
+    @EventHandler
+    public void onWorldInit(final WorldInitEvent event) {
+        chunky.getRegionCache().clear(event.getWorld().getName());
     }
 }

@@ -11,6 +11,10 @@ public class RegionCache {
         return cache.computeIfAbsent(world, x -> new WorldState());
     }
 
+    public void clear(String world) {
+        cache.remove(world);
+    }
+
     @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     public static final class WorldState {
         private final Map<Long, BitSet> regions = new ConcurrentHashMap<>();
