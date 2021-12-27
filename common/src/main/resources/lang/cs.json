@@ -51,7 +51,7 @@
   "help_trim": "&2chunky trim&r - Smaže chunky mimo označenou oblast",
   "help_menu": "&aPříkazy Chunky&r%s",
   "help_more": "Zadej &a%s&r k zobrazení více.",
-  "help_pattern": "&2chunky pattern <pattern>&r Nastavte vzor generace",
+  "help_pattern": "&2chunky pattern <pattern>&r - Nastavte vzor generace",
   "help_pause": "&2chunky pause&r - Pozastavit aktuální úkol a uložit pstup",
   "help_progress": "&2chunky progress&r - Zobrazit aktuální aktivní úkoly",
   "help_quiet": "&2chunky quiet <interval>&r - Nastavit interval klidu",
