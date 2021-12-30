@@ -40,7 +40,7 @@
   "format_start": "Завдання розпочато для світу %s з регіоном формою якого є %s із центром у %s, %s та радіусом %s.",
   "format_start_confirm": "Вже є активне завдяння в цьому світі. Аби продовжити його, введіть '%s'. Аби запустити нове завдання, введіть '%s'.",
   "format_start_disk": "Сервер має лише %s вільного дискового простору, але потрібний дисковий простір для виконання завдання складає %s. Якщо ви бажаєте продовжити попри все - введіть '%s'.",
-  "format_start_limit": "Your host has limited the maximum pre-generation radius to %s to avoid excessive disk space usage. Reduce the radius or contact your host if you wish to have this limit removed.",
+  "format_start_limit": "Ваш хост обмежив радіус передгенарації до %s аби уникнути надмірне споживання дискового простору. Зменьшіть радус, або зв'яжіться зі своїм хостом, щоб прибрати це обмеження.",
   "format_started_already": "Вже є активне завдання для світу %s!",
   "format_world": "Світ змінено на %s.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Керування бар'єрами світів",
