@@ -36,7 +36,7 @@
   "format_reload": "Успішно перезавантажено конфігурацію.",
   "format_reload_tasks_running": "Конфігурацію неможливо перезавантажити доки є активні завдання.",
   "format_shape": "Форму змінено на %s.",
-  "format_silent": "Режим тиші %s.",
+  "format_silent": "Повідомлень про прогрес завдань %s.",
   "format_start": "Завдання розпочато для світу %s з регіоном формою якого є %s із центром у %s, %s та радіусом %s.",
   "format_start_confirm": "A task was already started for this world. To continue running it, type '%s'. To start a new task, type '%s'.",
   "format_start_disk": "Сервер має лише %s вільного дискового простору, але потрібний дисковий простір для виконання завдання складає %s. Якщо ви бажаєте продовжити попри все - введіть '%s'.",
@@ -58,7 +58,7 @@
   "help_radius": "&2chunky radius <radius>&r - Встановити радіус",
   "help_reload": "&2chunky reload&r - Перезавантажити конфігурацію",
   "help_shape": "&2chunky shape <shape>&r - Встановити форму для генерації",
-  "help_silent": "&2chunky silent&r - Toggle displaying update messages",
+  "help_silent": "&2chunky silent&r - Ввімкнути/Вимкнути відображення повідомлень про прогрес завдань",
   "help_spawn": "&2chunky spawn&r - Встановити центр у точці відродження",
   "help_start": "&2chunky start&r - Розпочати нове завдання генерації чанків",
   "help_world": "&2chunky world <world>&r - Обрати світ для роботи з ним",
@@ -77,5 +77,5 @@
   "task_trim": "Видалено %s чанків зі світу %s , секунд витрачено: %s.",
   "task_done": "Task finished for %s. Processed: %s chunks (%s%%), Total time: %s:%s:%s",
   "task_stopped": "Завдання зупинено для світу %s.",
-  "task_update": "Task running for %s. Processed: %s chunks (%s%%), ETA: %s:%s:%s, Rate: %s cps, Current: %s, %s"
+  "task_update": "Завдання активне для світу %s. Опрацьовано: %s chunks (%s%%), ETA: %s:%s:%s, Швидкість: %s cps, Поточний: %s, %s"
 }
