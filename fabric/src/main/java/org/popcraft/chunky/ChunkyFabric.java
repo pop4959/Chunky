@@ -41,7 +41,11 @@ public class ChunkyFabric implements ModInitializer {
                 chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
             }
         });
-        ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> chunky.disable());
+        ServerLifecycleEvents.SERVER_STOPPING.register(minecraftServer -> {
+            if (chunky != null) {
+                chunky.disable();
+            }
+        });
         ServerTickEvents.END_SERVER_TICK.register(server -> BossBarProgress.tick(chunky, server));
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             final LiteralArgumentBuilder<ServerCommandSource> command = literal(CommandLiteral.CHUNKY)

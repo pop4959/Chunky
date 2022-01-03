@@ -64,7 +64,9 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         HandlerList.unregisterAll((Plugin) this);
-        chunky.disable();
+        if (chunky != null) {
+            chunky.disable();
+        }
     }
 
     @SuppressWarnings("NullableProblems")

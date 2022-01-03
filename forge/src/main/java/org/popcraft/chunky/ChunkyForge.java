@@ -121,7 +121,9 @@ public class ChunkyForge {
 
     @SubscribeEvent
     public void onServerStopping(ServerStoppingEvent event) {
-        chunky.disable();
+        if (chunky != null) {
+            chunky.disable();
+        }
     }
 
     @SubscribeEvent

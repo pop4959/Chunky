@@ -56,7 +56,9 @@ public class ChunkySponge {
 
     @Listener
     public void onServerStopping(final StoppingEngineEvent<Server> event) {
-        chunky.disable();
+        if (chunky != null) {
+            chunky.disable();
+        }
     }
 
     @Listener
