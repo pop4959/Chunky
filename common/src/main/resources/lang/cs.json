@@ -10,7 +10,7 @@
   "format_border_add": "%s okraj světa přidán do %s se středem %s, %sa poloměrem %s.",
   "format_border_bypass": "Dočasné obejití hranice %s pro %s.",
   "format_border_bypass_no_target": "Nelze najít hráče se jménem %s.",
-  "format_border_list": "Hranice světa",
+  "format_border_list": "Hranice Světa",
   "format_border_list_border": "%s: %s se středem %s, %s a poloměrem %s.",
   "format_border_list_none": "Neexistují žádné světové hranice.",
   "format_border_load": "Výběr byl načten z okraje světa pro %s.",
