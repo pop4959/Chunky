@@ -2,7 +2,7 @@ import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
-    id("org.spongepowered.gradle.plugin") version "2.0.0"
+    id("org.spongepowered.gradle.plugin") version "2.0.1"
 }
 
 dependencies {
@@ -10,14 +10,15 @@ dependencies {
 }
 
 sponge {
-    apiVersion("8.0.0-SNAPSHOT")
+    apiVersion("8.0.0")
+    loader {
+        name(PluginLoaders.JAVA_PLAIN)
+        version("1.0")
+    }
     license("GPL-3.0")
     plugin(rootProject.name) {
-        loader {
-            name(PluginLoaders.JAVA_PLAIN)
-            version("1.0")
-        }
         displayName(rootProject.name.capitalize())
+        version("${project.version}")
         entrypoint("${project.group}.${rootProject.name}.ChunkySponge")
         description("${project.property("description")}")
         links {
