@@ -1,6 +1,6 @@
 package org.popcraft.chunky.integration;
 
-import org.dynmap.DynmapAPI;
+import org.dynmap.DynmapCommonAPI;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.CircleMarker;
 import org.dynmap.markers.MarkerDescription;
@@ -19,7 +19,7 @@ public class DynmapIntegration extends AbstractMapIntegration {
     private final MarkerSet markerSet;
     private final Map<String, MarkerDescription> markers;
 
-    public DynmapIntegration(DynmapAPI dynmapAPI) {
+    public DynmapIntegration(DynmapCommonAPI dynmapAPI) {
         this.markerSet = dynmapAPI.getMarkerAPI().createMarkerSet("chunky.markerset", this.label, null, false);
         this.markers = new HashMap<>();
     }
