@@ -53,7 +53,7 @@
   "help_more": "Hãy gõ &a%s&r để xem thêm.",
   "help_pattern": "&2chunky pattern <pattern>&r - Đặt kiểu tạo khu vực",
   "help_pause": "&2chunky pause&r - Tạm dừng tác vụ hiện tại và lưu lại quá trình",
-  "help_progress": "&2Tiến độ chunky&r - Hiển thị tiến trình hiện tại",
+  "help_progress": "&2chunky progress&r - Hiển thị tiến trình hiện tại",
   "help_quiet": "&2chunky quiet <interval>&r - Đặt chế độ im lặng",
   "help_radius": "&2chunky radius <radius>&r - Đặt bán kính",
   "help_reload": "&2chunky reload&r - Tải lại cấu hình",
