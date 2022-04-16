@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "0.10-SNAPSHOT"
+    id("fabric-loom") version "0.11-SNAPSHOT"
 }
 
 val shade: Configuration by configurations.creating
@@ -38,7 +38,7 @@ tasks {
         archiveFileName.set(null as String?)
     }
     remapJar {
-        input.set(shadowJar.get().archiveFile)
+        inputFile.set(shadowJar.get().archiveFile)
         archiveFileName.set("${rootProject.name.capitalize()}-${project.version}.jar")
     }
 }
