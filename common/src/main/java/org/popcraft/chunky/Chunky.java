@@ -44,6 +44,14 @@ public class Chunky {
         this.limit = loadLimit().orElse(Double.MAX_VALUE);
         this.version = loadVersion();
         this.commands = loadCommands();
+        ChunkyProvider.register(this);
+    }
+
+    public void disable() {
+        getConfig().saveTasks();
+        getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
+        getScheduler().cancelTasks();
+        ChunkyProvider.unregister();
     }
 
     private Optional<Double> loadLimit() {
@@ -89,12 +97,6 @@ public class Chunky {
         commandMap.put(CommandLiteral.WORLDBORDER, new WorldBorderCommand(this));
         commandMap.put(CommandLiteral.WORLD, new WorldCommand(this));
         return commandMap;
-    }
-
-    public void disable() {
-        getConfig().saveTasks();
-        getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
-        getScheduler().cancelTasks();
     }
 
     public TaskScheduler getScheduler() {

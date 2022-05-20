@@ -1,7 +1,6 @@
 package org.popcraft.chunky.platform;
 
 import org.popcraft.chunky.platform.util.Location;
-import org.popcraft.chunky.platform.util.Vector3;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -10,6 +9,8 @@ import java.util.concurrent.CompletableFuture;
 
 public interface World {
     String getName();
+
+    String getKey();
 
     boolean isChunkGenerated(int x, int z);
 

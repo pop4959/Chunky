@@ -43,6 +43,11 @@ public class ForgeWorld implements World {
     }
 
     @Override
+    public String getKey() {
+        return getName();
+    }
+
+    @Override
     public boolean isChunkGenerated(int x, int z) {
         if (Thread.currentThread() != world.getServer().getRunningThread()) {
             return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), world.getServer()).join();

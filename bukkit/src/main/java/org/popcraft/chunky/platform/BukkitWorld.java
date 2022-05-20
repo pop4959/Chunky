@@ -29,6 +29,11 @@ public class BukkitWorld implements World {
     }
 
     @Override
+    public String getKey() {
+        return world.getKey().toString();
+    }
+
+    @Override
     public boolean isChunkGenerated(int x, int z) {
         try {
             return PaperLib.isPaper() && PaperLib.isChunkGenerated(world, x, z);

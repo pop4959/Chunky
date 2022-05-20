@@ -21,7 +21,7 @@ import org.popcraft.chunky.platform.ForgeServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.impl.GsonConfig;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -43,9 +43,9 @@ public class ChunkyForge {
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        MinecraftServer server = event.getServer();
-        File configFile = new File(event.getServer().getServerDirectory(), "config/chunky.json");
-        this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(() -> chunky, configFile));
+        final MinecraftServer server = event.getServer();
+        final Path configPath = event.getServer().getServerDirectory().toPath().resolve("config/chunky.json");
+        this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(() -> chunky, configPath));
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
         }

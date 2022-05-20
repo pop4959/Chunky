@@ -43,6 +43,11 @@ public class FabricWorld implements World {
     }
 
     @Override
+    public String getKey() {
+        return getName();
+    }
+
+    @Override
     public boolean isChunkGenerated(int x, int z) {
         if (Thread.currentThread() != serverWorld.getServer().getThread()) {
             return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), serverWorld.getServer()).join();
@@ -108,20 +113,20 @@ public class FabricWorld implements World {
 
     @Override
     public int getElevation(int x, int z) {
-        return serverWorld.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
+        return serverWorld.getChunk(x >> 4, z >> 4).sampleHeightmap(Heightmap.Type.MOTION_BLOCKING, x, z);
     }
 
     @Override
     public void playEffect(Player player, String effect) {
         final Location location = player.getLocation();
         final BlockPos pos = new BlockPos(location.getX(), location.getY(), location.getZ());
-        Input.tryInteger(effect).ifPresent(eventId -> serverWorld.syncWorldEvent(eventId, pos, 0));
+        Input.tryInteger(effect).ifPresent(eventId -> serverWorld.syncWorldEvent(null, eventId, pos, 0));
     }
 
     @Override
     public void playSound(Player player, String sound) {
         final Location location = player.getLocation();
-        Registry.SOUND_EVENT.getOrEmpty(Identifier.tryParse(sound)).ifPresent(soundEvent -> serverWorld.playSound(location.getX(), location.getY(), location.getZ(), soundEvent, SoundCategory.MASTER, 2f, 1f, true));
+        Registry.SOUND_EVENT.getOrEmpty(Identifier.tryParse(sound)).ifPresent(soundEvent -> serverWorld.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundCategory.MASTER, 2f, 1f));
     }
 
     @Override

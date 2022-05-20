@@ -2,20 +2,18 @@ package org.popcraft.chunky.platform.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,85 +23,66 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 public class GsonConfig implements Config {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final Supplier<Chunky> chunky;
-    private final Gson gson;
-    private final Path configPath;
-    private ConfigModel configModel;
+    private final Path savePath;
+    private ConfigModel configModel = new ConfigModel();
 
-    public GsonConfig(Supplier<Chunky> chunky, File configFile) {
+    public GsonConfig(final Supplier<Chunky> chunky, final Path savePath) {
         this.chunky = chunky;
-        this.gson = new GsonBuilder().setPrettyPrinting().create();
-        this.configPath = configFile.toPath();
-        if (!configFile.exists()) {
-            try {
-                if (configFile.createNewFile()) {
-                    this.configModel = new ConfigModel();
-                    configModel.version = 1;
-                    configModel.language = "en";
-                    configModel.continueOnRestart = false;
-                    saveConfig();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
+        this.savePath = savePath;
+        if (Files.exists(this.savePath)) {
             reload();
+        } else {
+            saveConfig();
         }
         Translator.setLanguage(getLanguage());
     }
 
     @Override
     public Path getDirectory() {
-        return configPath.getParent();
+        return savePath.getParent();
     }
 
     @Override
-    public Optional<GenerationTask> loadTask(World world) {
-        if (this.configModel == null) {
+    public Optional<GenerationTask> loadTask(final World world) {
+        final Map<String, TaskModel> tasks = Optional.ofNullable(configModel.tasks).orElse(new HashMap<>());
+        final TaskModel taskModel = tasks.get(world.getName());
+        if (taskModel == null || Optional.ofNullable(taskModel.cancelled).orElse(false)) {
             return Optional.empty();
         }
-        Map<String, TaskModel> tasks = this.configModel.tasks;
-        if (tasks == null) {
-            return Optional.empty();
-        }
-        TaskModel taskModel = tasks.get(world.getName());
-        if (taskModel == null || taskModel.cancelled) {
-            return Optional.empty();
-        }
-        Selection.Builder selection = Selection.builder(world)
-                .centerX(taskModel.centerX)
-                .centerZ(taskModel.centerZ)
-                .radiusX(taskModel.radius)
-                .radiusZ(taskModel.radiusZ == null ? taskModel.radius : taskModel.radiusZ)
-                .pattern(taskModel.iterator)
-                .shape(taskModel.shape);
-        long count = taskModel.count;
-        long time = taskModel.time;
+        final double radiusX = Optional.ofNullable(taskModel.radius).orElse(Selection.DEFAULT_RADIUS);
+        final double radiusZ = Optional.ofNullable(taskModel.radiusZ).orElse(radiusX);
+        final Selection.Builder selection = Selection.builder(world)
+                .centerX(Optional.ofNullable(taskModel.centerX).orElse(Selection.DEFAULT_CENTER_X))
+                .centerZ(Optional.ofNullable(taskModel.centerZ).orElse(Selection.DEFAULT_CENTER_Z))
+                .radiusX(radiusX)
+                .radiusZ(radiusZ)
+                .pattern(Optional.ofNullable(taskModel.iterator).orElse(PatternType.CONCENTRIC))
+                .shape(Optional.ofNullable(taskModel.shape).orElse(ShapeType.SQUARE));
+        final long count = taskModel.count;
+        final long time = taskModel.time;
         return Optional.of(new GenerationTask(chunky.get(), selection.build(), count, time));
     }
 
     @Override
     public List<GenerationTask> loadTasks() {
-        List<GenerationTask> generationTasks = new ArrayList<>();
+        final List<GenerationTask> generationTasks = new ArrayList<>();
         chunky.get().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
         return generationTasks;
     }
 
     @Override
-    public void saveTask(GenerationTask generationTask) {
-        if (this.configModel == null) {
-            this.configModel = new ConfigModel();
+    public void saveTask(final GenerationTask generationTask) {
+        if (configModel.tasks == null) {
+            configModel.tasks = new HashMap<>();
         }
-        if (this.configModel.tasks == null) {
-            this.configModel.tasks = new HashMap<>();
-        }
-        Map<String, TaskModel> tasks = this.configModel.tasks;
-        Selection selection = generationTask.getSelection();
-        TaskModel taskModel = tasks.getOrDefault(selection.world().getName(), new TaskModel());
-        String shape = generationTask.getShape().name();
+        final Map<String, TaskModel> tasks = configModel.tasks;
+        final Selection selection = generationTask.getSelection();
+        final TaskModel taskModel = tasks.getOrDefault(selection.world().getName(), new TaskModel());
+        final String shape = generationTask.getShape().name();
         taskModel.cancelled = generationTask.isCancelled();
         taskModel.radius = selection.radiusX();
         if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape)) {
@@ -125,7 +104,7 @@ public class GsonConfig implements Config {
     }
 
     @Override
-    public void cancelTask(World world) {
+    public void cancelTask(final World world) {
         loadTask(world).ifPresent(generationTask -> {
             generationTask.stop(true);
             saveTask(generationTask);
@@ -142,49 +121,46 @@ public class GsonConfig implements Config {
 
     @Override
     public int getVersion() {
-        return getConfigModel().map(model -> model.version).orElse(0);
+        return Optional.ofNullable(configModel.version).orElse(0);
     }
 
     @Override
     public String getLanguage() {
-        return getConfigModel().map(model -> Input.checkLanguage(model.language)).orElse("en");
+        return Optional.ofNullable(configModel.language).map(Input::checkLanguage).orElse("en");
     }
 
     @Override
     public boolean getContinueOnRestart() {
-        return getConfigModel().map(model -> model.continueOnRestart).orElse(false);
+        return Optional.ofNullable(configModel.continueOnRestart).orElse(false);
     }
 
     @Override
     public void reload() {
-        StringBuilder configBuilder = new StringBuilder();
-        try (Stream<String> input = Files.lines(configPath)) {
-            input.forEach(configBuilder::append);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        configModel = gson.fromJson(configBuilder.toString(), new TypeToken<ConfigModel>() {
-        }.getType());
-    }
-
-    public void saveConfig() {
-        try (Writer writer = new BufferedWriter(new FileWriter(configPath.toFile()))) {
-            gson.toJson(configModel, new TypeToken<ConfigModel>() {
-            }.getType(), writer);
+        try (final Reader reader = Files.newBufferedReader(savePath)) {
+            configModel = GSON.fromJson(reader, ConfigModel.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Optional<ConfigModel> getConfigModel() {
-        return Optional.ofNullable(configModel);
+    private void saveConfig() {
+        try {
+            Files.createDirectories(savePath.getParent());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (final Writer writer = Files.newBufferedWriter(savePath)) {
+            GSON.toJson(configModel, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("unused")
-    public static class ConfigModel {
-        private Integer version;
-        private String language;
-        private Boolean continueOnRestart;
+    private static class ConfigModel {
+        private Integer version = 1;
+        private String language = "en";
+        private Boolean continueOnRestart = false;
         private Map<String, TaskModel> tasks;
 
         public Integer getVersion() {
@@ -220,9 +196,8 @@ public class GsonConfig implements Config {
         }
     }
 
-
     @SuppressWarnings("unused")
-    public static class TaskModel {
+    private static class TaskModel {
         private Boolean cancelled;
         private Double radius;
         private Double radiusZ;
