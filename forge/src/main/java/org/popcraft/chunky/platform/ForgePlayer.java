@@ -1,6 +1,5 @@
 package org.popcraft.chunky.platform;
 
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.popcraft.chunky.platform.util.Location;
