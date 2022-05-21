@@ -50,9 +50,10 @@ public class GsonConfig implements Config {
     public Optional<GenerationTask> loadTask(final World world) {
         final Map<String, TaskModel> tasks = Optional.ofNullable(configModel.tasks).orElse(new HashMap<>());
         final TaskModel taskModel = tasks.get(world.getName());
-        if (taskModel == null || Optional.ofNullable(taskModel.cancelled).orElse(false)) {
+        if (taskModel == null) {
             return Optional.empty();
         }
+        final boolean cancelled = Optional.ofNullable(taskModel.cancelled).orElse(false);
         final double radiusX = Optional.ofNullable(taskModel.radius).orElse(Selection.DEFAULT_RADIUS);
         final double radiusZ = Optional.ofNullable(taskModel.radiusZ).orElse(radiusX);
         final Selection.Builder selection = Selection.builder(world)
@@ -64,7 +65,7 @@ public class GsonConfig implements Config {
                 .shape(Optional.ofNullable(taskModel.shape).orElse(ShapeType.SQUARE));
         final long count = taskModel.count;
         final long time = taskModel.time;
-        return Optional.of(new GenerationTask(chunky.get(), selection.build(), count, time));
+        return Optional.of(new GenerationTask(chunky.get(), selection.build(), count, time, cancelled));
     }
 
     @Override

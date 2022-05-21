@@ -36,7 +36,7 @@ public class ContinueCommand extends ChunkyCommand {
             return;
         }
         final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
-        loadTasks.forEach(generationTask -> {
+        loadTasks.stream().filter(task -> !task.isCancelled()).forEach(generationTask -> {
             World world = generationTask.getSelection().world();
             if (!generationTasks.containsKey(world.getName())) {
                 generationTasks.put(world.getName(), generationTask);

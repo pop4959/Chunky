@@ -32,10 +32,11 @@ public class GenerationTask implements Runnable {
     private boolean stopped, cancelled;
     private long prevTime;
 
-    public GenerationTask(Chunky chunky, Selection selection, long count, long time) {
+    public GenerationTask(Chunky chunky, Selection selection, long count, long time, boolean cancelled) {
         this(chunky, selection);
         this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection, count);
         this.finishedChunks.set(count);
+        this.cancelled = cancelled;
         this.prevTime = time;
     }
 

@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CancelCommand extends ChunkyCommand {
     public CancelCommand(Chunky chunky) {
@@ -21,7 +22,7 @@ public class CancelCommand extends ChunkyCommand {
 
     public void execute(Sender sender, String[] args) {
         final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
-        if (generationTasks.isEmpty() && chunky.getConfig().loadTasks().isEmpty()) {
+        if (generationTasks.isEmpty() && chunky.getConfig().loadTasks().stream().allMatch(GenerationTask::isCancelled)) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_NO_TASKS);
             return;
         }

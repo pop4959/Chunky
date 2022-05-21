@@ -38,9 +38,7 @@ public class BukkitConfig implements Config {
             return Optional.empty();
         }
         String worldKey = TASKS_KEY + world.getName() + ".";
-        if (config.getBoolean(worldKey + "cancelled", false)) {
-            return Optional.empty();
-        }
+        boolean cancelled = config.getBoolean(worldKey + "cancelled", false);
         double radiusX = config.getDouble(worldKey + "radius", Selection.DEFAULT_RADIUS);
         double radiusZ = config.getDouble(worldKey + "z-radius", radiusX);
         Selection.Builder selection = Selection.builder(world)
@@ -52,7 +50,7 @@ public class BukkitConfig implements Config {
                 .shape(config.getString(worldKey + "shape", ShapeType.SQUARE));
         long count = config.getLong(worldKey + "count", 0);
         long time = config.getLong(worldKey + "time", 0);
-        return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time));
+        return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time, cancelled));
     }
 
     @Override

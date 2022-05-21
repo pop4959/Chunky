@@ -79,9 +79,7 @@ public class SpongeConfig implements Config {
         if (taskNode.virtual()) {
             return Optional.empty();
         }
-        if (taskNode.node("cancelled").getBoolean(true)) {
-            return Optional.empty();
-        }
+        boolean cancelled = taskNode.node("cancelled").getBoolean(true);
         double radiusX = taskNode.node("radius").getDouble(Selection.DEFAULT_RADIUS);
         double radiusZ = taskNode.node("radiusZ").getDouble(radiusX);
         Selection.Builder selection = Selection.builder(world)
@@ -93,7 +91,7 @@ public class SpongeConfig implements Config {
                 .shape(taskNode.node("shape").getString(ShapeType.SQUARE));
         long count = taskNode.node("count").getInt(0);
         long time = taskNode.node("time").getInt(0);
-        return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time));
+        return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time, cancelled));
     }
 
     @Override
