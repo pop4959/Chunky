@@ -31,7 +31,7 @@ public class ContinueCommand extends ChunkyCommand {
         } else {
             loadTasks = chunky.getConfig().loadTasks();
         }
-        if (loadTasks.isEmpty()) {
+        if (loadTasks.stream().allMatch(GenerationTask::isCancelled)) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CONTINUE_NO_TASKS);
             return;
         }
