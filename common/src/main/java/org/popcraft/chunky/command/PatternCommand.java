@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.Parameter;
 import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.Collections;
@@ -22,14 +23,20 @@ public class PatternCommand extends ChunkyCommand {
             sender.sendMessage(TranslationKey.HELP_PATTERN);
             return;
         }
-        Optional<String> inputPattern = Input.tryPattern(args[1]);
-        if (!inputPattern.isPresent()) {
+        final Optional<String> optionalType = Input.tryPattern(args[1]);
+        if (!optionalType.isPresent()) {
             sender.sendMessage(TranslationKey.HELP_PATTERN);
             return;
         }
-        String pattern = inputPattern.get();
+        final String type = optionalType.get();
+        final String value = args.length > 2 ? args[2] : null;
+        if (PatternType.CSV.equals(type) && value == null) {
+            sender.sendMessage(TranslationKey.HELP_PATTERN);
+            return;
+        }
+        final Parameter pattern = Parameter.of(type, value);
         chunky.getSelection().pattern(pattern);
-        sender.sendMessagePrefixed(TranslationKey.FORMAT_PATTERN, translate("pattern_" + pattern));
+        sender.sendMessagePrefixed(TranslationKey.FORMAT_PATTERN, translate("pattern_" + pattern.getType()));
     }
 
     @Override

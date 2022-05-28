@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
  * with one another.
  */
 public class BoundaryTest {
-    private static final Selection SELECTION = Selection.builder(null).center(-25, 25).radius(50).build();
+    private static final Selection SELECTION = Selection.builder(null, null).center(-25, 25).radius(50).build();
 
     @Test
     public void boundaries() {

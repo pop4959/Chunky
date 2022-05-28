@@ -10,6 +10,7 @@ import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.Parameter;
 import org.popcraft.chunky.util.Translator;
 
 import java.io.IOException;
@@ -56,12 +57,12 @@ public class GsonConfig implements Config {
         final boolean cancelled = Optional.ofNullable(taskModel.cancelled).orElse(false);
         final double radiusX = Optional.ofNullable(taskModel.radius).orElse(Selection.DEFAULT_RADIUS);
         final double radiusZ = Optional.ofNullable(taskModel.radiusZ).orElse(radiusX);
-        final Selection.Builder selection = Selection.builder(world)
+        final Selection.Builder selection = Selection.builder(chunky.get(), world)
                 .centerX(Optional.ofNullable(taskModel.centerX).orElse(Selection.DEFAULT_CENTER_X))
                 .centerZ(Optional.ofNullable(taskModel.centerZ).orElse(Selection.DEFAULT_CENTER_Z))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(Optional.ofNullable(taskModel.iterator).orElse(PatternType.CONCENTRIC))
+                .pattern(Parameter.of(Optional.ofNullable(taskModel.iterator).orElse(PatternType.CONCENTRIC)))
                 .shape(Optional.ofNullable(taskModel.shape).orElse(ShapeType.SQUARE));
         final long count = taskModel.count;
         final long time = taskModel.time;

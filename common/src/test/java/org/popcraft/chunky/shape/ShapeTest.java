@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * This test checks each shape to ensure that the number of chunks they generate is correct.
  */
 public class ShapeTest {
-    private static final Selection.Builder SELECTION = Selection.builder(null).center(-500, 500).radiusX(1000).radiusZ(500);
+    private static final Selection.Builder SELECTION = Selection.builder(null, null).center(-500, 500).radiusX(1000).radiusZ(500);
 
     @Test
     public void square() {

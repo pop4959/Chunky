@@ -6,17 +6,19 @@ import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.ShapeType;
+import org.popcraft.chunky.util.Parameter;
 
 public class Selection {
     public static final double DEFAULT_CENTER_X = 0d;
     public static final double DEFAULT_CENTER_Z = 0d;
     public static final double DEFAULT_RADIUS = 500d;
+    private final Chunky chunky;
     private final World world;
     private final double centerX;
     private final double centerZ;
     private final double radiusX;
     private final double radiusZ;
-    private final String pattern;
+    private final Parameter pattern;
     private final String shape;
     private final int centerChunkX;
     private final int centerChunkZ;
@@ -25,7 +27,8 @@ public class Selection {
     private final int diameterChunksX;
     private final int diameterChunksZ;
 
-    private Selection(World world, double centerX, double centerZ, double radiusX, double radiusZ, String pattern, String shape) {
+    private Selection(Chunky chunky, World world, double centerX, double centerZ, double radiusX, double radiusZ, Parameter pattern, String shape) {
+        this.chunky = chunky;
         this.world = world;
         this.centerX = centerX;
         this.centerZ = centerZ;
@@ -41,8 +44,12 @@ public class Selection {
         this.diameterChunksZ = 2 * radiusChunksZ + 1;
     }
 
-    public static Builder builder(World world) {
-        return new Builder(world);
+    public static Builder builder(Chunky chunky, World world) {
+        return new Builder(chunky, world);
+    }
+
+    public Chunky chunky() {
+        return chunky;
     }
 
     public World world() {
@@ -65,7 +72,7 @@ public class Selection {
         return this.radiusZ;
     }
 
-    public String pattern() {
+    public Parameter pattern() {
         return this.pattern;
     }
 
@@ -99,15 +106,17 @@ public class Selection {
 
     @SuppressWarnings("UnusedReturnValue")
     public static final class Builder {
+        private final Chunky chunky;
         private World world;
         private double centerX = DEFAULT_CENTER_X;
         private double centerZ = DEFAULT_CENTER_Z;
         private double radiusX = DEFAULT_RADIUS;
         private double radiusZ = DEFAULT_RADIUS;
-        private String pattern = PatternType.CONCENTRIC;
+        private Parameter pattern = Parameter.of(PatternType.CONCENTRIC);
         private String shape = ShapeType.SQUARE;
 
-        private Builder(World world) {
+        private Builder(Chunky chunky, World world) {
+            this.chunky = chunky;
             this.world = world;
         }
 
@@ -148,7 +157,7 @@ public class Selection {
             return this;
         }
 
-        public Builder pattern(String pattern) {
+        public Builder pattern(Parameter pattern) {
             this.pattern = pattern;
             return this;
         }
@@ -176,7 +185,7 @@ public class Selection {
         }
 
         public Selection build() {
-            return new Selection(world, centerX, centerZ, radiusX, radiusZ, pattern, shape);
+            return new Selection(chunky, world, centerX, centerZ, radiusX, radiusZ, pattern, shape);
         }
     }
 }

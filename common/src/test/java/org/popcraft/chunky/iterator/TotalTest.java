@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
  * This test checks to make sure the total number of chunks generated matches across iterators.
  */
 public class TotalTest {
-    private static final Selection.Builder SELECTION = Selection.builder(null).center(-25, 25).radius(50);
+    private static final Selection.Builder SELECTION = Selection.builder(null, null).center(-25, 25).radius(50);
 
     /**
      * Checks that the totals still match when the radius is changed.

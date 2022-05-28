@@ -40,7 +40,7 @@ public class Chunky {
         this.server = server;
         this.config = config;
         this.eventBus = new EventBus();
-        this.selection = Selection.builder(server.getWorlds().get(0));
+        this.selection = Selection.builder(this, server.getWorlds().get(0));
         this.limit = loadLimit().orElse(Double.MAX_VALUE);
         this.version = loadVersion();
         this.commands = loadCommands();

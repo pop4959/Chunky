@@ -16,11 +16,13 @@ public class ChunkIteratorFactory {
             default:
                 break;
         }
-        switch (selection.pattern()) {
+        switch (selection.pattern().getType()) {
             case PatternType.LOOP:
                 return new Loop2ChunkIterator(selection, count);
             case PatternType.SPIRAL:
                 return new SpiralChunkIterator(selection, count);
+            case PatternType.CSV:
+                return new CsvChunkIterator(selection, count);
             case PatternType.CONCENTRIC:
             default:
                 return new ConcentricChunkIterator(selection, count);

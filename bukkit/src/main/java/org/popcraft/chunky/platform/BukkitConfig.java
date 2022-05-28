@@ -7,6 +7,7 @@ import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.Parameter;
 import org.popcraft.chunky.util.Translator;
 
 import java.nio.file.Path;
@@ -41,12 +42,12 @@ public class BukkitConfig implements Config {
         boolean cancelled = config.getBoolean(worldKey + "cancelled", false);
         double radiusX = config.getDouble(worldKey + "radius", Selection.DEFAULT_RADIUS);
         double radiusZ = config.getDouble(worldKey + "z-radius", radiusX);
-        Selection.Builder selection = Selection.builder(world)
+        Selection.Builder selection = Selection.builder(plugin.getChunky(), world)
                 .centerX(config.getDouble(worldKey + "x-center", Selection.DEFAULT_CENTER_X))
                 .centerZ(config.getDouble(worldKey + "z-center", Selection.DEFAULT_CENTER_Z))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(config.getString(worldKey + "iterator", PatternType.CONCENTRIC))
+                .pattern(Parameter.of(config.getString(worldKey + "iterator", PatternType.CONCENTRIC)))
                 .shape(config.getString(worldKey + "shape", ShapeType.SQUARE));
         long count = config.getLong(worldKey + "count", 0);
         long time = config.getLong(worldKey + "time", 0);

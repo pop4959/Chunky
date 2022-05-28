@@ -11,7 +11,7 @@ public class RegionCacheTest {
     @Test
     public void testChunkCache() {
         final RegionCache regionCache = new RegionCache();
-        final Selection selection = Selection.builder(null).center(0, 0).radius(16).build();
+        final Selection selection = Selection.builder(null, null).center(0, 0).radius(16).build();
         final ChunkIterator iterator = new ConcentricChunkIterator(selection);
         final RegionCache.WorldState worldState = regionCache.getWorld("world");
         iterator.forEachRemaining(chunk -> worldState.setGenerated(chunk.x, chunk.z));

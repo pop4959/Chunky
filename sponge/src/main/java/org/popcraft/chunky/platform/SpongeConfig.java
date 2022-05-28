@@ -6,6 +6,7 @@ import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.Parameter;
 import org.popcraft.chunky.util.Translator;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -82,12 +83,12 @@ public class SpongeConfig implements Config {
         boolean cancelled = taskNode.node("cancelled").getBoolean(true);
         double radiusX = taskNode.node("radius").getDouble(Selection.DEFAULT_RADIUS);
         double radiusZ = taskNode.node("radiusZ").getDouble(radiusX);
-        Selection.Builder selection = Selection.builder(world)
+        Selection.Builder selection = Selection.builder(plugin.getChunky(), world)
                 .centerX(taskNode.node("centerX").getDouble(Selection.DEFAULT_CENTER_X))
                 .centerZ(taskNode.node("centerZ").getDouble(Selection.DEFAULT_CENTER_Z))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(taskNode.node("iterator").getString(PatternType.CONCENTRIC))
+                .pattern(Parameter.of(taskNode.node("iterator").getString(PatternType.CONCENTRIC)))
                 .shape(taskNode.node("shape").getString(ShapeType.SQUARE));
         long count = taskNode.node("count").getInt(0);
         long time = taskNode.node("time").getInt(0);
