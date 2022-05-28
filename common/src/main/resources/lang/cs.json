@@ -66,6 +66,7 @@
   "pattern_concentric": "soustředný",
   "pattern_loop": "opakování",
   "pattern_spiral": "spirála",
+  "pattern_csv": "csv",
   "shape_circle": "kruh",
   "shape_diamond": "diamant",
   "shape_ellipse": "elipsa",

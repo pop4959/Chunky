@@ -66,6 +66,7 @@
   "pattern_concentric": "concentrique",
   "pattern_loop": "boucle",
   "pattern_spiral": "spirale",
+  "pattern_csv": "csv",
   "shape_circle": "cercle",
   "shape_diamond": "diamant",
   "shape_ellipse": "ellipse",

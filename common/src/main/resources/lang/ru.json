@@ -66,6 +66,7 @@
   "pattern_concentric": "концентрично",
   "pattern_loop": "цикл",
   "pattern_spiral": "спираль",
+  "pattern_csv": "csv",
   "shape_circle": "круг",
   "shape_diamond": "ромб",
   "shape_ellipse": "эллипс",
