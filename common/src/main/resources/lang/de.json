@@ -39,6 +39,7 @@
   "format_silent": "Stummer Modus %s.",
   "format_start": "Aufgabe gestartet für %2$s Region in %1$s bei %3$s, %4$s mit Radius %5$s.",
   "format_start_confirm": "Eine Aufgabe für diese Welt wurde bereits gestartet. Um sie fort zu führen, schreibe '%s'. Um eine neue Aufgabe zu starten, schreibe '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "Der Server hat nurnoch %s Festplattenspeicher verbleibend, aber der geschätzte Speicherplatz benötigt für die Aufgabe ist %s. Wenn du trotzdem starten willst, schreibe '%s'.",
   "format_start_limit": "Dein Host hat den maximalen Radius fürs generieren auf %s beschränkt, um übermässigen Speicherplatzverbrauch zu vermeiden. Verringere den Radius oder kontaktiere deinen Host wenn du dieses Limit entfernt haben willst.",
   "format_started_already": "Aufgabe für %s bereits gestartet!",
