@@ -41,6 +41,7 @@ public class TranslationKey {
     public static final String FORMAT_SILENT = "format_silent";
     public static final String FORMAT_START = "format_start";
     public static final String FORMAT_START_CONFIRM = "format_start_confirm";
+    public static final String FORMAT_START_CONFIRM_IRIS = "format_start_confirm_iris";
     public static final String FORMAT_START_DISK = "format_start_disk";
     public static final String FORMAT_START_LIMIT = "format_start_limit";
     public static final String FORMAT_STARTED_ALREADY = "format_started_already";
