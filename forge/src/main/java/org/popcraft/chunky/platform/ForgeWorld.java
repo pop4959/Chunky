@@ -137,21 +137,7 @@ public class ForgeWorld implements World {
     }
 
     @Override
-    public Optional<Path> getEntitiesDirectory() {
-        return getDirectory("entities");
-    }
-
-    @Override
-    public Optional<Path> getPOIDirectory() {
-        return getDirectory("poi");
-    }
-
-    @Override
-    public Optional<Path> getRegionDirectory() {
-        return getDirectory("region");
-    }
-
-    private Optional<Path> getDirectory(final String name) {
+    public Optional<Path> getDirectory(final String name) {
         if (name == null) {
             return Optional.empty();
         }

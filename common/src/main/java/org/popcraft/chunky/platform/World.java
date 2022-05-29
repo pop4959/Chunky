@@ -30,9 +30,17 @@ public interface World {
 
     void playSound(Player player, String sound);
 
-    Optional<Path> getEntitiesDirectory();
+    Optional<Path> getDirectory(String name);
 
-    Optional<Path> getPOIDirectory();
+    default Optional<Path> getEntitiesDirectory() {
+        return getDirectory("entities");
+    }
 
-    Optional<Path> getRegionDirectory();
+    default Optional<Path> getPOIDirectory() {
+        return getDirectory("poi");
+    }
+
+    default Optional<Path> getRegionDirectory() {
+        return getDirectory("region");
+    }
 }

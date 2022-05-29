@@ -94,21 +94,7 @@ public class BukkitWorld implements World {
     }
 
     @Override
-    public Optional<Path> getEntitiesDirectory() {
-        return getDirectory("entities");
-    }
-
-    @Override
-    public Optional<Path> getPOIDirectory() {
-        return getDirectory("poi");
-    }
-
-    @Override
-    public Optional<Path> getRegionDirectory() {
-        return getDirectory("region");
-    }
-
-    private Optional<Path> getDirectory(final String name) {
+    public Optional<Path> getDirectory(final String name) {
         if (name != null) {
             try (Stream<Path> paths = Files.walk(world.getWorldFolder().toPath())) {
                 return paths.filter(Files::isDirectory)
