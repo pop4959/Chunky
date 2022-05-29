@@ -41,6 +41,7 @@ public final class CommandLiteral {
     public static final String REMOVE = "remove";
     public static final String WRAP = "wrap";
     public static final String PLAYER = "player";
+    public static final String VALUE = "value";
 
     private CommandLiteral() {
     }

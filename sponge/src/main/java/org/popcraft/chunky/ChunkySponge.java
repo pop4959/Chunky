@@ -143,11 +143,15 @@ public class ChunkySponge {
                 .build();
         Command.Parameterized patternCommand = Command.builder()
                 .permission("chunky.command.pattern")
-                .addParameters(Parameter.string().key(CommandLiteral.PATTERN).completer(SuggestionProviders.PATTERNS).build())
+                .addParameters(
+                        Parameter.string().key(CommandLiteral.PATTERN).completer(SuggestionProviders.PATTERNS).build(),
+                        Parameter.string().key(CommandLiteral.VALUE).build()
+                )
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
                     args.add(CommandLiteral.PATTERN);
                     args.add(ctx.requireOne(Parameter.key(CommandLiteral.PATTERN, String.class)));
+                    ctx.one(Parameter.key(CommandLiteral.VALUE, String.class)).ifPresent(args::add);
                     executeSpongeCommand(ctx, CommandLiteral.PATTERN, args);
                     return CommandResult.success();
                 })
