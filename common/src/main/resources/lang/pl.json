@@ -39,6 +39,7 @@
   "format_silent": "Tryb cichy %s.",
   "format_start": "Zadanie rozpoczęte dla %1$s na %3$s, %4$s z promieniem %5$s.",
   "format_start_confirm": "Zadanie zostało już uruchomione dla tego świata. Aby kontynuować uruchamianie, wpisz '%s'. Aby rozpocząć nowe zadanie, wpisz '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "Serwer ma tylko %s miejsca na dysku, ale szacowane wymagane miejsce na dysku jest dla tego zadania to %s. Jeśli chcesz mimo to rozpocząć, wpisz '%s'.",
   "format_start_limit": "Twój host ograniczył maksymalny promień generowania do %s aby uniknąć dużego zużycia pamięci dyskowej. Zmniejsz promień albo skontaktuj się z twoim hostem jeżeli chcesz aby ten limit został usunięty.",
   "format_started_already": "Zadanie jest już rozpoczęte dla %s!",

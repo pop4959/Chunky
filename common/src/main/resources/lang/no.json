@@ -39,6 +39,7 @@
   "format_silent": "Stillemodus %s.",
   "format_start": "Oppgave startet i %s for %s regionen sentrert ved %s, %s med radius %s.",
   "format_start_confirm": "Det er allerede en oppgave aktiv i denne verdenen. For å fortsette å kjøre den, skriv '%s'. For å starte en ny oppgave, skriv '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "Serveren har bare %s diskplass igjen, estimert diskplass som kreves for oppgaven er %s. Hvis du likevel ønsker å starte, skriv '%s.",
   "format_start_limit": "Verten har begrenset maksimal forhåndsgenerasjons radius til %s for å unngå for mye bruk av diskplassen. Reduser radiusen eller kontakt verten din hvis du ønsker å fjerne denne grensen.",
   "format_started_already": "Oppgaven har allerede startet for %s!",
