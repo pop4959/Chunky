@@ -39,6 +39,7 @@
   "format_silent": "Modalità silenziosa %s.",
   "format_start": "Attività iniziata in %s per la regione %s centrata in %s, %s con raggio %s.",
   "format_start_confirm": "Un'attività è già iniziata in questo mondo. Per continuare ad eseguirla, digita '%s'. Per iniziare una nuova attività, digita '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "Il server ha solo %s di spazio su disco rimanente, ma lo spazio su disco stimato richiesto per l'attività è %s. Se si desidera iniziare comunque, digitare '%s'.",
   "format_start_limit": "Il tuo host ha limitato il raggio massimo di pre-generazione a %s per evitare un uso eccessivo dello spazio su disco. Riduci il raggio o contatta il tuo host se desideri che questo limite venga rimosso.",
   "format_started_already": "Attività già iniziata per %s!",
