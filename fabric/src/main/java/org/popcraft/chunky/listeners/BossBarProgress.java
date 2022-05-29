@@ -8,7 +8,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.dimension.DimensionType;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.FabricWorld;
@@ -41,11 +40,11 @@ public class BossBarProgress {
                 bossBar = bossBarManager.get(barId);
             } else {
                 bossBar = bossBarManager.add(barId, Text.of(barId.toString()));
-                if (DimensionType.OVERWORLD_ID.equals(worldId)) {
+                if (net.minecraft.world.World.OVERWORLD.getValue().equals(worldId)) {
                     bossBar.setColor(BossBar.Color.GREEN);
-                } else if (DimensionType.THE_NETHER_ID.equals(worldId)) {
+                } else if (net.minecraft.world.World.NETHER.getValue().equals(worldId)) {
                     bossBar.setColor(BossBar.Color.RED);
-                } else if (DimensionType.THE_END_ID.equals(worldId)) {
+                } else if (net.minecraft.world.World.END.getValue().equals(worldId)) {
                     bossBar.setColor(BossBar.Color.PURPLE);
                 } else {
                     bossBar.setColor(BossBar.Color.BLUE);

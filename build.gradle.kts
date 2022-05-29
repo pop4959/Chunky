@@ -1,5 +1,14 @@
 import java.io.ByteArrayOutputStream
 
+buildscript {
+    configurations.all {
+        resolutionStrategy {
+            force("org.ow2.asm:asm:9.3")
+            force("org.ow2.asm:asm-commons:9.3")
+        }
+    }
+}
+
 plugins {
     id("java-library")
     id("maven-publish")
