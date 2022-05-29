@@ -39,6 +39,7 @@
   "format_silent": "Stille modus %s.",
   "format_start": "Taak begonnen voor %1$s om %3$s, %4$s met de radius %5$s.",
   "format_start_confirm": "Er is al een taak gestart voor deze wereld. Om deze taak te blijven uitvoeren, typ '%s'. Om een nieuwe taak te beginnen, typ '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "De server heeft nog %s schijfruimte over, maar de geschatte schijfruimte die nodig is voor de taak is %s. Als u toch wilt beginnen, typ dan '%s'.",
   "format_start_limit": "Je host heeft de maximale pre-generatie radius beperkt tot %s om overmatig gebruik van schijfruimte te voorkomen. Verminder de radius of neem contact op met je host als je wilt dat deze limiet wordt verwijderd.",
   "format_started_already": "Taak is al gestart voor %s!",
