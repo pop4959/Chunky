@@ -144,8 +144,8 @@ public class ChunkySponge {
         Command.Parameterized patternCommand = Command.builder()
                 .permission("chunky.command.pattern")
                 .addParameters(
-                        Parameter.string().key(CommandLiteral.PATTERN).completer(SuggestionProviders.PATTERNS).build(),
-                        Parameter.string().key(CommandLiteral.VALUE).build()
+                        Parameter.string().key(CommandLiteral.PATTERN).completer(SuggestionProviders.PATTERNS).terminal().build(),
+                        Parameter.string().key(CommandLiteral.VALUE).terminal().build()
                 )
                 .executor(ctx -> {
                     List<String> args = new ArrayList<>();
