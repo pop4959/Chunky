@@ -39,6 +39,7 @@
   "format_silent": "Mode silencieux %s.",
   "format_start": "La tâche a commencé en %s pour la région %s centrée en %s, %s avec un rayon de %s.",
   "format_start_confirm": "Une tâche était déjà commencée pour ce monde. Pour continuer son exécution, tapez '%s'. Pour commencer une nouvelle tâche, tapez '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "Le serveur a seulement %s d'espace disque restant, mais l'espace disque estimé requis pour cette tâche est de %s. Si vous souhaitez commencer tout de même, écrivez '%s'.",
   "format_start_limit": "Votre hôte a limité le rayon de pré-génération maximum à %s pour éviter une utilisation excessive de l'espace disque. Réduisez le rayon ou contactez votre hôte si vous souhaitez que cette limite soit supprimée.",
   "format_started_already": "La tâche a déjà commencé pour %s !",
