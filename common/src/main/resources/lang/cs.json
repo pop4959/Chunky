@@ -39,6 +39,7 @@
   "format_silent": "Tichý režim %s.",
   "format_start": "Úkol byl zahájen v %s pro oblast %s se středem v %s, %s s poloměrem %s.",
   "format_start_confirm": "Úkol byl již zahájen pro tento svět. Pro pokračování v procesu, zadej '%s'. K zahájení nového úkolu, zadej '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "Server má jen %s místa na disku, ale odhadovaný nutný prostor na disku pro úkol je jen %s. Pokud chcete přesto začít, napište '%s'.",
   "format_start_limit": "Váš hostitel omezil maximální poloměr před generováním na %s, aby se zabránilo nadměrnému využívání místa na disku. Omezte poloměr nebo kontaktujte svého hostitele, pokud chcete odebrat tento limit.",
   "format_started_already": "Úkol byl již zahájen pro %s!",
