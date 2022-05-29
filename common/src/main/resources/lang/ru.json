@@ -39,6 +39,7 @@
   "format_silent": "Тихий режим был %s.",
   "format_start": "Задача в %s запущена для региона %s с центром в %s, %s и радиусом %s.",
   "format_start_confirm": "Задача для этого мира уже была запущена. Чтобы продолжить ее, напишите '%s'. Чтобы начать новую задачу, напишите '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "На сервере осталось %s дискового пространства, но для выполнения задачи требуется приблизительно %s. Если вы всё ещё хотите продолжить, введите '%s'.",
   "format_start_limit": "Ваш хост ограничил максимальный радиус предварительной генерации до %s во избежание переполнения дискового пространства. Уменьшите радиус, или свяжитесь с хостом для снятия ограничений.",
   "format_started_already": "Задача для %s уже запущена!",
