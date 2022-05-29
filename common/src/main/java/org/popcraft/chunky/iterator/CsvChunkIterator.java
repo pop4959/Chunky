@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 public class CsvChunkIterator implements ChunkIterator {
@@ -25,31 +26,30 @@ public class CsvChunkIterator implements ChunkIterator {
     }
 
     public CsvChunkIterator(Selection selection) {
-        this.chunks = selection.pattern().getValue()
+        final Path filePath = selection.pattern().getValue()
                 .map(value -> selection.chunky().getConfig().getDirectory().resolve(String.format("%s.csv", value)))
-                .map(this::chunks)
-                .orElse(new LinkedList<>());
-        this.total = chunks.size();
-        this.name = selection.pattern().toString();
-    }
-
-    private Queue<ChunkCoordinate> chunks(final Path path) {
-        try (final Stream<String> lines = Files.lines(path)) {
-            final Queue<ChunkCoordinate> queue = new LinkedList<>();
-            lines.forEach(line -> {
-                final String[] split = line.split(",");
-                if (split.length > 1) {
-                    final Optional<Integer> x = Input.tryInteger(split[0]);
-                    final Optional<Integer> z = Input.tryInteger(split[1]);
-                    if (x.isPresent() && z.isPresent()) {
-                        queue.add(new ChunkCoordinate(x.get(), z.get()));
+                .orElse(null);
+        this.chunks = new LinkedList<>();
+        final AtomicLong valid = new AtomicLong();
+        if (filePath != null) {
+            try (final Stream<String> lines = Files.lines(filePath)) {
+                lines.forEach(line -> {
+                    final String[] split = line.split(",");
+                    if (split.length > 1) {
+                        final Optional<Integer> x = Input.tryInteger(split[0]);
+                        final Optional<Integer> z = Input.tryInteger(split[1]);
+                        if (x.isPresent() && z.isPresent()) {
+                            chunks.add(new ChunkCoordinate(x.get(), z.get()));
+                            valid.incrementAndGet();
+                        }
                     }
-                }
-            });
-            return queue;
-        } catch (final IOException ignored) {
-            return new LinkedList<>();
+                });
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
         }
+        this.total = valid.get();
+        this.name = selection.pattern().toString();
     }
 
     @Override

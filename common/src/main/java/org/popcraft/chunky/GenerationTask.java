@@ -24,7 +24,6 @@ public class GenerationTask implements Runnable {
     private final AtomicLong startTime = new AtomicLong();
     private final AtomicLong printTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
-    private final AtomicLong totalChunks = new AtomicLong();
     private final Deque<Pair<Long, AtomicLong>> updateSamples = new ConcurrentLinkedDeque<>();
     private final Progress progress;
     private final RegionCache.WorldState worldState;
@@ -45,7 +44,6 @@ public class GenerationTask implements Runnable {
         this.selection = selection;
         this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection);
         this.shape = ShapeFactory.getShape(selection);
-        this.totalChunks.set(chunkIterator.total());
         this.progress = new Progress(selection.world().getName());
         this.worldState = chunky.getRegionCache().getWorld(selection.world().getName());
     }
@@ -55,7 +53,7 @@ public class GenerationTask implements Runnable {
             return;
         }
         progress.chunkCount = finishedChunks.addAndGet(1);
-        progress.percentComplete = 100f * progress.chunkCount / totalChunks.get();
+        progress.percentComplete = 100f * progress.chunkCount / chunkIterator.total();
         final long currentTime = System.currentTimeMillis();
         final Pair<Long, AtomicLong> bin = updateSamples.peekLast();
         if (loaded) {
@@ -70,7 +68,7 @@ public class GenerationTask implements Runnable {
         }
         final Pair<Long, AtomicLong> oldest = updateSamples.peek();
         final long oldestTime = oldest == null ? currentTime : oldest.left();
-        final long chunksLeft = totalChunks.get() - finishedChunks.get();
+        final long chunksLeft = chunkIterator.total() - finishedChunks.get();
         final double timeDiff = (currentTime - oldestTime) / 1e3;
         if (chunksLeft > 0 && timeDiff < 1e-1) {
             return;
