@@ -39,6 +39,7 @@
   "format_silent": "Повідомлення про прогрес завдань %s.",
   "format_start": "Завдання розпочато для світу %s з регіоном, формою якого є %s із центром у %s, %s та радіусом %s.",
   "format_start_confirm": "Вже є активне завдання в цьому світі. Аби продовжити його, введіть '%s'. Аби запустити нове завдання, введіть '%s'.",
+  "format_start_confirm_iris": "&cThere are known issues with Iris worlds that can cause errors when loaded by Chunky or other plugins. The Iris team recommends running '%s' instead. If you understand the risks and wish to proceed anyway, type '%s'.",
   "format_start_disk": "Сервер має лише %s вільного дискового простору, але потрібний дисковий простір для виконання завдання складає %s. Якщо ви бажаєте продовжити попри все - введіть '%s'.",
   "format_start_limit": "Ваш хост обмежив радіус передгенерації до %s аби уникнути надмірне споживання дискового простору. Зменште радіус, або зв'яжіться зі своїм хостом, щоб прибрати це обмеження.",
   "format_started_already": "Вже є активне завдання для світу %s!",
