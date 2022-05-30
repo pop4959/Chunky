@@ -127,6 +127,26 @@ public class BukkitConfig implements Config {
     }
 
     @Override
+    public boolean isSilent() {
+        return plugin.getConfig().getBoolean("silent", false);
+    }
+
+    @Override
+    public void setSilent(boolean silent) {
+        plugin.getConfig().set("silent", silent);
+    }
+
+    @Override
+    public int getUpdateInterval() {
+        return plugin.getConfig().getInt("update-interval", 1);
+    }
+
+    @Override
+    public void setUpdateInterval(int updateInterval) {
+        plugin.getConfig().set("update-interval", updateInterval);
+    }
+
+    @Override
     public void reload() {
         plugin.reloadConfig();
     }

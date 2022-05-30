@@ -1,3 +1,5 @@
 version: 1
 language: en
 continue-on-restart: false
+silent: false
+update-interval: 1

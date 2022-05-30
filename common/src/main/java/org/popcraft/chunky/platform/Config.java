@@ -27,5 +27,13 @@ public interface Config {
 
     boolean getContinueOnRestart();
 
+    boolean isSilent();
+
+    void setSilent(boolean silent);
+
+    int getUpdateInterval();
+
+    void setUpdateInterval(int updateInterval);
+
     void reload();
 }

@@ -97,8 +97,8 @@ public class GenerationTask implements Runnable {
             chunky.getEventBus().call(new GenerationTaskUpdateEvent(this));
             return;
         }
-        final boolean silentMode = chunky.getOptions().isSilent();
-        final boolean updateIntervalElapsed = ((currentTime - updateTime.get()) / 1e3) > chunky.getOptions().getQuietInterval();
+        final boolean silentMode = chunky.getConfig().isSilent();
+        final boolean updateIntervalElapsed = ((currentTime - updateTime.get()) / 1e3) > chunky.getConfig().getUpdateInterval();
         if (updateIntervalElapsed) {
             if (!silentMode) {
                 progress.sendUpdate(chunky.getServer().getConsole());

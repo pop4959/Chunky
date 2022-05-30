@@ -12,8 +12,8 @@ public class SilentCommand extends ChunkyCommand {
     }
 
     public void execute(Sender sender, String[] args) {
-        chunky.getOptions().setSilent(!chunky.getOptions().isSilent());
-        String status = translate(chunky.getOptions().isSilent() ? TranslationKey.ENABLED : TranslationKey.DISABLED);
+        chunky.getConfig().setSilent(!chunky.getConfig().isSilent());
+        String status = translate(chunky.getConfig().isSilent() ? TranslationKey.ENABLED : TranslationKey.DISABLED);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_SILENT, status);
     }
 }

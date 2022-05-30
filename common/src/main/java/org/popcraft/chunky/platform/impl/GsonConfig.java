@@ -137,6 +137,26 @@ public class GsonConfig implements Config {
     }
 
     @Override
+    public boolean isSilent() {
+        return Optional.ofNullable(configModel.silent).orElse(false);
+    }
+
+    @Override
+    public void setSilent(boolean silent) {
+        configModel.silent = silent;
+    }
+
+    @Override
+    public int getUpdateInterval() {
+        return Optional.ofNullable(configModel.updateInterval).orElse(1);
+    }
+
+    @Override
+    public void setUpdateInterval(int updateInterval) {
+        configModel.updateInterval = updateInterval;
+    }
+
+    @Override
     public void reload() {
         try (final Reader reader = Files.newBufferedReader(savePath)) {
             configModel = GSON.fromJson(reader, ConfigModel.class);
@@ -163,6 +183,8 @@ public class GsonConfig implements Config {
         private Integer version = 1;
         private String language = "en";
         private Boolean continueOnRestart = false;
+        private Boolean silent = false;
+        private Integer updateInterval = 1;
         private Map<String, TaskModel> tasks;
 
         public Integer getVersion() {
@@ -195,6 +217,22 @@ public class GsonConfig implements Config {
 
         public void setTasks(Map<String, TaskModel> tasks) {
             this.tasks = tasks;
+        }
+
+        public boolean isSilent() {
+            return silent;
+        }
+
+        public void setSilent(boolean silent) {
+            this.silent = silent;
+        }
+
+        public int getUpdateInterval() {
+            return updateInterval;
+        }
+
+        public void setUpdateInterval(int updateInterval) {
+            this.updateInterval = updateInterval;
         }
     }
 
