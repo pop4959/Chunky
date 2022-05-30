@@ -30,7 +30,7 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         final BossBarManager bossBarManager = server.getBossBarManager();
         final CommandBossBar existingBossBar = bossBarManager.get(barIdentifier);
         final CommandBossBar bossBar = existingBossBar == null ? createNewBossBar(bossBarManager, barIdentifier, worldIdentifier) : existingBossBar;
-        final boolean silent = chunky.getOptions().isSilent();
+        final boolean silent = chunky.getConfig().isSilent();
         if (silent == bossBar.isVisible()) {
             bossBar.setVisible(!silent);
         }

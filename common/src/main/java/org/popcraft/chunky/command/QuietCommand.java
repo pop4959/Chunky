@@ -22,7 +22,7 @@ public class QuietCommand extends ChunkyCommand {
             return;
         }
         int quietInterval = Math.max(0, newQuiet.get());
-        chunky.getOptions().setQuietInterval(quietInterval);
+        chunky.getConfig().setUpdateInterval(quietInterval);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_QUIET, quietInterval);
     }
 }

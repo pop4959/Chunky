@@ -29,7 +29,6 @@ public class Chunky {
     private final Selection.Builder selection;
     private final TaskScheduler scheduler = new TaskScheduler();
     private final Map<String, GenerationTask> generationTasks = new ConcurrentHashMap<>();
-    private final Options options = new Options();
     private final Map<String, PendingAction> pendingActions = new HashMap<>();
     private final RegionCache regionCache = new RegionCache();
     private final double limit;
@@ -125,10 +124,6 @@ public class Chunky {
 
     public Selection.Builder getSelection() {
         return selection;
-    }
-
-    public Options getOptions() {
-        return options;
     }
 
     public Optional<Runnable> getPendingAction(Sender sender) {
