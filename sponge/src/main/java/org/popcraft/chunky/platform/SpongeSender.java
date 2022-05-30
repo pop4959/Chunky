@@ -8,6 +8,8 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.world.DefaultWorldKeys;
+import org.spongepowered.api.world.server.WorldManager;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
@@ -30,7 +32,8 @@ public class SpongeSender implements Sender {
 
     @Override
     public World getWorld() {
-        return new SpongeWorld(Sponge.game().server().worldManager().defaultWorld());
+        final WorldManager worldManager = Sponge.game().server().worldManager();
+        return new SpongeWorld(worldManager.world(DefaultWorldKeys.DEFAULT).orElseThrow(IllegalStateException::new));
     }
 
     @Override
