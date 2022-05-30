@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
@@ -10,19 +11,27 @@ import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Parameter;
 import org.popcraft.chunky.util.Translator;
 
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class BukkitConfig implements Config {
     private static final String TASKS_KEY = "tasks.";
+    private static final List<String> HEADER = Arrays.asList("Chunky Configuration", "https://github.com/pop4959/Chunky/wiki/Configuration");
     private final ChunkyBukkit plugin;
 
     public BukkitConfig(ChunkyBukkit plugin) {
         this.plugin = plugin;
-        plugin.getConfig().options().copyDefaults(true);
-        plugin.getConfig().options().copyHeader(true);
+        final FileConfigurationOptions options = plugin.getConfig().options();
+        options.copyDefaults(true);
+        try {
+            FileConfigurationOptions.class.getMethod("header", String.class).invoke(options, String.join("\n", HEADER));
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            options.setHeader(HEADER);
+        }
         plugin.saveConfig();
         Translator.setLanguage(getLanguage());
     }
