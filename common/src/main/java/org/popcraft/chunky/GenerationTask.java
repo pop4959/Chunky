@@ -1,5 +1,7 @@
 package org.popcraft.chunky;
 
+import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
+import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ChunkIteratorFactory;
 import org.popcraft.chunky.platform.Sender;
@@ -22,7 +24,7 @@ public class GenerationTask implements Runnable {
     private final Selection selection;
     private final Shape shape;
     private final AtomicLong startTime = new AtomicLong();
-    private final AtomicLong printTime = new AtomicLong();
+    private final AtomicLong updateTime = new AtomicLong();
     private final AtomicLong finishedChunks = new AtomicLong();
     private final Deque<Pair<Long, AtomicLong>> updateSamples = new ConcurrentLinkedDeque<>();
     private final Progress progress;
@@ -90,11 +92,20 @@ public class GenerationTask implements Runnable {
         progress.seconds = time - progress.hours * 3600 - progress.minutes * 60;
         progress.chunkX = chunkX;
         progress.chunkZ = chunkZ;
-        if (chunksLeft > 0 && (chunky.getOptions().isSilent() || ((currentTime - printTime.get()) / 1e3) < chunky.getOptions().getQuietInterval())) {
+        if (progress.complete) {
+            progress.sendUpdate(chunky.getServer().getConsole());
+            chunky.getEventBus().call(new GenerationTaskUpdateEvent(this));
             return;
         }
-        printTime.set(currentTime);
-        progress.sendUpdate(chunky.getServer().getConsole());
+        final boolean silentMode = chunky.getOptions().isSilent();
+        final boolean updateIntervalElapsed = ((currentTime - updateTime.get()) / 1e3) > chunky.getOptions().getQuietInterval();
+        if (updateIntervalElapsed) {
+            if (!silentMode) {
+                progress.sendUpdate(chunky.getServer().getConsole());
+            }
+            chunky.getEventBus().call(new GenerationTaskUpdateEvent(this));
+            updateTime.set(currentTime);
+        }
     }
 
     @Override
@@ -135,11 +146,16 @@ public class GenerationTask implements Runnable {
         chunky.getConfig().saveTask(this);
         chunky.getGenerationTasks().remove(selection.world().getName());
         Thread.currentThread().setName(poolThreadName);
+        chunky.getEventBus().call(new GenerationTaskFinishEvent(this));
     }
 
     public void stop(final boolean cancelled) {
         this.stopped = true;
         this.cancelled = cancelled;
+    }
+
+    public Chunky getChunky() {
+        return chunky;
     }
 
     public Selection getSelection() {
@@ -170,6 +186,7 @@ public class GenerationTask implements Runnable {
         return progress;
     }
 
+    @SuppressWarnings("unused")
     public static class Progress {
         private final String world;
         private long chunkCount;

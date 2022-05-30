@@ -6,14 +6,14 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
-import org.popcraft.chunky.listeners.BossBarProgress;
+import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
+import org.popcraft.chunky.listeners.bossbar.BossBarTaskUpdateListener;
 import org.popcraft.chunky.platform.FabricPlayer;
 import org.popcraft.chunky.platform.FabricSender;
 import org.popcraft.chunky.platform.FabricServer;
@@ -43,6 +43,7 @@ public class ChunkyFabric implements ModInitializer {
             if (chunky.getConfig().getContinueOnRestart()) {
                 chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
             }
+            chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener());
             FabricLoader.getInstance().getEntrypointContainers("chunky", ModInitializer.class)
                     .forEach(entryPoint -> entryPoint.getEntrypoint().onInitialize());
         });
@@ -51,7 +52,6 @@ public class ChunkyFabric implements ModInitializer {
                 chunky.disable();
             }
         });
-        ServerTickEvents.END_SERVER_TICK.register(server -> BossBarProgress.tick(chunky, server));
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             final LiteralArgumentBuilder<ServerCommandSource> command = literal(CommandLiteral.CHUNKY)
                     .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
