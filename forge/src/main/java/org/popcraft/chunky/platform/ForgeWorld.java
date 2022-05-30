@@ -131,8 +131,7 @@ public class ForgeWorld implements World {
         final Location location = player.getLocation();
         final net.minecraft.world.entity.player.Player minecraftPlayer = world.getServer().getPlayerList().getPlayer(player.getUUID());
         if (minecraftPlayer != null) {
-            //noinspection deprecation
-            Registry.SOUND_EVENT.getOptional(ResourceLocation.tryParse(sound)).ifPresent(soundEvent -> world.playSound(minecraftPlayer, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
+            world.getServer().registryAccess().registry(Registry.SOUND_EVENT_REGISTRY).flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound))).ifPresent(soundEvent -> world.playSound(minecraftPlayer, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
         }
     }
 
