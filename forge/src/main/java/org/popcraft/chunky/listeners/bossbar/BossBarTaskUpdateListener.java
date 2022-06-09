@@ -7,7 +7,7 @@ import net.minecraft.server.bossevents.CustomBossEvent;
 import net.minecraft.server.bossevents.CustomBossEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
-import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
@@ -58,11 +58,11 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
 
     private CustomBossEvent createNewBossBar(final CustomBossEvents bossBarManager, final ResourceLocation barIdentifier, final ResourceLocation worldIdentifier) {
         final CustomBossEvent bossBar = bossBarManager.create(barIdentifier, Component.nullToEmpty(barIdentifier.toString()));
-        if (DimensionType.OVERWORLD_EFFECTS.equals(worldIdentifier)) {
+        if (Level.OVERWORLD.location().equals(worldIdentifier)) {
             bossBar.setColor(BossEvent.BossBarColor.GREEN);
-        } else if (DimensionType.NETHER_EFFECTS.equals(worldIdentifier)) {
+        } else if (Level.NETHER.location().equals(worldIdentifier)) {
             bossBar.setColor(BossEvent.BossBarColor.RED);
-        } else if (DimensionType.END_EFFECTS.equals(worldIdentifier)) {
+        } else if (Level.END.location().equals(worldIdentifier)) {
             bossBar.setColor(BossEvent.BossBarColor.PURPLE);
         } else {
             bossBar.setColor(BossEvent.BossBarColor.BLUE);

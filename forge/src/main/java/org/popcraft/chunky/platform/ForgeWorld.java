@@ -2,7 +2,6 @@ package org.popcraft.chunky.platform;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
@@ -20,7 +19,6 @@ import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -62,16 +60,7 @@ public class ForgeWorld implements World {
             if (unloadedChunkHolder != null && unloadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
                 return true;
             }
-            CompoundTag chunkNbt;
-            try {
-                chunkNbt = chunkStorage.readChunk(chunkPos);
-            } catch (IOException e) {
-                return false;
-            }
-            if (chunkNbt != null && chunkNbt.contains("Status", 8)) {
-                return "full".equals(chunkNbt.getString("Status"));
-            }
-            return false;
+            return chunkStorage.readChunk(chunkPos).join().map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false);
         }
     }
 

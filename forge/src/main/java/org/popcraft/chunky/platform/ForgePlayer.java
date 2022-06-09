@@ -38,7 +38,7 @@ public class ForgePlayer extends ForgeSender implements Player {
 
     @Override
     public void sendMessage(String key, boolean prefixed, Object... args) {
-        player.sendMessage(formatColored(translateKey(key, prefixed, args)), player.getUUID());
+        player.sendSystemMessage(formatColored(translateKey(key, prefixed, args)));
     }
 
     @Override
