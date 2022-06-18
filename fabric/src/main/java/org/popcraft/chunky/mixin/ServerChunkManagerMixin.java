@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface ServerChunkManagerMixin {
     @Invoker("tick")
     @SuppressWarnings({"UnusedReturnValue", "UnnecessaryInterfaceModifier"})
-    public boolean tick();
+    public boolean invokeTick();
 }

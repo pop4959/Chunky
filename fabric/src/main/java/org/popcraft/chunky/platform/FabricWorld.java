@@ -54,7 +54,7 @@ public class FabricWorld implements World {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             ThreadedAnvilChunkStorage chunkStorage = serverWorld.getChunkManager().threadedAnvilChunkStorage;
             ThreadedAnvilChunkStorageMixin chunkStorageMixin = (ThreadedAnvilChunkStorageMixin) chunkStorage;
-            ChunkHolder loadedChunkHolder = chunkStorageMixin.getChunkHolder(chunkPos.toLong());
+            ChunkHolder loadedChunkHolder = chunkStorageMixin.invokeGetChunkHolder(chunkPos.toLong());
             if (loadedChunkHolder != null && loadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
                 return true;
             }
@@ -62,7 +62,7 @@ public class FabricWorld implements World {
             if (unloadedChunkHolder != null && unloadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
                 return true;
             }
-            return chunkStorageMixin.getUpdatedChunkNbt(chunkPos).join().map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false);
+            return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos).join().map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false);
         }
     }
 
@@ -74,10 +74,10 @@ public class FabricWorld implements World {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkManager serverChunkManager = serverWorld.getChunkManager();
             serverChunkManager.addTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
-            ((ServerChunkManagerMixin) serverChunkManager).tick();
+            ((ServerChunkManagerMixin) serverChunkManager).invokeTick();
             final ThreadedAnvilChunkStorage threadedAnvilChunkStorage = serverChunkManager.threadedAnvilChunkStorage;
             final ThreadedAnvilChunkStorageMixin threadedAnvilChunkStorageMixin = (ThreadedAnvilChunkStorageMixin) threadedAnvilChunkStorage;
-            final ChunkHolder chunkHolder = threadedAnvilChunkStorageMixin.getChunkHolder(chunkPos.toLong());
+            final ChunkHolder chunkHolder = threadedAnvilChunkStorageMixin.invokeGetChunkHolder(chunkPos.toLong());
             final CompletableFuture<Void> chunkFuture = chunkHolder == null ? CompletableFuture.completedFuture(null) : CompletableFuture.allOf(chunkHolder.getChunkAt(ChunkStatus.FULL, threadedAnvilChunkStorage));
             chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkManager.removeTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), serverWorld.getServer());
             return chunkFuture;

@@ -16,10 +16,10 @@ import java.util.concurrent.CompletableFuture;
 @Mixin(ThreadedAnvilChunkStorage.class)
 public interface ThreadedAnvilChunkStorageMixin {
     @Invoker("getChunkHolder")
-    public ChunkHolder getChunkHolder(long pos);
+    public ChunkHolder invokeGetChunkHolder(long pos);
 
     @Invoker("getUpdatedChunkNbt")
-    public CompletableFuture<Optional<NbtCompound>> getUpdatedChunkNbt(ChunkPos pos);
+    public CompletableFuture<Optional<NbtCompound>> invokeGetUpdatedChunkNbt(ChunkPos pos);
 
     @Accessor("chunksToUnload")
     public Long2ObjectLinkedOpenHashMap<ChunkHolder> getChunksToUnload();
