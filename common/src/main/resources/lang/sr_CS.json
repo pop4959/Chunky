@@ -38,7 +38,7 @@
   "format_shape": "Oblik promenjen u %s.",
   "format_silent": "Tihi mod %s.",
   "format_start": "Proces pokrenut u %s za %s regiju centriranu u %s, %s sa razdaljinom %s.",
-  "format_start_confirm": "Proces je već pokrenut u ovom svetu. Da nastavite sa njim kucajte '%s'. Da pokrenete novi proces, kucajte '%s%'.",
+  "format_start_confirm": "Proces je već pokrenut u ovom svetu. Da nastavite sa njim kucajte '%s'. Da pokrenete novi proces, kucajte '%s'.",
   "format_start_disk": "Server ima samo %s preostalog prostora, potrebno je oko %s za ovaj proces. Ako ipak želite nastaviti, kucajte '%s'.",
   "format_start_limit": "Vaš host je ograničio maksimalnu razdaljinu pregenerisanja na %s da bi izbegao veće korišćenje memorije. Smanjite razdaljinu ili ih kontaktirajte da biste uklonili ovo ograničenje.",
   "format_started_already": "Proces je već pokrenut za %s!",
