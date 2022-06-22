@@ -24,6 +24,7 @@ public class TranslatorTest {
         testTranslation("pt");
         testTranslation("pt_BR");
         testTranslation("ru");
+        testTranslation("sr_CS");
         testTranslation("tr");
         testTranslation("uk");
         testTranslation("vi");
