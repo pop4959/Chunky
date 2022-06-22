@@ -4,10 +4,12 @@ files:
     languages_mapping:
       locale_with_underscore:
         bg: bg
+        bs: bs
         cs: cs
         de: de
         es-ES: es
         fr: fr
+        hr: hr
         it: it
         nl: nl
         no: no
