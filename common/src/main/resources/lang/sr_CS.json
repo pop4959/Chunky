@@ -50,7 +50,7 @@
   "help_corners": "&2chunky corners <x1> <z1> <x2> <z2>&r - Postavite po ivicama",
   "help_trim": "&2chunky trim&r - Obrišite čankove van selekcije",
   "help_menu": "&aChunky Komande&r%s",
-  "help_more": "Kucajte &s%s&r za više.",
+  "help_more": "Kucajte &a%s&r za više.",
   "help_pattern": "&2chunky pattern <oblik>&r - Postavite oblik za generisanje",
   "help_pause": "&2chunky pause&r - Pauzirajte trenutne procese i sačuvajte napredak",
   "help_progress": "&2chunky progress&r - Prikazuje trenutni napredak procesa",
