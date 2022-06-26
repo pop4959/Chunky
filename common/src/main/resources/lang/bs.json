@@ -61,8 +61,8 @@
   "help_silent": "&2chunky silent&r - Uključite/isključite poruke napretka",
   "help_spawn": "&2chunky spawn&r - Postavite centar za spawn lokaciju",
   "help_start": "&2chunky start&r - Započnite novi proces generisanja",
-  "help_world": "&2chunky world <svet>&r - Odaberite svet",
-  "help_worldborder": "&2chunky worldborder&r - Postavite centar i razdaljinu preko bordera svjeta",
+  "help_world": "&2chunky world <svijet>&r - Odaberite svijet",
+  "help_worldborder": "&2chunky worldborder&r - Postavite centar i razdaljinu preko bordera svijeta",
   "pattern_concentric": "koncentrično",
   "pattern_loop": "petlja",
   "pattern_spiral": "spirala",
@@ -73,10 +73,10 @@
   "shape_pentagon": "pentagon",
   "shape_rectangle": "pravougaonik",
   "shape_square": "kvadrat",
-  "shape_star": "zvjezda",
+  "shape_star": "zvijezda",
   "shape_triangle": "trougao",
   "task_trim": "Obrisano %s čankova iz %s u %s sekundi.",
-  "task_done": "Proces završen za %s. Obrađeno: %s čankova (%s%%), Proteklo vrijemena: %s:%s:%s",
+  "task_done": "Proces završen za %s. Obrađeno: %s čankova (%s%%), Proteklo vremena: %s:%s:%s",
   "task_stopped": "Proces zaustavljen za %s.",
   "task_update": "U toku je proces za %s. Obrađeno: %s čankova (%s%%), Preostalo: %s:%s:%s, Brzina: %s čps, Trenutno: %s, %s"
 }
