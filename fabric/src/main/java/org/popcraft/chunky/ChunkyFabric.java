@@ -12,7 +12,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
+import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
+import org.popcraft.chunky.listeners.bossbar.BossBarTaskFinishListener;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskUpdateListener;
 import org.popcraft.chunky.platform.FabricPlayer;
 import org.popcraft.chunky.platform.FabricSender;
@@ -44,6 +46,7 @@ public class ChunkyFabric implements ModInitializer {
                 chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
             }
             chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener());
+            chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener());
             FabricLoader.getInstance().getEntrypointContainers("chunky", ModInitializer.class)
                     .forEach(entryPoint -> entryPoint.getEntrypoint().onInitialize());
         });

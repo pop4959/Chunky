@@ -13,7 +13,9 @@ import net.minecraftforge.fml.common.Mod;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
+import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
+import org.popcraft.chunky.listeners.bossbar.BossBarTaskFinishListener;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskUpdateListener;
 import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.ForgeServer;
@@ -49,6 +51,7 @@ public class ChunkyForge {
             chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
         }
         chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener());
+        chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener());
         final LiteralArgumentBuilder<CommandSourceStack> command = literal(CommandLiteral.CHUNKY)
                 .requires(serverCommandSource -> serverCommandSource.hasPermission(2))
                 .executes(context -> {
