@@ -25,7 +25,7 @@
   "format_confirm": "Nemate šta da potvrdite!",
   "format_continue": "Proces nastavljen za %s.",
   "format_continue_no_tasks": "Nema procesa za nastavak.",
-  "format_trim_confirm": "&cUpozorenje: Čankovi u %s izvan %s regije centrirani u %s, %s sa razdaljinom %s će biti trajno obrisani. Napravite rezervnu kopiju servera prije nego što nastavite da biste izbjegli potencijalnu štetu. Morate restartovati server kada se proces završi. Ako ste razumjeli i želite nastaviti, napišite '%s'.",
+  "format_trim_confirm": "&cUpozorenje: Čankovi u %s izvan %s regije centrirani u %s, %s sa razdaljinom %s će biti trajno obrisani. Napravite rezervnu kopiju servera prije nego što nastavite da biste izbjegli potencijalnu štetu. Morate restartovati server kada se proces završi. Ako ste razumijeli i želite nastaviti, napišite '%s'.",
   "format_pattern": "Oblik promijenjen u %s.",
   "format_pause": "Proces za %s pauziran.",
   "format_pause_no_tasks": "Nema procesa za pauziranje.",
@@ -40,7 +40,7 @@
   "format_start": "Proces pokrenut u %s za %s regiju centriranu u %s, %s sa razdaljinom %s.",
   "format_start_confirm": "Proces je već pokrenut u ovom svijetu. Da nastavite sa njim kucajte '%s'. Da pokrenete novi proces, kucajte '%s'.",
   "format_start_disk": "Server ima samo %s preostalog prostora, potrebno je oko %s za ovaj proces. Ako ipak želite nastaviti, kucajte '%s'.",
-  "format_start_limit": "Vaš host je ograničio maksimalnu razdaljinu pregenerisanja na %s da bi izbegao veće korišćenje memorije. Smanjite razdaljinu ili ih kontaktirajte da biste uklonili ovo ograničenje.",
+  "format_start_limit": "Vaš host je ograničio maksimalnu razdaljinu pregenerisanja na %s da bi izbjegao veće korištenje memorije. Smanjite razdaljinu ili ih kontaktirajte da biste uklonili ovo ograničenje.",
   "format_started_already": "Proces je već pokrenut za %s!",
   "format_world": "Svijet promijenjen u %s.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Upravljajte borderima svijetova",
@@ -76,7 +76,7 @@
   "shape_star": "zvijezda",
   "shape_triangle": "trokut",
   "task_trim": "Obrisano %s čankova iz %s u %s sekundi.",
-  "task_done": "Proces završen za %s. Obrađeno: %s čankova (%s%%), Proteklo vrijemena: %s:%s:%s",
+  "task_done": "Proces završen za %s. Obrađeno: %s čankova (%s%%), Protjeklo vremena: %s:%s:%s",
   "task_stopped": "Proces zaustavljen za %s.",
   "task_update": "U toku je proces za %s. Obrađeno: %s čankova (%s%%), Preostalo: %s:%s:%s, Brzina: %s čps, Trenutačno: %s, %s"
 }
