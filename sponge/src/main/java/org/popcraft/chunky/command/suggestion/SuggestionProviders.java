@@ -1,6 +1,6 @@
 package org.popcraft.chunky.command.suggestion;
 
-public class SuggestionProviders {
+public final class SuggestionProviders {
     public static final PatternSuggestionProvider PATTERNS;
     public static final ShapeSuggestionProvider SHAPES;
 

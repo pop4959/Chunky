@@ -10,11 +10,11 @@ import org.popcraft.chunky.util.TranslationKey;
 import java.util.Optional;
 
 public class CenterCommand extends ChunkyCommand {
-    public CenterCommand(Chunky chunky) {
+    public CenterCommand(final Chunky chunky) {
         super(chunky);
     }
 
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         Optional<Double> newX = Optional.empty();
         if (args.length > 1) {
             newX = Input.tryDoubleSuffixed(args[1]);
@@ -26,7 +26,7 @@ public class CenterCommand extends ChunkyCommand {
         final double centerX;
         final double centerZ;
         if (!newX.isPresent() && !newZ.isPresent()) {
-            Location coordinate = sender.getLocation();
+            final Location coordinate = sender.getLocation();
             centerX = coordinate.getX();
             centerZ = coordinate.getZ();
         } else if (newX.isPresent() && newZ.isPresent()) {

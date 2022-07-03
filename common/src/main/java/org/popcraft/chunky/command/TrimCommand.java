@@ -25,14 +25,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.popcraft.chunky.util.Translator.translate;
 
 public class TrimCommand extends ChunkyCommand {
-    public TrimCommand(Chunky chunky) {
+    public TrimCommand(final Chunky chunky) {
         super(chunky);
     }
 
     @Override
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         if (args.length > 1) {
-            Optional<World> world = Input.tryWorld(chunky, args[1]);
+            final Optional<World> world = Input.tryWorld(chunky, args[1]);
             if (world.isPresent()) {
                 chunky.getSelection().world(world.get());
             } else {
@@ -41,7 +41,7 @@ public class TrimCommand extends ChunkyCommand {
             }
         }
         if (args.length > 2) {
-            Optional<String> shape = Input.tryShape(args[2]);
+            final Optional<String> shape = Input.tryShape(args[2]);
             if (shape.isPresent()) {
                 chunky.getSelection().shape(shape.get());
             } else {
@@ -50,8 +50,8 @@ public class TrimCommand extends ChunkyCommand {
             }
         }
         if (args.length > 3) {
-            Optional<Double> centerX = Input.tryDoubleSuffixed(args[3]).filter(cx -> !Input.isPastWorldLimit(cx));
-            Optional<Double> centerZ = Input.tryDoubleSuffixed(args.length > 4 ? args[4] : null).filter(cz -> !Input.isPastWorldLimit(cz));
+            final Optional<Double> centerX = Input.tryDoubleSuffixed(args[3]).filter(cx -> !Input.isPastWorldLimit(cx));
+            final Optional<Double> centerZ = Input.tryDoubleSuffixed(args.length > 4 ? args[4] : null).filter(cz -> !Input.isPastWorldLimit(cz));
             if (centerX.isPresent() && centerZ.isPresent()) {
                 chunky.getSelection().center(centerX.get(), centerZ.get());
             } else {
@@ -60,7 +60,7 @@ public class TrimCommand extends ChunkyCommand {
             }
         }
         if (args.length > 5) {
-            Optional<Double> radiusX = Input.tryDoubleSuffixed(args[5]).filter(rx -> rx >= 0 && !Input.isPastWorldLimit(rx));
+            final Optional<Double> radiusX = Input.tryDoubleSuffixed(args[5]).filter(rx -> rx >= 0 && !Input.isPastWorldLimit(rx));
             if (radiusX.isPresent()) {
                 chunky.getSelection().radius(radiusX.get());
             } else {
@@ -69,7 +69,7 @@ public class TrimCommand extends ChunkyCommand {
             }
         }
         if (args.length > 6) {
-            Optional<Double> radiusZ = Input.tryDoubleSuffixed(args[6]).filter(rz -> rz >= 0 && !Input.isPastWorldLimit(rz));
+            final Optional<Double> radiusZ = Input.tryDoubleSuffixed(args[6]).filter(rz -> rz >= 0 && !Input.isPastWorldLimit(rz));
             if (radiusZ.isPresent()) {
                 chunky.getSelection().radiusZ(radiusZ.get());
             } else {
@@ -107,12 +107,12 @@ public class TrimCommand extends ChunkyCommand {
     }
 
     private int checkRegion(final Path region, final Shape shape) {
-        Optional<ChunkCoordinate> regionCoordinate = tryRegionCoordinate(region);
+        final Optional<ChunkCoordinate> regionCoordinate = tryRegionCoordinate(region);
         if (!regionCoordinate.isPresent()) {
             return 0;
         }
-        int chunkX = regionCoordinate.get().x << 5;
-        int chunkZ = regionCoordinate.get().z << 5;
+        final int chunkX = regionCoordinate.get().x << 5;
+        final int chunkZ = regionCoordinate.get().z << 5;
         if (shouldDeleteRegion(shape, chunkX, chunkZ)) {
             return deleteRegion(region);
         } else {
@@ -131,8 +131,8 @@ public class TrimCommand extends ChunkyCommand {
         }
         final String regionCoordinates = fileName.substring(2, extension);
         final int separator = regionCoordinates.indexOf('.');
-        Optional<Integer> regionX = Input.tryInteger(regionCoordinates.substring(0, separator));
-        Optional<Integer> regionZ = Input.tryInteger(regionCoordinates.substring(separator + 1));
+        final Optional<Integer> regionX = Input.tryInteger(regionCoordinates.substring(0, separator));
+        final Optional<Integer> regionZ = Input.tryInteger(regionCoordinates.substring(separator + 1));
         if (regionX.isPresent() && regionZ.isPresent()) {
             return Optional.of(new ChunkCoordinate(regionX.get(), regionZ.get()));
         }
@@ -142,8 +142,8 @@ public class TrimCommand extends ChunkyCommand {
     private boolean shouldDeleteRegion(final Shape shape, final int chunkX, final int chunkZ) {
         for (int offsetX = 0; offsetX < 32; ++offsetX) {
             for (int offsetZ = 0; offsetZ < 32; ++offsetZ) {
-                int chunkCenterX = ((chunkX + offsetX) << 4) + 8;
-                int chunkCenterZ = ((chunkZ + offsetZ) << 4) + 8;
+                final int chunkCenterX = ((chunkX + offsetX) << 4) + 8;
+                final int chunkCenterZ = ((chunkZ + offsetZ) << 4) + 8;
                 if (shape.isBounding(chunkCenterX, chunkCenterZ)) {
                     return false;
                 }
@@ -170,10 +170,10 @@ public class TrimCommand extends ChunkyCommand {
             }
             for (int offsetX = 0; offsetX < 32; ++offsetX) {
                 for (int offsetZ = 0; offsetZ < 32; ++offsetZ) {
-                    int chunkCenterX = ((chunkX + offsetX) << 4) + 8;
-                    int chunkCenterZ = ((chunkZ + offsetZ) << 4) + 8;
+                    final int chunkCenterX = ((chunkX + offsetX) << 4) + 8;
+                    final int chunkCenterZ = ((chunkZ + offsetZ) << 4) + 8;
                     if (!shape.isBounding(chunkCenterX, chunkCenterZ)) {
-                        int chunkLocation = ((offsetX % 32) + (offsetZ % 32) * 32) * 4;
+                        final int chunkLocation = ((offsetX % 32) + (offsetZ % 32) * 32) * 4;
                         regionFile.seek(chunkLocation);
                         if (regionFile.readInt() != 0) {
                             regionFile.seek(chunkLocation);
@@ -190,9 +190,9 @@ public class TrimCommand extends ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(String[] args) {
+    public List<String> tabSuggestions(final String[] args) {
         if (args.length == 2) {
-            List<String> suggestions = new ArrayList<>();
+            final List<String> suggestions = new ArrayList<>();
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
             return suggestions;
         } else if (args.length == 3) {

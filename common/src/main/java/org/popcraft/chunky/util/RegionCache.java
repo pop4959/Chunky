@@ -7,11 +7,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RegionCache {
     private final Map<String, WorldState> cache = new ConcurrentHashMap<>();
 
-    public WorldState getWorld(String world) {
+    public WorldState getWorld(final String world) {
         return cache.computeIfAbsent(world, x -> new WorldState());
     }
 
-    public void clear(String world) {
+    public void clear(final String world) {
         cache.remove(world);
     }
 
@@ -19,7 +19,7 @@ public class RegionCache {
     public static final class WorldState {
         private final Map<Long, BitSet> regions = new ConcurrentHashMap<>();
 
-        public void setGenerated(int x, int z) {
+        public void setGenerated(final int x, final int z) {
             final int regionX = x >> 5;
             final int regionZ = z >> 5;
             final long regionKey = ChunkMath.pack(regionX, regionZ);
@@ -30,7 +30,7 @@ public class RegionCache {
             }
         }
 
-        public boolean isGenerated(int x, int z) {
+        public boolean isGenerated(final int x, final int z) {
             final int regionX = x >> 5;
             final int regionZ = z >> 5;
             final long regionKey = ChunkMath.pack(regionX, regionZ);

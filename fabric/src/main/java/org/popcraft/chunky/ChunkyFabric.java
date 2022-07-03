@@ -65,11 +65,11 @@ public class ChunkyFabric implements ModInitializer {
                         } else {
                             sender = new FabricSender(context.getSource());
                         }
-                        Map<String, ChunkyCommand> commands = chunky.getCommands();
-                        String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
-                        String[] tokens = input.split(" ");
-                        String subCommand = tokens.length > 1 && commands.containsKey(tokens[1]) ? tokens[1] : CommandLiteral.HELP;
-                        String[] args = tokens.length > 1 ? Arrays.copyOfRange(tokens, 1, tokens.length) : new String[]{};
+                        final Map<String, ChunkyCommand> commands = chunky.getCommands();
+                        final String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
+                        final String[] tokens = input.split(" ");
+                        final String subCommand = tokens.length > 1 && commands.containsKey(tokens[1]) ? tokens[1] : CommandLiteral.HELP;
+                        final String[] args = tokens.length > 1 ? Arrays.copyOfRange(tokens, 1, tokens.length) : new String[]{};
                         commands.get(subCommand).execute(sender, args);
                         return Command.SINGLE_SUCCESS;
                     });

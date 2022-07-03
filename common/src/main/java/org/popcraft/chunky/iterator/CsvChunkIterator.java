@@ -18,14 +18,14 @@ public class CsvChunkIterator implements ChunkIterator {
     private final long total;
     private final String name;
 
-    public CsvChunkIterator(Selection selection, long count) {
+    public CsvChunkIterator(final Selection selection, final long count) {
         this(selection);
         for (int i = 0; i < count && hasNext(); ++i) {
             chunks.poll();
         }
     }
 
-    public CsvChunkIterator(Selection selection) {
+    public CsvChunkIterator(final Selection selection) {
         final Path filePath = selection.pattern().getValue()
                 .map(value -> selection.chunky().getConfig().getDirectory().resolve(String.format("%s.csv", value)))
                 .orElse(null);

@@ -2,15 +2,15 @@ package org.popcraft.chunky.shape;
 
 import org.popcraft.chunky.Selection;
 
-public class ShapeFactory {
+public final class ShapeFactory {
     private ShapeFactory() {
     }
 
-    public static Shape getShape(Selection selection) {
+    public static Shape getShape(final Selection selection) {
         return getShape(selection, true);
     }
 
-    public static Shape getShape(Selection selection, boolean chunkAligned) {
+    public static Shape getShape(final Selection selection, final boolean chunkAligned) {
         switch (selection.shape()) {
             case ShapeType.CIRCLE:
                 return new Circle(selection, chunkAligned);

@@ -43,7 +43,7 @@ public class ChunkyForge {
     }
 
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
+    public void onServerStarting(final ServerStartingEvent event) {
         final MinecraftServer server = event.getServer();
         final Path configPath = event.getServer().getServerDirectory().toPath().resolve("config/chunky.json");
         this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(() -> chunky, configPath));
@@ -55,12 +55,12 @@ public class ChunkyForge {
         final LiteralArgumentBuilder<CommandSourceStack> command = literal(CommandLiteral.CHUNKY)
                 .requires(serverCommandSource -> serverCommandSource.hasPermission(2))
                 .executes(context -> {
-                    Sender sender = new ForgeSender(context.getSource());
-                    Map<String, ChunkyCommand> commands = chunky.getCommands();
-                    String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
-                    String[] tokens = input.split(" ");
-                    String subCommand = tokens.length > 1 && commands.containsKey(tokens[1]) ? tokens[1] : CommandLiteral.HELP;
-                    String[] args = tokens.length > 1 ? Arrays.copyOfRange(tokens, 1, tokens.length) : new String[]{};
+                    final Sender sender = new ForgeSender(context.getSource());
+                    final Map<String, ChunkyCommand> commands = chunky.getCommands();
+                    final String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
+                    final String[] tokens = input.split(" ");
+                    final String subCommand = tokens.length > 1 && commands.containsKey(tokens[1]) ? tokens[1] : CommandLiteral.HELP;
+                    final String[] args = tokens.length > 1 ? Arrays.copyOfRange(tokens, 1, tokens.length) : new String[]{};
                     commands.get(subCommand).execute(sender, args);
                     return Command.SINGLE_SUCCESS;
                 });
@@ -124,7 +124,7 @@ public class ChunkyForge {
     }
 
     @SubscribeEvent
-    public void onServerStopping(ServerStoppingEvent event) {
+    public void onServerStopping(final ServerStoppingEvent event) {
         if (chunky != null) {
             chunky.disable();
         }

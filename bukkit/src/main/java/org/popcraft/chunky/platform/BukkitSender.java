@@ -29,7 +29,7 @@ public class BukkitSender implements Sender {
 
     private final CommandSender sender;
 
-    public BukkitSender(CommandSender sender) {
+    public BukkitSender(final CommandSender sender) {
         this.sender = sender;
     }
 
@@ -54,26 +54,27 @@ public class BukkitSender implements Sender {
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(final String permission) {
         return sender.hasPermission(permission);
     }
 
     @Override
-    public void sendMessage(String key, boolean prefixed, Object... args) {
+    public void sendMessage(final String key, final boolean prefixed, final Object... args) {
         sender.sendMessage(formatColored(translateKey(key, prefixed, args)));
     }
 
-    protected String formatColored(String message) {
+    protected String formatColored(final String message) {
+        String coloredMessage = message;
         if (RGB_COLORS_SUPPORTED) {
             Matcher rgbMatcher = RGB_PATTERN.matcher(message);
             while (rgbMatcher.find()) {
                 final ChatColor rgbColor = ChatColor.of(rgbMatcher.group().substring(1));
-                final String messageStart = message.substring(0, rgbMatcher.start());
-                final String messageEnd = message.substring(rgbMatcher.end());
-                message = messageStart + rgbColor + messageEnd;
-                rgbMatcher = RGB_PATTERN.matcher(message);
+                final String messageStart = coloredMessage.substring(0, rgbMatcher.start());
+                final String messageEnd = coloredMessage.substring(rgbMatcher.end());
+                coloredMessage = messageStart + rgbColor + messageEnd;
+                rgbMatcher = RGB_PATTERN.matcher(coloredMessage);
             }
         }
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', message);
+        return org.bukkit.ChatColor.translateAlternateColorCodes('&', coloredMessage);
     }
 }

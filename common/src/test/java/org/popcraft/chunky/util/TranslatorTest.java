@@ -35,7 +35,7 @@ public class TranslatorTest {
         testTranslation("zh_HK");
     }
 
-    private void testTranslation(String language) {
+    private void testTranslation(final String language) {
         setLanguage(language);
         translate(TranslationKey.BORDER_DEPENDENCY_UPDATE);
         translate(TranslationKey.BORDER_LOAD_FAILED);

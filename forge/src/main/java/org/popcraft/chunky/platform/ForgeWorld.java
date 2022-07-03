@@ -30,7 +30,7 @@ public class ForgeWorld implements World {
     private final ServerLevel world;
     private final Border worldBorder;
 
-    public ForgeWorld(ServerLevel world) {
+    public ForgeWorld(final ServerLevel world) {
         this.world = world;
         this.worldBorder = new ForgeBorder(world.getWorldBorder());
     }
@@ -46,17 +46,17 @@ public class ForgeWorld implements World {
     }
 
     @Override
-    public boolean isChunkGenerated(int x, int z) {
+    public boolean isChunkGenerated(final int x, final int z) {
         if (Thread.currentThread() != world.getServer().getRunningThread()) {
             return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), world.getServer()).join();
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
-            ChunkMap chunkStorage = world.getChunkSource().chunkMap;
-            ChunkHolder loadedChunkHolder = chunkStorage.getVisibleChunkIfPresent(chunkPos.toLong());
+            final ChunkMap chunkStorage = world.getChunkSource().chunkMap;
+            final ChunkHolder loadedChunkHolder = chunkStorage.getVisibleChunkIfPresent(chunkPos.toLong());
             if (loadedChunkHolder != null && loadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
                 return true;
             }
-            ChunkHolder unloadedChunkHolder = chunkStorage.pendingUnloads.get(chunkPos.toLong());
+            final ChunkHolder unloadedChunkHolder = chunkStorage.pendingUnloads.get(chunkPos.toLong());
             if (unloadedChunkHolder != null && unloadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
                 return true;
             }
@@ -65,7 +65,7 @@ public class ForgeWorld implements World {
     }
 
     @Override
-    public CompletableFuture<Void> getChunkAtAsync(int x, int z) {
+    public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         if (Thread.currentThread() != world.getServer().getRunningThread()) {
             return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), world.getServer()).join();
         } else {
@@ -104,19 +104,19 @@ public class ForgeWorld implements World {
     }
 
     @Override
-    public int getElevation(int x, int z) {
+    public int getElevation(final int x, final int z) {
         return world.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
     }
 
     @Override
-    public void playEffect(Player player, String effect) {
+    public void playEffect(final Player player, final String effect) {
         final Location location = player.getLocation();
         final BlockPos pos = new BlockPos(location.getX(), location.getY(), location.getZ());
         Input.tryInteger(effect).ifPresent(eventId -> world.levelEvent(eventId, pos, 0));
     }
 
     @Override
-    public void playSound(Player player, String sound) {
+    public void playSound(final Player player, final String sound) {
         final Location location = player.getLocation();
         final net.minecraft.world.entity.player.Player minecraftPlayer = world.getServer().getPlayerList().getPlayer(player.getUUID());
         if (minecraftPlayer != null) {
@@ -129,7 +129,7 @@ public class ForgeWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT)).normalize().resolve(name);
+        final Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT)).normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
 

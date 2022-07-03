@@ -6,17 +6,17 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.TranslationKey;
 
 public class ReloadCommand extends ChunkyCommand {
-    public ReloadCommand(Chunky chunky) {
+    public ReloadCommand(final Chunky chunky) {
         super(chunky);
     }
 
     @Override
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         if (!chunky.getGenerationTasks().isEmpty()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_RELOAD_TASKS_RUNNING);
             return;
         }
-        Config config = chunky.getServer().getConfig();
+        final Config config = chunky.getServer().getConfig();
         config.reload();
         chunky.setLanguage(config.getLanguage());
         sender.sendMessagePrefixed(TranslationKey.FORMAT_RELOAD);

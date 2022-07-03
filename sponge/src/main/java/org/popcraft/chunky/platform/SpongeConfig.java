@@ -1,6 +1,5 @@
 package org.popcraft.chunky.platform;
 
-import com.google.common.reflect.TypeToken;
 import org.popcraft.chunky.ChunkySponge;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
@@ -30,15 +29,15 @@ public class SpongeConfig implements Config {
     private final HoconConfigurationLoader configLoader;
     private CommentedConfigurationNode rootNode;
 
-    public SpongeConfig(ChunkySponge plugin) {
+    public SpongeConfig(final ChunkySponge plugin) {
         this.plugin = plugin;
-        Path defaultConfigPath = plugin.getConfigPath();
+        final Path defaultConfigPath = plugin.getConfigPath();
         try {
             Files.createDirectories(defaultConfigPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Path defaultConfigFile = new File(defaultConfigPath.toFile(), CONFIG_FILE).toPath();
+        final Path defaultConfigFile = new File(defaultConfigPath.toFile(), CONFIG_FILE).toPath();
         this.configLoader = HoconConfigurationLoader.builder()
                 .path(defaultConfigFile)
                 .build();
@@ -48,13 +47,13 @@ public class SpongeConfig implements Config {
             this.rootNode = configLoader.createNode();
             e.printStackTrace();
         }
-        URL defaults = getClass().getClassLoader().getResource(CONFIG_FILE);
+        final URL defaults = getClass().getClassLoader().getResource(CONFIG_FILE);
         if (defaults != null) {
             final HoconConfigurationLoader defaultConfigLoader = HoconConfigurationLoader.builder()
                     .url(defaults)
                     .build();
             try {
-                CommentedConfigurationNode defaultRootNode = defaultConfigLoader.load();
+                final CommentedConfigurationNode defaultRootNode = defaultConfigLoader.load();
                 rootNode.mergeFrom(defaultRootNode);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -74,44 +73,44 @@ public class SpongeConfig implements Config {
     }
 
     @Override
-    public Optional<GenerationTask> loadTask(World world) {
+    public Optional<GenerationTask> loadTask(final World world) {
         if (this.rootNode == null) {
             return Optional.empty();
         }
-        ConfigurationNode taskNode = rootNode.node("tasks", world.getName());
+        final ConfigurationNode taskNode = rootNode.node("tasks", world.getName());
         if (taskNode.virtual()) {
             return Optional.empty();
         }
-        boolean cancelled = taskNode.node("cancelled").getBoolean(true);
-        double radiusX = taskNode.node("radius").getDouble(Selection.DEFAULT_RADIUS);
-        double radiusZ = taskNode.node("radiusZ").getDouble(radiusX);
-        Selection.Builder selection = Selection.builder(plugin.getChunky(), world)
+        final boolean cancelled = taskNode.node("cancelled").getBoolean(true);
+        final double radiusX = taskNode.node("radius").getDouble(Selection.DEFAULT_RADIUS);
+        final double radiusZ = taskNode.node("radiusZ").getDouble(radiusX);
+        final Selection.Builder selection = Selection.builder(plugin.getChunky(), world)
                 .centerX(taskNode.node("centerX").getDouble(Selection.DEFAULT_CENTER_X))
                 .centerZ(taskNode.node("centerZ").getDouble(Selection.DEFAULT_CENTER_Z))
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
                 .pattern(Parameter.of(taskNode.node("iterator").getString(PatternType.CONCENTRIC)))
                 .shape(taskNode.node("shape").getString(ShapeType.SQUARE));
-        long count = taskNode.node("count").getInt(0);
-        long time = taskNode.node("time").getInt(0);
+        final long count = taskNode.node("count").getInt(0);
+        final long time = taskNode.node("time").getInt(0);
         return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time, cancelled));
     }
 
     @Override
     public List<GenerationTask> loadTasks() {
-        List<GenerationTask> generationTasks = new ArrayList<>();
+        final List<GenerationTask> generationTasks = new ArrayList<>();
         plugin.getChunky().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
         return generationTasks;
     }
 
     @Override
-    public void saveTask(GenerationTask generationTask) {
+    public void saveTask(final GenerationTask generationTask) {
         if (this.rootNode == null) {
             this.rootNode = configLoader.createNode();
         }
-        Selection selection = generationTask.getSelection();
-        ConfigurationNode taskNode = rootNode.node("tasks", selection.world().getName());
-        String shape = generationTask.getShape().name();
+        final Selection selection = generationTask.getSelection();
+        final ConfigurationNode taskNode = rootNode.node("tasks", selection.world().getName());
+        final String shape = generationTask.getShape().name();
         try {
             taskNode.node("cancelled").set(generationTask.isCancelled());
             taskNode.node("radius").set(selection.radiusX());
@@ -136,7 +135,7 @@ public class SpongeConfig implements Config {
     }
 
     @Override
-    public void cancelTask(World world) {
+    public void cancelTask(final World world) {
         loadTask(world).ifPresent(generationTask -> {
             generationTask.stop(true);
             saveTask(generationTask);
@@ -175,7 +174,7 @@ public class SpongeConfig implements Config {
     }
 
     @Override
-    public void setSilent(boolean silent) {
+    public void setSilent(final boolean silent) {
         if (this.rootNode != null) {
             try {
                 this.rootNode.node(ROOT_CONFIG_NODE, "silent").set(silent);
@@ -191,7 +190,7 @@ public class SpongeConfig implements Config {
     }
 
     @Override
-    public void setUpdateInterval(int updateInterval) {
+    public void setUpdateInterval(final int updateInterval) {
         if (this.rootNode != null) {
             try {
                 this.rootNode.node(ROOT_CONFIG_NODE, "update-interval").set(updateInterval);

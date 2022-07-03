@@ -71,9 +71,9 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Sender bukkitSender = sender instanceof Player ? new BukkitPlayer((Player) sender) : new BukkitSender(sender);
-        Map<String, ChunkyCommand> commands = chunky.getCommands();
+    public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+        final Sender bukkitSender = sender instanceof Player ? new BukkitPlayer((Player) sender) : new BukkitSender(sender);
+        final Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
             if (sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
                 commands.get(args[0].toLowerCase()).execute(bukkitSender, args);
@@ -88,12 +88,12 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
 
     @SuppressWarnings("NullableProblems")
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
         if (args.length < 1) {
             return Collections.emptyList();
         }
         final List<String> suggestions = new ArrayList<>();
-        Map<String, ChunkyCommand> commands = chunky.getCommands();
+        final Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length == 1) {
             commands.keySet().stream().filter(name -> sender.hasPermission(COMMAND_PERMISSION_KEY + name)).forEach(suggestions::add);
         } else if (commands.containsKey(args[0].toLowerCase()) && sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {

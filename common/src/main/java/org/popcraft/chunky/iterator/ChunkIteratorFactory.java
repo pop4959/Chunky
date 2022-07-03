@@ -3,11 +3,11 @@ package org.popcraft.chunky.iterator;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.shape.ShapeType;
 
-public class ChunkIteratorFactory {
+public final class ChunkIteratorFactory {
     private ChunkIteratorFactory() {
     }
 
-    public static ChunkIterator getChunkIterator(Selection selection, long count) {
+    public static ChunkIterator getChunkIterator(final Selection selection, final long count) {
         switch (selection.shape()) {
             case ShapeType.RECTANGLE:
             case ShapeType.ELLIPSE:
@@ -29,7 +29,7 @@ public class ChunkIteratorFactory {
         }
     }
 
-    public static ChunkIterator getChunkIterator(Selection selection) {
+    public static ChunkIterator getChunkIterator(final Selection selection) {
         return getChunkIterator(selection, 0);
     }
 }

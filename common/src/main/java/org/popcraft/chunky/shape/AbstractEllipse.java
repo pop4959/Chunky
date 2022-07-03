@@ -4,7 +4,7 @@ import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.util.Vector2;
 
 public abstract class AbstractEllipse extends AbstractShape {
-    protected AbstractEllipse(Selection selection, boolean chunkAligned) {
+    protected AbstractEllipse(final Selection selection, final boolean chunkAligned) {
         super(selection, chunkAligned);
     }
 

@@ -1,6 +1,26 @@
 package org.popcraft.chunky;
 
-import org.popcraft.chunky.command.*;
+import org.popcraft.chunky.command.CancelCommand;
+import org.popcraft.chunky.command.CenterCommand;
+import org.popcraft.chunky.command.ChunkyCommand;
+import org.popcraft.chunky.command.CommandLiteral;
+import org.popcraft.chunky.command.ConfirmCommand;
+import org.popcraft.chunky.command.ContinueCommand;
+import org.popcraft.chunky.command.CornersCommand;
+import org.popcraft.chunky.command.HelpCommand;
+import org.popcraft.chunky.command.PatternCommand;
+import org.popcraft.chunky.command.PauseCommand;
+import org.popcraft.chunky.command.ProgressCommand;
+import org.popcraft.chunky.command.QuietCommand;
+import org.popcraft.chunky.command.RadiusCommand;
+import org.popcraft.chunky.command.ReloadCommand;
+import org.popcraft.chunky.command.ShapeCommand;
+import org.popcraft.chunky.command.SilentCommand;
+import org.popcraft.chunky.command.SpawnCommand;
+import org.popcraft.chunky.command.StartCommand;
+import org.popcraft.chunky.command.TrimCommand;
+import org.popcraft.chunky.command.WorldBorderCommand;
+import org.popcraft.chunky.command.WorldCommand;
 import org.popcraft.chunky.event.EventBus;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Sender;
@@ -35,7 +55,7 @@ public class Chunky {
     private final Version version;
     private final Map<String, ChunkyCommand> commands;
 
-    public Chunky(Server server, Config config) {
+    public Chunky(final Server server, final Config config) {
         this.server = server;
         this.config = config;
         this.eventBus = new EventBus();
@@ -126,17 +146,17 @@ public class Chunky {
         return selection;
     }
 
-    public Optional<Runnable> getPendingAction(Sender sender) {
+    public Optional<Runnable> getPendingAction(final Sender sender) {
         pendingActions.values().removeIf(PendingAction::hasExpired);
-        PendingAction pendingAction = pendingActions.remove(sender.getName());
+        final PendingAction pendingAction = pendingActions.remove(sender.getName());
         return Optional.ofNullable(pendingAction).map(PendingAction::getAction);
     }
 
-    public void setPendingAction(Sender sender, Runnable action) {
+    public void setPendingAction(final Sender sender, final Runnable action) {
         pendingActions.put(sender.getName(), new PendingAction(action));
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(final String language) {
         Translator.setLanguage(language);
     }
 

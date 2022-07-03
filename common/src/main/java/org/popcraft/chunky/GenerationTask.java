@@ -33,7 +33,7 @@ public class GenerationTask implements Runnable {
     private boolean stopped, cancelled;
     private long prevTime;
 
-    public GenerationTask(Chunky chunky, Selection selection, long count, long time, boolean cancelled) {
+    public GenerationTask(final Chunky chunky, final Selection selection, final long count, final long time, final boolean cancelled) {
         this(chunky, selection);
         this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection, count);
         this.finishedChunks.set(count);
@@ -41,7 +41,7 @@ public class GenerationTask implements Runnable {
         this.prevTime = time;
     }
 
-    public GenerationTask(Chunky chunky, Selection selection) {
+    public GenerationTask(final Chunky chunky, final Selection selection) {
         this.chunky = chunky;
         this.selection = selection;
         this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection);
@@ -50,7 +50,7 @@ public class GenerationTask implements Runnable {
         this.worldState = chunky.getRegionCache().getWorld(selection.world().getName());
     }
 
-    private void update(int chunkX, int chunkZ, boolean loaded) {
+    private void update(final int chunkX, final int chunkZ, final boolean loaded) {
         if (stopped) {
             return;
         }
@@ -187,7 +187,7 @@ public class GenerationTask implements Runnable {
     }
 
     @SuppressWarnings("unused")
-    public static class Progress {
+    public static final class Progress {
         private final String world;
         private long chunkCount;
         private boolean complete;

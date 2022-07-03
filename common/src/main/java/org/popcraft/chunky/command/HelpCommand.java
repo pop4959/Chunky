@@ -13,7 +13,7 @@ import static org.popcraft.chunky.util.Translator.translate;
 public class HelpCommand extends ChunkyCommand {
     private final List<String> helpMessages;
 
-    public HelpCommand(Chunky chunky) {
+    public HelpCommand(final Chunky chunky) {
         super(chunky);
         this.helpMessages = new ArrayList<>();
         helpMessages.add(TranslationKey.HELP_START);
@@ -36,13 +36,13 @@ public class HelpCommand extends ChunkyCommand {
     }
 
     @Override
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         final StringBuilder help = new StringBuilder();
         if (sender.isPlayer()) {
-            int pageIndexLast = helpMessages.size() / 8;
-            int pageIndex = (args.length < 2 ? 0 : Math.max(0, Input.tryInteger(args[1]).orElse(1) - 1)) % (pageIndexLast + 1);
-            int helpIndexFirst = 8 * pageIndex;
-            int helpIndexLast = Math.min(helpIndexFirst + 8, helpMessages.size());
+            final int pageIndexLast = helpMessages.size() / 8;
+            final int pageIndex = (args.length < 2 ? 0 : Math.max(0, Input.tryInteger(args[1]).orElse(1) - 1)) % (pageIndexLast + 1);
+            final int helpIndexFirst = 8 * pageIndex;
+            final int helpIndexLast = Math.min(helpIndexFirst + 8, helpMessages.size());
             for (int i = helpIndexFirst; i < helpIndexLast; ++i) {
                 help.append('\n').append(translate(helpMessages.get(i)));
             }

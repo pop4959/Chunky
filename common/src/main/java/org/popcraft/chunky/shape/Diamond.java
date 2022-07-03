@@ -11,7 +11,7 @@ import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
 public class Diamond extends AbstractPolygon {
     final double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
 
-    public Diamond(Selection selection, boolean chunkAligned) {
+    public Diamond(final Selection selection, final boolean chunkAligned) {
         super(selection, chunkAligned);
         this.p1x = centerX;
         this.p1z = centerZ + radiusX;
@@ -34,7 +34,7 @@ public class Diamond extends AbstractPolygon {
     }
 
     @Override
-    public boolean isBounding(double x, double z) {
+    public boolean isBounding(final double x, final double z) {
         if (!insideLine(p1x, p1z, p2x, p2z, x, z)) {
             return false;
         }

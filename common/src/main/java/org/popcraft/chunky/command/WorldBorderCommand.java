@@ -14,16 +14,16 @@ import org.popcraft.chunky.util.TranslationKey;
 import java.util.Map;
 
 public class WorldBorderCommand extends ChunkyCommand {
-    public WorldBorderCommand(Chunky chunky) {
+    public WorldBorderCommand(final Chunky chunky) {
         super(chunky);
     }
 
-    public void execute(Sender sender, String[] args) {
-        Selection previous = chunky.getSelection().build();
+    public void execute(final Sender sender, final String[] args) {
+        final Selection previous = chunky.getSelection().build();
         if (!setBorderViaIntegration(previous.world())) {
             chunky.getSelection().worldborder();
         }
-        Selection current = chunky.getSelection().build();
+        final Selection current = chunky.getSelection().build();
         sender.sendMessagePrefixed(TranslationKey.FORMAT_CENTER, Formatting.number(current.centerX()), Formatting.number(current.centerZ()));
         if (current.radiusX() == current.radiusZ()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_RADIUS, Formatting.number(current.radiusX()));
@@ -35,14 +35,14 @@ public class WorldBorderCommand extends ChunkyCommand {
         }
     }
 
-    boolean setBorderViaIntegration(World world) {
-        Map<String, Integration> integrations = chunky.getServer().getIntegrations();
+    boolean setBorderViaIntegration(final World world) {
+        final Map<String, Integration> integrations = chunky.getServer().getIntegrations();
         if (integrations.containsKey("border")) {
-            BorderIntegration worldborder = (BorderIntegration) integrations.get("border");
-            String worldName = world.getName();
+            final BorderIntegration worldborder = (BorderIntegration) integrations.get("border");
+            final String worldName = world.getName();
             if (worldborder.hasBorder(worldName)) {
-                Border border = worldborder.getBorder(worldName);
-                Vector2 center = border.getCenter();
+                final Border border = worldborder.getBorder(worldName);
+                final Vector2 center = border.getCenter();
                 chunky.getSelection().center(center.getX(), center.getZ())
                         .radiusX(border.getRadiusX()).radiusZ(border.getRadiusZ())
                         .shape(border.getShape());

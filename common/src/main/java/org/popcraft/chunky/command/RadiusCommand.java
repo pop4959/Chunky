@@ -10,11 +10,11 @@ import org.popcraft.chunky.util.TranslationKey;
 import java.util.Optional;
 
 public class RadiusCommand extends ChunkyCommand {
-    public RadiusCommand(Chunky chunky) {
+    public RadiusCommand(final Chunky chunky) {
         super(chunky);
     }
 
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         if (args.length < 2) {
             sender.sendMessage(TranslationKey.HELP_RADIUS);
             return;
@@ -26,14 +26,14 @@ public class RadiusCommand extends ChunkyCommand {
             return;
         }
         final Selection current = chunky.getSelection().build();
-        double radiusX = signX.map(sign -> current.radiusX() + sign * newRadiusX.get()).orElseGet(newRadiusX::get);
+        final double radiusX = signX.map(sign -> current.radiusX() + sign * newRadiusX.get()).orElseGet(newRadiusX::get);
         if (radiusX < 0 || Input.isPastWorldLimit(radiusX)) {
             sender.sendMessage(TranslationKey.HELP_RADIUS);
             return;
         }
         if (args.length > 2) {
-            Optional<Integer> signZ = Input.trySign(args[2]);
-            Optional<Double> newRadiusZ = Input.tryDoubleSuffixed(signZ.isPresent() ? args[2].substring(1) : args[2]);
+            final Optional<Integer> signZ = Input.trySign(args[2]);
+            final Optional<Double> newRadiusZ = Input.tryDoubleSuffixed(signZ.isPresent() ? args[2].substring(1) : args[2]);
             if (!newRadiusZ.isPresent() || newRadiusZ.get() < 0 || Input.isPastWorldLimit(newRadiusZ.get())) {
                 sender.sendMessage(TranslationKey.HELP_RADIUS);
                 return;

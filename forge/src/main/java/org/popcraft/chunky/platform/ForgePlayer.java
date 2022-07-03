@@ -11,7 +11,7 @@ import static org.popcraft.chunky.util.Translator.translateKey;
 public class ForgePlayer extends ForgeSender implements Player {
     private final ServerPlayer player;
 
-    public ForgePlayer(ServerPlayer player) {
+    public ForgePlayer(final ServerPlayer player) {
         super(player.createCommandSourceStack());
         this.player = player;
     }
@@ -37,7 +37,7 @@ public class ForgePlayer extends ForgeSender implements Player {
     }
 
     @Override
-    public void sendMessage(String key, boolean prefixed, Object... args) {
+    public void sendMessage(final String key, final boolean prefixed, final Object... args) {
         player.sendSystemMessage(formatColored(translateKey(key, prefixed, args)));
     }
 
@@ -47,16 +47,16 @@ public class ForgePlayer extends ForgeSender implements Player {
     }
 
     @Override
-    public void teleport(Location location) {
+    public void teleport(final Location location) {
         player.teleportTo(((ForgeWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
     @Override
-    public void sendActionBar(String key) {
+    public void sendActionBar(final String key) {
         player.displayClientMessage(formatColored(translateKey(key, false)), true);
     }
 
-    private Component formatColored(String message) {
+    private Component formatColored(final String message) {
         return Component.nullToEmpty(message.replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§"));
     }
 }

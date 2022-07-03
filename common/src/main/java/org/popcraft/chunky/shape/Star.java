@@ -13,7 +13,7 @@ public class Star extends AbstractPolygon {
     private final double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z, p5x, p5z;
     private final double i1x, i1z, i2x, i2z, i3x, i3z, i4x, i4z, i5x, i5z;
 
-    public Star(Selection selection, boolean chunkAligned) {
+    public Star(final Selection selection, final boolean chunkAligned) {
         super(selection, chunkAligned);
         this.p1x = centerX + radiusX * Math.cos(Math.toRadians(54));
         this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(54));
@@ -59,15 +59,15 @@ public class Star extends AbstractPolygon {
     }
 
     @Override
-    public boolean isBounding(double x, double z) {
-        boolean inside13 = insideLine(p1x, p1z, p3x, p3z, x, z);
-        boolean inside24 = insideLine(p2x, p2z, p4x, p4z, x, z);
-        boolean inside35 = insideLine(p3x, p3z, p5x, p5z, x, z);
-        boolean inside41 = insideLine(p4x, p4z, p1x, p1z, x, z);
+    public boolean isBounding(final double x, final double z) {
+        final boolean inside13 = insideLine(p1x, p1z, p3x, p3z, x, z);
+        final boolean inside24 = insideLine(p2x, p2z, p4x, p4z, x, z);
+        final boolean inside35 = insideLine(p3x, p3z, p5x, p5z, x, z);
+        final boolean inside41 = insideLine(p4x, p4z, p1x, p1z, x, z);
         if (inside13 && inside24 && inside35 && inside41) {
             return true;
         }
-        boolean inside52 = insideLine(p5x, p5z, p2x, p2z, x, z);
+        final boolean inside52 = insideLine(p5x, p5z, p2x, p2z, x, z);
         if (inside24 && inside35 && inside41 && inside52) {
             return true;
         }

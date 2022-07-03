@@ -8,7 +8,7 @@ public abstract class AbstractShape implements Shape {
     protected final double diameterX, diameterZ;
     protected final double radiusX, radiusZ;
 
-    protected AbstractShape(Selection selection, boolean chunkAligned) {
+    protected AbstractShape(final Selection selection, final boolean chunkAligned) {
         if (chunkAligned) {
             this.centerX = (double) (selection.centerChunkX() << 4) + 8;
             this.centerZ = (double) (selection.centerChunkZ() << 4) + 8;

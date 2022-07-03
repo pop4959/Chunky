@@ -4,22 +4,22 @@ public class Vector2 {
     private double x;
     private double z;
 
-    public Vector2(double x, double z) {
+    public Vector2(final double x, final double z) {
         this.x = x;
         this.z = z;
     }
 
-    public static Vector2 of(double x, double z) {
+    public static Vector2 of(final double x, final double z) {
         return new Vector2(x, z);
     }
 
-    public Vector2 add(Vector2 other) {
+    public Vector2 add(final Vector2 other) {
         x += other.x;
         z += other.z;
         return this;
     }
 
-    public Vector2 multiply(double value) {
+    public Vector2 multiply(final double value) {
         x *= value;
         z *= value;
         return this;
@@ -32,11 +32,11 @@ public class Vector2 {
         return this;
     }
 
-    public double distance(Vector2 other) {
+    public double distance(final Vector2 other) {
         return Math.sqrt(distanceSquared(other));
     }
 
-    public double distanceSquared(Vector2 other) {
+    public double distanceSquared(final Vector2 other) {
         final double dx = this.x - other.x;
         final double dz = this.z - other.z;
         return dx * dx + dz * dz;
@@ -54,7 +54,7 @@ public class Vector2 {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(final double x) {
         this.x = x;
     }
 
@@ -62,7 +62,7 @@ public class Vector2 {
         return z;
     }
 
-    public void setZ(double z) {
+    public void setZ(final double z) {
         this.z = z;
     }
 }

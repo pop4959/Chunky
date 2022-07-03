@@ -14,11 +14,11 @@ import java.util.Optional;
 import static org.popcraft.chunky.util.Translator.translate;
 
 public class PatternCommand extends ChunkyCommand {
-    public PatternCommand(Chunky chunky) {
+    public PatternCommand(final Chunky chunky) {
         super(chunky);
     }
 
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         if (args.length < 2) {
             sender.sendMessage(TranslationKey.HELP_PATTERN);
             return;
@@ -40,7 +40,7 @@ public class PatternCommand extends ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(String[] args) {
+    public List<String> tabSuggestions(final String[] args) {
         if (args.length == 2) {
             return PatternType.ALL;
         }

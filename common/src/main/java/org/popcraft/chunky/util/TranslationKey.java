@@ -1,6 +1,6 @@
 package org.popcraft.chunky.util;
 
-public class TranslationKey {
+public final class TranslationKey {
     public static final String BORDER_DEPENDENCY_UPDATE = "border_dependency_update";
     public static final String BORDER_LOAD_FAILED = "border_load_failed";
     public static final String BORDER_SAVE_FAILED = "border_save_failed";

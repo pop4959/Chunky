@@ -31,7 +31,7 @@ public class FabricWorld implements World {
     private final ServerWorld serverWorld;
     private final Border worldBorder;
 
-    public FabricWorld(ServerWorld serverWorld) {
+    public FabricWorld(final ServerWorld serverWorld) {
         this.serverWorld = serverWorld;
         this.worldBorder = new FabricBorder(serverWorld.getWorldBorder());
     }
@@ -47,18 +47,18 @@ public class FabricWorld implements World {
     }
 
     @Override
-    public boolean isChunkGenerated(int x, int z) {
+    public boolean isChunkGenerated(final int x, final int z) {
         if (Thread.currentThread() != serverWorld.getServer().getThread()) {
             return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), serverWorld.getServer()).join();
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
-            ThreadedAnvilChunkStorage chunkStorage = serverWorld.getChunkManager().threadedAnvilChunkStorage;
-            ThreadedAnvilChunkStorageMixin chunkStorageMixin = (ThreadedAnvilChunkStorageMixin) chunkStorage;
-            ChunkHolder loadedChunkHolder = chunkStorageMixin.invokeGetChunkHolder(chunkPos.toLong());
+            final ThreadedAnvilChunkStorage chunkStorage = serverWorld.getChunkManager().threadedAnvilChunkStorage;
+            final ThreadedAnvilChunkStorageMixin chunkStorageMixin = (ThreadedAnvilChunkStorageMixin) chunkStorage;
+            final ChunkHolder loadedChunkHolder = chunkStorageMixin.invokeGetChunkHolder(chunkPos.toLong());
             if (loadedChunkHolder != null && loadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
                 return true;
             }
-            ChunkHolder unloadedChunkHolder = chunkStorageMixin.getChunksToUnload().get(chunkPos.toLong());
+            final ChunkHolder unloadedChunkHolder = chunkStorageMixin.getChunksToUnload().get(chunkPos.toLong());
             if (unloadedChunkHolder != null && unloadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
                 return true;
             }
@@ -67,7 +67,7 @@ public class FabricWorld implements World {
     }
 
     @Override
-    public CompletableFuture<Void> getChunkAtAsync(int x, int z) {
+    public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         if (Thread.currentThread() != serverWorld.getServer().getThread()) {
             return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), serverWorld.getServer()).join();
         } else {
@@ -107,19 +107,19 @@ public class FabricWorld implements World {
     }
 
     @Override
-    public int getElevation(int x, int z) {
+    public int getElevation(final int x, final int z) {
         return serverWorld.getChunk(x >> 4, z >> 4).sampleHeightmap(Heightmap.Type.MOTION_BLOCKING, x, z);
     }
 
     @Override
-    public void playEffect(Player player, String effect) {
+    public void playEffect(final Player player, final String effect) {
         final Location location = player.getLocation();
         final BlockPos pos = new BlockPos(location.getX(), location.getY(), location.getZ());
         Input.tryInteger(effect).ifPresent(eventId -> serverWorld.syncWorldEvent(null, eventId, pos, 0));
     }
 
     @Override
-    public void playSound(Player player, String sound) {
+    public void playSound(final Player player, final String sound) {
         final Location location = player.getLocation();
         Registry.SOUND_EVENT.getOrEmpty(Identifier.tryParse(sound)).ifPresent(soundEvent -> serverWorld.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundCategory.MASTER, 2f, 1f));
     }
@@ -129,7 +129,7 @@ public class FabricWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        Path directory = DimensionType.getSaveDirectory(serverWorld.getRegistryKey(), serverWorld.getServer().getSavePath(WorldSavePath.ROOT)).normalize().resolve(name);
+        final Path directory = DimensionType.getSaveDirectory(serverWorld.getRegistryKey(), serverWorld.getServer().getSavePath(WorldSavePath.ROOT)).normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
 

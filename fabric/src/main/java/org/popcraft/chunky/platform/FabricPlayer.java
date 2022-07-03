@@ -11,7 +11,7 @@ import static org.popcraft.chunky.util.Translator.translateKey;
 public class FabricPlayer extends FabricSender implements Player {
     private final ServerPlayerEntity player;
 
-    public FabricPlayer(ServerPlayerEntity player) {
+    public FabricPlayer(final ServerPlayerEntity player) {
         super(player.getCommandSource());
         this.player = player;
     }
@@ -37,7 +37,7 @@ public class FabricPlayer extends FabricSender implements Player {
     }
 
     @Override
-    public void sendMessage(String key, boolean prefixed, Object... args) {
+    public void sendMessage(final String key, final boolean prefixed, final Object... args) {
         player.sendMessage(formatColored(translateKey(key, prefixed, args)), false);
     }
 
@@ -47,16 +47,16 @@ public class FabricPlayer extends FabricSender implements Player {
     }
 
     @Override
-    public void teleport(Location location) {
+    public void teleport(final Location location) {
         player.teleport(((FabricWorld) location.getWorld()).getServerWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
     @Override
-    public void sendActionBar(String key) {
+    public void sendActionBar(final String key) {
         player.sendMessage(formatColored(translateKey(key, false)), true);
     }
 
-    private Text formatColored(String message) {
+    private Text formatColored(final String message) {
         return Text.of(message.replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§"));
     }
 }

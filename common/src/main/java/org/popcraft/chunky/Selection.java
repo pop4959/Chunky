@@ -8,7 +8,7 @@ import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Parameter;
 
-public class Selection {
+public final class Selection {
     public static final double DEFAULT_CENTER_X = 0d;
     public static final double DEFAULT_CENTER_Z = 0d;
     public static final double DEFAULT_RADIUS = 500d;
@@ -27,7 +27,7 @@ public class Selection {
     private final int diameterChunksX;
     private final int diameterChunksZ;
 
-    private Selection(Chunky chunky, World world, double centerX, double centerZ, double radiusX, double radiusZ, Parameter pattern, String shape) {
+    private Selection(final Chunky chunky, final World world, final double centerX, final double centerZ, final double radiusX, final double radiusZ, final Parameter pattern, final String shape) {
         this.chunky = chunky;
         this.world = world;
         this.centerX = centerX;
@@ -44,7 +44,7 @@ public class Selection {
         this.diameterChunksZ = 2 * radiusChunksZ + 1;
     }
 
-    public static Builder builder(Chunky chunky, World world) {
+    public static Builder builder(final Chunky chunky, final World world) {
         return new Builder(chunky, world);
     }
 
@@ -115,68 +115,68 @@ public class Selection {
         private Parameter pattern = Parameter.of(PatternType.CONCENTRIC);
         private String shape = ShapeType.SQUARE;
 
-        private Builder(Chunky chunky, World world) {
+        private Builder(final Chunky chunky, final World world) {
             this.chunky = chunky;
             this.world = world;
         }
 
-        public Builder world(World world) {
+        public Builder world(final World world) {
             this.world = world;
             return this;
         }
 
-        public Builder center(double centerX, double centerZ) {
+        public Builder center(final double centerX, final double centerZ) {
             this.centerX = centerX;
             this.centerZ = centerZ;
             return this;
         }
 
-        public Builder centerX(double centerX) {
+        public Builder centerX(final double centerX) {
             this.centerX = centerX;
             return this;
         }
 
-        public Builder centerZ(double centerZ) {
+        public Builder centerZ(final double centerZ) {
             this.centerZ = centerZ;
             return this;
         }
 
-        public Builder radius(double radius) {
+        public Builder radius(final double radius) {
             this.radiusX = radius;
             this.radiusZ = radius;
             return this;
         }
 
-        public Builder radiusX(double radiusX) {
+        public Builder radiusX(final double radiusX) {
             this.radiusX = radiusX;
             return this;
         }
 
-        public Builder radiusZ(double radiusZ) {
+        public Builder radiusZ(final double radiusZ) {
             this.radiusZ = radiusZ;
             return this;
         }
 
-        public Builder pattern(Parameter pattern) {
+        public Builder pattern(final Parameter pattern) {
             this.pattern = pattern;
             return this;
         }
 
-        public Builder shape(String shape) {
+        public Builder shape(final String shape) {
             this.shape = shape;
             return this;
         }
 
         public Builder spawn() {
-            Location spawn = world.getSpawn();
+            final Location spawn = world.getSpawn();
             this.centerX = spawn.getX();
             this.centerZ = spawn.getZ();
             return this;
         }
 
         public Builder worldborder() {
-            Border border = world.getWorldBorder();
-            Vector2 center = border.getCenter();
+            final Border border = world.getWorldBorder();
+            final Vector2 center = border.getCenter();
             this.centerX = center.getX();
             this.centerZ = center.getZ();
             this.radiusX = border.getRadiusX();

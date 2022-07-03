@@ -6,7 +6,7 @@ public class PendingAction {
     private final Runnable action;
     private final long expiry;
 
-    public PendingAction(Runnable action) {
+    public PendingAction(final Runnable action) {
         this.action = action;
         this.expiry = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1);
     }

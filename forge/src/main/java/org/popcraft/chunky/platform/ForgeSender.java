@@ -12,7 +12,7 @@ import static org.popcraft.chunky.util.Translator.translateKey;
 public class ForgeSender implements Sender {
     private final CommandSourceStack source;
 
-    public ForgeSender(CommandSourceStack source) {
+    public ForgeSender(final CommandSourceStack source) {
         this.source = source;
     }
 
@@ -33,18 +33,18 @@ public class ForgeSender implements Sender {
 
     @Override
     public Location getLocation() {
-        Vec3 pos = source.getPosition();
-        Vec2 rot = source.getRotation();
+        final Vec3 pos = source.getPosition();
+        final Vec2 rot = source.getRotation();
         return new Location(getWorld(), pos.x(), pos.y(), pos.z(), rot.x, rot.y);
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(final String permission) {
         return source.hasPermission(2);
     }
 
     @Override
-    public void sendMessage(String key, boolean prefixed, Object... args) {
+    public void sendMessage(final String key, final boolean prefixed, final Object... args) {
         source.sendSuccess(Component.nullToEmpty(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
     }
 }

@@ -27,7 +27,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
 
     final org.bukkit.entity.Player player;
 
-    public BukkitPlayer(org.bukkit.entity.Player player) {
+    public BukkitPlayer(final org.bukkit.entity.Player player) {
         super(player);
         this.player = player;
     }
@@ -49,7 +49,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
 
     @Override
     public Location getLocation() {
-        org.bukkit.Location location = player.getLocation();
+        final org.bukkit.Location location = player.getLocation();
         return new Location(getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
@@ -59,7 +59,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
     }
 
     @Override
-    public void teleport(Location location) {
+    public void teleport(final Location location) {
         final org.bukkit.World world = Bukkit.getWorld(location.getWorld().getName());
         final org.bukkit.Location loc = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         final Entity vehicle = player.getVehicle();
@@ -70,7 +70,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
     }
 
     @Override
-    public void sendActionBar(String key) {
+    public void sendActionBar(final String key) {
         if (ACTION_BAR_SUPPORTED) {
             final String message = formatColored(translateKey(key, false));
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));

@@ -18,7 +18,7 @@ public class BukkitWorld implements World {
     private final org.bukkit.World world;
     private final Border worldBorder;
 
-    public BukkitWorld(org.bukkit.World world) {
+    public BukkitWorld(final org.bukkit.World world) {
         this.world = world;
         this.worldBorder = new BukkitBorder(world.getWorldBorder());
     }
@@ -34,7 +34,7 @@ public class BukkitWorld implements World {
     }
 
     @Override
-    public boolean isChunkGenerated(int x, int z) {
+    public boolean isChunkGenerated(final int x, final int z) {
         try {
             return PaperLib.isPaper() && PaperLib.isChunkGenerated(world, x, z);
         } catch (CompletionException e) {
@@ -43,7 +43,7 @@ public class BukkitWorld implements World {
     }
 
     @Override
-    public CompletableFuture<Void> getChunkAtAsync(int x, int z) {
+    public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         return CompletableFuture.allOf(PaperLib.getChunkAtAsync(world, x, z));
     }
 
@@ -59,7 +59,7 @@ public class BukkitWorld implements World {
 
     @Override
     public Location getSpawn() {
-        org.bukkit.Location spawnLocation = world.getSpawnLocation();
+        final org.bukkit.Location spawnLocation = world.getSpawnLocation();
         return new Location(this, spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), spawnLocation.getYaw(), spawnLocation.getPitch());
     }
 
@@ -69,12 +69,12 @@ public class BukkitWorld implements World {
     }
 
     @Override
-    public int getElevation(int x, int z) {
+    public int getElevation(final int x, final int z) {
         return world.getHighestBlockYAt(x, z);
     }
 
     @Override
-    public void playEffect(Player player, String effect) {
+    public void playEffect(final Player player, final String effect) {
         try {
             final Location location = player.getLocation();
             final org.bukkit.Location bukkitLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
@@ -84,7 +84,7 @@ public class BukkitWorld implements World {
     }
 
     @Override
-    public void playSound(Player player, String sound) {
+    public void playSound(final Player player, final String sound) {
         try {
             final Location location = player.getLocation();
             final org.bukkit.Location bukkitLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());

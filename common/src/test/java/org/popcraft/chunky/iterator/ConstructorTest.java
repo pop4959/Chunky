@@ -19,21 +19,21 @@ public class ConstructorTest {
 
     @Test
     public void concentric() {
-        List<ChunkCoordinate> chunks = new ArrayList<>();
-        ChunkIterator chunkIterator = new ConcentricChunkIterator(SELECTION);
+        final List<ChunkCoordinate> chunks = new ArrayList<>();
+        final ChunkIterator chunkIterator = new ConcentricChunkIterator(SELECTION);
         chunkIterator.forEachRemaining(chunks::add);
-        int total = (int) chunkIterator.total();
+        final int total = (int) chunkIterator.total();
         for (int i = 0; i < total; ++i) {
-            List<ChunkCoordinate> continueChunks = new ArrayList<>();
-            ChunkIterator continueIterator = new ConcentricChunkIterator(SELECTION, i);
+            final List<ChunkCoordinate> continueChunks = new ArrayList<>();
+            final ChunkIterator continueIterator = new ConcentricChunkIterator(SELECTION, i);
             continueIterator.forEachRemaining(continueChunks::add);
-            int continueTotal = (int) continueIterator.total();
+            final int continueTotal = (int) continueIterator.total();
             assertEquals("Total", total, continueTotal);
-            int size = chunks.size(), continueSize = continueChunks.size();
+            final int size = chunks.size(), continueSize = continueChunks.size();
             assertEquals("Continued Size", size - i, continueSize);
             for (int j = 0; j < continueSize; ++j) {
-                int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
-                int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
+                final int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
+                final int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
                 assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
             }
         }
@@ -41,21 +41,21 @@ public class ConstructorTest {
 
     @Test
     public void loop2() {
-        List<ChunkCoordinate> chunks = new ArrayList<>();
-        ChunkIterator chunkIterator = new Loop2ChunkIterator(SELECTION);
+        final List<ChunkCoordinate> chunks = new ArrayList<>();
+        final ChunkIterator chunkIterator = new Loop2ChunkIterator(SELECTION);
         chunkIterator.forEachRemaining(chunks::add);
-        int total = (int) chunkIterator.total();
+        final int total = (int) chunkIterator.total();
         for (int i = 0; i < total; ++i) {
-            List<ChunkCoordinate> continueChunks = new ArrayList<>();
-            ChunkIterator continueIterator = new Loop2ChunkIterator(SELECTION, i);
+            final List<ChunkCoordinate> continueChunks = new ArrayList<>();
+            final ChunkIterator continueIterator = new Loop2ChunkIterator(SELECTION, i);
             continueIterator.forEachRemaining(continueChunks::add);
-            int continueTotal = (int) continueIterator.total();
+            final int continueTotal = (int) continueIterator.total();
             assertEquals("Total", total, continueTotal);
-            int size = chunks.size(), continueSize = continueChunks.size();
+            final int size = chunks.size(), continueSize = continueChunks.size();
             assertEquals("Continued Size", size - i, continueSize);
             for (int j = 0; j < continueSize; ++j) {
-                int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
-                int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
+                final int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
+                final int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
                 assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
             }
         }
@@ -63,21 +63,21 @@ public class ConstructorTest {
 
     @Test
     public void spiral() {
-        List<ChunkCoordinate> chunks = new ArrayList<>();
-        ChunkIterator chunkIterator = new SpiralChunkIterator(SELECTION);
+        final List<ChunkCoordinate> chunks = new ArrayList<>();
+        final ChunkIterator chunkIterator = new SpiralChunkIterator(SELECTION);
         chunkIterator.forEachRemaining(chunks::add);
-        int total = (int) chunkIterator.total();
+        final int total = (int) chunkIterator.total();
         for (int i = 0; i < total; ++i) {
-            List<ChunkCoordinate> continueChunks = new ArrayList<>();
-            ChunkIterator continueIterator = new SpiralChunkIterator(SELECTION, i);
+            final List<ChunkCoordinate> continueChunks = new ArrayList<>();
+            final ChunkIterator continueIterator = new SpiralChunkIterator(SELECTION, i);
             continueIterator.forEachRemaining(continueChunks::add);
-            int continueTotal = (int) continueIterator.total();
+            final int continueTotal = (int) continueIterator.total();
             assertEquals("Total", total, continueTotal);
-            int size = chunks.size(), continueSize = continueChunks.size();
+            final int size = chunks.size(), continueSize = continueChunks.size();
             assertEquals("Continued Size", size - i, continueSize);
             for (int j = 0; j < continueSize; ++j) {
-                int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
-                int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
+                final int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
+                final int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
                 assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
             }
         }
@@ -85,22 +85,22 @@ public class ConstructorTest {
 
     @Test
     public void rectangle() {
-        List<ChunkCoordinate> chunks = new ArrayList<>();
-        Selection s = Selection.builder(null, null).center(-25, 25).radiusX(50).radiusZ(100).build();
-        ChunkIterator chunkIterator = new Loop2ChunkIterator(s);
+        final List<ChunkCoordinate> chunks = new ArrayList<>();
+        final Selection s = Selection.builder(null, null).center(-25, 25).radiusX(50).radiusZ(100).build();
+        final ChunkIterator chunkIterator = new Loop2ChunkIterator(s);
         chunkIterator.forEachRemaining(chunks::add);
-        int total = (int) chunkIterator.total();
+        final int total = (int) chunkIterator.total();
         for (int i = 0; i < total; ++i) {
-            List<ChunkCoordinate> continueChunks = new ArrayList<>();
-            ChunkIterator continueIterator = new Loop2ChunkIterator(s, i);
+            final List<ChunkCoordinate> continueChunks = new ArrayList<>();
+            final ChunkIterator continueIterator = new Loop2ChunkIterator(s, i);
             continueIterator.forEachRemaining(continueChunks::add);
-            int continueTotal = (int) continueIterator.total();
+            final int continueTotal = (int) continueIterator.total();
             assertEquals("Total", total, continueTotal);
-            int size = chunks.size(), continueSize = continueChunks.size();
+            final int size = chunks.size(), continueSize = continueChunks.size();
             assertEquals("Continued Size", size - i, continueSize);
             for (int j = 0; j < continueSize; ++j) {
-                int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
-                int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
+                final int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
+                final int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
                 assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
             }
         }

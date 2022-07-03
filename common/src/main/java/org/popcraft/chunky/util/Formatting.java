@@ -5,15 +5,15 @@ import org.popcraft.chunky.shape.ShapeType;
 
 import java.text.DecimalFormat;
 
-public class Formatting {
+public final class Formatting {
     private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("#.##");
     private static final char[] BINARY_PREFIXES = new char[]{'K', 'M', 'G', 'T', 'P'};
 
     private Formatting() {
     }
 
-    public static String bytes(long bytes) {
-        long value = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
+    public static String bytes(final long bytes) {
+        final long value = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
         if (value < 1024) {
             return String.format("%d B", bytes);
         }
@@ -28,7 +28,7 @@ public class Formatting {
         return String.format("%.1f %cB", bytes / (double) prefixValue, BINARY_PREFIXES[i]);
     }
 
-    public static String radius(Selection selection) {
+    public static String radius(final Selection selection) {
         if (ShapeType.RECTANGLE.equals(selection.shape()) || ShapeType.ELLIPSE.equals(selection.shape())) {
             return String.format("%s, %s", number(selection.radiusX()), number(selection.radiusZ()));
         } else {
@@ -36,7 +36,7 @@ public class Formatting {
         }
     }
 
-    public static synchronized String number(double number) {
+    public static synchronized String number(final double number) {
         return NUMBER_FORMAT.format(number);
     }
 }

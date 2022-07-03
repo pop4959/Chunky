@@ -30,27 +30,27 @@ public class Version implements Comparable<Version> {
         }
     }
 
-    public Version(final String version, boolean minecraft) {
+    public Version(final String version, final boolean minecraft) {
         this(minecraft && version.indexOf('-') > -1 ? version.substring(0, version.indexOf('-')) : version);
     }
 
-    public boolean isEqualTo(Version o) {
+    public boolean isEqualTo(final Version o) {
         return compareTo(o) == 0;
     }
 
-    public boolean isHigherThan(Version o) {
+    public boolean isHigherThan(final Version o) {
         return compareTo(o) > 0;
     }
 
-    public boolean isHigherThanOrEqualTo(Version o) {
+    public boolean isHigherThanOrEqualTo(final Version o) {
         return compareTo(o) >= 0;
     }
 
-    public boolean isLowerThan(Version o) {
+    public boolean isLowerThan(final Version o) {
         return compareTo(o) < 0;
     }
 
-    public boolean isLowerThanOrEqualTo(Version o) {
+    public boolean isLowerThanOrEqualTo(final Version o) {
         return compareTo(o) <= 0;
     }
 
@@ -59,7 +59,7 @@ public class Version implements Comparable<Version> {
     }
 
     @Override
-    public int compareTo(Version o) {
+    public int compareTo(final Version o) {
         if (this.major != o.major) {
             return this.major - o.major;
         }
@@ -70,10 +70,14 @@ public class Version implements Comparable<Version> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Version version = (Version) o;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Version version = (Version) o;
         return major == version.major && minor == version.minor && patch == version.patch;
     }
 

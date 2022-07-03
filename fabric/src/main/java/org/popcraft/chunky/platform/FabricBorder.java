@@ -7,7 +7,7 @@ import org.popcraft.chunky.shape.ShapeType;
 public class FabricBorder implements Border {
     private final WorldBorder worldBorder;
 
-    public FabricBorder(WorldBorder worldBorder) {
+    public FabricBorder(final WorldBorder worldBorder) {
         this.worldBorder = worldBorder;
     }
 

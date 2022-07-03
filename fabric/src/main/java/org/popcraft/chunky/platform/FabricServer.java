@@ -19,7 +19,7 @@ public class FabricServer implements Server {
     private final ChunkyFabric plugin;
     private final MinecraftServer server;
 
-    public FabricServer(ChunkyFabric plugin, MinecraftServer server) {
+    public FabricServer(final ChunkyFabric plugin, final MinecraftServer server) {
         this.plugin = plugin;
         this.server = server;
     }
@@ -30,7 +30,7 @@ public class FabricServer implements Server {
     }
 
     @Override
-    public Optional<World> getWorld(String name) {
+    public Optional<World> getWorld(final String name) {
         return Optional.ofNullable(Identifier.tryParse(name))
                 .map(worldIdentifier -> server.getWorld(RegistryKey.of(Registry.WORLD_KEY, worldIdentifier)))
                 .map(FabricWorld::new);
@@ -38,7 +38,7 @@ public class FabricServer implements Server {
 
     @Override
     public List<World> getWorlds() {
-        List<World> worlds = new ArrayList<>();
+        final List<World> worlds = new ArrayList<>();
         server.getWorlds().forEach(world -> worlds.add(new FabricWorld(world)));
         return worlds;
     }
@@ -54,7 +54,7 @@ public class FabricServer implements Server {
     }
 
     @Override
-    public Optional<Player> getPlayer(String name) {
+    public Optional<Player> getPlayer(final String name) {
         return Optional.ofNullable(server.getPlayerManager().getPlayer(name)).map(FabricPlayer::new);
     }
 

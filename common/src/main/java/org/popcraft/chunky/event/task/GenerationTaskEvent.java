@@ -6,7 +6,7 @@ import org.popcraft.chunky.event.Event;
 public class GenerationTaskEvent implements Event {
     private final GenerationTask generationTask;
 
-    public GenerationTaskEvent(GenerationTask generationTask) {
+    public GenerationTaskEvent(final GenerationTask generationTask) {
         this.generationTask = generationTask;
     }
 

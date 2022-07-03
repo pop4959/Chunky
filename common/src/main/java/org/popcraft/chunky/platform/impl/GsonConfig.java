@@ -142,7 +142,7 @@ public class GsonConfig implements Config {
     }
 
     @Override
-    public void setSilent(boolean silent) {
+    public void setSilent(final boolean silent) {
         configModel.silent = silent;
     }
 
@@ -152,7 +152,7 @@ public class GsonConfig implements Config {
     }
 
     @Override
-    public void setUpdateInterval(int updateInterval) {
+    public void setUpdateInterval(final int updateInterval) {
         configModel.updateInterval = updateInterval;
     }
 
@@ -191,7 +191,7 @@ public class GsonConfig implements Config {
             return version;
         }
 
-        public void setVersion(Integer version) {
+        public void setVersion(final Integer version) {
             this.version = version;
         }
 
@@ -199,7 +199,7 @@ public class GsonConfig implements Config {
             return language;
         }
 
-        public void setLanguage(String language) {
+        public void setLanguage(final String language) {
             this.language = language;
         }
 
@@ -207,7 +207,7 @@ public class GsonConfig implements Config {
             return continueOnRestart;
         }
 
-        public void setContinueOnRestart(Boolean continueOnRestart) {
+        public void setContinueOnRestart(final Boolean continueOnRestart) {
             this.continueOnRestart = continueOnRestart;
         }
 
@@ -215,7 +215,7 @@ public class GsonConfig implements Config {
             return tasks;
         }
 
-        public void setTasks(Map<String, TaskModel> tasks) {
+        public void setTasks(final Map<String, TaskModel> tasks) {
             this.tasks = tasks;
         }
 
@@ -223,7 +223,7 @@ public class GsonConfig implements Config {
             return silent;
         }
 
-        public void setSilent(boolean silent) {
+        public void setSilent(final boolean silent) {
             this.silent = silent;
         }
 
@@ -231,7 +231,7 @@ public class GsonConfig implements Config {
             return updateInterval;
         }
 
-        public void setUpdateInterval(int updateInterval) {
+        public void setUpdateInterval(final int updateInterval) {
             this.updateInterval = updateInterval;
         }
     }
@@ -252,7 +252,7 @@ public class GsonConfig implements Config {
             return cancelled;
         }
 
-        public void setCancelled(Boolean cancelled) {
+        public void setCancelled(final Boolean cancelled) {
             this.cancelled = cancelled;
         }
 
@@ -260,7 +260,7 @@ public class GsonConfig implements Config {
             return radius;
         }
 
-        public void setRadius(Double radius) {
+        public void setRadius(final Double radius) {
             this.radius = radius;
         }
 
@@ -268,7 +268,7 @@ public class GsonConfig implements Config {
             return radiusZ;
         }
 
-        public void setRadiusZ(Double radiusZ) {
+        public void setRadiusZ(final Double radiusZ) {
             this.radiusZ = radiusZ;
         }
 
@@ -276,7 +276,7 @@ public class GsonConfig implements Config {
             return centerX;
         }
 
-        public void setCenterX(Double centerX) {
+        public void setCenterX(final Double centerX) {
             this.centerX = centerX;
         }
 
@@ -284,7 +284,7 @@ public class GsonConfig implements Config {
             return centerZ;
         }
 
-        public void setCenterZ(Double centerZ) {
+        public void setCenterZ(final Double centerZ) {
             this.centerZ = centerZ;
         }
 
@@ -292,7 +292,7 @@ public class GsonConfig implements Config {
             return iterator;
         }
 
-        public void setIterator(String iterator) {
+        public void setIterator(final String iterator) {
             this.iterator = iterator;
         }
 
@@ -300,7 +300,7 @@ public class GsonConfig implements Config {
             return shape;
         }
 
-        public void setShape(String shape) {
+        public void setShape(final String shape) {
             this.shape = shape;
         }
 
@@ -308,7 +308,7 @@ public class GsonConfig implements Config {
             return count;
         }
 
-        public void setCount(Long count) {
+        public void setCount(final Long count) {
             this.count = count;
         }
 
@@ -316,7 +316,7 @@ public class GsonConfig implements Config {
             return time;
         }
 
-        public void setTime(Long time) {
+        public void setTime(final Long time) {
             this.time = time;
         }
     }

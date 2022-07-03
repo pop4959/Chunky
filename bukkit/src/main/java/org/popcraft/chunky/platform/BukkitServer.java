@@ -15,7 +15,7 @@ public class BukkitServer implements Server {
     private final ChunkyBukkit plugin;
     private final Map<String, Integration> integrations;
 
-    public BukkitServer(ChunkyBukkit plugin) {
+    public BukkitServer(final ChunkyBukkit plugin) {
         this.plugin = plugin;
         this.integrations = new HashMap<>();
     }
@@ -26,14 +26,14 @@ public class BukkitServer implements Server {
     }
 
     @Override
-    public Optional<World> getWorld(String name) {
-        org.bukkit.World world = plugin.getServer().getWorld(name);
+    public Optional<World> getWorld(final String name) {
+        final org.bukkit.World world = plugin.getServer().getWorld(name);
         return Optional.ofNullable(world == null ? null : new BukkitWorld(world));
     }
 
     @Override
     public List<World> getWorlds() {
-        List<World> worlds = new ArrayList<>();
+        final List<World> worlds = new ArrayList<>();
         plugin.getServer().getWorlds().forEach(world -> worlds.add(new BukkitWorld(world)));
         return worlds;
     }
@@ -49,7 +49,7 @@ public class BukkitServer implements Server {
     }
 
     @Override
-    public Optional<Player> getPlayer(String name) {
+    public Optional<Player> getPlayer(final String name) {
         return Optional.ofNullable(plugin.getServer().getPlayer(name)).map(BukkitPlayer::new);
     }
 

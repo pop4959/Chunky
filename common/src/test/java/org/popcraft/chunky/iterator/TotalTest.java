@@ -16,12 +16,12 @@ public class TotalTest {
      */
     @Test
     public void radius() {
-        Selection original = SELECTION.build();
+        final Selection original = SELECTION.build();
         for (int i = 0; i < original.radiusX(); ++i) {
-            Selection s = SELECTION.radiusX(i).radiusZ(i).build();
-            ChunkIterator concentricIterator = new ConcentricChunkIterator(s);
-            ChunkIterator loop2Iterator = new Loop2ChunkIterator(s);
-            ChunkIterator spiralIterator = new SpiralChunkIterator(s);
+            final Selection s = SELECTION.radiusX(i).radiusZ(i).build();
+            final ChunkIterator concentricIterator = new ConcentricChunkIterator(s);
+            final ChunkIterator loop2Iterator = new Loop2ChunkIterator(s);
+            final ChunkIterator spiralIterator = new SpiralChunkIterator(s);
             assertEquals(concentricIterator.total(), loop2Iterator.total());
             assertEquals(loop2Iterator.total(), spiralIterator.total());
         }
@@ -32,13 +32,13 @@ public class TotalTest {
      */
     @Test
     public void center() {
-        Selection original = SELECTION.build();
+        final Selection original = SELECTION.build();
         for (int i = 0; i > original.centerX(); --i) {
             for (int j = 0; j < original.centerZ(); ++j) {
-                Selection s = SELECTION.center(i, j).build();
-                ChunkIterator concentricIterator = new ConcentricChunkIterator(s);
-                ChunkIterator loop2Iterator = new Loop2ChunkIterator(s);
-                ChunkIterator spiralIterator = new SpiralChunkIterator(s);
+                final Selection s = SELECTION.center(i, j).build();
+                final ChunkIterator concentricIterator = new ConcentricChunkIterator(s);
+                final ChunkIterator loop2Iterator = new Loop2ChunkIterator(s);
+                final ChunkIterator spiralIterator = new SpiralChunkIterator(s);
                 assertEquals(concentricIterator.total(), loop2Iterator.total());
                 assertEquals(loop2Iterator.total(), spiralIterator.total());
             }

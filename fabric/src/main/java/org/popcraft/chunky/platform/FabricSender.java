@@ -12,7 +12,7 @@ import static org.popcraft.chunky.util.Translator.translateKey;
 public class FabricSender implements Sender {
     private final ServerCommandSource source;
 
-    public FabricSender(ServerCommandSource source) {
+    public FabricSender(final ServerCommandSource source) {
         this.source = source;
     }
 
@@ -39,12 +39,12 @@ public class FabricSender implements Sender {
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(final String permission) {
         return source.hasPermissionLevel(2);
     }
 
     @Override
-    public void sendMessage(String key, boolean prefixed, Object... args) {
+    public void sendMessage(final String key, final boolean prefixed, final Object... args) {
         source.sendFeedback(Text.of(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
     }
 }

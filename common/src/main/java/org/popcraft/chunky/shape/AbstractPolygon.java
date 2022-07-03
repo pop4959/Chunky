@@ -6,7 +6,7 @@ import org.popcraft.chunky.platform.util.Vector2;
 import java.util.List;
 
 public abstract class AbstractPolygon extends AbstractShape {
-    protected AbstractPolygon(Selection selection, boolean chunkAligned) {
+    protected AbstractPolygon(final Selection selection, final boolean chunkAligned) {
         super(selection, chunkAligned);
     }
 

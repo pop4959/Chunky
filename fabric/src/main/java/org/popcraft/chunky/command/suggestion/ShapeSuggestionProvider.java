@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ShapeSuggestionProvider implements SuggestionProvider<ServerCommandSource> {
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<ServerCommandSource> context, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(final CommandContext<ServerCommandSource> context, final SuggestionsBuilder builder) {
         try {
             final String input = context.getArgument(CommandLiteral.SHAPE, String.class);
             ShapeType.ALL.forEach(shape -> {

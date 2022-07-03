@@ -15,11 +15,11 @@ import java.util.Map;
 import java.util.Optional;
 
 public class CancelCommand extends ChunkyCommand {
-    public CancelCommand(Chunky chunky) {
+    public CancelCommand(final Chunky chunky) {
         super(chunky);
     }
 
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
         if (generationTasks.isEmpty() && chunky.getConfig().loadTasks().stream().allMatch(GenerationTask::isCancelled)) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_NO_TASKS);
@@ -53,9 +53,9 @@ public class CancelCommand extends ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(String[] args) {
+    public List<String> tabSuggestions(final String[] args) {
         if (args.length == 2) {
-            List<String> suggestions = new ArrayList<>();
+            final List<String> suggestions = new ArrayList<>();
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
             return suggestions;
         }

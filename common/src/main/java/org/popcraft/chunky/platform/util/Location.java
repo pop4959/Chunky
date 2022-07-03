@@ -10,7 +10,7 @@ public class Location {
     private float yaw;
     private float pitch;
 
-    public Location(World world, double x, double y, double z, float yaw, float pitch) {
+    public Location(final World world, final double x, final double y, final double z, final float yaw, final float pitch) {
         this.world = world;
         this.x = x;
         this.y = y;
@@ -19,7 +19,7 @@ public class Location {
         this.pitch = pitch;
     }
 
-    public Location(World world, double x, double y, double z) {
+    public Location(final World world, final double x, final double y, final double z) {
         this.world = world;
         this.x = x;
         this.y = y;
@@ -30,14 +30,14 @@ public class Location {
         return new Vector3(x, y, z);
     }
 
-    public Location add(Vector3 vector) {
+    public Location add(final Vector3 vector) {
         x += vector.getX();
         y += vector.getY();
         z += vector.getZ();
         return this;
     }
 
-    public Location setDirection(Vector3 direction) {
+    public Location setDirection(final Vector3 direction) {
         final double dirX = direction.getX();
         final double dirY = direction.getY();
         final double dirZ = direction.getZ();
@@ -58,7 +58,7 @@ public class Location {
         return world;
     }
 
-    public void setWorld(World world) {
+    public void setWorld(final World world) {
         this.world = world;
     }
 
@@ -66,7 +66,7 @@ public class Location {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(final double x) {
         this.x = x;
     }
 
@@ -74,7 +74,7 @@ public class Location {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(final double y) {
         this.y = y;
     }
 
@@ -82,7 +82,7 @@ public class Location {
         return z;
     }
 
-    public void setZ(double z) {
+    public void setZ(final double z) {
         this.z = z;
     }
 
@@ -90,7 +90,7 @@ public class Location {
         return yaw;
     }
 
-    public void setYaw(float yaw) {
+    public void setYaw(final float yaw) {
         this.yaw = yaw;
     }
 
@@ -98,7 +98,7 @@ public class Location {
         return pitch;
     }
 
-    public void setPitch(float pitch) {
+    public void setPitch(final float pitch) {
         this.pitch = pitch;
     }
 }

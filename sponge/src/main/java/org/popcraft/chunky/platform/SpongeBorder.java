@@ -8,13 +8,13 @@ import org.spongepowered.math.vector.Vector2d;
 public class SpongeBorder implements Border {
     private final ServerWorld serverWorld;
 
-    public SpongeBorder(ServerWorld serverWorld) {
+    public SpongeBorder(final ServerWorld serverWorld) {
         this.serverWorld = serverWorld;
     }
 
     @Override
     public Vector2 getCenter() {
-        Vector2d center = serverWorld.border().center();
+        final Vector2d center = serverWorld.border().center();
         return Vector2.of(center.x(), center.y());
     }
 

@@ -15,7 +15,7 @@ public class SpongeServer implements Server {
     private final ChunkySponge plugin;
     private final Map<String, Integration> integrations;
 
-    public SpongeServer(ChunkySponge plugin) {
+    public SpongeServer(final ChunkySponge plugin) {
         this.plugin = plugin;
         this.integrations = new HashMap<>();
     }
@@ -26,7 +26,7 @@ public class SpongeServer implements Server {
     }
 
     @Override
-    public Optional<World> getWorld(String name) {
+    public Optional<World> getWorld(final String name) {
         return plugin.getGame().server().worldManager().world(ResourceKey.resolve(name)).map(SpongeWorld::new);
     }
 
@@ -46,7 +46,7 @@ public class SpongeServer implements Server {
     }
 
     @Override
-    public Optional<Player> getPlayer(String name) {
+    public Optional<Player> getPlayer(final String name) {
         return plugin.getGame().server().player(name).map(SpongePlayer::new);
     }
 

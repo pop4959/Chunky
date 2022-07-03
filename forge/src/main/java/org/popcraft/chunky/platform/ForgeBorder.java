@@ -7,7 +7,7 @@ import org.popcraft.chunky.shape.ShapeType;
 public class ForgeBorder implements Border {
     private final WorldBorder worldBorder;
 
-    public ForgeBorder(WorldBorder worldBorder) {
+    public ForgeBorder(final WorldBorder worldBorder) {
         this.worldBorder = worldBorder;
     }
 

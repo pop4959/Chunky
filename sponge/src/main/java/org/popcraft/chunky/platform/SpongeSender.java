@@ -16,7 +16,7 @@ import static org.popcraft.chunky.util.Translator.translateKey;
 public class SpongeSender implements Sender {
     private final Object source;
 
-    public SpongeSender(Object source) {
+    public SpongeSender(final Object source) {
         this.source = source;
     }
 
@@ -42,12 +42,12 @@ public class SpongeSender implements Sender {
     }
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasPermission(final String permission) {
         return source instanceof Subject && ((Subject) source).hasPermission(permission);
     }
 
     @Override
-    public void sendMessage(String key, boolean prefixed, Object... args) {
+    public void sendMessage(final String key, final boolean prefixed, final Object... args) {
         if (source instanceof Audience) {
             ((Audience) source).sendMessage(Identity.nil(), LegacyComponentSerializer.legacyAmpersand().deserialize(translateKey(key, prefixed, args)));
         }

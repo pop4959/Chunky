@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class PatternSuggestionProvider implements SuggestionProvider<CommandSourceStack> {
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(final CommandContext<CommandSourceStack> context, final SuggestionsBuilder builder) {
         try {
             final String input = context.getArgument(CommandLiteral.PATTERN, String.class);
             PatternType.ALL.forEach(pattern -> {

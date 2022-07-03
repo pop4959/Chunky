@@ -8,16 +8,16 @@ import org.popcraft.chunky.shape.ShapeType;
 
 public class WorldBorderIntegration implements BorderIntegration {
     @Override
-    public boolean hasBorder(String world) {
+    public boolean hasBorder(final String world) {
         return Config.Border(world) != null;
     }
 
     @Override
-    public Border getBorder(String world) {
+    public Border getBorder(final String world) {
         return new Border() {
             @Override
             public Vector2 getCenter() {
-                BorderData borderData = Config.Border(world);
+                final BorderData borderData = Config.Border(world);
                 return Vector2.of(borderData.getX(), borderData.getZ());
             }
 
@@ -33,10 +33,10 @@ public class WorldBorderIntegration implements BorderIntegration {
 
             @Override
             public String getShape() {
-                BorderData borderData = Config.Border(world);
-                double radiusX = getRadiusX();
-                double radiusZ = getRadiusZ();
-                boolean round = borderData.getShape() == null ? Config.ShapeRound() : borderData.getShape();
+                final BorderData borderData = Config.Border(world);
+                final double radiusX = getRadiusX();
+                final double radiusZ = getRadiusZ();
+                final boolean round = borderData.getShape() == null ? Config.ShapeRound() : borderData.getShape();
                 final String shape;
                 if (radiusX == radiusZ) {
                     shape = round ? ShapeType.CIRCLE : ShapeType.SQUARE;

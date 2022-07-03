@@ -10,7 +10,7 @@ public class Rectangle extends AbstractPolygon {
     final double b1x, b1z, b2x, b2z;
     final double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z;
 
-    protected Rectangle(Selection selection, boolean chunkAligned) {
+    protected Rectangle(final Selection selection, final boolean chunkAligned) {
         super(selection, chunkAligned);
         this.b1x = centerX - radiusX;
         this.b1z = centerZ - radiusZ;
@@ -37,7 +37,7 @@ public class Rectangle extends AbstractPolygon {
     }
 
     @Override
-    public boolean isBounding(double x, double z) {
+    public boolean isBounding(final double x, final double z) {
         return x >= b1x && x <= b2x && z >= b1z && z <= b2z;
     }
 

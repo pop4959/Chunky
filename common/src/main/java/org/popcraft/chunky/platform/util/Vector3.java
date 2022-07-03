@@ -5,24 +5,24 @@ public class Vector3 {
     private double y;
     private double z;
 
-    public Vector3(double x, double y, double z) {
+    public Vector3(final double x, final double y, final double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public static Vector3 of(double x, double y, double z) {
+    public static Vector3 of(final double x, final double y, final double z) {
         return new Vector3(x, y, z);
     }
 
-    public Vector3 add(Vector3 other) {
+    public Vector3 add(final Vector3 other) {
         x += other.x;
         y += other.y;
         z += other.z;
         return this;
     }
 
-    public Vector3 multiply(double value) {
+    public Vector3 multiply(final double value) {
         x *= value;
         y *= value;
         z *= value;
@@ -37,11 +37,11 @@ public class Vector3 {
         return this;
     }
 
-    public double distance(Vector3 other) {
+    public double distance(final Vector3 other) {
         return Math.sqrt(distanceSquared(other));
     }
 
-    public double distanceSquared(Vector3 other) {
+    public double distanceSquared(final Vector3 other) {
         final double dx = this.x - other.x;
         final double dy = this.y - other.y;
         final double dz = this.z - other.z;
@@ -60,7 +60,7 @@ public class Vector3 {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(final double x) {
         this.x = x;
     }
 
@@ -68,7 +68,7 @@ public class Vector3 {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(final double y) {
         this.y = y;
     }
 
@@ -76,7 +76,7 @@ public class Vector3 {
         return z;
     }
 
-    public void setZ(double z) {
+    public void setZ(final double z) {
         this.z = z;
     }
 }

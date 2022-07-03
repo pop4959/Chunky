@@ -11,7 +11,7 @@ import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
 public class Pentagon extends AbstractPolygon {
     private final double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z, p5x, p5z;
 
-    public Pentagon(Selection selection, boolean chunkAligned) {
+    public Pentagon(final Selection selection, final boolean chunkAligned) {
         super(selection, chunkAligned);
         this.p1x = centerX + radiusX * Math.cos(Math.toRadians(54));
         this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(54));
@@ -37,12 +37,12 @@ public class Pentagon extends AbstractPolygon {
     }
 
     @Override
-    public boolean isBounding(double x, double z) {
-        boolean inside12 = insideLine(p1x, p1z, p2x, p2z, x, z);
-        boolean inside23 = insideLine(p2x, p2z, p3x, p3z, x, z);
-        boolean inside34 = insideLine(p3x, p3z, p4x, p4z, x, z);
-        boolean inside45 = insideLine(p4x, p4z, p5x, p5z, x, z);
-        boolean inside51 = insideLine(p5x, p5z, p1x, p1z, x, z);
+    public boolean isBounding(final double x, final double z) {
+        final boolean inside12 = insideLine(p1x, p1z, p2x, p2z, x, z);
+        final boolean inside23 = insideLine(p2x, p2z, p3x, p3z, x, z);
+        final boolean inside34 = insideLine(p3x, p3z, p4x, p4z, x, z);
+        final boolean inside45 = insideLine(p4x, p4z, p5x, p5z, x, z);
+        final boolean inside51 = insideLine(p5x, p5z, p1x, p1z, x, z);
         return inside12 && inside23 && inside34 && inside45 && inside51;
     }
 

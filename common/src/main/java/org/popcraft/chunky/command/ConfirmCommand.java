@@ -7,13 +7,13 @@ import org.popcraft.chunky.util.TranslationKey;
 import java.util.Optional;
 
 public class ConfirmCommand extends ChunkyCommand {
-    public ConfirmCommand(Chunky chunky) {
+    public ConfirmCommand(final Chunky chunky) {
         super(chunky);
     }
 
     @Override
-    public void execute(Sender sender, String[] args) {
-        Optional<Runnable> pendingAction = chunky.getPendingAction(sender);
+    public void execute(final Sender sender, final String[] args) {
+        final Optional<Runnable> pendingAction = chunky.getPendingAction(sender);
         if (!pendingAction.isPresent()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CONFIRM);
             return;

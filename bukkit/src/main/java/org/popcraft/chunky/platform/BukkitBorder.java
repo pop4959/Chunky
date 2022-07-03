@@ -7,7 +7,7 @@ import org.popcraft.chunky.shape.ShapeType;
 public class BukkitBorder implements Border {
     final WorldBorder worldBorder;
 
-    public BukkitBorder(WorldBorder worldBorder) {
+    public BukkitBorder(final WorldBorder worldBorder) {
         this.worldBorder = worldBorder;
     }
 

@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Translator {
+public final class Translator {
     private static final Map<String, String> fallbackTranslations;
     private static Map<String, String> translations = Collections.emptyMap();
 
@@ -22,17 +22,17 @@ public class Translator {
     private Translator() {
     }
 
-    public static void setLanguage(String language) {
+    public static void setLanguage(final String language) {
         translations = load(language);
     }
 
-    public static boolean isValidLanguage(String language) {
+    public static boolean isValidLanguage(final String language) {
         return Translator.class.getClassLoader().getResource("lang/" + language + ".json") != null;
     }
 
-    public static String translateKey(String key, boolean prefixed, Object... args) {
-        StringBuilder translation = new StringBuilder();
-        String message = translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, "Missing translation"));
+    public static String translateKey(final String key, final boolean prefixed, final Object... args) {
+        final StringBuilder translation = new StringBuilder();
+        final String message = translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, "Missing translation"));
         if (prefixed) {
             translation.append("[Chunky] ");
         }
@@ -40,19 +40,19 @@ public class Translator {
         return translation.toString();
     }
 
-    public static String translate(String key, Object... args) {
+    public static String translate(final String key, final Object... args) {
         return translateKey(key, false, args);
     }
 
-    public static void addCustomTranslation(String key, String message) {
+    public static void addCustomTranslation(final String key, final String message) {
         fallbackTranslations.put(key, message);
     }
 
-    private static Map<String, String> load(String language) {
-        InputStream input = Translator.class.getClassLoader().getResourceAsStream("lang/" + language + ".json");
+    private static Map<String, String> load(final String language) {
+        final InputStream input = Translator.class.getClassLoader().getResourceAsStream("lang/" + language + ".json");
         if (input != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
-                StringBuilder lang = new StringBuilder();
+                final StringBuilder lang = new StringBuilder();
                 String s;
                 while ((s = reader.readLine()) != null) {
                     lang.append(s);

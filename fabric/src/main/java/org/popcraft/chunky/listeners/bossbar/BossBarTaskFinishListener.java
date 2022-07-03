@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 public class BossBarTaskFinishListener implements Consumer<GenerationTaskFinishEvent> {
     @Override
-    public void accept(GenerationTaskFinishEvent event) {
+    public void accept(final GenerationTaskFinishEvent event) {
         final GenerationTask task = event.getGenerationTask();
         final World world = task.getSelection().world();
         final Identifier worldIdentifier = Identifier.tryParse(world.getKey());

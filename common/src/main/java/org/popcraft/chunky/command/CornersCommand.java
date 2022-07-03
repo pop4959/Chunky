@@ -10,20 +10,20 @@ import org.popcraft.chunky.util.TranslationKey;
 import java.util.Optional;
 
 public class CornersCommand extends ChunkyCommand {
-    public CornersCommand(Chunky chunky) {
+    public CornersCommand(final Chunky chunky) {
         super(chunky);
     }
 
     @Override
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         if (args.length < 5) {
             sender.sendMessage(TranslationKey.HELP_CORNERS);
             return;
         }
-        Optional<Double> x1 = Input.tryDoubleSuffixed(args[1]);
-        Optional<Double> z1 = Input.tryDoubleSuffixed(args[2]);
-        Optional<Double> x2 = Input.tryDoubleSuffixed(args[3]);
-        Optional<Double> z2 = Input.tryDoubleSuffixed(args[4]);
+        final Optional<Double> x1 = Input.tryDoubleSuffixed(args[1]);
+        final Optional<Double> z1 = Input.tryDoubleSuffixed(args[2]);
+        final Optional<Double> x2 = Input.tryDoubleSuffixed(args[3]);
+        final Optional<Double> z2 = Input.tryDoubleSuffixed(args[4]);
         if (!x1.isPresent() || !z1.isPresent() || !x2.isPresent() || !z2.isPresent()) {
             sender.sendMessage(TranslationKey.HELP_CORNERS);
             return;
@@ -32,13 +32,13 @@ public class CornersCommand extends ChunkyCommand {
             sender.sendMessage(TranslationKey.HELP_CORNERS);
             return;
         }
-        double centerX = (x1.get() + x2.get()) / 2d;
-        double centerZ = (z1.get() + z2.get()) / 2d;
-        double radiusX = Math.abs(x1.get() - x2.get()) / 2d;
-        double radiusZ = Math.abs(z1.get() - z2.get()) / 2d;
+        final double centerX = (x1.get() + x2.get()) / 2d;
+        final double centerZ = (z1.get() + z2.get()) / 2d;
+        final double radiusX = Math.abs(x1.get() - x2.get()) / 2d;
+        final double radiusZ = Math.abs(z1.get() - z2.get()) / 2d;
         chunky.getSelection().center(centerX, centerZ).radiusX(radiusX).radiusZ(radiusZ);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_CENTER, Formatting.number(centerX), Formatting.number(centerZ));
-        String shape;
+        final String shape;
         if (radiusX == radiusZ) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_RADIUS, Formatting.number(radiusX));
             shape = ShapeType.SQUARE;

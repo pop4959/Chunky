@@ -13,7 +13,7 @@ import static org.popcraft.chunky.util.Translator.translateKey;
 public class SpongePlayer extends SpongeSender implements Player {
     private final ServerPlayer player;
 
-    public SpongePlayer(ServerPlayer player) {
+    public SpongePlayer(final ServerPlayer player) {
         super(player);
         this.player = player;
     }
@@ -46,13 +46,13 @@ public class SpongePlayer extends SpongeSender implements Player {
     }
 
     @Override
-    public void teleport(Location location) {
+    public void teleport(final Location location) {
         player.setLocation(ServerLocation.of(((SpongeWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ()));
         player.setRotation(Vector3d.from(location.getYaw(), location.getPitch(), 0));
     }
 
     @Override
-    public void sendActionBar(String key) {
+    public void sendActionBar(final String key) {
         player.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize(translateKey(key, false)));
     }
 }

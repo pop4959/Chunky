@@ -7,13 +7,13 @@ import org.popcraft.chunky.util.TranslationKey;
 import static org.popcraft.chunky.util.Translator.translate;
 
 public class SilentCommand extends ChunkyCommand {
-    public SilentCommand(Chunky chunky) {
+    public SilentCommand(final Chunky chunky) {
         super(chunky);
     }
 
-    public void execute(Sender sender, String[] args) {
+    public void execute(final Sender sender, final String[] args) {
         chunky.getConfig().setSilent(!chunky.getConfig().isSilent());
-        String status = translate(chunky.getConfig().isSilent() ? TranslationKey.ENABLED : TranslationKey.DISABLED);
+        final String status = translate(chunky.getConfig().isSilent() ? TranslationKey.ENABLED : TranslationKey.DISABLED);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_SILENT, status);
     }
 }
