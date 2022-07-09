@@ -13,12 +13,6 @@ dependencies {
     shade(project(":chunky-common"))
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
-
 tasks {
     processResources {
         filesMatching("fabric.mod.json") {

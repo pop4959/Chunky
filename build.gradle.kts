@@ -30,7 +30,7 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(8))
+            languageVersion.set(JavaLanguageVersion.of(17))
         }
         withSourcesJar()
     }
@@ -38,6 +38,7 @@ subprojects {
     tasks {
         withType<JavaCompile> {
             options.encoding = "UTF-8"
+            options.compilerArgs.add("-Xlint:none")
         }
         jar {
             archiveClassifier.set("noshade")
