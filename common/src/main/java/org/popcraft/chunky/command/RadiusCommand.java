@@ -21,7 +21,7 @@ public class RadiusCommand extends ChunkyCommand {
         }
         final Optional<Integer> signX = Input.trySign(args[1]);
         final Optional<Double> newRadiusX = Input.tryDoubleSuffixed(signX.isPresent() ? args[1].substring(1) : args[1]);
-        if (!newRadiusX.isPresent() || newRadiusX.get() < 0 || Input.isPastWorldLimit(newRadiusX.get())) {
+        if (newRadiusX.isEmpty() || newRadiusX.get() < 0 || Input.isPastWorldLimit(newRadiusX.get())) {
             sender.sendMessage(TranslationKey.HELP_RADIUS);
             return;
         }
@@ -34,7 +34,7 @@ public class RadiusCommand extends ChunkyCommand {
         if (args.length > 2) {
             final Optional<Integer> signZ = Input.trySign(args[2]);
             final Optional<Double> newRadiusZ = Input.tryDoubleSuffixed(signZ.isPresent() ? args[2].substring(1) : args[2]);
-            if (!newRadiusZ.isPresent() || newRadiusZ.get() < 0 || Input.isPastWorldLimit(newRadiusZ.get())) {
+            if (newRadiusZ.isEmpty() || newRadiusZ.get() < 0 || Input.isPastWorldLimit(newRadiusZ.get())) {
                 sender.sendMessage(TranslationKey.HELP_RADIUS);
                 return;
             }

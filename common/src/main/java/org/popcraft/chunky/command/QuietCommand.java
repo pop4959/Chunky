@@ -17,7 +17,7 @@ public class QuietCommand extends ChunkyCommand {
         if (args.length > 1) {
             newQuiet = Input.tryInteger(args[1]);
         }
-        if (!newQuiet.isPresent()) {
+        if (newQuiet.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_QUIET);
             return;
         }

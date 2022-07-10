@@ -14,7 +14,7 @@ public class ConfirmCommand extends ChunkyCommand {
     @Override
     public void execute(final Sender sender, final String[] args) {
         final Optional<Runnable> pendingAction = chunky.getPendingAction(sender);
-        if (!pendingAction.isPresent()) {
+        if (pendingAction.isEmpty()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CONFIRM);
             return;
         }

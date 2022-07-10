@@ -59,7 +59,8 @@ public final class Translator {
                 }
                 return new Gson().fromJson(lang.toString(), new TypeToken<HashMap<String, String>>() {
                 }.getType());
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return Collections.emptyMap();

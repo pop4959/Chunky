@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateEvent> {
     @Override
     public void accept(final GenerationTaskUpdateEvent event) {
-        final GenerationTask task = event.getGenerationTask();
+        final GenerationTask task = event.generationTask();
         final Chunky chunky = task.getChunky();
         final World world = task.getSelection().world();
         final ResourceLocation worldIdentifier = ResourceLocation.tryParse(world.getKey());

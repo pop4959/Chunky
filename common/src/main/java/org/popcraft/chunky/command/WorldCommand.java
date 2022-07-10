@@ -23,7 +23,7 @@ public class WorldCommand extends ChunkyCommand {
             return;
         }
         final Optional<World> newWorld = Input.tryWorld(chunky, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
-        if (!newWorld.isPresent()) {
+        if (newWorld.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_WORLD);
             return;
         }

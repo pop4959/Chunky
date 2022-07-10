@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
@@ -72,7 +71,7 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     @SuppressWarnings("NullableProblems")
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-        final Sender bukkitSender = sender instanceof Player ? new BukkitPlayer((Player) sender) : new BukkitSender(sender);
+        final Sender bukkitSender = sender instanceof final Player player ? new BukkitPlayer(player) : new BukkitSender(sender);
         final Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
             if (sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
@@ -101,7 +100,7 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         }
         return suggestions.stream()
                 .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Chunky getChunky() {

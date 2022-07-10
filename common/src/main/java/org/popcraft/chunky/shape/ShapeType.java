@@ -1,7 +1,5 @@
 package org.popcraft.chunky.shape;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public final class ShapeType {
@@ -15,7 +13,7 @@ public final class ShapeType {
     public static final String STAR = "star";
     public static final String TRIANGLE = "triangle";
 
-    public static final List<String> ALL = Collections.unmodifiableList(Arrays.asList(CIRCLE, DIAMOND, ELLIPSE, PENTAGON, RECTANGLE, SQUARE, STAR, TRIANGLE));
+    public static final List<String> ALL = List.of(CIRCLE, DIAMOND, ELLIPSE, PENTAGON, RECTANGLE, SQUARE, STAR, TRIANGLE);
 
     private ShapeType() {
     }

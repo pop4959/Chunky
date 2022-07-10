@@ -61,8 +61,8 @@ public class ShapeTest {
         int generated = 0;
         while (chunkIterator.hasNext()) {
             final ChunkCoordinate chunkCoordinate = chunkIterator.next();
-            final int xChunkCenter = (chunkCoordinate.x << 4) + 8;
-            final int zChunkCenter = (chunkCoordinate.z << 4) + 8;
+            final int xChunkCenter = (chunkCoordinate.x() << 4) + 8;
+            final int zChunkCenter = (chunkCoordinate.z() << 4) + 8;
             if (shape.isBounding(xChunkCenter, zChunkCenter)) {
                 ++generated;
             }

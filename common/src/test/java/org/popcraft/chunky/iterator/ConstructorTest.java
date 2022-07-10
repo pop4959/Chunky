@@ -32,8 +32,8 @@ public class ConstructorTest {
             final int size = chunks.size(), continueSize = continueChunks.size();
             assertEquals("Continued Size", size - i, continueSize);
             for (int j = 0; j < continueSize; ++j) {
-                final int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
-                final int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
+                final int chunkX = chunks.get(j + i).x(), chunkZ = chunks.get(j + i).z();
+                final int continueChunkX = continueChunks.get(j).x(), continueChunkZ = continueChunks.get(j).z();
                 assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
             }
         }
@@ -54,8 +54,8 @@ public class ConstructorTest {
             final int size = chunks.size(), continueSize = continueChunks.size();
             assertEquals("Continued Size", size - i, continueSize);
             for (int j = 0; j < continueSize; ++j) {
-                final int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
-                final int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
+                final int chunkX = chunks.get(j + i).x(), chunkZ = chunks.get(j + i).z();
+                final int continueChunkX = continueChunks.get(j).x(), continueChunkZ = continueChunks.get(j).z();
                 assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
             }
         }
@@ -76,8 +76,8 @@ public class ConstructorTest {
             final int size = chunks.size(), continueSize = continueChunks.size();
             assertEquals("Continued Size", size - i, continueSize);
             for (int j = 0; j < continueSize; ++j) {
-                final int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
-                final int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
+                final int chunkX = chunks.get(j + i).x(), chunkZ = chunks.get(j + i).z();
+                final int continueChunkX = continueChunks.get(j).x(), continueChunkZ = continueChunks.get(j).z();
                 assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
             }
         }
@@ -99,8 +99,8 @@ public class ConstructorTest {
             final int size = chunks.size(), continueSize = continueChunks.size();
             assertEquals("Continued Size", size - i, continueSize);
             for (int j = 0; j < continueSize; ++j) {
-                final int chunkX = chunks.get(j + i).x, chunkZ = chunks.get(j + i).z;
-                final int continueChunkX = continueChunks.get(j).x, continueChunkZ = continueChunks.get(j).z;
+                final int chunkX = chunks.get(j + i).x(), chunkZ = chunks.get(j + i).z();
+                final int continueChunkX = continueChunks.get(j).x(), continueChunkZ = continueChunks.get(j).z();
                 assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
             }
         }

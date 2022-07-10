@@ -87,14 +87,11 @@ public final class Input {
             return Optional.empty();
         }
         final char sign = input.charAt(0);
-        switch (sign) {
-            case '-':
-                return Optional.of(-1);
-            case '+':
-                return Optional.of(1);
-            default:
-                return Optional.empty();
-        }
+        return switch (sign) {
+            case '-' -> Optional.of(-1);
+            case '+' -> Optional.of(1);
+            default -> Optional.empty();
+        };
     }
 
     public static boolean isPastWorldLimit(final double value) {
@@ -106,15 +103,11 @@ public final class Input {
     }
 
     private static Optional<Integer> suffixValue(final char suffix) {
-        switch (Character.toLowerCase(suffix)) {
-            case 'c':
-                return Optional.of(16);
-            case 'r':
-                return Optional.of(512);
-            case 'k':
-                return Optional.of(1000);
-            default:
-                return Optional.empty();
-        }
+        return switch (Character.toLowerCase(suffix)) {
+            case 'c' -> Optional.of(16);
+            case 'r' -> Optional.of(512);
+            case 'k' -> Optional.of(1000);
+            default -> Optional.empty();
+        };
     }
 }

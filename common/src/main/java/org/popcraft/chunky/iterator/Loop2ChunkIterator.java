@@ -3,6 +3,8 @@ package org.popcraft.chunky.iterator;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.ChunkCoordinate;
 
+import java.util.NoSuchElementException;
+
 public class Loop2ChunkIterator implements ChunkIterator {
     private final int x1, x2, z1, z2;
     private final long diameterChunksZ;
@@ -45,6 +47,9 @@ public class Loop2ChunkIterator implements ChunkIterator {
 
     @Override
     public ChunkCoordinate next() {
+        if (!hasNext) {
+            throw new NoSuchElementException();
+        }
         final ChunkCoordinate chunkCoord = new ChunkCoordinate(x, z);
         if (++z > z2) {
             z = z1;

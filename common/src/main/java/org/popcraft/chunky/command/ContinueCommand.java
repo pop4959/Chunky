@@ -23,7 +23,7 @@ public class ContinueCommand extends ChunkyCommand {
         final List<GenerationTask> loadTasks;
         if (args.length > 1) {
             final Optional<World> world = Input.tryWorld(chunky, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
-            if (!world.isPresent()) {
+            if (world.isEmpty()) {
                 sender.sendMessage(TranslationKey.HELP_CONTINUE);
                 return;
             }

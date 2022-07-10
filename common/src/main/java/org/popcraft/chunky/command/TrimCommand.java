@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
@@ -88,13 +89,19 @@ public class TrimCommand extends ChunkyCommand {
             final long startTime = System.currentTimeMillis();
             try {
                 if (regionPath.isPresent()) {
-                    Files.walk(regionPath.get()).forEach(region -> deleted.getAndAdd(checkRegion(region, shape)));
+                    try (final Stream<Path> regionWalker = Files.walk(regionPath.get())) {
+                        regionWalker.forEach(region -> deleted.getAndAdd(checkRegion(region, shape)));
+                    }
                 }
                 if (poiPath.isPresent()) {
-                    Files.walk(poiPath.get()).forEach(region -> checkRegion(region, shape));
+                    try (final Stream<Path> poiWalker = Files.walk(poiPath.get())) {
+                        poiWalker.forEach(region -> checkRegion(region, shape));
+                    }
                 }
                 if (entitiesPath.isPresent()) {
-                    Files.walk(entitiesPath.get()).forEach(region -> checkRegion(region, shape));
+                    try (final Stream<Path> entityWalker = Files.walk(entitiesPath.get())) {
+                        entityWalker.forEach(region -> checkRegion(region, shape));
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -108,11 +115,11 @@ public class TrimCommand extends ChunkyCommand {
 
     private int checkRegion(final Path region, final Shape shape) {
         final Optional<ChunkCoordinate> regionCoordinate = tryRegionCoordinate(region);
-        if (!regionCoordinate.isPresent()) {
+        if (regionCoordinate.isEmpty()) {
             return 0;
         }
-        final int chunkX = regionCoordinate.get().x << 5;
-        final int chunkZ = regionCoordinate.get().z << 5;
+        final int chunkX = regionCoordinate.get().x() << 5;
+        final int chunkZ = regionCoordinate.get().z() << 5;
         if (shouldDeleteRegion(shape, chunkX, chunkZ)) {
             return deleteRegion(region);
         } else {

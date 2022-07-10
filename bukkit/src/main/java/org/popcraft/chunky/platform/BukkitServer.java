@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class BukkitServer implements Server {
     private final ChunkyBukkit plugin;
@@ -45,7 +44,9 @@ public class BukkitServer implements Server {
 
     @Override
     public Collection<Player> getPlayers() {
-        return plugin.getServer().getOnlinePlayers().stream().map(BukkitPlayer::new).collect(Collectors.toList());
+        final Collection<Player> players = new ArrayList<>();
+        plugin.getServer().getOnlinePlayers().forEach(player -> players.add(new BukkitPlayer(player)));
+        return players;
     }
 
     @Override

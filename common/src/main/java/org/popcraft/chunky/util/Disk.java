@@ -33,6 +33,7 @@ public final class Disk {
                 return currentWorkingDirectory.toFile().getUsableSpace();
             }
         } catch (UnsupportedOperationException | InvalidPathException | SecurityException ignored) {
+            return Long.MAX_VALUE;
         }
         return 0L;
     }

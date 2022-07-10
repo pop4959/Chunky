@@ -8,25 +8,16 @@ public final class ChunkIteratorFactory {
     }
 
     public static ChunkIterator getChunkIterator(final Selection selection, final long count) {
-        switch (selection.shape()) {
-            case ShapeType.RECTANGLE:
-            case ShapeType.ELLIPSE:
-            case ShapeType.OVAL:
-                return new Loop2ChunkIterator(selection, count);
-            default:
-                break;
+        final String shape = selection.shape();
+        if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape) || ShapeType.OVAL.equals(shape)) {
+            return new Loop2ChunkIterator(selection, count);
         }
-        switch (selection.pattern().getType()) {
-            case PatternType.LOOP:
-                return new Loop2ChunkIterator(selection, count);
-            case PatternType.SPIRAL:
-                return new SpiralChunkIterator(selection, count);
-            case PatternType.CSV:
-                return new CsvChunkIterator(selection, count);
-            case PatternType.CONCENTRIC:
-            default:
-                return new ConcentricChunkIterator(selection, count);
-        }
+        return switch (selection.pattern().getType()) {
+            case PatternType.LOOP -> new Loop2ChunkIterator(selection, count);
+            case PatternType.SPIRAL -> new SpiralChunkIterator(selection, count);
+            case PatternType.CSV -> new CsvChunkIterator(selection, count);
+            default -> new ConcentricChunkIterator(selection, count);
+        };
     }
 
     public static ChunkIterator getChunkIterator(final Selection selection) {

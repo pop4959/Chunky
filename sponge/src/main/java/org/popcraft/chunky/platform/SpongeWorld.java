@@ -83,12 +83,16 @@ public class SpongeWorld implements World {
 
     @Override
     public void playSound(final Player player, final String sound) {
-        final Location location = player.getLocation();
+        final Key soundKey;
         try {
             //noinspection PatternValidation
-            world.playSound(Sound.sound(Key.key(sound), Sound.Source.MASTER, 2f, 1f), location.getX(), location.getY(), location.getZ());
-        } catch (final InvalidKeyException ignored) {
+            soundKey = Key.key(sound);
+        } catch (final InvalidKeyException e) {
+            return;
         }
+        final Location location = player.getLocation();
+        world.playSound(Sound.sound(soundKey, Sound.Source.MASTER, 2f, 1f), location.getX(), location.getY(), location.getZ());
+
     }
 
     @Override

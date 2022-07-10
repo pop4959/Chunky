@@ -75,22 +75,28 @@ public class BukkitWorld implements World {
 
     @Override
     public void playEffect(final Player player, final String effect) {
+        final Effect effectType;
         try {
-            final Location location = player.getLocation();
-            final org.bukkit.Location bukkitLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-            world.playEffect(bukkitLocation, Effect.valueOf(effect.toUpperCase()), 0);
-        } catch (IllegalArgumentException ignored) {
+            effectType = Effect.valueOf(effect.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return;
         }
+        final Location location = player.getLocation();
+        final org.bukkit.Location bukkitLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        world.playEffect(bukkitLocation, effectType, 0);
     }
 
     @Override
     public void playSound(final Player player, final String sound) {
+        final Sound soundType;
         try {
-            final Location location = player.getLocation();
-            final org.bukkit.Location bukkitLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-            world.playSound(bukkitLocation, Sound.valueOf(sound.toUpperCase()), 2f, 1f);
-        } catch (IllegalArgumentException ignored) {
+            soundType = Sound.valueOf(sound.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return;
         }
+        final Location location = player.getLocation();
+        final org.bukkit.Location bukkitLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        world.playSound(bukkitLocation, soundType, 2f, 1f);
     }
 
     @Override

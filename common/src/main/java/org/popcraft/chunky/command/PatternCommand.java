@@ -24,7 +24,7 @@ public class PatternCommand extends ChunkyCommand {
             return;
         }
         final Optional<String> optionalType = Input.tryPattern(args[1]);
-        if (!optionalType.isPresent()) {
+        if (optionalType.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_PATTERN);
             return;
         }

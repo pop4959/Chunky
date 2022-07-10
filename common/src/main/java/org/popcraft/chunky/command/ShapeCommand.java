@@ -23,7 +23,7 @@ public class ShapeCommand extends ChunkyCommand {
             return;
         }
         final Optional<String> inputShape = Input.tryShape(args[1]);
-        if (!inputShape.isPresent()) {
+        if (inputShape.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_SHAPE);
             return;
         }

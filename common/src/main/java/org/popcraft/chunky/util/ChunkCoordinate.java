@@ -2,14 +2,7 @@ package org.popcraft.chunky.util;
 
 import java.util.Objects;
 
-public class ChunkCoordinate implements Comparable<ChunkCoordinate> {
-    public final int x, z;
-
-    public ChunkCoordinate(final int x, final int z) {
-        this.x = x;
-        this.z = z;
-    }
-
+public record ChunkCoordinate(int x, int z) implements Comparable<ChunkCoordinate> {
     @Override
     public int compareTo(final ChunkCoordinate o) {
         return this.x == o.x ? Integer.compare(this.z, o.z) : Integer.compare(this.x, o.x);

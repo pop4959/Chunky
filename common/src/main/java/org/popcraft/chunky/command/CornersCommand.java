@@ -24,7 +24,7 @@ public class CornersCommand extends ChunkyCommand {
         final Optional<Double> z1 = Input.tryDoubleSuffixed(args[2]);
         final Optional<Double> x2 = Input.tryDoubleSuffixed(args[3]);
         final Optional<Double> z2 = Input.tryDoubleSuffixed(args[4]);
-        if (!x1.isPresent() || !z1.isPresent() || !x2.isPresent() || !z2.isPresent()) {
+        if (x1.isEmpty() || z1.isEmpty() || x2.isEmpty() || z2.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_CORNERS);
             return;
         }

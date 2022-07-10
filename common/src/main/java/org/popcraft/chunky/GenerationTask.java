@@ -116,14 +116,14 @@ public class GenerationTask implements Runnable {
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             final ChunkCoordinate chunk = chunkIterator.next();
-            final int chunkCenterX = (chunk.x << 4) + 8;
-            final int chunkCenterZ = (chunk.z << 4) + 8;
-            if (!shape.isBounding(chunkCenterX, chunkCenterZ) || worldState.isGenerated(chunk.x, chunk.z)) {
-                update(chunk.x, chunk.z, false);
+            final int chunkCenterX = (chunk.x() << 4) + 8;
+            final int chunkCenterZ = (chunk.z() << 4) + 8;
+            if (!shape.isBounding(chunkCenterX, chunkCenterZ) || worldState.isGenerated(chunk.x(), chunk.z())) {
+                update(chunk.x(), chunk.z(), false);
                 continue;
             }
-            if (selection.world().isChunkGenerated(chunk.x, chunk.z)) {
-                update(chunk.x, chunk.z, true);
+            if (selection.world().isChunkGenerated(chunk.x(), chunk.z())) {
+                update(chunk.x(), chunk.z(), true);
                 continue;
             }
             try {
@@ -133,9 +133,9 @@ public class GenerationTask implements Runnable {
                 stop(cancelled);
                 break;
             }
-            selection.world().getChunkAtAsync(chunk.x, chunk.z).whenComplete((ignored, throwable) -> {
+            selection.world().getChunkAtAsync(chunk.x(), chunk.z()).whenComplete((ignored, throwable) -> {
                 working.release();
-                update(chunk.x, chunk.z, true);
+                update(chunk.x(), chunk.z(), true);
             });
         }
         if (stopped) {

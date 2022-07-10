@@ -33,9 +33,9 @@ import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 import static net.minecraft.commands.arguments.DimensionArgument.dimension;
 
-@Mod(ChunkyForge.MODID)
+@Mod(ChunkyForge.MOD_ID)
 public class ChunkyForge {
-    public static final String MODID = "chunky";
+    public static final String MOD_ID = "chunky";
     private Chunky chunky;
 
     public ChunkyForge() {

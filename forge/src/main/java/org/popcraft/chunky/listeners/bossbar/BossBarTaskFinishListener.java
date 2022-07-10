@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class BossBarTaskFinishListener implements Consumer<GenerationTaskFinishEvent> {
     @Override
     public void accept(final GenerationTaskFinishEvent event) {
-        final GenerationTask task = event.getGenerationTask();
+        final GenerationTask task = event.generationTask();
         final World world = task.getSelection().world();
         final ResourceLocation worldIdentifier = ResourceLocation.tryParse(world.getKey());
         final ResourceLocation barIdentifier = ResourceLocation.tryParse("chunky:progress_" + world.getKey().replace(':', '_'));

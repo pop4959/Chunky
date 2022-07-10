@@ -37,13 +37,13 @@ public class BoundaryTest {
         final ChunkCoordinate loop2Point2 = loop2Coordinates.get(loop2Coordinates.size() - 1);
         final ChunkCoordinate spiralPoint1 = spiralCoordinates.get(0);
         final ChunkCoordinate spiralPoint2 = spiralCoordinates.get(spiralCoordinates.size() - 1);
-        assertEquals(concentricPoint1.x, loop2Point1.x);
-        assertEquals(concentricPoint1.z, loop2Point1.z);
-        assertEquals(loop2Point1.x, spiralPoint1.x);
-        assertEquals(loop2Point1.z, spiralPoint1.z);
-        assertEquals(concentricPoint2.x, loop2Point2.x);
-        assertEquals(concentricPoint2.z, loop2Point2.z);
-        assertEquals(loop2Point2.x, spiralPoint2.x);
-        assertEquals(loop2Point2.z, spiralPoint2.z);
+        assertEquals(concentricPoint1.x(), loop2Point1.x());
+        assertEquals(concentricPoint1.z(), loop2Point1.z());
+        assertEquals(loop2Point1.x(), spiralPoint1.x());
+        assertEquals(loop2Point1.z(), spiralPoint1.z());
+        assertEquals(concentricPoint2.x(), loop2Point2.x());
+        assertEquals(concentricPoint2.z(), loop2Point2.z());
+        assertEquals(loop2Point2.x(), spiralPoint2.x());
+        assertEquals(loop2Point2.z(), spiralPoint2.z());
     }
 }

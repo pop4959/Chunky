@@ -27,7 +27,7 @@ public class PauseCommand extends ChunkyCommand {
         }
         if (args.length > 1) {
             final Optional<World> world = Input.tryWorld(chunky, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
-            if (!world.isPresent() || !generationTasks.containsKey(world.get().getName())) {
+            if (world.isEmpty() || !generationTasks.containsKey(world.get().getName())) {
                 sender.sendMessage(TranslationKey.HELP_PAUSE);
             } else {
                 generationTasks.get(world.get().getName()).stop(false);

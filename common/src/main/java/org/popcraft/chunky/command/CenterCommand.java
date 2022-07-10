@@ -25,7 +25,7 @@ public class CenterCommand extends ChunkyCommand {
         }
         final double centerX;
         final double centerZ;
-        if (!newX.isPresent() && !newZ.isPresent()) {
+        if (newX.isEmpty() && newZ.isEmpty()) {
             final Location coordinate = sender.getLocation();
             centerX = coordinate.getX();
             centerZ = coordinate.getZ();

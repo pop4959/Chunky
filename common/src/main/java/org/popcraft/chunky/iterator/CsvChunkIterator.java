@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
@@ -59,6 +60,9 @@ public class CsvChunkIterator implements ChunkIterator {
 
     @Override
     public ChunkCoordinate next() {
+        if (chunks.isEmpty()) {
+            throw new NoSuchElementException();
+        }
         return chunks.poll();
     }
 

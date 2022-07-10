@@ -11,25 +11,15 @@ public final class ShapeFactory {
     }
 
     public static Shape getShape(final Selection selection, final boolean chunkAligned) {
-        switch (selection.shape()) {
-            case ShapeType.CIRCLE:
-                return new Circle(selection, chunkAligned);
-            case ShapeType.DIAMOND:
-                return new Diamond(selection, chunkAligned);
-            case ShapeType.ELLIPSE:
-            case ShapeType.OVAL:
-                return new Ellipse(selection, chunkAligned);
-            case ShapeType.PENTAGON:
-                return new Pentagon(selection, chunkAligned);
-            case ShapeType.RECTANGLE:
-                return new Rectangle(selection, chunkAligned);
-            case ShapeType.STAR:
-                return new Star(selection, chunkAligned);
-            case ShapeType.TRIANGLE:
-                return new Triangle(selection, chunkAligned);
-            case ShapeType.SQUARE:
-            default:
-                return new Square(selection, chunkAligned);
-        }
+        return switch (selection.shape()) {
+            case ShapeType.CIRCLE -> new Circle(selection, chunkAligned);
+            case ShapeType.DIAMOND -> new Diamond(selection, chunkAligned);
+            case ShapeType.ELLIPSE, ShapeType.OVAL -> new Ellipse(selection, chunkAligned);
+            case ShapeType.PENTAGON -> new Pentagon(selection, chunkAligned);
+            case ShapeType.RECTANGLE -> new Rectangle(selection, chunkAligned);
+            case ShapeType.STAR -> new Star(selection, chunkAligned);
+            case ShapeType.TRIANGLE -> new Triangle(selection, chunkAligned);
+            default -> new Square(selection, chunkAligned);
+        };
     }
 }
