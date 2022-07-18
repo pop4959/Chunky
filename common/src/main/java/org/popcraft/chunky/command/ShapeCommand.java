@@ -6,23 +6,21 @@ import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
-public class ShapeCommand extends ChunkyCommand {
+public class ShapeCommand implements ChunkyCommand {
+    private final Chunky chunky;
+
     public ShapeCommand(final Chunky chunky) {
-        super(chunky);
+        this.chunky = chunky;
     }
 
-    public void execute(final Sender sender, final String[] args) {
-        if (args.length < 2) {
-            sender.sendMessage(TranslationKey.HELP_SHAPE);
-            return;
-        }
-        final Optional<String> inputShape = Input.tryShape(args[1]);
+    @Override
+    public void execute(final Sender sender, final CommandArguments arguments) {
+        final Optional<String> inputShape = arguments.next().flatMap(Input::tryShape);
         if (inputShape.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_SHAPE);
             return;
@@ -33,10 +31,10 @@ public class ShapeCommand extends ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(final String[] args) {
-        if (args.length == 2) {
+    public List<String> tabSuggestions(final CommandArguments arguments) {
+        if (arguments.size() == 1) {
             return ShapeType.ALL;
         }
-        return Collections.emptyList();
+        return List.of();
     }
 }

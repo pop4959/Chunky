@@ -11,14 +11,18 @@ import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.TranslationKey;
 
+import java.util.List;
 import java.util.Map;
 
-public class WorldBorderCommand extends ChunkyCommand {
+public class WorldBorderCommand implements ChunkyCommand {
+    private final Chunky chunky;
+
     public WorldBorderCommand(final Chunky chunky) {
-        super(chunky);
+        this.chunky = chunky;
     }
 
-    public void execute(final Sender sender, final String[] args) {
+    @Override
+    public void execute(final Sender sender, final CommandArguments arguments) {
         final Selection previous = chunky.getSelection().build();
         if (!setBorderViaIntegration(previous.world())) {
             chunky.getSelection().worldborder();
@@ -33,6 +37,11 @@ public class WorldBorderCommand extends ChunkyCommand {
         if (!previous.shape().equals(current.shape())) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, current.shape());
         }
+    }
+
+    @Override
+    public List<String> tabSuggestions(final CommandArguments arguments) {
+        return List.of();
     }
 
     boolean setBorderViaIntegration(final World world) {

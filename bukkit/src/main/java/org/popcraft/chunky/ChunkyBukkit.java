@@ -14,6 +14,7 @@ import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.command.ChunkyCommand;
+import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.integration.WorldBorderIntegration;
 import org.popcraft.chunky.platform.BukkitConfig;
@@ -25,7 +26,7 @@ import org.popcraft.chunky.util.TranslationKey;
 import org.popcraft.chunky.util.Version;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
             return;
         }
         if (chunky.getConfig().getContinueOnRestart()) {
-            getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{}));
+            getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty()));
         }
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
             chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
@@ -73,14 +74,15 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         final Sender bukkitSender = sender instanceof final Player player ? new BukkitPlayer(player) : new BukkitSender(sender);
         final Map<String, ChunkyCommand> commands = chunky.getCommands();
+        final CommandArguments arguments = CommandArguments.of(Arrays.copyOfRange(args, 1, args.length));
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
             if (sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
-                commands.get(args[0].toLowerCase()).execute(bukkitSender, args);
+                commands.get(args[0].toLowerCase()).execute(bukkitSender, arguments);
             } else {
                 bukkitSender.sendMessage(TranslationKey.COMMAND_NO_PERMISSION);
             }
         } else {
-            commands.get(CommandLiteral.HELP).execute(bukkitSender, new String[]{});
+            commands.get(CommandLiteral.HELP).execute(bukkitSender, arguments);
         }
         return true;
     }
@@ -89,14 +91,15 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
         if (args.length < 1) {
-            return Collections.emptyList();
+            return List.of();
         }
         final List<String> suggestions = new ArrayList<>();
         final Map<String, ChunkyCommand> commands = chunky.getCommands();
         if (args.length == 1) {
             commands.keySet().stream().filter(name -> sender.hasPermission(COMMAND_PERMISSION_KEY + name)).forEach(suggestions::add);
         } else if (commands.containsKey(args[0].toLowerCase()) && sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
-            suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(args));
+            final CommandArguments arguments = CommandArguments.of(Arrays.copyOfRange(args, 1, args.length));
+            suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(arguments));
         }
         return suggestions.stream()
                 .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))

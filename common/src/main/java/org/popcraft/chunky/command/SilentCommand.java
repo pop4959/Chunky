@@ -4,16 +4,26 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.TranslationKey;
 
+import java.util.List;
+
 import static org.popcraft.chunky.util.Translator.translate;
 
-public class SilentCommand extends ChunkyCommand {
+public class SilentCommand implements ChunkyCommand {
+    private final Chunky chunky;
+
     public SilentCommand(final Chunky chunky) {
-        super(chunky);
+        this.chunky = chunky;
     }
 
-    public void execute(final Sender sender, final String[] args) {
+    @Override
+    public void execute(final Sender sender, final CommandArguments arguments) {
         chunky.getConfig().setSilent(!chunky.getConfig().isSilent());
         final String status = translate(chunky.getConfig().isSilent() ? TranslationKey.ENABLED : TranslationKey.DISABLED);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_SILENT, status);
+    }
+
+    @Override
+    public List<String> tabSuggestions(final CommandArguments arguments) {
+        return List.of();
     }
 }

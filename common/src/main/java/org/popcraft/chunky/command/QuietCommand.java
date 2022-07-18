@@ -5,18 +5,19 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
+import java.util.List;
 import java.util.Optional;
 
-public class QuietCommand extends ChunkyCommand {
+public class QuietCommand implements ChunkyCommand {
+    private final Chunky chunky;
+
     public QuietCommand(final Chunky chunky) {
-        super(chunky);
+        this.chunky = chunky;
     }
 
-    public void execute(final Sender sender, final String[] args) {
-        Optional<Integer> newQuiet = Optional.empty();
-        if (args.length > 1) {
-            newQuiet = Input.tryInteger(args[1]);
-        }
+    @Override
+    public void execute(final Sender sender, final CommandArguments arguments) {
+        final Optional<Integer> newQuiet = arguments.next().flatMap(Input::tryInteger);
         if (newQuiet.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_QUIET);
             return;
@@ -24,5 +25,10 @@ public class QuietCommand extends ChunkyCommand {
         final int quietInterval = Math.max(0, newQuiet.get());
         chunky.getConfig().setUpdateInterval(quietInterval);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_QUIET, quietInterval);
+    }
+
+    @Override
+    public List<String> tabSuggestions(final CommandArguments arguments) {
+        return List.of();
     }
 }

@@ -7,20 +7,21 @@ import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
+import java.util.List;
 import java.util.Optional;
 
-public class RadiusCommand extends ChunkyCommand {
+public class RadiusCommand implements ChunkyCommand {
+    private final Chunky chunky;
+
     public RadiusCommand(final Chunky chunky) {
-        super(chunky);
+        this.chunky = chunky;
     }
 
-    public void execute(final Sender sender, final String[] args) {
-        if (args.length < 2) {
-            sender.sendMessage(TranslationKey.HELP_RADIUS);
-            return;
-        }
-        final Optional<Integer> signX = Input.trySign(args[1]);
-        final Optional<Double> newRadiusX = Input.tryDoubleSuffixed(signX.isPresent() ? args[1].substring(1) : args[1]);
+    @Override
+    public void execute(final Sender sender, final CommandArguments arguments) {
+        final Optional<String> newX = arguments.next();
+        final Optional<Integer> signX = newX.flatMap(Input::trySign);
+        final Optional<Double> newRadiusX = newX.map(x -> signX.isPresent() ? x.substring(1) : x).flatMap(Input::tryDoubleSuffixed);
         if (newRadiusX.isEmpty() || newRadiusX.get() < 0 || Input.isPastWorldLimit(newRadiusX.get())) {
             sender.sendMessage(TranslationKey.HELP_RADIUS);
             return;
@@ -31,9 +32,10 @@ public class RadiusCommand extends ChunkyCommand {
             sender.sendMessage(TranslationKey.HELP_RADIUS);
             return;
         }
-        if (args.length > 2) {
-            final Optional<Integer> signZ = Input.trySign(args[2]);
-            final Optional<Double> newRadiusZ = Input.tryDoubleSuffixed(signZ.isPresent() ? args[2].substring(1) : args[2]);
+        final Optional<String> newZ = arguments.next();
+        if (newZ.isPresent()) {
+            final Optional<Integer> signZ = newZ.flatMap(Input::trySign);
+            final Optional<Double> newRadiusZ = newZ.map(z -> signZ.isPresent() ? z.substring(1) : z).flatMap(Input::tryDoubleSuffixed);
             if (newRadiusZ.isEmpty() || newRadiusZ.get() < 0 || Input.isPastWorldLimit(newRadiusZ.get())) {
                 sender.sendMessage(TranslationKey.HELP_RADIUS);
                 return;
@@ -49,5 +51,10 @@ public class RadiusCommand extends ChunkyCommand {
             chunky.getSelection().radius(radiusX);
             sender.sendMessagePrefixed(TranslationKey.FORMAT_RADIUS, Formatting.number(radiusX));
         }
+    }
+
+    @Override
+    public List<String> tabSuggestions(final CommandArguments arguments) {
+        return List.of();
     }
 }

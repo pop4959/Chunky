@@ -8,26 +8,27 @@ import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class ContinueCommand extends ChunkyCommand {
+public class ContinueCommand implements ChunkyCommand {
+    private final Chunky chunky;
+
     public ContinueCommand(final Chunky chunky) {
-        super(chunky);
+        this.chunky = chunky;
     }
 
-    public void execute(final Sender sender, final String[] args) {
+    @Override
+    public void execute(final Sender sender, final CommandArguments arguments) {
         final List<GenerationTask> loadTasks;
-        if (args.length > 1) {
-            final Optional<World> world = Input.tryWorld(chunky, String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
+        if (arguments.size() > 0) {
+            final Optional<World> world = Input.tryWorld(chunky, arguments.joined());
             if (world.isEmpty()) {
                 sender.sendMessage(TranslationKey.HELP_CONTINUE);
                 return;
             }
-            loadTasks = chunky.getConfig().loadTask(world.get()).map(Collections::singletonList).orElse(Collections.emptyList());
+            loadTasks = chunky.getConfig().loadTask(world.get()).map(List::of).orElse(List.of());
         } else {
             loadTasks = chunky.getConfig().loadTasks();
         }
@@ -49,12 +50,12 @@ public class ContinueCommand extends ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(final String[] args) {
-        if (args.length == 2) {
+    public List<String> tabSuggestions(final CommandArguments arguments) {
+        if (arguments.size() == 1) {
             final List<String> suggestions = new ArrayList<>();
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
             return suggestions;
         }
-        return Collections.emptyList();
+        return List.of();
     }
 }

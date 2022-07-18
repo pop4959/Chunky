@@ -10,6 +10,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.popcraft.chunky.command.ChunkyCommand;
+import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
@@ -43,7 +44,7 @@ public class ChunkyFabric implements ModInitializer {
             final Path configPath = FabricLoader.getInstance().getConfigDir().resolve("chunky.json");
             this.chunky = new Chunky(new FabricServer(this, minecraftServer), new GsonConfig(() -> chunky, configPath));
             if (chunky.getConfig().getContinueOnRestart()) {
-                chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
+                chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
             }
             chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener());
             chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener());
@@ -69,8 +70,8 @@ public class ChunkyFabric implements ModInitializer {
                         final String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
                         final String[] tokens = input.split(" ");
                         final String subCommand = tokens.length > 1 && commands.containsKey(tokens[1]) ? tokens[1] : CommandLiteral.HELP;
-                        final String[] args = tokens.length > 1 ? Arrays.copyOfRange(tokens, 1, tokens.length) : new String[]{};
-                        commands.get(subCommand).execute(sender, args);
+                        final CommandArguments arguments = tokens.length > 2 ? CommandArguments.of(Arrays.copyOfRange(tokens, 2, tokens.length)) : CommandArguments.empty();
+                        commands.get(subCommand).execute(sender, arguments);
                         return Command.SINGLE_SUCCESS;
                     });
             registerArguments(command, literal(CommandLiteral.CANCEL),

@@ -7,43 +7,41 @@ import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Parameter;
 import org.popcraft.chunky.util.TranslationKey;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
-public class PatternCommand extends ChunkyCommand {
+public class PatternCommand implements ChunkyCommand {
+    private final Chunky chunky;
+
     public PatternCommand(final Chunky chunky) {
-        super(chunky);
+        this.chunky = chunky;
     }
 
-    public void execute(final Sender sender, final String[] args) {
-        if (args.length < 2) {
-            sender.sendMessage(TranslationKey.HELP_PATTERN);
-            return;
-        }
-        final Optional<String> optionalType = Input.tryPattern(args[1]);
+    @Override
+    public void execute(final Sender sender, final CommandArguments arguments) {
+        final Optional<String> optionalType = arguments.next().flatMap(Input::tryPattern);
         if (optionalType.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_PATTERN);
             return;
         }
         final String type = optionalType.get();
-        final String value = args.length > 2 ? args[2] : null;
-        if (PatternType.CSV.equals(type) && value == null) {
+        final Optional<String> value = arguments.next();
+        if (PatternType.CSV.equals(type) && value.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_PATTERN);
             return;
         }
-        final Parameter pattern = Parameter.of(type, value);
+        final Parameter pattern = Parameter.of(type, value.orElse(null));
         chunky.getSelection().pattern(pattern);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_PATTERN, translate("pattern_" + pattern.getType()));
     }
 
     @Override
-    public List<String> tabSuggestions(final String[] args) {
-        if (args.length == 2) {
+    public List<String> tabSuggestions(final CommandArguments arguments) {
+        if (arguments.size() == 1) {
             return PatternType.ALL;
         }
-        return Collections.emptyList();
+        return List.of();
     }
 }

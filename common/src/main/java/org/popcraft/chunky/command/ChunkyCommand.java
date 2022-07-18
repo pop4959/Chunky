@@ -1,22 +1,11 @@
 package org.popcraft.chunky.command;
 
-import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Sender;
 
-import java.util.Collections;
 import java.util.List;
 
-public abstract class ChunkyCommand {
-    protected final Chunky chunky;
+public interface ChunkyCommand {
+    void execute(Sender sender, CommandArguments arguments);
 
-    protected ChunkyCommand(final Chunky chunky) {
-        this.chunky = chunky;
-    }
-
-    public abstract void execute(Sender sender, String[] args);
-
-    @SuppressWarnings("unused")
-    public List<String> tabSuggestions(final String[] args) {
-        return Collections.emptyList();
-    }
+    List<String> tabSuggestions(final CommandArguments arguments);
 }

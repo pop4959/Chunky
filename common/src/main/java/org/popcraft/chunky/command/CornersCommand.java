@@ -7,23 +7,22 @@ import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
+import java.util.List;
 import java.util.Optional;
 
-public class CornersCommand extends ChunkyCommand {
+public class CornersCommand implements ChunkyCommand {
+    private final Chunky chunky;
+
     public CornersCommand(final Chunky chunky) {
-        super(chunky);
+        this.chunky = chunky;
     }
 
     @Override
-    public void execute(final Sender sender, final String[] args) {
-        if (args.length < 5) {
-            sender.sendMessage(TranslationKey.HELP_CORNERS);
-            return;
-        }
-        final Optional<Double> x1 = Input.tryDoubleSuffixed(args[1]);
-        final Optional<Double> z1 = Input.tryDoubleSuffixed(args[2]);
-        final Optional<Double> x2 = Input.tryDoubleSuffixed(args[3]);
-        final Optional<Double> z2 = Input.tryDoubleSuffixed(args[4]);
+    public void execute(final Sender sender, final CommandArguments arguments) {
+        final Optional<Double> x1 = arguments.next().flatMap(Input::tryDoubleSuffixed);
+        final Optional<Double> z1 = arguments.next().flatMap(Input::tryDoubleSuffixed);
+        final Optional<Double> x2 = arguments.next().flatMap(Input::tryDoubleSuffixed);
+        final Optional<Double> z2 = arguments.next().flatMap(Input::tryDoubleSuffixed);
         if (x1.isEmpty() || z1.isEmpty() || x2.isEmpty() || z2.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_CORNERS);
             return;
@@ -48,5 +47,10 @@ public class CornersCommand extends ChunkyCommand {
         }
         chunky.getSelection().shape(shape);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, shape);
+    }
+
+    @Override
+    public List<String> tabSuggestions(final CommandArguments arguments) {
+        return List.of();
     }
 }

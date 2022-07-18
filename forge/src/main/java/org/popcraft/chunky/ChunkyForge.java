@@ -11,6 +11,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.popcraft.chunky.command.ChunkyCommand;
+import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
@@ -48,7 +49,7 @@ public class ChunkyForge {
         final Path configPath = event.getServer().getServerDirectory().toPath().resolve("config/chunky.json");
         this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(() -> chunky, configPath));
         if (chunky.getConfig().getContinueOnRestart()) {
-            chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), new String[]{});
+            chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
         }
         chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener());
         chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener());
@@ -60,8 +61,8 @@ public class ChunkyForge {
                     final String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
                     final String[] tokens = input.split(" ");
                     final String subCommand = tokens.length > 1 && commands.containsKey(tokens[1]) ? tokens[1] : CommandLiteral.HELP;
-                    final String[] args = tokens.length > 1 ? Arrays.copyOfRange(tokens, 1, tokens.length) : new String[]{};
-                    commands.get(subCommand).execute(sender, args);
+                    final CommandArguments arguments = tokens.length > 2 ? CommandArguments.of(Arrays.copyOfRange(tokens, 2, tokens.length)) : CommandArguments.empty();
+                    commands.get(subCommand).execute(sender, arguments);
                     return Command.SINGLE_SUCCESS;
                 });
         registerArguments(command, literal(CommandLiteral.CANCEL),
