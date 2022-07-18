@@ -50,7 +50,7 @@ public class CornersCommand implements ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(final CommandArguments arguments) {
+    public List<String> suggestions(final CommandArguments arguments) {
         return List.of();
     }
 }

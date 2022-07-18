@@ -99,7 +99,7 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
             commands.keySet().stream().filter(name -> sender.hasPermission(COMMAND_PERMISSION_KEY + name)).forEach(suggestions::add);
         } else if (commands.containsKey(args[0].toLowerCase()) && sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
             final CommandArguments arguments = CommandArguments.of(Arrays.copyOfRange(args, 1, args.length));
-            suggestions.addAll(commands.get(args[0].toLowerCase()).tabSuggestions(arguments));
+            suggestions.addAll(commands.get(args[0].toLowerCase()).suggestions(arguments));
         }
         return suggestions.stream()
                 .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))

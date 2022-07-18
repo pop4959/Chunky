@@ -7,5 +7,5 @@ import java.util.List;
 public interface ChunkyCommand {
     void execute(Sender sender, CommandArguments arguments);
 
-    List<String> tabSuggestions(final CommandArguments arguments);
+    List<String> suggestions(final CommandArguments arguments);
 }

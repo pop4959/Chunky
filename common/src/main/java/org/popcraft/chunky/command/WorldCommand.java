@@ -29,7 +29,7 @@ public class WorldCommand implements ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(final CommandArguments arguments) {
+    public List<String> suggestions(final CommandArguments arguments) {
         if (arguments.size() == 1) {
             final List<String> suggestions = new ArrayList<>();
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));

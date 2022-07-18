@@ -38,7 +38,7 @@ public class PatternCommand implements ChunkyCommand {
     }
 
     @Override
-    public List<String> tabSuggestions(final CommandArguments arguments) {
+    public List<String> suggestions(final CommandArguments arguments) {
         if (arguments.size() == 1) {
             return PatternType.ALL;
         }
