@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
@@ -18,6 +19,7 @@ import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskFinishListener;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskUpdateListener;
+import org.popcraft.chunky.platform.ForgePlayer;
 import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.ForgeServer;
 import org.popcraft.chunky.platform.Sender;
@@ -56,7 +58,12 @@ public class ChunkyForge {
         final LiteralArgumentBuilder<CommandSourceStack> command = literal(CommandLiteral.CHUNKY)
                 .requires(serverCommandSource -> serverCommandSource.hasPermission(2))
                 .executes(context -> {
-                    final Sender sender = new ForgeSender(context.getSource());
+                    final Sender sender;
+                    if (context.getSource().getEntity() instanceof final ServerPlayer player) {
+                        sender = new ForgePlayer(player);
+                    } else {
+                        sender = new ForgeSender(context.getSource());
+                    }
                     final Map<String, ChunkyCommand> commands = chunky.getCommands();
                     final String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
                     final String[] tokens = input.split(" ");
