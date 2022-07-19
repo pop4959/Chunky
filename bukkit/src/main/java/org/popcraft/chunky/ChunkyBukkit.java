@@ -74,7 +74,7 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         final Sender bukkitSender = sender instanceof final Player player ? new BukkitPlayer(player) : new BukkitSender(sender);
         final Map<String, ChunkyCommand> commands = chunky.getCommands();
-        final CommandArguments arguments = CommandArguments.of(Arrays.copyOfRange(args, 1, args.length));
+        final CommandArguments arguments = CommandArguments.of(Arrays.copyOfRange(args, Math.min(1, args.length), args.length));
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
             if (sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
                 commands.get(args[0].toLowerCase()).execute(bukkitSender, arguments);
