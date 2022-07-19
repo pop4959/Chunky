@@ -6,7 +6,7 @@ repositories {
 
 dependencies {
     compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.18.2-R0.1-SNAPSHOT")
-    compileOnly(group = "com.github.Brettflan", name = "WorldBorder", version = "44f388f3ba") {
+    compileOnly(group = "com.github.Puremin0rez", name = "WorldBorder", version = "1.19") {
         isTransitive = false
     }
     implementation(group = "io.papermc", name = "paperlib", version = "1.0.8-SNAPSHOT")
