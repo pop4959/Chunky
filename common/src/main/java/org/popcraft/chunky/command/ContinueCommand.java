@@ -28,9 +28,9 @@ public class ContinueCommand implements ChunkyCommand {
                 sender.sendMessage(TranslationKey.HELP_CONTINUE);
                 return;
             }
-            loadTasks = chunky.getConfig().loadTask(world.get()).map(List::of).orElse(List.of());
+            loadTasks = chunky.getTaskLoader().loadTask(world.get()).map(List::of).orElse(List.of());
         } else {
-            loadTasks = chunky.getConfig().loadTasks();
+            loadTasks = chunky.getTaskLoader().loadTasks();
         }
         if (loadTasks.stream().allMatch(GenerationTask::isCancelled)) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CONTINUE_NO_TASKS);

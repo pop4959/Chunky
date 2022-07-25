@@ -22,7 +22,7 @@ public class CancelCommand implements ChunkyCommand {
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
         final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
-        if (generationTasks.isEmpty() && chunky.getConfig().loadTasks().stream().allMatch(GenerationTask::isCancelled)) {
+        if (generationTasks.isEmpty() && chunky.getTaskLoader().loadTasks().stream().allMatch(GenerationTask::isCancelled)) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_NO_TASKS);
             return;
         }
@@ -35,7 +35,7 @@ public class CancelCommand implements ChunkyCommand {
             }
             cancelAction = () -> {
                 sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL, world.get().getName());
-                chunky.getConfig().cancelTask(world.get());
+                chunky.getTaskLoader().cancelTask(world.get());
                 if (chunky.getGenerationTasks().containsKey(world.get().getName())) {
                     chunky.getGenerationTasks().remove(world.get().getName()).stop(true);
                 }
@@ -43,7 +43,7 @@ public class CancelCommand implements ChunkyCommand {
         } else {
             cancelAction = () -> {
                 sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_ALL);
-                chunky.getConfig().cancelTasks();
+                chunky.getTaskLoader().cancelTasks();
                 chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true));
                 chunky.getGenerationTasks().clear();
                 chunky.getScheduler().cancelTasks();

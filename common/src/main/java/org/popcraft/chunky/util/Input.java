@@ -40,6 +40,13 @@ public final class Input {
         return Optional.empty();
     }
 
+    public static Optional<Boolean> tryBoolean(final String input) {
+        if (input == null || input.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(Boolean.parseBoolean(input));
+    }
+
     public static Optional<Integer> tryInteger(final String input) {
         if (input == null || input.isEmpty()) {
             return Optional.empty();
@@ -80,6 +87,17 @@ public final class Input {
         return suffixValue(input.charAt(last))
                 .map(suffixValue -> tryDouble(input.substring(0, last)).map(d -> d * suffixValue))
                 .orElse(tryDouble(input));
+    }
+
+    public static Optional<Long> tryLong(final String input) {
+        if (input == null || input.isEmpty()) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(Long.parseLong(input));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 
     public static Optional<Integer> trySign(final String input) {

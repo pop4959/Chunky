@@ -49,7 +49,7 @@ public class ChunkyForge {
     public void onServerStarting(final ServerStartingEvent event) {
         final MinecraftServer server = event.getServer();
         final Path configPath = event.getServer().getServerDirectory().toPath().resolve("config/chunky.json");
-        this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(() -> chunky, configPath));
+        this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(configPath));
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
         }

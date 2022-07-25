@@ -1,25 +1,16 @@
 package org.popcraft.chunky.platform;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.popcraft.chunky.ChunkyBukkit;
-import org.popcraft.chunky.GenerationTask;
-import org.popcraft.chunky.Selection;
-import org.popcraft.chunky.iterator.PatternType;
-import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Input;
-import org.popcraft.chunky.util.Parameter;
 import org.popcraft.chunky.util.Translator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class BukkitConfig implements Config {
-    private static final String TASKS_KEY = "tasks.";
     private static final List<String> HEADER = Arrays.asList("Chunky Configuration", "https://github.com/pop4959/Chunky/wiki/Configuration");
     private final ChunkyBukkit plugin;
 
@@ -39,76 +30,6 @@ public class BukkitConfig implements Config {
     @Override
     public Path getDirectory() {
         return plugin.getDataFolder().toPath();
-    }
-
-    @Override
-    public synchronized Optional<GenerationTask> loadTask(final World world) {
-        final FileConfiguration config = plugin.getConfig();
-        if (config.getConfigurationSection(TASKS_KEY + world.getName()) == null) {
-            return Optional.empty();
-        }
-        final String worldKey = TASKS_KEY + world.getName() + ".";
-        final boolean cancelled = config.getBoolean(worldKey + "cancelled", false);
-        final double radiusX = config.getDouble(worldKey + "radius", Selection.DEFAULT_RADIUS);
-        final double radiusZ = config.getDouble(worldKey + "z-radius", radiusX);
-        final Selection.Builder selection = Selection.builder(plugin.getChunky(), world)
-                .centerX(config.getDouble(worldKey + "x-center", Selection.DEFAULT_CENTER_X))
-                .centerZ(config.getDouble(worldKey + "z-center", Selection.DEFAULT_CENTER_Z))
-                .radiusX(radiusX)
-                .radiusZ(radiusZ)
-                .pattern(Parameter.of(config.getString(worldKey + "iterator", PatternType.CONCENTRIC)))
-                .shape(config.getString(worldKey + "shape", ShapeType.SQUARE));
-        final long count = config.getLong(worldKey + "count", 0);
-        final long time = config.getLong(worldKey + "time", 0);
-        return Optional.of(new GenerationTask(plugin.getChunky(), selection.build(), count, time, cancelled));
-    }
-
-    @Override
-    public synchronized List<GenerationTask> loadTasks() {
-        final List<GenerationTask> generationTasks = new ArrayList<>();
-        plugin.getChunky().getServer().getWorlds().forEach(world -> loadTask(world).ifPresent(generationTasks::add));
-        return generationTasks;
-    }
-
-    @Override
-    public synchronized void saveTask(final GenerationTask generationTask) {
-        final FileConfiguration config = plugin.getConfig();
-        final Selection selection = generationTask.getSelection();
-        final String worldKey = TASKS_KEY + selection.world().getName() + ".";
-        final String shape = generationTask.getShape().name();
-        config.set(worldKey + "cancelled", generationTask.isCancelled());
-        config.set(worldKey + "radius", selection.radiusX());
-        if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape)) {
-            config.set(worldKey + "z-radius", selection.radiusZ());
-        }
-        config.set(worldKey + "x-center", selection.centerX());
-        config.set(worldKey + "z-center", selection.centerZ());
-        config.set(worldKey + "iterator", generationTask.getChunkIterator().name());
-        config.set(worldKey + "shape", shape);
-        config.set(worldKey + "count", generationTask.getCount());
-        config.set(worldKey + "time", generationTask.getTotalTime());
-        plugin.saveConfig();
-    }
-
-    @Override
-    public synchronized void saveTasks() {
-        plugin.getChunky().getGenerationTasks().values().forEach(this::saveTask);
-    }
-
-    @Override
-    public void cancelTask(final World world) {
-        loadTask(world).ifPresent(generationTask -> {
-            generationTask.stop(true);
-            saveTask(generationTask);
-        });
-    }
-
-    @Override
-    public synchronized void cancelTasks() {
-        loadTasks().forEach(generationTask -> {
-            generationTask.stop(true);
-            saveTask(generationTask);
-        });
     }
 
     @Override

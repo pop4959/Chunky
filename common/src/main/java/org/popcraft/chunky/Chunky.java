@@ -28,6 +28,7 @@ import org.popcraft.chunky.platform.Server;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.PendingAction;
 import org.popcraft.chunky.util.RegionCache;
+import org.popcraft.chunky.util.TaskLoader;
 import org.popcraft.chunky.util.TaskScheduler;
 import org.popcraft.chunky.util.Translator;
 import org.popcraft.chunky.util.Version;
@@ -45,6 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Chunky {
     private final Server server;
     private final Config config;
+    private final TaskLoader taskLoader;
     private final EventBus eventBus;
     private final Selection.Builder selection;
     private final TaskScheduler scheduler = new TaskScheduler();
@@ -58,6 +60,7 @@ public class Chunky {
     public Chunky(final Server server, final Config config) {
         this.server = server;
         this.config = config;
+        this.taskLoader = new TaskLoader(this);
         this.eventBus = new EventBus();
         this.selection = Selection.builder(this, server.getWorlds().get(0));
         this.limit = loadLimit().orElse(Double.MAX_VALUE);
@@ -67,7 +70,7 @@ public class Chunky {
     }
 
     public void disable() {
-        getConfig().saveTasks();
+        taskLoader.saveTasks();
         getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
         getScheduler().cancelTasks();
         ChunkyProvider.unregister();
@@ -128,6 +131,10 @@ public class Chunky {
 
     public Config getConfig() {
         return config;
+    }
+
+    public TaskLoader getTaskLoader() {
+        return taskLoader;
     }
 
     public EventBus getEventBus() {
