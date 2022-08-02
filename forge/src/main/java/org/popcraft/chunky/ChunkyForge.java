@@ -11,6 +11,7 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
@@ -48,7 +49,7 @@ public class ChunkyForge {
     @SubscribeEvent
     public void onServerStarting(final ServerStartingEvent event) {
         final MinecraftServer server = event.getServer();
-        final Path configPath = event.getServer().getServerDirectory().toPath().resolve("config/chunky.json");
+        final Path configPath = FMLPaths.CONFIGDIR.get().resolve("chunky/config.json");
         this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(configPath));
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());

@@ -41,7 +41,7 @@ public class ChunkyFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
-            final Path configPath = FabricLoader.getInstance().getConfigDir().resolve("chunky.json");
+            final Path configPath = FabricLoader.getInstance().getConfigDir().resolve("chunky/config.json");
             this.chunky = new Chunky(new FabricServer(this, minecraftServer), new GsonConfig(configPath));
             if (chunky.getConfig().getContinueOnRestart()) {
                 chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
