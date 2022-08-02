@@ -93,7 +93,7 @@ public class GsonConfig implements Config {
 
     @SuppressWarnings("unused")
     private static class ConfigModel {
-        private Integer version = 1;
+        private Integer version = 2;
         private String language = "en";
         private Boolean continueOnRestart = false;
         private Boolean silent = false;
