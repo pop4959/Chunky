@@ -142,6 +142,7 @@ public class TaskLoader {
         final String taskFileName = world.replace(':', '/') + ".properties";
         final Path taskPath = savePath.resolve(taskFileName);
         try {
+            Files.createDirectories(taskPath.getParent());
             Files.write(taskPath, propertiesBuilder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
