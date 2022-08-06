@@ -5,10 +5,10 @@ plugins {
 val shade: Configuration by configurations.creating
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.19")
-    mappings(group = "net.fabricmc", name = "yarn", version = "1.19+build.1", classifier = "v2")
+    minecraft(group = "com.mojang", name = "minecraft", version = "1.18")
+    mappings(group = "net.fabricmc", name = "yarn", version = "1.18+build.1", classifier = "v2")
     modImplementation(group = "net.fabricmc", name = "fabric-loader", version = "0.14.6")
-    modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.55.2+1.19")
+    modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.43.1+1.18")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }

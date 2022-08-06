@@ -9,9 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-
 @SuppressWarnings("UnnecessaryInterfaceModifier")
 @Mixin(ThreadedAnvilChunkStorage.class)
 public interface ThreadedAnvilChunkStorageMixin {
@@ -19,7 +16,7 @@ public interface ThreadedAnvilChunkStorageMixin {
     public ChunkHolder invokeGetChunkHolder(long pos);
 
     @Invoker("getUpdatedChunkNbt")
-    public CompletableFuture<Optional<NbtCompound>> invokeGetUpdatedChunkNbt(ChunkPos pos);
+    public NbtCompound invokeGetUpdatedChunkNbt(ChunkPos pos);
 
     @Accessor("chunksToUnload")
     public Long2ObjectLinkedOpenHashMap<ChunkHolder> getChunksToUnload();

@@ -7,6 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.dimension.DimensionType;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
@@ -57,11 +58,11 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
 
     private CommandBossBar createNewBossBar(final BossBarManager bossBarManager, final Identifier barIdentifier, final Identifier worldIdentifier) {
         final CommandBossBar bossBar = bossBarManager.add(barIdentifier, Text.of(barIdentifier.toString()));
-        if (net.minecraft.world.World.OVERWORLD.getValue().equals(worldIdentifier)) {
+        if (DimensionType.OVERWORLD_ID.equals(worldIdentifier)) {
             bossBar.setColor(BossBar.Color.GREEN);
-        } else if (net.minecraft.world.World.NETHER.getValue().equals(worldIdentifier)) {
+        } else if (DimensionType.THE_NETHER_ID.equals(worldIdentifier)) {
             bossBar.setColor(BossBar.Color.RED);
-        } else if (net.minecraft.world.World.END.getValue().equals(worldIdentifier)) {
+        } else if (DimensionType.THE_END_ID.equals(worldIdentifier)) {
             bossBar.setColor(BossBar.Color.PURPLE);
         } else {
             bossBar.setColor(BossBar.Color.BLUE);

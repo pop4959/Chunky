@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerChunkManager;
@@ -62,7 +63,11 @@ public class FabricWorld implements World {
             if (unloadedChunkHolder != null && unloadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
                 return true;
             }
-            return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos).join().map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false);
+            final NbtCompound chunkNbt = chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos);
+            if (chunkNbt != null && chunkNbt.contains("Status", 8)) {
+                return "full".equals(chunkNbt.getString("Status"));
+            }
+            return false;
         }
     }
 
