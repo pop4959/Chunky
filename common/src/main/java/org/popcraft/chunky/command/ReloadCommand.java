@@ -1,6 +1,7 @@
 package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.event.command.ReloadCommandEvent;
 import org.popcraft.chunky.platform.Config;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.TranslationKey;
@@ -27,6 +28,7 @@ public class ReloadCommand implements ChunkyCommand {
             final Config config = chunky.getServer().getConfig();
             config.reload();
             chunky.setLanguage(config.getLanguage());
+            chunky.getEventBus().call(new ReloadCommandEvent());
         }
         sender.sendMessagePrefixed(TranslationKey.FORMAT_RELOAD);
     }
