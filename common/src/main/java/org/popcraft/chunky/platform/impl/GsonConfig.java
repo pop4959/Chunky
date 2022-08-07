@@ -50,6 +50,11 @@ public class GsonConfig implements Config {
     }
 
     @Override
+    public boolean isForceLoadExistingChunks() {
+        return Optional.ofNullable(configModel.forceLoadExistingChunks).orElse(false);
+    }
+
+    @Override
     public boolean isSilent() {
         return Optional.ofNullable(configModel.silent).orElse(false);
     }
@@ -96,6 +101,7 @@ public class GsonConfig implements Config {
         private Integer version = 2;
         private String language = "en";
         private Boolean continueOnRestart = false;
+        private Boolean forceLoadExistingChunks = false;
         private Boolean silent = false;
         private Integer updateInterval = 1;
         private Map<String, TaskModel> tasks;
@@ -122,6 +128,14 @@ public class GsonConfig implements Config {
 
         public void setContinueOnRestart(final Boolean continueOnRestart) {
             this.continueOnRestart = continueOnRestart;
+        }
+
+        public Boolean getForceLoadExistingChunks() {
+            return forceLoadExistingChunks;
+        }
+
+        public void setForceLoadExistingChunks(final Boolean forceLoadExistingChunks) {
+            this.forceLoadExistingChunks = forceLoadExistingChunks;
         }
 
         public Map<String, TaskModel> getTasks() {

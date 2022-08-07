@@ -48,6 +48,11 @@ public class BukkitConfig implements Config {
     }
 
     @Override
+    public boolean isForceLoadExistingChunks() {
+        return plugin.getConfig().getBoolean("force-load-existing-chunks", false);
+    }
+
+    @Override
     public boolean isSilent() {
         return plugin.getConfig().getBoolean("silent", false);
     }

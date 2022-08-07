@@ -11,6 +11,8 @@ public interface Config {
 
     boolean getContinueOnRestart();
 
+    boolean isForceLoadExistingChunks();
+
     boolean isSilent();
 
     void setSilent(boolean silent);

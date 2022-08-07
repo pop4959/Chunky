@@ -82,6 +82,11 @@ public class SpongeConfig implements Config {
     }
 
     @Override
+    public boolean isForceLoadExistingChunks() {
+        return this.rootNode != null && this.rootNode.node(ROOT_CONFIG_NODE, "force-load-existing-chunks").getBoolean(false);
+    }
+
+    @Override
     public boolean isSilent() {
         return this.rootNode != null && this.rootNode.node(ROOT_CONFIG_NODE, "silent").getBoolean(false);
     }

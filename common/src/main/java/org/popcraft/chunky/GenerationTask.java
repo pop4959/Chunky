@@ -118,13 +118,19 @@ public class GenerationTask implements Runnable {
             final ChunkCoordinate chunk = chunkIterator.next();
             final int chunkCenterX = (chunk.x() << 4) + 8;
             final int chunkCenterZ = (chunk.z() << 4) + 8;
-            if (!shape.isBounding(chunkCenterX, chunkCenterZ) || worldState.isGenerated(chunk.x(), chunk.z())) {
+            if (!shape.isBounding(chunkCenterX, chunkCenterZ)) {
                 update(chunk.x(), chunk.z(), false);
                 continue;
             }
-            if (selection.world().isChunkGenerated(chunk.x(), chunk.z())) {
-                update(chunk.x(), chunk.z(), true);
-                continue;
+            if (!chunky.getConfig().isForceLoadExistingChunks()) {
+                if (worldState.isGenerated(chunk.x(), chunk.z())) {
+                    update(chunk.x(), chunk.z(), false);
+                    continue;
+                }
+                if (selection.world().isChunkGenerated(chunk.x(), chunk.z())) {
+                    update(chunk.x(), chunk.z(), true);
+                    continue;
+                }
             }
             try {
                 working.acquire();
