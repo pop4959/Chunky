@@ -27,6 +27,7 @@ public class HelpCommand implements ChunkyCommand {
             TranslationKey.HELP_SILENT,
             TranslationKey.HELP_QUIET,
             TranslationKey.HELP_TRIM,
+            TranslationKey.HELP_SELECTION,
             TranslationKey.HELP_PROGRESS,
             TranslationKey.HELP_RELOAD
     );

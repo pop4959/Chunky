@@ -102,6 +102,7 @@ public class ChunkyFabric implements ModInitializer {
                     argument(CommandLiteral.RADIUS, word()));
             registerArguments(command, literal(CommandLiteral.RELOAD),
                     argument(CommandLiteral.TYPE, word()));
+            registerArguments(command, literal(CommandLiteral.SELECTION));
             registerArguments(command, literal(CommandLiteral.SHAPE),
                     argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES));
             registerArguments(command, literal(CommandLiteral.SILENT));

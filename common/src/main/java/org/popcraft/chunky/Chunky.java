@@ -14,6 +14,7 @@ import org.popcraft.chunky.command.ProgressCommand;
 import org.popcraft.chunky.command.QuietCommand;
 import org.popcraft.chunky.command.RadiusCommand;
 import org.popcraft.chunky.command.ReloadCommand;
+import org.popcraft.chunky.command.SelectionCommand;
 import org.popcraft.chunky.command.ShapeCommand;
 import org.popcraft.chunky.command.SilentCommand;
 import org.popcraft.chunky.command.SpawnCommand;
@@ -111,6 +112,7 @@ public class Chunky {
         commandMap.put(CommandLiteral.QUIET, new QuietCommand(this));
         commandMap.put(CommandLiteral.RADIUS, new RadiusCommand(this));
         commandMap.put(CommandLiteral.RELOAD, new ReloadCommand(this));
+        commandMap.put(CommandLiteral.SELECTION, new SelectionCommand(this));
         commandMap.put(CommandLiteral.SHAPE, new ShapeCommand(this));
         commandMap.put(CommandLiteral.SILENT, new SilentCommand(this));
         commandMap.put(CommandLiteral.SPAWN, new SpawnCommand(this));

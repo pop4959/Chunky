@@ -203,6 +203,13 @@ public class ChunkySponge {
                     return CommandResult.success();
                 })
                 .build();
+        final Command.Parameterized selectionCommand = Command.builder()
+                .permission("chunky.command.selection")
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, CommandLiteral.SELECTION, List.of());
+                    return CommandResult.success();
+                })
+                .build();
         final Command.Parameterized shapeCommand = Command.builder()
                 .permission("chunky.command.shape")
                 .addParameters(Parameter.string().key(CommandLiteral.SHAPE).completer(SuggestionProviders.SHAPES).build())
@@ -304,6 +311,7 @@ public class ChunkySponge {
                 .addChild(quietCommand, CommandLiteral.QUIET)
                 .addChild(radiusCommand, CommandLiteral.RADIUS)
                 .addChild(reloadCommand, CommandLiteral.RELOAD)
+                .addChild(selectionCommand, CommandLiteral.SELECTION)
                 .addChild(shapeCommand, CommandLiteral.SHAPE)
                 .addChild(silentCommand, CommandLiteral.SILENT)
                 .addChild(spawnCommand, CommandLiteral.SPAWN)

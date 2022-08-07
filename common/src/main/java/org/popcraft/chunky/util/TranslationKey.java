@@ -37,6 +37,12 @@ public final class TranslationKey {
     public static final String FORMAT_RADIUS = "format_radius";
     public static final String FORMAT_RELOAD = "format_reload";
     public static final String FORMAT_RELOAD_TASKS_RUNNING = "format_reload_tasks_running";
+    public static final String FORMAT_SELECTION = "format_selection";
+    public static final String FORMAT_SELECTION_CENTER = "format_selection_center";
+    public static final String FORMAT_SELECTION_RADII = "format_selection_radii";
+    public static final String FORMAT_SELECTION_RADIUS = "format_selection_radius";
+    public static final String FORMAT_SELECTION_SHAPE = "format_selection_shape";
+    public static final String FORMAT_SELECTION_WORLD = "format_selection_world";
     public static final String FORMAT_SHAPE = "format_shape";
     public static final String FORMAT_SILENT = "format_silent";
     public static final String FORMAT_START = "format_start";
@@ -59,6 +65,7 @@ public final class TranslationKey {
     public static final String HELP_QUIET = "help_quiet";
     public static final String HELP_RADIUS = "help_radius";
     public static final String HELP_RELOAD = "help_reload";
+    public static final String HELP_SELECTION = "help_selection";
     public static final String HELP_SHAPE = "help_shape";
     public static final String HELP_SILENT = "help_silent";
     public static final String HELP_SPAWN = "help_spawn";
