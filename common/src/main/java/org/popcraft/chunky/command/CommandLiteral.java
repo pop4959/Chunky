@@ -42,6 +42,7 @@ public final class CommandLiteral {
     public static final String WRAP = "wrap";
     public static final String PLAYER = "player";
     public static final String VALUE = "value";
+    public static final String TYPE = "type";
 
     private CommandLiteral() {
     }

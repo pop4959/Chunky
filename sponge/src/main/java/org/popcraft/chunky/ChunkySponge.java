@@ -194,8 +194,12 @@ public class ChunkySponge {
                 .build();
         final Command.Parameterized reloadCommand = Command.builder()
                 .permission("chunky.command.reload")
+                .addParameters(Parameter.string().key(CommandLiteral.TYPE).terminal().build())
+                .terminal(true)
                 .executor(ctx -> {
-                    executeSpongeCommand(ctx, CommandLiteral.RELOAD, List.of());
+                    final List<String> args = new ArrayList<>();
+                    ctx.one(Parameter.key(CommandLiteral.TYPE, String.class)).ifPresent(args::add);
+                    executeSpongeCommand(ctx, CommandLiteral.RELOAD, args);
                     return CommandResult.success();
                 })
                 .build();

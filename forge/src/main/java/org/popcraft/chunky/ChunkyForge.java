@@ -99,7 +99,8 @@ public class ChunkyForge {
         registerArguments(command, literal(CommandLiteral.RADIUS),
                 argument(CommandLiteral.RADIUS, word()),
                 argument(CommandLiteral.RADIUS, word()));
-        registerArguments(command, literal(CommandLiteral.RELOAD));
+        registerArguments(command, literal(CommandLiteral.RELOAD),
+                argument(CommandLiteral.TYPE, word()));
         registerArguments(command, literal(CommandLiteral.SHAPE),
                 argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES));
         registerArguments(command, literal(CommandLiteral.SILENT));

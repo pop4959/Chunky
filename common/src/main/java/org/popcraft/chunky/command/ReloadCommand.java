@@ -16,18 +16,26 @@ public class ReloadCommand implements ChunkyCommand {
 
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
-        if (!chunky.getGenerationTasks().isEmpty()) {
-            sender.sendMessagePrefixed(TranslationKey.FORMAT_RELOAD_TASKS_RUNNING);
-            return;
+        final String type = arguments.next().orElse(null);
+        if ("tasks".equals(type)) {
+            if (!chunky.getGenerationTasks().isEmpty()) {
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_RELOAD_TASKS_RUNNING);
+                return;
+            }
+            chunky.getTaskLoader().reload();
+        } else {
+            final Config config = chunky.getServer().getConfig();
+            config.reload();
+            chunky.setLanguage(config.getLanguage());
         }
-        final Config config = chunky.getServer().getConfig();
-        config.reload();
-        chunky.setLanguage(config.getLanguage());
         sender.sendMessagePrefixed(TranslationKey.FORMAT_RELOAD);
     }
 
     @Override
     public List<String> suggestions(final CommandArguments arguments) {
+        if (arguments.size() == 1) {
+            return List.of("config", "tasks");
+        }
         return List.of();
     }
 }
