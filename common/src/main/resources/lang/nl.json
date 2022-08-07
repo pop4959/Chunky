@@ -38,7 +38,7 @@
   "format_selection": "Huidige selectie",
   "format_selection_center": "Midden: %s, %s",
   "format_selection_radius": "Straal: %s",
-  "format_selection_radii": "Radii: %s, %s",
+  "format_selection_radii": "Straal: %s, %s",
   "format_selection_shape": "Vorm: %s",
   "format_selection_world": "Wereld: %s",
   "format_shape": "Vorm veranderd naar %s.",
