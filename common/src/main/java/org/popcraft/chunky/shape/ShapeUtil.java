@@ -70,4 +70,43 @@ public final class ShapeUtil {
         final double z = centerZ + radiusZ * Math.sin(angle);
         return Vector2.of(x, z);
     }
+
+    /**
+     * Calculate the closest point on a line from a given position.
+     *
+     * @param posX Position x
+     * @param posZ Position z
+     * @param p1x Line point 1 x
+     * @param p1z Line point 1 z
+     * @param p2x Line point 2 x
+     * @param p2z Line point 2 z
+     * @return The closest point to the position on the line.
+     */
+    public static Vector2 closestPointOnLine(final double posX, final double posZ, final double p1x, final double p1z, final double p2x, final double p2z) {
+        final double dx = p2x - p1x;
+        final double dz = p2z - p1z;
+        final double perpendicularSlope = -dx / dz;
+        final double p3x, p3z;
+        if (Double.isInfinite(perpendicularSlope)) {
+            p3x = posX;
+            p3z = posZ + 1;
+        } else {
+            p3x = posX + 1;
+            p3z = posZ + perpendicularSlope;
+        }
+        return ShapeUtil.intersection(p1x, p1z, p2x, p2z, posX, posZ, p3x, p3z).orElseThrow(IllegalStateException::new);
+    }
+
+    /**
+     * Calculate the distance between 2 points.
+     *
+     * @param p1x Point 1 x
+     * @param p1z Point 1 z
+     * @param p2x Point 2 x
+     * @param p2z Point 2 z
+     * @return The distance between the 2 points.
+     */
+    public static double distanceBetweenPoints(final double p1x, final double p1z, final double p2x, final double p2z) {
+        return Math.sqrt(Math.pow(p1x - p2x, 2) + Math.pow(p1z - p2z, 2));
+    }
 }
