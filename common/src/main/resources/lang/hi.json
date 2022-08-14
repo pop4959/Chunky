@@ -63,7 +63,7 @@
   "help_quiet": "&2chunky quiet <interval>&r - मौन अंतराल सेट करना",
   "help_radius": "&2chunky radius <radius>&r - त्रिज्या सेट करना",
   "help_reload": "&2chunky reload&r - कॉन्फ़िगरेशन पुनः लोड करना",
-  "help_selection": "&2चंकी चयन&r - वर्तमान चयन दिखाना",
+  "help_selection": "&2chunky selection&r - वर्तमान चयन दिखाना",
   "help_shape": "&2chunky shape <shape>&r - जेनरेट करने के लिए आकार सेट करना",
   "help_silent": "&2chunky silent&r - अपडेट मैसेज को प्रदर्शित करने के लिए टॉगल करना",
   "help_spawn": "&2chunky spawn&r - केंद्र को स्पॉन बिंदु पर सेट करना",
