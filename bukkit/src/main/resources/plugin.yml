@@ -16,6 +16,9 @@ commands:
 permissions:
   chunky.command:
     default: op
+  chunky.command.border:
+    default: op
+    children: [chunky.command]
   chunky.command.cancel:
     default: op
     children: [chunky.command]
@@ -29,9 +32,6 @@ permissions:
     default: op
     children: [chunky.command]
   chunky.command.corners:
-    default: op
-    children: [chunky.command]
-  chunky.command.trim:
     default: op
     children: [chunky.command]
   chunky.command.help:
@@ -55,6 +55,9 @@ permissions:
   chunky.command.reload:
     default: op
     children: [chunky.command]
+  chunky.command.selection:
+    default: op
+    children: [chunky.command]
   chunky.command.shape:
     default: op
     children: [chunky.command]
@@ -65,6 +68,9 @@ permissions:
     default: op
     children: [chunky.command]
   chunky.command.start:
+    default: op
+    children: [chunky.command]
+  chunky.command.trim:
     default: op
     children: [chunky.command]
   chunky.command.worldborder:
@@ -89,6 +95,7 @@ permissions:
       - chunky.command.quiet
       - chunky.command.radius
       - chunky.command.reload
+      - chunky.command.selection
       - chunky.command.shape
       - chunky.command.silent
       - chunky.command.spawn
