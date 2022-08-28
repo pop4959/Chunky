@@ -35,7 +35,7 @@
   "format_radius": "Rayon modifié à %s.",
   "format_reload": "Configuration rechargée avec succès.",
   "format_reload_tasks_running": "La configuration ne peut pas être rechargée pendant que les tâches sont en cours d'exécution.",
-  "format_selection": "Current selection",
+  "format_selection": "Sélection active",
   "format_selection_center": "Centre: %s, %s",
   "format_selection_radius": "Rayon: %s",
   "format_selection_radii": "Radii: %s, %s",
