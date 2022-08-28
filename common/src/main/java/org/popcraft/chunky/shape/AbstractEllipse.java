@@ -8,7 +8,5 @@ public abstract class AbstractEllipse extends AbstractShape {
         super(selection, chunkAligned);
     }
 
-    public Vector2 radii() {
-        return Vector2.of(radiusX, radiusZ);
-    }
+    public abstract Vector2 radii();
 }
