@@ -5,31 +5,33 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
 public class HelpCommand implements ChunkyCommand {
     private final Chunky chunky;
-    private final List<String> helpMessages = List.of(
-            TranslationKey.HELP_START,
-            TranslationKey.HELP_PAUSE,
-            TranslationKey.HELP_CONTINUE,
-            TranslationKey.HELP_CANCEL,
-            TranslationKey.HELP_WORLD,
-            TranslationKey.HELP_WORLDBORDER,
-            TranslationKey.HELP_CENTER,
-            TranslationKey.HELP_SPAWN,
-            TranslationKey.HELP_RADIUS,
-            TranslationKey.HELP_CORNERS,
-            TranslationKey.HELP_SHAPE,
-            TranslationKey.HELP_PATTERN,
-            TranslationKey.HELP_SILENT,
-            TranslationKey.HELP_QUIET,
-            TranslationKey.HELP_TRIM,
-            TranslationKey.HELP_SELECTION,
-            TranslationKey.HELP_PROGRESS,
-            TranslationKey.HELP_RELOAD
+    private final List<String> helpCommands = List.of(
+            CommandLiteral.START,
+            CommandLiteral.PAUSE,
+            CommandLiteral.CONTINUE,
+            CommandLiteral.CANCEL,
+            CommandLiteral.WORLD,
+            CommandLiteral.WORLDBORDER,
+            CommandLiteral.CENTER,
+            CommandLiteral.SPAWN,
+            CommandLiteral.RADIUS,
+            CommandLiteral.CORNERS,
+            CommandLiteral.SHAPE,
+            CommandLiteral.PATTERN,
+            CommandLiteral.SILENT,
+            CommandLiteral.QUIET,
+            CommandLiteral.TRIM,
+            CommandLiteral.SELECTION,
+            CommandLiteral.PROGRESS,
+            CommandLiteral.BORDER,
+            CommandLiteral.RELOAD
     );
 
     public HelpCommand(final Chunky chunky) {
@@ -38,20 +40,30 @@ public class HelpCommand implements ChunkyCommand {
 
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
+        final List<String> visibleCommands = new ArrayList<>();
+        for (final String command : helpCommands) {
+            if (chunky.getCommands().containsKey(command)) {
+                visibleCommands.add(command);
+            }
+        }
+        final int visibleCommandCount = visibleCommands.size();
         final StringBuilder help = new StringBuilder();
+        final int pageIndexLast = visibleCommandCount / 8;
+        final int pageIndex = (arguments.size() < 1 ? 0 : Math.max(0, arguments.next().flatMap(Input::tryInteger).orElse(1) - 1)) % (pageIndexLast + 1);
+        final int helpIndexFirst;
+        final int helpIndexLast;
         if (sender.isPlayer()) {
-            final int pageIndexLast = helpMessages.size() / 8;
-            final int pageIndex = (arguments.size() < 1 ? 0 : Math.max(0, arguments.next().flatMap(Input::tryInteger).orElse(1) - 1)) % (pageIndexLast + 1);
-            final int helpIndexFirst = 8 * pageIndex;
-            final int helpIndexLast = Math.min(helpIndexFirst + 8, helpMessages.size());
-            for (int i = helpIndexFirst; i < helpIndexLast; ++i) {
-                help.append('\n').append(translate(helpMessages.get(i)));
-            }
-            if (pageIndex != pageIndexLast) {
-                help.append('\n').append(translate(TranslationKey.HELP_MORE, "/chunky help " + (pageIndex + 2)));
-            }
+            helpIndexFirst = 8 * pageIndex;
+            helpIndexLast = Math.min(helpIndexFirst + 8, visibleCommandCount);
         } else {
-            helpMessages.forEach(message -> help.append('\n').append(translate(message)));
+            helpIndexFirst = 0;
+            helpIndexLast = visibleCommandCount;
+        }
+        for (int i = helpIndexFirst; i < helpIndexLast; ++i) {
+            help.append('\n').append(translate("help_" + visibleCommands.get(i)));
+        }
+        if (sender.isPlayer() && pageIndex != pageIndexLast) {
+            help.append('\n').append(translate(TranslationKey.HELP_MORE, "/chunky help " + (pageIndex + 2)));
         }
         sender.sendMessage(TranslationKey.HELP_MENU, help.toString());
     }
