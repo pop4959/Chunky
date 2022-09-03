@@ -2,7 +2,10 @@ package org.popcraft.chunky.platform;
 
 import io.papermc.lib.PaperLib;
 import org.bukkit.Effect;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.popcraft.chunky.platform.util.Location;
 
 import java.io.IOException;
@@ -70,7 +73,32 @@ public class BukkitWorld implements World {
 
     @Override
     public int getElevation(final int x, final int z) {
-        return world.getHighestBlockYAt(x, z);
+        final int height = world.getHighestBlockYAt(x, z) + 1;
+        final int logicalHeight = world.getLogicalHeight();
+        if (height >= logicalHeight) {
+            Block block = world.getBlockAt(x, logicalHeight, z);
+            int air = 0;
+            while (block.getY() > world.getMinHeight()) {
+                block = block.getRelative(BlockFace.DOWN);
+                final Material type = block.getType();
+                if (type.isAir()) {
+                    ++air;
+                    continue;
+                }
+                if (type.isSolid()) {
+                    if (air > 1) {
+                        return block.getY() + 1;
+                    }
+                    air = 0;
+                }
+            }
+        }
+        return height;
+    }
+
+    @Override
+    public int getMaxElevation() {
+        return world.getLogicalHeight();
     }
 
     @Override

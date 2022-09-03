@@ -6,9 +6,12 @@ import net.kyori.adventure.sound.Sound;
 import org.popcraft.chunky.platform.util.Location;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.registry.RegistryKey;
 import org.spongepowered.api.registry.RegistryTypes;
+import org.spongepowered.api.util.Direction;
+import org.spongepowered.api.world.server.ServerLocation;
 import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.math.vector.Vector3d;
 import org.spongepowered.math.vector.Vector3i;
@@ -71,7 +74,12 @@ public class SpongeWorld implements World {
 
     @Override
     public int getElevation(final int x, final int z) {
-        return world.highestYAt(x, z);
+        return world.highestYAt(x, z) + 1;
+    }
+
+    @Override
+    public int getMaxElevation() {
+        return world.maximumHeight();
     }
 
     @Override

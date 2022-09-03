@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerChunkManager;
@@ -11,6 +12,7 @@ import net.minecraft.util.Unit;
 import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.chunk.ChunkStatus;
@@ -108,7 +110,32 @@ public class FabricWorld implements World {
 
     @Override
     public int getElevation(final int x, final int z) {
-        return serverWorld.getChunk(x >> 4, z >> 4).sampleHeightmap(Heightmap.Type.MOTION_BLOCKING, x, z);
+        final int height = serverWorld.getChunk(x >> 4, z >> 4).sampleHeightmap(Heightmap.Type.MOTION_BLOCKING, x, z) + 1;
+        final int logicalHeight = serverWorld.getLogicalHeight();
+        if (height >= logicalHeight) {
+            BlockPos.Mutable pos = new BlockPos.Mutable(x, logicalHeight, z);
+            int air = 0;
+            while (pos.getY() > serverWorld.getBottomY()) {
+                pos = pos.move(Direction.DOWN);
+                final BlockState blockState = serverWorld.getBlockState(pos);
+                if (blockState.isAir()) {
+                    ++air;
+                    continue;
+                }
+                if (blockState.getMaterial().blocksMovement()) {
+                    if (air > 1) {
+                        return pos.getY() + 1;
+                    }
+                    air = 0;
+                }
+            }
+        }
+        return height;
+    }
+
+    @Override
+    public int getMaxElevation() {
+        return serverWorld.getLogicalHeight();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
@@ -11,6 +12,7 @@ import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -105,7 +107,32 @@ public class ForgeWorld implements World {
 
     @Override
     public int getElevation(final int x, final int z) {
-        return world.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
+        final int height = world.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) + 1;
+        final int logicalHeight = world.getLogicalHeight();
+        if (height >= logicalHeight) {
+            BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, logicalHeight, z);
+            int air = 0;
+            while (pos.getY() > world.getMinBuildHeight()) {
+                pos = pos.move(Direction.DOWN);
+                final BlockState blockState = world.getBlockState(pos);
+                if (blockState.isAir()) {
+                    ++air;
+                    continue;
+                }
+                if (blockState.getMaterial().blocksMotion()) {
+                    if (air > 1) {
+                        return pos.getY() + 1;
+                    }
+                    air = 0;
+                }
+            }
+        }
+        return height;
+    }
+
+    @Override
+    public int getMaxElevation() {
+        return world.getLogicalHeight();
     }
 
     @Override

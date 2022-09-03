@@ -26,6 +26,8 @@ public interface World {
 
     int getElevation(int x, int z);
 
+    int getMaxElevation();
+
     void playEffect(Player player, String effect);
 
     void playSound(Player player, String sound);
