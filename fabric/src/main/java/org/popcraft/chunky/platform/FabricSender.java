@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -40,7 +41,12 @@ public class FabricSender implements Sender {
 
     @Override
     public boolean hasPermission(final String permission) {
-        return source.hasPermissionLevel(2);
+        try {
+            Class.forName("me.lucko.fabric.api.permissions.v0.Permissions");
+            return Permissions.check(source, permission, false);
+        } catch (final ClassNotFoundException e) {
+            return source.hasPermissionLevel(2);
+        }
     }
 
     @Override
