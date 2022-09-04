@@ -115,16 +115,10 @@ public class ForgeWorld implements World {
             while (pos.getY() > world.getMinBuildHeight()) {
                 pos = pos.move(Direction.DOWN);
                 final BlockState blockState = world.getBlockState(pos);
-                if (blockState.isAir()) {
-                    ++air;
-                    continue;
+                if (blockState.getMaterial().isSolid() && air > 1) {
+                    return pos.getY() + 1;
                 }
-                if (blockState.getMaterial().blocksMotion()) {
-                    if (air > 1) {
-                        return pos.getY() + 1;
-                    }
-                    air = 0;
-                }
+                air = blockState.isAir() ? air + 1 : 0;
             }
         }
         return height;

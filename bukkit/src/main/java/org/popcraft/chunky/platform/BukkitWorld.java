@@ -81,16 +81,10 @@ public class BukkitWorld implements World {
             while (block.getY() > world.getMinHeight()) {
                 block = block.getRelative(BlockFace.DOWN);
                 final Material type = block.getType();
-                if (type.isAir()) {
-                    ++air;
-                    continue;
+                if (type.isSolid() && air > 1) {
+                    return block.getY() + 1;
                 }
-                if (type.isSolid()) {
-                    if (air > 1) {
-                        return block.getY() + 1;
-                    }
-                    air = 0;
-                }
+                air = type.isAir() ? air + 1 : 0;
             }
         }
         return height;

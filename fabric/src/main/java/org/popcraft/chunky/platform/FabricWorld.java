@@ -118,16 +118,10 @@ public class FabricWorld implements World {
             while (pos.getY() > serverWorld.getBottomY()) {
                 pos = pos.move(Direction.DOWN);
                 final BlockState blockState = serverWorld.getBlockState(pos);
-                if (blockState.isAir()) {
-                    ++air;
-                    continue;
+                if (blockState.getMaterial().isSolid() && air > 1) {
+                    return pos.getY() + 1;
                 }
-                if (blockState.getMaterial().blocksMovement()) {
-                    if (air > 1) {
-                        return pos.getY() + 1;
-                    }
-                    air = 0;
-                }
+                air = blockState.isAir() ? air + 1 : 0;
             }
         }
         return height;
