@@ -16,7 +16,7 @@
   "format_border_load": "Selekcja załadowana z granicy świata dla %s.",
   "format_border_no_border": "Nie ma żadnych granic świata w %s.",
   "format_border_remove": "Usunięto granicę świata z %s.",
-  "format_border_wrap": "Zawijanie granicy świata jest teraz %s dla %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Zadanie wstrzymane dla %s.",
   "format_cancel_all": "Anulowanie wszystkich zadań.",
   "format_cancel_confirm": "Anulowane zadania nie mogą być kontynuowane. Jeśli jesteś pewien, że chcesz anulować wpisz '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "Usunięto %s chunków z %s w %s sekund.",
   "task_done": "Zadanie zakończone dla %s. Przetworzono: %s chunków (%s%%), Łączny czas: %s:%s:%s",
   "task_stopped": "Zadanie zatrzymane dla %s.",
-  "task_update": "Zadanie w trakcie dla %s. Przetworzono: %s chunków (%s%%), ETA: %s:%s:%s, Tempo: %s cps, Obecnie: %s, %s"
+  "task_update": "Zadanie w trakcie dla %s. Przetworzono: %s chunków (%s%%), ETA: %s:%s:%s, Tempo: %s cps, Obecnie: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }
