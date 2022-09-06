@@ -16,7 +16,7 @@
   "format_border_load": "Selection loaded from world border for %s.",
   "format_border_no_border": "No world border exists for %s.",
   "format_border_remove": "Removed world border from %s.",
-  "format_border_wrap": "World border wrapping is now %s for %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Task cancelled for %s.",
   "format_cancel_all": "Cancelando todas as tarefas.",
   "format_cancel_confirm": "Tarefas canceladas não podem ser retomadas. Se você tem certeza que deseja cancelar, digite '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "Deleted %s chunks from %s in %s seconds.",
   "task_done": "Tarefa terminada para %s. Processado: %s chunks (%s%%), Tempo total: %s:%s:%s",
   "task_stopped": "Tarefa parada para %s.",
-  "task_update": "Tarefa em execução para %s. Processado: %s chunks (%s%%), ETA: %s:%s:%s, Taxa: %s cps, Actual: %s, %s"
+  "task_update": "Tarefa em execução para %s. Processado: %s chunks (%s%%), ETA: %s:%s:%s, Taxa: %s cps, Actual: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }
