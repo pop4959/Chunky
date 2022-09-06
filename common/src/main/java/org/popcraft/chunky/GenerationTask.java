@@ -1,5 +1,7 @@
 package org.popcraft.chunky;
 
+import org.popcraft.chunky.api.event.task.GenerationCompleteEvent;
+import org.popcraft.chunky.api.event.task.GenerationProgressEvent;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.iterator.ChunkIterator;
@@ -92,6 +94,7 @@ public class GenerationTask implements Runnable {
         progress.seconds = time - progress.hours * 3600 - progress.minutes * 60;
         progress.chunkX = chunkX;
         progress.chunkZ = chunkZ;
+        chunky.getEventBus().call(new GenerationProgressEvent(progress.world, progress.chunkCount, progress.complete, progress.percentComplete, progress.hours, progress.minutes, progress.seconds, progress.rate, progress.chunkX, progress.chunkZ));
         if (progress.complete) {
             progress.sendUpdate(chunky.getServer().getConsole());
             chunky.getEventBus().call(new GenerationTaskUpdateEvent(this));
@@ -153,6 +156,7 @@ public class GenerationTask implements Runnable {
         chunky.getGenerationTasks().remove(selection.world().getName());
         Thread.currentThread().setName(poolThreadName);
         chunky.getEventBus().call(new GenerationTaskFinishEvent(this));
+        chunky.getEventBus().call(new GenerationCompleteEvent(selection.world().getName()));
     }
 
     public void stop(final boolean cancelled) {

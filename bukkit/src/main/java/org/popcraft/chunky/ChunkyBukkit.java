@@ -14,6 +14,7 @@ import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.popcraft.chunky.api.ChunkyAPI;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
@@ -52,6 +53,7 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
             return;
         }
         getServer().getServicesManager().register(Chunky.class, chunky, this, ServicePriority.Normal);
+        getServer().getServicesManager().register(ChunkyAPI.class, chunky.getApi(), this, ServicePriority.Normal);
         if (chunky.getConfig().getContinueOnRestart()) {
             getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty()));
         }

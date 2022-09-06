@@ -1,5 +1,7 @@
 package org.popcraft.chunky;
 
+import org.popcraft.chunky.api.ChunkyAPI;
+import org.popcraft.chunky.api.ChunkyAPIImpl;
 import org.popcraft.chunky.command.CancelCommand;
 import org.popcraft.chunky.command.CenterCommand;
 import org.popcraft.chunky.command.ChunkyCommand;
@@ -57,6 +59,7 @@ public class Chunky {
     private final double limit;
     private final Version version;
     private final Map<String, ChunkyCommand> commands;
+    private final ChunkyAPI api;
 
     public Chunky(final Server server, final Config config) {
         this.server = server;
@@ -67,6 +70,7 @@ public class Chunky {
         this.limit = loadLimit().orElse(Double.MAX_VALUE);
         this.version = loadVersion();
         this.commands = loadCommands();
+        this.api = new ChunkyAPIImpl(this);
         ChunkyProvider.register(this);
     }
 
@@ -179,5 +183,9 @@ public class Chunky {
 
     public Version getVersion() {
         return version;
+    }
+
+    public ChunkyAPI getApi() {
+        return api;
     }
 }
