@@ -16,7 +16,7 @@
   "format_border_load": "Výběr byl načten z okraje světa pro %s.",
   "format_border_no_border": "Pro %s neexistuje žádná hranice světa.",
   "format_border_remove": "Ohraničení světa bylo odebráno z %s.",
-  "format_border_wrap": "Zabalování hranic světa je nyní %s pro %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Úkol zrušen pro %s.",
   "format_cancel_all": "Rušení všech úkolů.",
   "format_cancel_confirm": "Ve zrušeném úkolu nelze pokračovat. Pokud jsi si jistý, že chceš zrušit úkol, napiš '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "Smazáno %s chunků z %s za %s vteřin.",
   "task_done": "Úkol pro %s byl dokončen. Zpracováno: %s chunků (%s%%), Celkový čas: %s:%s:%s",
   "task_stopped": "Úkol pro %s byl zastaven.",
-  "task_update": "Úkol běží po dobu %s. Zpracováno: %s chunků (%s%%), ETA: %s:%s:%s, Hodnota: %s cps, Aktuální: %s, %s"
+  "task_update": "Úkol běží po dobu %s. Zpracováno: %s chunků (%s%%), ETA: %s:%s:%s, Hodnota: %s cps, Aktuální: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }
