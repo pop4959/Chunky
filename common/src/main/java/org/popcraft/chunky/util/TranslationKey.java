@@ -88,6 +88,13 @@ public final class TranslationKey {
     public static final String TASK_DONE = "task_done";
     public static final String TASK_STOPPED = "task_stopped";
     public static final String TASK_UPDATE = "task_update";
+    public static final String WRAP_BOTH = "wrap_both";
+    public static final String WRAP_DEFAULT = "wrap_default";
+    public static final String WRAP_EARTH = "wrap_earth";
+    public static final String WRAP_NONE = "wrap_none";
+    public static final String WRAP_RADIAL = "wrap_radial";
+    public static final String WRAP_X = "wrap_x";
+    public static final String WRAP_Z = "wrap_z";
 
     private TranslationKey() {
     }

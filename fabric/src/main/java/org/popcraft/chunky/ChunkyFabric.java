@@ -137,7 +137,8 @@ public class ChunkyFabric implements ModInitializer {
                     argument(CommandLiteral.WORLD, dimension()));
             registerArguments(borderCommand, literal(CommandLiteral.REMOVE),
                     argument(CommandLiteral.WORLD, dimension()));
-            registerArguments(borderCommand, literal(CommandLiteral.WRAP));
+            registerArguments(borderCommand, literal(CommandLiteral.WRAP),
+                    argument(CommandLiteral.WRAP, word()));
             registerArguments(command, borderCommand);
             dispatcher.register(command);
         });

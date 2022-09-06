@@ -125,6 +125,13 @@ public class TranslatorTest {
         translate(TranslationKey.TASK_DONE, "world", 5000, String.format("%.2f", 50f), "0", "01", "15");
         translate(TranslationKey.TASK_STOPPED, "world");
         translate(TranslationKey.TASK_UPDATE, "world", 5000, String.format("%.2f", 50f), "0", "00", "01", String.format("%.1f", 40f), 70, 70);
+        translate(TranslationKey.WRAP_NONE);
+        translate(TranslationKey.WRAP_DEFAULT);
+        translate(TranslationKey.WRAP_BOTH);
+        translate(TranslationKey.WRAP_RADIAL);
+        translate(TranslationKey.WRAP_X);
+        translate(TranslationKey.WRAP_Z);
+        translate(TranslationKey.WRAP_EARTH);
         translate("prefix");
         translate("null");
     }
