@@ -127,12 +127,16 @@ public class ChunkyFabric implements ModInitializer {
             final LiteralArgumentBuilder<ServerCommandSource> borderCommand = literal(CommandLiteral.BORDER)
                     .requires(serverCommandSource -> chunky.getCommands().containsKey(CommandLiteral.BORDER))
                     .executes(command.getCommand());
-            registerArguments(borderCommand, literal(CommandLiteral.ADD));
-            registerArguments(borderCommand, literal(CommandLiteral.BYPASS), argument(CommandLiteral.PLAYER, player()));
+            registerArguments(borderCommand, literal(CommandLiteral.ADD),
+                    argument(CommandLiteral.WORLD, dimension()));
+            registerArguments(borderCommand, literal(CommandLiteral.BYPASS),
+                    argument(CommandLiteral.PLAYER, player()));
             registerArguments(borderCommand, literal(CommandLiteral.HELP));
             registerArguments(borderCommand, literal(CommandLiteral.LIST));
-            registerArguments(borderCommand, literal(CommandLiteral.LOAD));
-            registerArguments(borderCommand, literal(CommandLiteral.REMOVE));
+            registerArguments(borderCommand, literal(CommandLiteral.LOAD),
+                    argument(CommandLiteral.WORLD, dimension()));
+            registerArguments(borderCommand, literal(CommandLiteral.REMOVE),
+                    argument(CommandLiteral.WORLD, dimension()));
             registerArguments(borderCommand, literal(CommandLiteral.WRAP));
             registerArguments(command, borderCommand);
             dispatcher.register(command);
