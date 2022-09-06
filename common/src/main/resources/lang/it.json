@@ -16,7 +16,7 @@
   "format_border_load": "Selezione caricata dal bordo del mondo %s.",
   "format_border_no_border": "Non esiste nessun bordo in %s.",
   "format_border_remove": "Rimosso il bordo del mondo da %s.",
-  "format_border_wrap": "L'effetto Pac-Man è ora %s per %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Attività annullata per %s.",
   "format_cancel_all": "Annullamento di tutte le attività.",
   "format_cancel_confirm": "Le attività annullate non possono essere continuate. Se sei sicuro di voler annullare, digita '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "Eliminati %s chunk da %s in %s secondi.",
   "task_done": "Attività terminata per %s. Elaborati: %s chunk (%s%%), Tempo totale: %s:%s:%s",
   "task_stopped": "Attività interrotta per %s.",
-  "task_update": "Attività in esecuzione per %s. Elaborati: %s chunk (%s%%), ETA: %s:%s:%s, Velocità: %s cps, Attuale: %s, %s"
+  "task_update": "Attività in esecuzione per %s. Elaborati: %s chunk (%s%%), ETA: %s:%s:%s, Velocità: %s cps, Attuale: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }
