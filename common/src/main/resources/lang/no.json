@@ -1,6 +1,6 @@
 {
-  "border_dependency_update": "Chunky needs to be updated in order to use ChunkyBorder!",
-  "border_load_failed": "No saved borders found.",
+  "border_dependency_update": "Chunky må oppdateres for å kunne bruke ChunkyBorder!",
+  "border_load_failed": "Ingen lagrede grenser funnet.",
   "border_save_failed": "Kan ikke lagre grenser.",
   "command_no_permission": "&cDu har ikke tillatelse til å bruke denne kommandoen.",
   "disabled": "deaktivert",
