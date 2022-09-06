@@ -16,7 +16,7 @@
   "format_border_load": "Selection loaded from world border for %s.",
   "format_border_no_border": "No world border exists for %s.",
   "format_border_remove": "Removed world border from %s.",
-  "format_border_wrap": "World border wrapping is now %s for %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Oppgaven ble avbrutt for %s.",
   "format_cancel_all": "Avbryte alle oppgaver.",
   "format_cancel_confirm": "Avbrutte oppgaver kan ikke fortsettes. Hvis du er sikker på at du ønsker å avbryte, skriv '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "Slettet %s chunker fra %s på %s sekunder.",
   "task_done": "Oppgave fullført for %s. Behandlet: %s chunker (%s%%), tid brukt: %s:%s:%s",
   "task_stopped": "Oppgaven ble stoppet for %s.",
-  "task_update": "Oppgave kjører for %s. Behandlet: %s chunker (%s%%), ETA: %s:%s:%s, Rate: %s cps, nåværende: %s, %s"
+  "task_update": "Oppgave kjører for %s. Behandlet: %s chunker (%s%%), ETA: %s:%s:%s, Rate: %s cps, nåværende: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }

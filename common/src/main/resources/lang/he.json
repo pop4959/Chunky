@@ -16,7 +16,7 @@
   "format_border_load": "בחירה נטענה מגבול העולם עבור %s.",
   "format_border_no_border": "אין גבול עולם קיים עבור %s.",
   "format_border_remove": "הוסר גבול העולם מ%s.",
-  "format_border_wrap": "שיגור בקצה העולם כעת %s עבור %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "משימה בוטלה עבור %s.",
   "format_cancel_all": "מבטל את כל המשימות.",
   "format_cancel_confirm": "משימות מבוטלות לא יכולות להימשך. אם אתה רוצה לבטל, הקלד '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "נמחק %s צאנקים מ%s ב%s שניות.",
   "task_done": "משימה הושלמה עבור %s. עובד: %s צאנקים (%s%%), זמן סך הכל: %s:%s:%s",
   "task_stopped": "משימה הופסקה עבור %s.",
-  "task_update": "משימה פועלת עבור %s. עובד: %s צאנקים (%s%%), זמן משוער: %s:%s:%s, קצב: %s צאנקים לשנייה, כעת: %s, %s"
+  "task_update": "משימה פועלת עבור %s. עובד: %s צאנקים (%s%%), זמן משוער: %s:%s:%s, קצב: %s צאנקים לשנייה, כעת: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }

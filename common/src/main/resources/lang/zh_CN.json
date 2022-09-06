@@ -16,7 +16,7 @@
   "format_border_load": "已将世界 %s 的世界边界选中。",
   "format_border_no_border": "世界 %s 目前还没有世界边界。",
   "format_border_remove": "移除了世界 %s 的世界边界。",
-  "format_border_wrap": "世界边界延展循环传送已 %s 于世界 %s。",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "任务取消于 %s。",
   "format_cancel_all": "取消所有任务中。",
   "format_cancel_confirm": "被取消的任务将无法继续。如果您确定要那么做，请输入 '%s'。",
@@ -85,5 +85,12 @@
   "task_trim": "在 %3$s 秒内从 %2$s 删除了 %1$s 个区块。",
   "task_done": "任务结束于 %s。 处理了 %s 个区块 (%s%%), 总运行时长: %s:%s:%s",
   "task_stopped": "任务暂停于 %s。",
-  "task_update": "任务运行于世界 %s。 处理了 %s 个区块 (%s%%), 预计距完成还有: %s:%s:%s, 速率: %s 区块/秒, 当前区块进度: %s, %s"
+  "task_update": "任务运行于世界 %s。 处理了 %s 个区块 (%s%%), 预计距完成还有: %s:%s:%s, 速率: %s 区块/秒, 当前区块进度: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }

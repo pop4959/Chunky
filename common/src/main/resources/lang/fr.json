@@ -16,7 +16,7 @@
   "format_border_load": "Sélection chargée de la bordure du monde pour le monde %s.",
   "format_border_no_border": "Aucune bordure de monde n'existe pour %s.",
   "format_border_remove": "La bordure du monde %s a été supprimée.",
-  "format_border_wrap": "Le dégagement de la bordure du monde est maintenant %s dans la dimension %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Tâche annulée pour le monde: %s.",
   "format_cancel_all": "Annulation de toutes les tâches.",
   "format_cancel_confirm": "Les tâches annulées ne peuvent pas être continuées. Si vous êtes sûr(e) de vouloir annuler, tapez '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "%s tronçons supprimés de %s en %s secondes.",
   "task_done": "Tâche terminée pour %s. Traité: %s tronçons (%s%%), Durée totale: %s:%s:%s",
   "task_stopped": "Tâche arrêtée pour %s.",
-  "task_update": "Tâche en cours pour %s. Traité: %s tronçons (%s%%), Prévision: %s:%s:%s, Moyenne: %s cps, Actuellement: %s, %s"
+  "task_update": "Tâche en cours pour %s. Traité: %s tronçons (%s%%), Prévision: %s:%s:%s, Moyenne: %s cps, Actuellement: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }

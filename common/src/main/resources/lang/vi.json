@@ -16,7 +16,7 @@
   "format_border_load": "Đã tải lựa chọn từ đường biên thế giới cho %s.",
   "format_border_no_border": "Không tồn tại đường biên thế giới của %s.",
   "format_border_remove": "Đã bỏ đường biên giới của %s.",
-  "format_border_wrap": "Dịch chuyển qua đường biên %s cho %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Đã hủy tác vụ tại %s.",
   "format_cancel_all": "Đang hủy toàn bộ tác vụ hiện có.",
   "format_cancel_confirm": "Tác vụ đã hủy sẽ không thể tiếp tục. Nếu bạn chắc chắn, hãy gõ '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "Đã xóa %s chunks từ %s trong %s giây.",
   "task_done": "Đã hoàn tác vụ tại %s. Đã khởi tạo: %s chunks (%s%%), Tổng thời gian: %s:%s:%s",
   "task_stopped": "Đã dừng tác vụ tại %s.",
-  "task_update": "Tác vụ đang hoạt động tại %s. Đã khởi tạo: %s chunks (%s%%), Thời gian dự kiến: %s:%s:%s, Tốc độ: %s cps, Tọa độ hiện tại %s, %s"
+  "task_update": "Tác vụ đang hoạt động tại %s. Đã khởi tạo: %s chunks (%s%%), Thời gian dự kiến: %s:%s:%s, Tốc độ: %s cps, Tọa độ hiện tại %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }

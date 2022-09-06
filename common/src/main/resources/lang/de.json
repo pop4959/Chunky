@@ -16,7 +16,7 @@
   "format_border_load": "Auswahl von der Weltgrenze für %s geladen.",
   "format_border_no_border": "Für %s existiert keine Weltgrenze.",
   "format_border_remove": "Weltgrenze von %s entfernt.",
-  "format_border_wrap": "Der Weltrandumbruch ist jetzt %s für %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Aufgabe abgebrochen für %s.",
   "format_cancel_all": "Abbrechen aller Aufgaben.",
   "format_cancel_confirm": "Abgebrochene Aufgaben können nicht fortgesetzt werden. Wenn du dir sicher bist, dass du es abbrechen willst, schreibe '%s'",
@@ -85,5 +85,12 @@
   "task_trim": "Löschte %s Chunks von %s in %s Sekunden.",
   "task_done": "Aufgabe für %s beendet. Verarbeitet: %s Chunks (%s%%), Gesamte Zeit: %s:%s:%s",
   "task_stopped": "Aufgabe für %s gestoppt.",
-  "task_update": "Aufgabe für %s läuft. Verarbeitet: %s Chunks (%s%%), ETA: %s:%s:%s, Rate: %s cps, Aktuell: %s, %s"
+  "task_update": "Aufgabe für %s läuft. Verarbeitet: %s Chunks (%s%%), ETA: %s:%s:%s, Rate: %s cps, Aktuell: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }
