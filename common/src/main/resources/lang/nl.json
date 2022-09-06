@@ -16,7 +16,7 @@
   "format_border_load": "Selectie geladen van wereldgrens voor %s.",
   "format_border_no_border": "Er bestaat geen wereldgrens voor %s.",
   "format_border_remove": "Verwijderde wereldgrens van %s.",
-  "format_border_wrap": "De worldborder is nu %s voor %s.",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "Taak geannuleerd voor %s.",
   "format_cancel_all": "Alle taken annuleren.",
   "format_cancel_confirm": "Geannuleerde taken kunnen niet worden voortgezet. Als u zeker weet dat u wilt annuleren, typ '%s'.",
@@ -85,5 +85,12 @@
   "task_trim": "%s chunks verwijderd van %s in %s seconden.",
   "task_done": "Taak voltooid voor %s. Verwerkt: %s chunks (%s%%), Totale tijd: %s:%s:%s",
   "task_stopped": "Taak geannuleerd voor %s.",
-  "task_update": "Taak wordt uitgevoerd voor %s. Verwerkt: %s chunks (%s%%), ETA: %s:%s:%s, Snelheid: %s cps, Huidig: %s, %s"
+  "task_update": "Taak wordt uitgevoerd voor %s. Verwerkt: %s chunks (%s%%), ETA: %s:%s:%s, Snelheid: %s cps, Huidig: %s, %s",
+  "wrap_both": "both",
+  "wrap_default": "default",
+  "wrap_earth": "earth",
+  "wrap_none": "none",
+  "wrap_radial": "radial",
+  "wrap_x": "x",
+  "wrap_z": "z"
 }
