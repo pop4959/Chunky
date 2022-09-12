@@ -18,7 +18,7 @@ tasks {
                 allJava
             }
         }
-        setDestinationDir(rootProject.projectDir.resolve("javadoc"))
+        setDestinationDir(rootProject.projectDir.resolve("docs/chunky/javadoc"))
         include("org/popcraft/chunky/api/**")
         exclude("org/popcraft/chunky/api/ChunkyAPIImpl.java")
     }
