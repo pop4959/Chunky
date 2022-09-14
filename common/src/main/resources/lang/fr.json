@@ -87,7 +87,7 @@
   "task_stopped": "Tâche arrêtée pour %s.",
   "task_update": "Tâche en cours pour %s. Traité: %s tronçons (%s%%), Prévision: %s:%s:%s, Moyenne: %s cps, Actuellement: %s, %s",
   "wrap_both": "both",
-  "wrap_default": "default",
+  "wrap_default": "par défaut",
   "wrap_earth": "earth",
   "wrap_none": "none",
   "wrap_radial": "radial",
