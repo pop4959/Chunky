@@ -204,7 +204,7 @@ public class TrimCommand implements ChunkyCommand {
             chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
             return suggestions;
         } else if (arguments.size() == 2) {
-            return ShapeType.ALL;
+            return ShapeType.all();
         }
         return List.of();
     }

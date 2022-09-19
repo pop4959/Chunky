@@ -34,7 +34,7 @@ public final class Input {
             return Optional.empty();
         }
         final String inputLower = input.toLowerCase();
-        if (ShapeType.ALL.contains(inputLower)) {
+        if (ShapeType.all().contains(inputLower)) {
             return Optional.of(inputLower);
         }
         return Optional.empty();

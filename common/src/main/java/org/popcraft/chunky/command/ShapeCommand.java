@@ -33,7 +33,7 @@ public class ShapeCommand implements ChunkyCommand {
     @Override
     public List<String> suggestions(final CommandArguments arguments) {
         if (arguments.size() == 1) {
-            return ShapeType.ALL;
+            return ShapeType.all();
         }
         return List.of();
     }

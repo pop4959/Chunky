@@ -1,6 +1,8 @@
 package org.popcraft.chunky.shape;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public final class ShapeType {
     public static final String CIRCLE = "circle";
@@ -13,8 +15,18 @@ public final class ShapeType {
     public static final String STAR = "star";
     public static final String TRIANGLE = "triangle";
 
-    public static final List<String> ALL = List.of(CIRCLE, DIAMOND, ELLIPSE, PENTAGON, RECTANGLE, SQUARE, STAR, TRIANGLE);
+    private static final List<String> DEFAULTS = List.of(CIRCLE, DIAMOND, ELLIPSE, PENTAGON, RECTANGLE, SQUARE, STAR, TRIANGLE);
 
     private ShapeType() {
+    }
+
+    public static List<String> all() {
+        final Set<String> customTypes = ShapeFactory.getCustomTypes();
+        if (customTypes.isEmpty()) {
+            return DEFAULTS;
+        }
+        final List<String> allTypes = new ArrayList<>(DEFAULTS);
+        allTypes.addAll(customTypes);
+        return allTypes;
     }
 }

@@ -15,13 +15,13 @@ public class ShapeSuggestionProvider implements SuggestionProvider<CommandSource
     public CompletableFuture<Suggestions> getSuggestions(final CommandContext<CommandSourceStack> context, final SuggestionsBuilder builder) {
         try {
             final String input = context.getArgument(CommandLiteral.SHAPE, String.class);
-            ShapeType.ALL.forEach(shape -> {
+            ShapeType.all().forEach(shape -> {
                 if (shape.contains(input.toLowerCase())) {
                     builder.suggest(shape);
                 }
             });
         } catch (IllegalArgumentException e) {
-            ShapeType.ALL.forEach(builder::suggest);
+            ShapeType.all().forEach(builder::suggest);
         }
         return builder.buildFuture();
     }
