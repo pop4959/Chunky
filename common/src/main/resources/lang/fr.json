@@ -86,7 +86,7 @@
   "task_done": "Tâche terminée pour %s. Traité: %s tronçons (%s%%), Durée totale: %s:%s:%s",
   "task_stopped": "Tâche arrêtée pour %s.",
   "task_update": "Tâche en cours pour %s. Traité: %s tronçons (%s%%), Prévision: %s:%s:%s, Moyenne: %s cps, Actuellement: %s, %s",
-  "wrap_both": "both",
+  "wrap_both": "les deux",
   "wrap_default": "par défaut",
   "wrap_earth": "earth",
   "wrap_none": "none",
