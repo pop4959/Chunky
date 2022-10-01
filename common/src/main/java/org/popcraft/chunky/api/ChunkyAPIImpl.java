@@ -11,7 +11,6 @@ import org.popcraft.chunky.util.Parameter;
 
 import java.util.function.Consumer;
 
-@SuppressWarnings("ClassCanBeRecord")
 public class ChunkyAPIImpl implements ChunkyAPI {
     private final Chunky chunky;
 
