@@ -1,7 +1,7 @@
 {
   "border_dependency_update": "在使用 ChunkyBorder 前您應該先更新 Chunky 的版本！",
-  "border_load_failed": "沒有找到已儲存的邊界。",
-  "border_save_failed": "無法儲存邊界。",
+  "border_load_failed": "沒有找到已儲存的世界邊界。",
+  "border_save_failed": "無法儲存世界邊界。",
   "command_no_permission": "&c您沒有權限使用此指令。",
   "disabled": "關閉",
   "enabled": "啟用",
