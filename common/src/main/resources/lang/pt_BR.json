@@ -16,7 +16,7 @@
   "format_border_load": "Seleção carregada da barreira do mundo no %s.",
   "format_border_no_border": "Nenhuma barreira do mundo encontrada no %s.",
   "format_border_remove": "Barreira do mundo removida do %s.",
-  "format_border_wrap": "World border wrap changed to %s for %s.",
+  "format_border_wrap": "Wrap da barreira do mundo alterada para %s no %s.",
   "format_cancel": "Tarefa cancelada no mundo %s.",
   "format_cancel_all": "Cancelando todas as tarefas.",
   "format_cancel_confirm": "Tarefas canceladas não podem ser retomadas. Caso queira cancelar, digite \"%s\".",
