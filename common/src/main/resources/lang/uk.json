@@ -87,10 +87,10 @@
   "task_stopped": "Завдання зупинено для світу %s.",
   "task_update": "Завдання активне для світу %s. Опрацьовано: %s chunks (%s%%), ETA: %s:%s:%s, Швидкість: %s cps, Поточний чанк: %s, %s",
   "wrap_both": "both",
-  "wrap_default": "default",
+  "wrap_default": "типовий",
   "wrap_earth": "earth",
   "wrap_none": "none",
-  "wrap_radial": "radial",
+  "wrap_radial": "радіальний",
   "wrap_x": "x",
   "wrap_z": "z"
 }
