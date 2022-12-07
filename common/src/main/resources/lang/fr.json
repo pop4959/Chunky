@@ -38,7 +38,7 @@
   "format_selection": "Sélection active",
   "format_selection_center": "Centre: %s, %s",
   "format_selection_radius": "Rayon: %s",
-  "format_selection_radii": "Radii: %s, %s",
+  "format_selection_radii": "Rayons: %s,%s",
   "format_selection_shape": "Forme: %s",
   "format_selection_world": "Monde: %s",
   "format_shape": "La forme a été changée en %s.",
@@ -89,7 +89,7 @@
   "wrap_both": "les deux",
   "wrap_default": "par défaut",
   "wrap_earth": "earth",
-  "wrap_none": "none",
+  "wrap_none": "aucun",
   "wrap_radial": "radial",
   "wrap_x": "x",
   "wrap_z": "z"
