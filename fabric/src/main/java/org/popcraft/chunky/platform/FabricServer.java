@@ -1,9 +1,9 @@
 package org.popcraft.chunky.platform;
 
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import org.popcraft.chunky.ChunkyFabric;
 import org.popcraft.chunky.integration.Integration;
 
@@ -31,7 +31,7 @@ public class FabricServer implements Server {
     @Override
     public Optional<World> getWorld(final String name) {
         return Optional.ofNullable(Identifier.tryParse(name))
-                .map(worldIdentifier -> server.getWorld(RegistryKey.of(Registry.WORLD_KEY, worldIdentifier)))
+                .map(worldIdentifier -> server.getWorld(RegistryKey.of(RegistryKeys.WORLD, worldIdentifier)))
                 .map(FabricWorld::new);
     }
 

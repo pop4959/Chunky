@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerChunkManager;
@@ -13,7 +14,6 @@ import net.minecraft.util.WorldSavePath;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.dimension.DimensionType;
@@ -142,7 +142,11 @@ public class FabricWorld implements World {
     @Override
     public void playSound(final Player player, final String sound) {
         final Location location = player.getLocation();
-        Registry.SOUND_EVENT.getOrEmpty(Identifier.tryParse(sound)).ifPresent(soundEvent -> serverWorld.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundCategory.MASTER, 2f, 1f));
+        serverWorld.getServer()
+                .getRegistryManager()
+                .getOptional(RegistryKeys.SOUND_EVENT)
+                .flatMap(soundEventRegistry -> soundEventRegistry.getOrEmpty(Identifier.tryParse(sound)))
+                .ifPresent(soundEvent -> serverWorld.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundCategory.MASTER, 2f, 1f));
     }
 
     @Override

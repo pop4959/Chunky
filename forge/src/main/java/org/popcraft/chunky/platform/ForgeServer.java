@@ -1,6 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -31,7 +31,7 @@ public class ForgeServer implements Server {
     @Override
     public Optional<World> getWorld(final String name) {
         return Optional.ofNullable(ResourceLocation.tryParse(name))
-                .map(resourceLocation -> server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, resourceLocation)))
+                .map(resourceLocation -> server.getLevel(ResourceKey.create(Registries.DIMENSION, resourceLocation)))
                 .map(ForgeWorld::new);
     }
 

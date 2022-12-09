@@ -2,7 +2,7 @@ package org.popcraft.chunky.platform;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
@@ -139,10 +139,11 @@ public class ForgeWorld implements World {
     @Override
     public void playSound(final Player player, final String sound) {
         final Location location = player.getLocation();
-        final net.minecraft.world.entity.player.Player minecraftPlayer = world.getServer().getPlayerList().getPlayer(player.getUUID());
-        if (minecraftPlayer != null) {
-            world.getServer().registryAccess().registry(Registry.SOUND_EVENT_REGISTRY).flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound))).ifPresent(soundEvent -> world.playSound(minecraftPlayer, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
-        }
+            world.getServer()
+                    .registryAccess()
+                    .registry(Registries.SOUND_EVENT)
+                    .flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound)))
+                    .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
     }
 
     @Override
