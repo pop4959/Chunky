@@ -6,9 +6,11 @@ import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ChunkIteratorFactory;
+import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
+import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Pair;
@@ -22,6 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class GenerationTask implements Runnable {
     private static final int MAX_WORKING_COUNT = Input.tryInteger(System.getProperty("chunky.maxWorkingCount")).orElse(50);
+    private static final int MAX_TOTAL_COUNT_TIME = 1500;
     private final Chunky chunky;
     private final Selection selection;
     private final Shape shape;
@@ -31,6 +34,7 @@ public class GenerationTask implements Runnable {
     private final Deque<Pair<Long, AtomicLong>> updateSamples = new ConcurrentLinkedDeque<>();
     private final Progress progress;
     private final RegionCache.WorldState worldState;
+    private final AtomicLong totalChunks = new AtomicLong();
     private ChunkIterator chunkIterator;
     private boolean stopped, cancelled;
     private long prevTime;
@@ -56,8 +60,12 @@ public class GenerationTask implements Runnable {
         if (stopped) {
             return;
         }
-        progress.chunkCount = finishedChunks.addAndGet(1);
-        progress.percentComplete = 100f * progress.chunkCount / chunkIterator.total();
+        final int chunkCenterX = (chunkX << 4) + 8;
+        final int chunkCenterZ = (chunkZ << 4) + 8;
+        if (shape.isBounding(chunkCenterX, chunkCenterZ)) {
+            progress.chunkCount = finishedChunks.addAndGet(1);
+        }
+        progress.percentComplete = 100f * progress.chunkCount / totalChunks.get();
         final long currentTime = System.currentTimeMillis();
         final Pair<Long, AtomicLong> bin = updateSamples.peekLast();
         if (loaded) {
@@ -72,7 +80,7 @@ public class GenerationTask implements Runnable {
         }
         final Pair<Long, AtomicLong> oldest = updateSamples.peek();
         final long oldestTime = oldest == null ? currentTime : oldest.left();
-        final long chunksLeft = chunkIterator.total() - finishedChunks.get();
+        final long chunksLeft = totalChunks.get() - finishedChunks.get();
         final double timeDiff = (currentTime - oldestTime) / 1e3;
         if (chunksLeft > 0 && timeDiff < 1e-1) {
             return;
@@ -116,6 +124,7 @@ public class GenerationTask implements Runnable {
         final String poolThreadName = Thread.currentThread().getName();
         Thread.currentThread().setName(String.format("Chunky-%s Thread", selection.world().getName()));
         final Semaphore working = new Semaphore(MAX_WORKING_COUNT);
+        setTotalChunks();
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             final ChunkCoordinate chunk = chunkIterator.next();
@@ -162,6 +171,26 @@ public class GenerationTask implements Runnable {
     public void stop(final boolean cancelled) {
         this.stopped = true;
         this.cancelled = cancelled;
+    }
+
+    private void setTotalChunks() {
+        if (shape.name().equals(ShapeType.RECTANGLE) || shape.name().equals(ShapeType.SQUARE) || selection.pattern().getType().equals(PatternType.CSV)) {
+            totalChunks.set(chunkIterator.total());
+        }
+        final ChunkIterator iterator = ChunkIteratorFactory.getChunkIterator(selection);
+        final long startTime = System.currentTimeMillis();
+        while (iterator.hasNext()) {
+            if (System.currentTimeMillis() - startTime > MAX_TOTAL_COUNT_TIME) {
+                totalChunks.set(chunkIterator.total());
+                return;
+            }
+            final ChunkCoordinate chunk = iterator.next();
+            final int chunkCenterX = (chunk.x() << 4) + 8;
+            final int chunkCenterZ = (chunk.z() << 4) + 8;
+            if (shape.isBounding(chunkCenterX, chunkCenterZ)) {
+                totalChunks.incrementAndGet();
+            }
+        }
     }
 
     public Chunky getChunky() {
