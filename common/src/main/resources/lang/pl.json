@@ -63,7 +63,7 @@
   "help_quiet": "&2chunky quiet <interval>&r - Ustawia cichy interwał",
   "help_radius": "&2chunky radius <radius>&r - Ustawia promień (rozmiar świata)",
   "help_reload": "&2chunky reload&r - Odśwież konfigurację",
-  "help_selection": "&2zaznaczenie chunków&r - Wyświetl bieżące zaznaczenie",
+  "help_selection": "&2chunky selection&r - Wyświetl bieżące zaznaczenie",
   "help_shape": "&2chunky shape <shape>&r - Ustawia kształt do wygenerowania",
   "help_silent": "&2chunky silent&r - Przełącza wyświetlanie wiadomości o generacji",
   "help_spawn": "&2chunky spawn&r - Ustawia środek mapy na punkt odrodzenia",
