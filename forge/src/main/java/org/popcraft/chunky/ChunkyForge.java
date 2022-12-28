@@ -7,6 +7,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -56,6 +57,10 @@ public class ChunkyForge {
         }
         chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener());
         chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener());
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(final RegisterCommandsEvent event) {
         final LiteralArgumentBuilder<CommandSourceStack> command = literal(CommandLiteral.CHUNKY)
                 .requires(serverCommandSource -> serverCommandSource.hasPermission(2))
                 .executes(context -> {
@@ -123,7 +128,7 @@ public class ChunkyForge {
         registerArguments(command, literal(CommandLiteral.WORLDBORDER));
         registerArguments(command, literal(CommandLiteral.WORLD),
                 argument(CommandLiteral.WORLD, dimension()));
-        server.getCommands().getDispatcher().register(command);
+        event.getDispatcher().register(command);
     }
 
     @SafeVarargs
