@@ -29,7 +29,9 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class FabricWorld implements World {
+    private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private static final ChunkTicketType<Unit> CHUNKY = ChunkTicketType.create("chunky", (unit, unit2) -> 0);
+    private static final ChunkTicketType<Unit> CHUNKY_TICKING = ChunkTicketType.create("chunky_ticking", (unit, unit2) -> 0, TICKING_LOAD_DURATION * 20);
     private final ServerWorld serverWorld;
     private final Border worldBorder;
 
@@ -76,6 +78,9 @@ public class FabricWorld implements World {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkManager serverChunkManager = serverWorld.getChunkManager();
             serverChunkManager.addTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
+            if (TICKING_LOAD_DURATION > 0) {
+                serverChunkManager.addTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
+            }
             ((ServerChunkManagerMixin) serverChunkManager).invokeTick();
             final ThreadedAnvilChunkStorage threadedAnvilChunkStorage = serverChunkManager.threadedAnvilChunkStorage;
             final ThreadedAnvilChunkStorageMixin threadedAnvilChunkStorageMixin = (ThreadedAnvilChunkStorageMixin) threadedAnvilChunkStorage;

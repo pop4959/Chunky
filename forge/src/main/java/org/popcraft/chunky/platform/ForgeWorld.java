@@ -28,7 +28,9 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class ForgeWorld implements World {
+    private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private static final TicketType<Unit> CHUNKY = TicketType.create(ChunkyForge.MOD_ID, (unit, unit2) -> 0);
+    private static final TicketType<Unit> CHUNKY_TICKING = TicketType.create("%s_ticking".formatted(ChunkyForge.MOD_ID), (unit, unit2) -> 0, TICKING_LOAD_DURATION * 20);
     private final ServerLevel world;
     private final Border worldBorder;
 
@@ -74,6 +76,9 @@ public class ForgeWorld implements World {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkCache serverChunkCache = world.getChunkSource();
             serverChunkCache.addRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
+            if (TICKING_LOAD_DURATION > 0) {
+                serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
+            }
             serverChunkCache.runDistanceManagerUpdates();
             final ChunkMap chunkManager = serverChunkCache.chunkMap;
             final ChunkHolder chunkHolder = chunkManager.getVisibleChunkIfPresent(chunkPos.toLong());
