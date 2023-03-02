@@ -128,7 +128,12 @@ public class ChunkyFabric implements ModInitializer {
                     .requires(serverCommandSource -> chunky != null && chunky.getCommands().containsKey(CommandLiteral.BORDER))
                     .executes(command.getCommand());
             registerArguments(borderCommand, literal(CommandLiteral.ADD),
-                    argument(CommandLiteral.WORLD, dimension()));
+                    argument(CommandLiteral.WORLD, dimension()),
+                    argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES),
+                    argument(CommandLiteral.CENTER_X, word()),
+                    argument(CommandLiteral.CENTER_Z, word()),
+                    argument(CommandLiteral.RADIUS_X, word()),
+                    argument(CommandLiteral.RADIUS_Z, word()));
             registerArguments(borderCommand, literal(CommandLiteral.BYPASS),
                     argument(CommandLiteral.PLAYER, player()));
             registerArguments(borderCommand, literal(CommandLiteral.HELP));
