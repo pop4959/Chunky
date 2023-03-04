@@ -26,6 +26,7 @@
   "format_continue": "Завдання продовжується для світу %s.",
   "format_continue_no_tasks": "Немає завдань для продовження.",
   "format_trim_confirm": "&cПопередження: Чанки в світі %s поза регіоном, формою якого є %s з центром %s, %s та радіусом %s, будуть невідворотно видалені. Буль ласка, переконайтесь, що ви зробили резервну копію вашого сервера, перш ніж продовжити, аби уникнути можливих проблем. Вам буде необхідно перезавантажити сервер після закінчення завдання. Якщо ви все розумієте та бажаєте продовжити, введіть '%s'.",
+  "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
   "format_pattern": "Патерн змінено на %s.",
   "format_pause": "Завдання призупинено для світу %s.",
   "format_pause_no_tasks": "Немає завдань для призупинення.",
