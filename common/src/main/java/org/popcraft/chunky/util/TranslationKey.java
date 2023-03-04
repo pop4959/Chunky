@@ -28,6 +28,7 @@ public final class TranslationKey {
     public static final String FORMAT_CONTINUE = "format_continue";
     public static final String FORMAT_CONTINUE_NO_TASKS = "format_continue_no_tasks";
     public static final String FORMAT_TRIM_CONFIRM = "format_trim_confirm";
+    public static final String FORMAT_TRIM_CONFIRM_INSIDE = "format_trim_confirm_inside";
     public static final String FORMAT_PATTERN = "format_pattern";
     public static final String FORMAT_PAUSE = "format_pause";
     public static final String FORMAT_PAUSE_NO_TASKS = "format_pause_no_tasks";
