@@ -26,6 +26,7 @@
   "format_continue": "Continuazione dell'attività per %s.",
   "format_continue_no_tasks": "Nessuna attività da continuare.",
   "format_trim_confirm": "&cAttenzione: I chunk in %s fuori dalla regione %s centrata in %s, %s con raggio %s verranno eliminati definitivamente. Assicurati di aver effettuato un backup del tuo server prima di continuare per evitare potenziali danni. Ti sarà richiesto di riavviare il server completamente dopo che l'attività sarà terminata. Se hai compreso e desideri procedere, digita '%s'.",
+  "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
   "format_pattern": "Modello cambiato in %s.",
   "format_pause": "Attività in pausa per %s.",
   "format_pause_no_tasks": "Nessuna attività da fermare.",
