@@ -26,6 +26,7 @@
   "format_continue": "任务持续了 %s。",
   "format_continue_no_tasks": "没有预生成任务可以继续。",
   "format_trim_confirm": "&c警告： 在世界 %s 中形状 %s 的区块以 %s, %s 为中心 %s 为半径的预生成行为将被永久删除。 请确保您已经备份了您的服务器再继续，以避免对世界存档潜在的影响与损害。 任务完成后您需要重新启动服务器。如果您理解并想继续，请输入 '%s'。",
+  "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
   "format_pattern": "预生成方案改为 %s。",
   "format_pause": "任务暂停了 %s。",
   "format_pause_no_tasks": "没有预生成任务可以暂停",

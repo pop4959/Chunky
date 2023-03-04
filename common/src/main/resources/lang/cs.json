@@ -26,6 +26,7 @@
   "format_continue": "Úkol pokračuje pro %s.",
   "format_continue_no_tasks": "Žádné úkoly k pokračování.",
   "format_trim_confirm": "&cVarování: chunky v %s mimo oblast %s se středem na %s, %s s poloměrem %s budou natrvalo odstraněny. Před pokračováním se ujistěte, že jste si vytvořili zálohu svého serveru a zabránili tak potenciálnímu poškození. Po dokončení úkolu budete muset plně restartovat server. Pokud souhlasíte a přejete si pokračovat, zadejte '%s'.",
+  "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
   "format_pattern": "Vzor změněn na %s.",
   "format_pause": "Úkol pozastaven pro %s.",
   "format_pause_no_tasks": "Žádné úkoly k pozastavení.",
