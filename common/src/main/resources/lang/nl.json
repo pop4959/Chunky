@@ -26,6 +26,7 @@
   "format_continue": "Taak wordt voortgezet voor %s.",
   "format_continue_no_tasks": "Geen taken om mee door te gaan.",
   "format_trim_confirm": "&cWaarschuwing: Chunks in %s buiten de %s regio gecentreerd op %s, %s met radius %s zullen permanent verwijderd worden. Zorg ervoor dat je een back-up van je server hebt genomen voordat je verder gaat om mogelijke schade te voorkomen. Je zult de server volledig moeten herstarten nadat de taak is voltooid. Als je het begrijpt en verder wilt gaan, typ dan '%s'.",
+  "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
   "format_pattern": "Patroon gewijzigd naar %s.",
   "format_pause": "taak gepauzeerd voor %s.",
   "format_pause_no_tasks": "Geen taken om te pauzeren.",
