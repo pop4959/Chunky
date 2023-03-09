@@ -12,7 +12,7 @@ public interface World {
 
     String getKey();
 
-    boolean isChunkGenerated(int x, int z);
+    CompletableFuture<Boolean> isChunkGenerated(int x, int z);
 
     CompletableFuture<Void> getChunkAtAsync(int x, int z);
 

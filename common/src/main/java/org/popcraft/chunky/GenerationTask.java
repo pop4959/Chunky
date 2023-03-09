@@ -16,6 +16,7 @@ import org.popcraft.chunky.util.RegionCache;
 import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.Deque;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
@@ -52,7 +53,7 @@ public class GenerationTask implements Runnable {
         this.worldState = chunky.getRegionCache().getWorld(selection.world().getName());
     }
 
-    private void update(final int chunkX, final int chunkZ, final boolean loaded) {
+    private synchronized void update(final int chunkX, final int chunkZ, final boolean loaded) {
         if (stopped) {
             return;
         }
@@ -116,6 +117,7 @@ public class GenerationTask implements Runnable {
         final String poolThreadName = Thread.currentThread().getName();
         Thread.currentThread().setName(String.format("Chunky-%s Thread", selection.world().getName()));
         final Semaphore working = new Semaphore(MAX_WORKING_COUNT);
+        final boolean forceLoadExistingChunks = chunky.getConfig().isForceLoadExistingChunks();
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             final ChunkCoordinate chunk = chunkIterator.next();
@@ -125,15 +127,9 @@ public class GenerationTask implements Runnable {
                 update(chunk.x(), chunk.z(), false);
                 continue;
             }
-            if (!chunky.getConfig().isForceLoadExistingChunks()) {
-                if (worldState.isGenerated(chunk.x(), chunk.z())) {
-                    update(chunk.x(), chunk.z(), false);
-                    continue;
-                }
-                if (selection.world().isChunkGenerated(chunk.x(), chunk.z())) {
-                    update(chunk.x(), chunk.z(), true);
-                    continue;
-                }
+            if (!forceLoadExistingChunks && worldState.isGenerated(chunk.x(), chunk.z())) {
+                update(chunk.x(), chunk.z(), false);
+                continue;
             }
             try {
                 working.acquire();
@@ -142,10 +138,20 @@ public class GenerationTask implements Runnable {
                 stop(cancelled);
                 break;
             }
-            selection.world().getChunkAtAsync(chunk.x(), chunk.z()).whenComplete((ignored, throwable) -> {
-                working.release();
-                update(chunk.x(), chunk.z(), true);
-            });
+            final CompletableFuture<Boolean> isChunkGenerated = forceLoadExistingChunks ?
+                    CompletableFuture.completedFuture(false) :
+                    selection.world().isChunkGenerated(chunk.x(), chunk.z());
+            isChunkGenerated
+                    .thenCompose(generated -> {
+                        if (Boolean.TRUE.equals(generated)) {
+                            return CompletableFuture.completedFuture(null);
+                        } else {
+                            return selection.world().getChunkAtAsync(chunk.x(), chunk.z());
+                        }
+                    }).whenComplete((ignored, throwable) -> {
+                        working.release();
+                        update(chunk.x(), chunk.z(), true);
+                    });
         }
         if (stopped) {
             chunky.getServer().getConsole().sendMessagePrefixed(TranslationKey.TASK_STOPPED, selection.world().getName());

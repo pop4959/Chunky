@@ -2,6 +2,7 @@ name: ${name}
 version: ${version}
 main: ${group}.chunky.ChunkyBukkit
 api-version: 1.13
+folia-supported: true
 softdepend: [dynmap, BlueMap, squaremap, WorldBorder]
 load: POSTWORLD
 authors: [${author}]

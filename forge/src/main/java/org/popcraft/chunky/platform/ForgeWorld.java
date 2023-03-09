@@ -50,7 +50,7 @@ public class ForgeWorld implements World {
     }
 
     @Override
-    public boolean isChunkGenerated(final int x, final int z) {
+    public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
         if (Thread.currentThread() != world.getServer().getRunningThread()) {
             return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), world.getServer()).join();
         } else {
@@ -58,13 +58,13 @@ public class ForgeWorld implements World {
             final ChunkMap chunkStorage = world.getChunkSource().chunkMap;
             final ChunkHolder loadedChunkHolder = chunkStorage.getVisibleChunkIfPresent(chunkPos.toLong());
             if (loadedChunkHolder != null && loadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
-                return true;
+                return CompletableFuture.completedFuture(true);
             }
             final ChunkHolder unloadedChunkHolder = chunkStorage.pendingUnloads.get(chunkPos.toLong());
             if (unloadedChunkHolder != null && unloadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
-                return true;
+                return CompletableFuture.completedFuture(true);
             }
-            return chunkStorage.readChunk(chunkPos).join().map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false);
+            return chunkStorage.readChunk(chunkPos).thenApply(optionalNbt -> optionalNbt.map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false));
         }
     }
 

@@ -51,7 +51,7 @@ public class FabricWorld implements World {
     }
 
     @Override
-    public boolean isChunkGenerated(final int x, final int z) {
+    public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
         if (Thread.currentThread() != serverWorld.getServer().getThread()) {
             return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), serverWorld.getServer()).join();
         } else {
@@ -60,13 +60,13 @@ public class FabricWorld implements World {
             final ThreadedAnvilChunkStorageMixin chunkStorageMixin = (ThreadedAnvilChunkStorageMixin) chunkStorage;
             final ChunkHolder loadedChunkHolder = chunkStorageMixin.invokeGetChunkHolder(chunkPos.toLong());
             if (loadedChunkHolder != null && loadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
-                return true;
+                return CompletableFuture.completedFuture(true);
             }
             final ChunkHolder unloadedChunkHolder = chunkStorageMixin.getChunksToUnload().get(chunkPos.toLong());
             if (unloadedChunkHolder != null && unloadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
-                return true;
+                return CompletableFuture.completedFuture(true);
             }
-            return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos).join().map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false);
+            return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos).thenApply(optionalNbt -> optionalNbt.map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false));
         }
     }
 

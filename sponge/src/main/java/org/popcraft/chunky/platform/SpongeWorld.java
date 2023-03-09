@@ -39,8 +39,8 @@ public class SpongeWorld implements World {
     }
 
     @Override
-    public boolean isChunkGenerated(final int x, final int z) {
-        return world.hasChunk(x, 0, z);
+    public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
+        return CompletableFuture.completedFuture(world.hasChunk(x, 0, z));
     }
 
     @Override
