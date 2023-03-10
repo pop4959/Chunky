@@ -1,6 +1,5 @@
 package org.popcraft.chunky.platform;
 
-import io.papermc.lib.PaperLib;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -63,9 +62,17 @@ public class BukkitPlayer extends BukkitSender implements Player {
         final org.bukkit.World world = Bukkit.getWorld(location.getWorld().getName());
         final org.bukkit.Location loc = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         final Entity vehicle = player.getVehicle();
-        PaperLib.teleportAsync(player, loc);
+        teleportAsync(player, loc);
         if (vehicle != null) {
-            PaperLib.teleportAsync(vehicle, loc);
+            teleportAsync(vehicle, loc);
+        }
+    }
+
+    private void teleportAsync(final Entity entity, final org.bukkit.Location location) {
+        if (Paper.isPaper()) {
+            Paper.teleportAsync(entity, location);
+        } else {
+            entity.teleport(location);
         }
     }
 

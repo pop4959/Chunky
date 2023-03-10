@@ -1,6 +1,5 @@
 package org.popcraft.chunky.platform;
 
-import io.papermc.lib.PaperLib;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -18,10 +17,12 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 public class BukkitWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
+    private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
     private final org.bukkit.World world;
     private final Border worldBorder;
 
@@ -42,10 +43,10 @@ public class BukkitWorld implements World {
 
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
-        if (PaperLib.isPaper()) {
+        if (Paper.isPaper()) {
             return CompletableFuture.supplyAsync(() -> {
                 try {
-                    return PaperLib.isChunkGenerated(world, x, z);
+                    return world.isChunkGenerated(x, z);
                 } catch (CompletionException e) {
                     return false;
                 }
@@ -58,11 +59,20 @@ public class BukkitWorld implements World {
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         if (TICKING_LOAD_DURATION > 0) {
-            final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
             world.addPluginChunkTicket(x, z, plugin);
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> world.removePluginChunkTicket(x, z, plugin), TICKING_LOAD_DURATION * 20L);
+            final Runnable removeTicketTask = () -> world.removePluginChunkTicket(x, z, plugin);
+            if (Folia.isFolia()) {
+                CompletableFuture.runAsync(() -> Folia.schedule(plugin, new org.bukkit.Location(world, x << 4, 0, z << 4), removeTicketTask), CompletableFuture.delayedExecutor(TICKING_LOAD_DURATION, TimeUnit.SECONDS, command -> {
+                }));
+            } else {
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, removeTicketTask, TICKING_LOAD_DURATION * 20L);
+            }
         }
-        return CompletableFuture.allOf(PaperLib.getChunkAtAsync(world, x, z));
+        if (Paper.isPaper()) {
+            return CompletableFuture.allOf(Paper.getChunkAtAsync(world, x, z));
+        } else {
+            return CompletableFuture.allOf(CompletableFuture.completedFuture(world.getChunkAt(x, z)));
+        }
     }
 
     @Override
