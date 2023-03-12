@@ -57,12 +57,15 @@ public class BukkitWorld implements World {
 
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
+        final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(PaperLib.getChunkAtAsync(world, x, z));
         if (TICKING_LOAD_DURATION > 0) {
             final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
-            world.addPluginChunkTicket(x, z, plugin);
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> world.removePluginChunkTicket(x, z, plugin), TICKING_LOAD_DURATION * 20L);
+            chunkFuture.thenAccept(ignored -> {
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> world.addPluginChunkTicket(x, z, plugin));
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> world.removePluginChunkTicket(x, z, plugin), TICKING_LOAD_DURATION * 20L);
+            });
         }
-        return CompletableFuture.allOf(PaperLib.getChunkAtAsync(world, x, z));
+        return chunkFuture;
     }
 
     @Override
