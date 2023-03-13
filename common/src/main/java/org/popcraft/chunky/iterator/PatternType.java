@@ -7,8 +7,9 @@ public final class PatternType {
     public static final String LOOP = "loop";
     public static final String SPIRAL = "spiral";
     public static final String CSV = "csv";
+    public static final String REGION = "region";
 
-    public static final List<String> ALL = List.of(CONCENTRIC, LOOP, SPIRAL, CSV);
+    public static final List<String> ALL = List.of(CONCENTRIC, LOOP, SPIRAL, CSV, REGION);
 
     private PatternType() {
     }

@@ -77,6 +77,7 @@ public final class TranslationKey {
     public static final String PATTERN_LOOP = "pattern_loop";
     public static final String PATTERN_SPIRAL = "pattern_spiral";
     public static final String PATTERN_CSV = "pattern_csv";
+    public static final String PATTERN_REGION = "pattern_region";
     public static final String SHAPE_CIRCLE = "shape_circle";
     public static final String SHAPE_DIAMOND = "shape_diamond";
     public static final String SHAPE_ELLIPSE = "shape_ellipse";

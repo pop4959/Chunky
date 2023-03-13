@@ -8,6 +8,7 @@ import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Parameter;
 
+@SuppressWarnings("unused")
 public final class Selection {
     public static final double DEFAULT_CENTER_X = 0d;
     public static final double DEFAULT_CENTER_Z = 0d;
@@ -26,6 +27,12 @@ public final class Selection {
     private final int radiusChunksZ;
     private final int diameterChunksX;
     private final int diameterChunksZ;
+    private final int centerRegionX;
+    private final int centerRegionZ;
+    private final int radiusRegionsX;
+    private final int radiusRegionsZ;
+    private final int diameterRegionsX;
+    private final int diameterRegionsZ;
 
     private Selection(final Chunky chunky, final World world, final double centerX, final double centerZ, final double radiusX, final double radiusZ, final Parameter pattern, final String shape) {
         this.chunky = chunky;
@@ -42,6 +49,12 @@ public final class Selection {
         this.radiusChunksZ = (int) Math.ceil(radiusZ / 16f);
         this.diameterChunksX = 2 * radiusChunksX + 1;
         this.diameterChunksZ = 2 * radiusChunksZ + 1;
+        this.centerRegionX = centerChunkX >> 5;
+        this.centerRegionZ = centerChunkZ >> 5;
+        this.radiusRegionsX = (int) Math.ceil(radiusChunksX / 32f);
+        this.radiusRegionsZ = (int) Math.ceil(radiusChunksZ / 32f);
+        this.diameterRegionsX = 2 * radiusRegionsX + 1;
+        this.diameterRegionsZ = 2 * radiusRegionsZ + 1;
     }
 
     public static Builder builder(final Chunky chunky, final World world) {
@@ -104,7 +117,30 @@ public final class Selection {
         return this.diameterChunksZ;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
+    public int centerRegionX() {
+        return this.centerRegionX;
+    }
+
+    public int centerRegionZ() {
+        return this.centerRegionZ;
+    }
+
+    public int radiusRegionsX() {
+        return this.radiusRegionsX;
+    }
+
+    public int radiusRegionsZ() {
+        return this.radiusRegionsZ;
+    }
+
+    public int diameterRegionsX() {
+        return this.diameterRegionsX;
+    }
+
+    public int diameterRegionsZ() {
+        return this.diameterRegionsZ;
+    }
+
     public static final class Builder {
         private final Chunky chunky;
         private World world;
