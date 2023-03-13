@@ -27,9 +27,29 @@ public class RegionChunkIterator implements ChunkIterator {
     private boolean hasNextRegion = true;
     private boolean hasNext = true;
 
-    public RegionChunkIterator(final Selection selection, @SuppressWarnings({"unused", "java:S1172"}) final long count) {
+    public RegionChunkIterator(final Selection selection, final long count) {
         this(selection);
-        // TODO: Implement
+        if (count <= 0) {
+            return;
+        }
+        this.currentRegionProgress = null;
+        this.regionX = centerRegionX;
+        this.regionZ = centerRegionZ;
+        this.annulusRegions = 0;
+        this.spanRegions = 0;
+        this.downRegions = this.leftRegions = this.upRegions = this.rightRegions = 0;
+        this.hasNextRegion = true;
+        this.hasNext = true;
+        long countRemainingChunks = count;
+        currentRegionProgress = nextRegionChunkProgress(countRemainingChunks);
+        countRemainingChunks -= Math.min(countRemainingChunks, currentRegionProgress == null ? 0 : currentRegionProgress.total());
+        while (currentRegionProgress != null && !currentRegionProgress.hasNext()) {
+            currentRegionProgress = nextRegionChunkProgress(countRemainingChunks);
+            countRemainingChunks -= Math.min(countRemainingChunks, currentRegionProgress == null ? 0 : currentRegionProgress.total());
+        }
+        if (currentRegionProgress == null) {
+            hasNext = false;
+        }
     }
 
     public RegionChunkIterator(final Selection selection) {
@@ -75,10 +95,14 @@ public class RegionChunkIterator implements ChunkIterator {
     }
 
     private RegionChunkProgress nextRegionChunkProgress() {
+        return nextRegionChunkProgress(0);
+    }
+
+    private RegionChunkProgress nextRegionChunkProgress(final long count) {
         if (!hasNextRegion) {
             return null;
         }
-        final RegionChunkProgress regionChunkProgress = new RegionChunkProgress(regionX, regionZ);
+        final RegionChunkProgress regionChunkProgress = new RegionChunkProgress(regionX, regionZ, count);
         if (regionX == centerRegionX + annulusRegions && regionZ == centerRegionZ + annulusRegions) {
             ++annulusRegions;
             ++regionX;
@@ -127,12 +151,16 @@ public class RegionChunkIterator implements ChunkIterator {
         private int offsetZ;
         private boolean hasNext = true;
 
-        public RegionChunkProgress(final int x, final int z, final int count) {
+        public RegionChunkProgress(final int x, final int z, final long count) {
             this(x, z);
             if (count <= 0) {
                 return;
             }
-            this.current = count;
+            this.current = (int) Math.min(count, 1024);
+            if (!full && sizeZ > 0) {
+                offsetX = current / sizeZ;
+                offsetZ = current % sizeZ;
+            }
             if (current >= total) {
                 this.hasNext = false;
             }
