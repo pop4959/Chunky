@@ -75,6 +75,7 @@
   "pattern_loop": "Schleife",
   "pattern_spiral": "Spirale",
   "pattern_csv": "csv",
+  "pattern_region": "region",
   "shape_circle": "Kreis",
   "shape_diamond": "Diamant",
   "shape_ellipse": "Ellipse",
