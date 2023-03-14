@@ -113,6 +113,7 @@ public class TranslatorTest {
         translate(TranslationKey.PATTERN_LOOP);
         translate(TranslationKey.PATTERN_SPIRAL);
         translate(TranslationKey.PATTERN_CSV);
+        translate(TranslationKey.PATTERN_REGION);
         translate(TranslationKey.SHAPE_CIRCLE);
         translate(TranslationKey.SHAPE_DIAMOND);
         translate(TranslationKey.SHAPE_ELLIPSE);
