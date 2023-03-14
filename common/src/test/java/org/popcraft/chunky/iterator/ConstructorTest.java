@@ -84,6 +84,28 @@ public class ConstructorTest {
     }
 
     @Test
+    public void region() {
+        final List<ChunkCoordinate> chunks = new ArrayList<>();
+        final ChunkIterator chunkIterator = new RegionChunkIterator(SELECTION);
+        chunkIterator.forEachRemaining(chunks::add);
+        final int total = (int) chunkIterator.total();
+        for (int i = 0; i < total; ++i) {
+            final List<ChunkCoordinate> continueChunks = new ArrayList<>();
+            final ChunkIterator continueIterator = new RegionChunkIterator(SELECTION, i);
+            continueIterator.forEachRemaining(continueChunks::add);
+            final int continueTotal = (int) continueIterator.total();
+            assertEquals("Total", total, continueTotal);
+            final int size = chunks.size(), continueSize = continueChunks.size();
+            assertEquals("Continued Size", size - i, continueSize);
+            for (int j = 0; j < continueSize; ++j) {
+                final int chunkX = chunks.get(j + i).x(), chunkZ = chunks.get(j + i).z();
+                final int continueChunkX = continueChunks.get(j).x(), continueChunkZ = continueChunks.get(j).z();
+                assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
+            }
+        }
+    }
+
+    @Test
     public void rectangle() {
         final List<ChunkCoordinate> chunks = new ArrayList<>();
         final Selection s = Selection.builder(null, null).center(-25, 25).radiusX(50).radiusZ(100).build();

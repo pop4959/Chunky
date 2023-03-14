@@ -58,21 +58,27 @@ public class BukkitWorld implements World {
 
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
-        if (TICKING_LOAD_DURATION > 0) {
-            world.addPluginChunkTicket(x, z, plugin);
-            final Runnable removeTicketTask = () -> world.removePluginChunkTicket(x, z, plugin);
-            if (Folia.isFolia()) {
-                CompletableFuture.runAsync(() -> Folia.schedule(plugin, new org.bukkit.Location(world, x << 4, 0, z << 4), removeTicketTask), CompletableFuture.delayedExecutor(TICKING_LOAD_DURATION, TimeUnit.SECONDS, command -> {
-                }));
-            } else {
-                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, removeTicketTask, TICKING_LOAD_DURATION * 20L);
-            }
-        }
+        final CompletableFuture<Void> chunkFuture;
         if (Paper.isPaper()) {
-            return CompletableFuture.allOf(Paper.getChunkAtAsync(world, x, z));
+            chunkFuture = CompletableFuture.allOf(Paper.getChunkAtAsync(world, x, z));
         } else {
-            return CompletableFuture.allOf(CompletableFuture.completedFuture(world.getChunkAt(x, z)));
+            chunkFuture = CompletableFuture.allOf(CompletableFuture.completedFuture(world.getChunkAt(x, z)));
         }
+        if (TICKING_LOAD_DURATION > 0) {
+            chunkFuture.thenAccept(ignored -> {
+                final Runnable addTicketTask = () -> world.addPluginChunkTicket(x, z, plugin);
+                final Runnable removeTicketTask = () -> world.removePluginChunkTicket(x, z, plugin);
+                if (Folia.isFolia()) {
+                    final org.bukkit.Location location = new org.bukkit.Location(world, x << 4, 0, z << 4);
+                    Folia.schedule(plugin, location, addTicketTask);
+                    CompletableFuture.runAsync(() -> Folia.schedule(plugin, location, removeTicketTask), CompletableFuture.delayedExecutor(TICKING_LOAD_DURATION, TimeUnit.SECONDS));
+                } else {
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, addTicketTask);
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, removeTicketTask, TICKING_LOAD_DURATION * 20L);
+                }
+            });
+        }
+        return chunkFuture;
     }
 
     @Override
