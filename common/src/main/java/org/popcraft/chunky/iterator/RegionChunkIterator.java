@@ -41,6 +41,21 @@ public class RegionChunkIterator implements ChunkIterator {
         this.hasNextRegion = true;
         this.hasNext = true;
         long countRemainingChunks = count;
+        final long estimatedRegionCount = count / 1024;
+        int estimatedDiameterRegions = (int) Math.floor(Math.sqrt(estimatedRegionCount));
+        if (estimatedDiameterRegions % 2 == 0) {
+            --estimatedDiameterRegions;
+        }
+        if (estimatedDiameterRegions > 2) {
+            final int skipDiameterRegions = estimatedDiameterRegions - 2;
+            this.annulusRegions = skipDiameterRegions / 2 + 1;
+            this.regionX += annulusRegions;
+            this.regionZ += annulusRegions - 1;
+            this.spanRegions = 2 * annulusRegions;
+            ++this.downRegions;
+            final long skipChunks = ((long) skipDiameterRegions * skipDiameterRegions) * 1024;
+            countRemainingChunks -= skipChunks;
+        }
         currentRegionProgress = nextRegionChunkProgress(countRemainingChunks);
         countRemainingChunks -= Math.min(countRemainingChunks, currentRegionProgress == null ? 0 : currentRegionProgress.total());
         while (currentRegionProgress != null && !currentRegionProgress.hasNext()) {
