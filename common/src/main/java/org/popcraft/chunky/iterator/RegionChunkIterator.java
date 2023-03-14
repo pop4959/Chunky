@@ -83,10 +83,6 @@ public class RegionChunkIterator implements ChunkIterator {
         final long diameterChunks = selection.diameterChunksX();
         this.totalChunks = diameterChunks * diameterChunks;
         this.currentRegionProgress = nextRegionChunkProgress();
-//        System.out.printf("Region center %d %d, Radius %d%n", centerRegionX, centerRegionZ, radiusRegions);
-//        System.out.printf("Chunk center %d %d, Radius %d%n", centerChunkX, centerChunkZ, radiusChunks);
-//        System.out.printf("Iterator edges (%d %d) -> (%d, %d)%n", minChunkX, minChunkZ, maxChunkX, maxChunkZ);
-//        System.out.printf("Iterator total %d%n", totalChunks);
     }
 
     @Override
@@ -202,12 +198,6 @@ public class RegionChunkIterator implements ChunkIterator {
                 this.full = total == 1024;
             }
             this.name = "region_chunk_progress_%d_%d".formatted(x, z);
-//            System.out.printf("%s%n", name);
-//            System.out.printf("Region edges (%d %d) -> (%d, %d)%n", lowEdgeX, lowEdgeZ, highEdgeX, highEdgeZ);
-//            System.out.printf("Edges (%d %d) -> (%d, %d)%n", minX, minZ, maxX, maxZ);
-//            System.out.printf("Deltas %d %d%n", sizeX, sizeZ);
-//            System.out.printf("Total %d%n", total);
-//            System.out.printf("Full %b%n", full);
         }
 
         @Override
