@@ -47,8 +47,6 @@ public class BoundaryTest {
         assertEquals(concentricPoint1.z(), loop2Point1.z());
         assertEquals(loop2Point1.x(), spiralPoint1.x());
         assertEquals(loop2Point1.z(), spiralPoint1.z());
-//        System.out.println(concentricCoordinates.stream().map(chunk -> "(%s)".formatted(chunk.toString())).toList());
-//        System.out.println(regionCoordinates.stream().map(chunk -> "(%s)".formatted(chunk.toString())).toList());
         assertEquals(spiralPoint1.x(), regionPoint1.x());
         assertEquals(spiralPoint1.z(), regionPoint1.z());
         assertEquals(concentricPoint2.x(), loop2Point2.x());
