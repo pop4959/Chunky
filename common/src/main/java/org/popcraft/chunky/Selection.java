@@ -148,7 +148,7 @@ public final class Selection {
         private double centerZ = DEFAULT_CENTER_Z;
         private double radiusX = DEFAULT_RADIUS;
         private double radiusZ = DEFAULT_RADIUS;
-        private Parameter pattern = Parameter.of(PatternType.CONCENTRIC);
+        private Parameter pattern = Parameter.of(PatternType.REGION);
         private String shape = ShapeType.SQUARE;
 
         private Builder(final Chunky chunky, final World world) {

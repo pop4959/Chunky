@@ -66,7 +66,7 @@ public class TaskLoader {
         final double centerZ = Input.tryDouble(task.getProperty(TaskProperty.CENTER_Z.key())).orElse(Selection.DEFAULT_CENTER_Z);
         final double radiusX = Input.tryDouble(task.getProperty(TaskProperty.RADIUS_X.key())).orElse(Selection.DEFAULT_RADIUS);
         final double radiusZ = Input.tryDouble(task.getProperty(TaskProperty.RADIUS_Z.key())).orElse(radiusX);
-        final String pattern = task.getProperty(TaskProperty.PATTERN.key(), PatternType.CONCENTRIC);
+        final String pattern = task.getProperty(TaskProperty.PATTERN.key(), PatternType.REGION);
         final String file = task.getProperty(TaskProperty.CSV.key());
         final String shape = task.getProperty(TaskProperty.SHAPE.key(), ShapeType.SQUARE);
         final Selection.Builder selection = Selection.builder(chunky, world)
