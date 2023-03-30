@@ -1,6 +1,5 @@
 package org.popcraft.chunky;
 
-import io.papermc.lib.PaperLib;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -23,6 +22,7 @@ import org.popcraft.chunky.platform.BukkitConfig;
 import org.popcraft.chunky.platform.BukkitPlayer;
 import org.popcraft.chunky.platform.BukkitSender;
 import org.popcraft.chunky.platform.BukkitServer;
+import org.popcraft.chunky.platform.Folia;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.TranslationKey;
 import org.popcraft.chunky.util.Version;
@@ -42,10 +42,7 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     public void onEnable() {
         this.chunky = new Chunky(new BukkitServer(this), new BukkitConfig(this));
         final Version currentVersion = new Version(Bukkit.getBukkitVersion(), true);
-        if (Version.MINECRAFT_1_13_2.isEqualTo(currentVersion) && !PaperLib.isPaper()) {
-            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION_SPIGOT));
-            getServer().getPluginManager().disablePlugin(this);
-        } else if (currentVersion.isValid() && Version.MINECRAFT_1_13_2.isHigherThan(currentVersion)) {
+        if (currentVersion.isValid() && Version.MINECRAFT_1_13_2.isHigherThan(currentVersion)) {
             getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
             getServer().getPluginManager().disablePlugin(this);
         }
@@ -55,7 +52,12 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         getServer().getServicesManager().register(Chunky.class, chunky, this, ServicePriority.Normal);
         getServer().getServicesManager().register(ChunkyAPI.class, chunky.getApi(), this, ServicePriority.Normal);
         if (chunky.getConfig().getContinueOnRestart()) {
-            getServer().getScheduler().scheduleSyncDelayedTask(this, () -> chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty()));
+            final Runnable continueTask = () -> chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
+            if (Folia.isFolia()) {
+                Folia.onServerInit(this, continueTask);
+            } else {
+                getServer().getScheduler().scheduleSyncDelayedTask(this, continueTask);
+            }
         }
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
             chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
