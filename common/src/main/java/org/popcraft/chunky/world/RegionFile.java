@@ -12,14 +12,17 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.zip.InflaterInputStream;
 
 public final class RegionFile {
     private static final int ENTRIES = 1024;
     private static final int SECTOR_SIZE = 4096;
-    private final Map<Long, Chunk> chunks = new HashMap<>();
+    private final Set<Chunk> chunks = new HashSet<>();
+    private final Map<Long, Chunk> chunkMap = new HashMap<>();
 
     public RegionFile(final File file) {
         try (final RandomAccessFile region = new RandomAccessFile(file, "r")) {
@@ -50,28 +53,31 @@ public final class RegionFile {
                 region.readFully(compressed);
                 final DataInputStream input = new DataInputStream(new InflaterInputStream(new ByteArrayInputStream(compressed)));
                 if (Tag.load(input) instanceof final CompoundTag data) {
-                    final Optional<IntTag> xPos = data.getInt("xPos");
-                    final Optional<IntTag> zPos = data.getInt("zPos");
-                    if (xPos.isEmpty() || zPos.isEmpty()) {
-                        continue;
-                    }
-                    final int x = xPos.get().value();
-                    final int z = zPos.get().value();
-                    final long pos = ChunkMath.pack(x, z);
-                    chunks.put(pos, new Chunk(data, timestampTable[i], x, z));
+                    chunks.add(new Chunk(data, timestampTable[i]));
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        for (final Chunk chunk : chunks) {
+            final CompoundTag data = chunk.getData();
+            final Optional<IntTag> xPos = data.getInt("xPos");
+            final Optional<IntTag> zPos = data.getInt("zPos");
+            if (xPos.isPresent() && zPos.isPresent()) {
+                final int x = xPos.get().value();
+                final int z = zPos.get().value();
+                final long pos = ChunkMath.pack(x, z);
+                chunkMap.put(pos, chunk);
+            }
+        }
     }
 
     public Collection<Chunk> getChunks() {
-        return chunks.values();
+        return chunks;
     }
 
     public Optional<Chunk> getChunk(final int x, final int z) {
         final long pos = ChunkMath.pack(x, z);
-        return Optional.ofNullable(chunks.get(pos));
+        return Optional.ofNullable(chunkMap.get(pos));
     }
 }
