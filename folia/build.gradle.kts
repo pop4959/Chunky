@@ -1,8 +1,7 @@
 repositories {
-    mavenLocal()
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    compileOnly(group = "dev.folia", name = "folia-api", version = "1.19.3-R0.1-SNAPSHOT")
-    compileOnly(group = "net.kyori", name = "adventure-platform-bukkit", version = "4.2.0")
+    compileOnly(group = "dev.folia", name = "folia-api", version = "1.19.4-R0.1-SNAPSHOT")
 }

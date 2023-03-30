@@ -1,6 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import io.papermc.paper.threadedregions.RegionisedServerInitEvent;
+import io.papermc.paper.threadedregions.RegionizedServerInitEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 public final class Folia {
-    private static final boolean CONFIG_EXISTS = classExists("io.papermc.paper.threadedregions.scheduler.RegionisedScheduler") || classExists("io.papermc.paper.threadedregions.scheduler.EntityScheduler");
+    private static final boolean CONFIG_EXISTS = classExists("io.papermc.paper.threadedregions.RegionizedServer") || classExists("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
 
     private Folia() {
     }
@@ -24,7 +24,7 @@ public final class Folia {
     public static void onServerInit(final Plugin plugin, final Runnable runnable) {
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler
-            public void onRegionisedServerInit(final RegionisedServerInitEvent event) {
+            public void onRegionisedServerInit(final RegionizedServerInitEvent event) {
                 runnable.run();
             }
         }, plugin);
