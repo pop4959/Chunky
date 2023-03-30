@@ -75,6 +75,7 @@
   "pattern_loop": "回环",
   "pattern_spiral": "螺旋",
   "pattern_csv": "csv",
+  "pattern_region": "region",
   "shape_circle": "环形",
   "shape_diamond": "菱形",
   "shape_ellipse": "椭圆形",

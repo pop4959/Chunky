@@ -75,6 +75,7 @@
   "pattern_loop": "пошаровий",
   "pattern_spiral": "спіральний",
   "pattern_csv": "csv",
+  "pattern_region": "region",
   "shape_circle": "коло",
   "shape_diamond": "ромб",
   "shape_ellipse": "еліпс",

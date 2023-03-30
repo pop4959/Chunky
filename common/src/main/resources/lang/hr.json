@@ -75,6 +75,7 @@
   "pattern_loop": "petlja",
   "pattern_spiral": "spirala",
   "pattern_csv": "csv",
+  "pattern_region": "region",
   "shape_circle": "krug",
   "shape_diamond": "romb",
   "shape_ellipse": "elipsa",
