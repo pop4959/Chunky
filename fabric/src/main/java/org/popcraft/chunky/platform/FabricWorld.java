@@ -140,7 +140,7 @@ public class FabricWorld implements World {
     @Override
     public void playEffect(final Player player, final String effect) {
         final Location location = player.getLocation();
-        final BlockPos pos = new BlockPos(location.getX(), location.getY(), location.getZ());
+        final BlockPos pos = BlockPos.ofFloored(location.getX(), location.getY(), location.getZ());
         Input.tryInteger(effect).ifPresent(eventId -> serverWorld.syncWorldEvent(null, eventId, pos, 0));
     }
 

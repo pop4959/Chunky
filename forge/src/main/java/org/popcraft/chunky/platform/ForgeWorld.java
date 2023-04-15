@@ -137,7 +137,7 @@ public class ForgeWorld implements World {
     @Override
     public void playEffect(final Player player, final String effect) {
         final Location location = player.getLocation();
-        final BlockPos pos = new BlockPos(location.getX(), location.getY(), location.getZ());
+        final BlockPos pos = BlockPos.containing(location.getX(), location.getY(), location.getZ());
         Input.tryInteger(effect).ifPresent(eventId -> world.levelEvent(eventId, pos, 0));
     }
 
