@@ -1,4 +1,4 @@
-package org.popcraft.chunky.world;
+package org.popcraft.chunky.nbt.util;
 
 import org.popcraft.chunky.nbt.CompoundTag;
 

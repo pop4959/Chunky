@@ -10,6 +10,7 @@ pluginManagement {
 rootProject.name = "chunky"
 
 sequenceOf(
+    "nbt",
     "common",
     "paper",
     "folia",

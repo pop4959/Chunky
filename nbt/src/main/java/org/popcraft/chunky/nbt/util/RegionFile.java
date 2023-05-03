@@ -1,9 +1,8 @@
-package org.popcraft.chunky.world;
+package org.popcraft.chunky.nbt.util;
 
 import org.popcraft.chunky.nbt.CompoundTag;
 import org.popcraft.chunky.nbt.IntTag;
 import org.popcraft.chunky.nbt.Tag;
-import org.popcraft.chunky.util.ChunkMath;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -22,7 +21,7 @@ public final class RegionFile {
     private static final int ENTRIES = 1024;
     private static final int SECTOR_SIZE = 4096;
     private final Set<Chunk> chunks = new HashSet<>();
-    private final Map<Long, Chunk> chunkMap = new HashMap<>();
+    private final Map<ChunkPos, Chunk> chunkMap = new HashMap<>();
 
     public RegionFile(final File file) {
         try (final RandomAccessFile region = new RandomAccessFile(file, "r")) {
@@ -66,8 +65,7 @@ public final class RegionFile {
             if (xPos.isPresent() && zPos.isPresent()) {
                 final int x = xPos.get().value();
                 final int z = zPos.get().value();
-                final long pos = ChunkMath.pack(x, z);
-                chunkMap.put(pos, chunk);
+                chunkMap.put(ChunkPos.of(x, z), chunk);
             }
         }
     }
@@ -77,7 +75,6 @@ public final class RegionFile {
     }
 
     public Optional<Chunk> getChunk(final int x, final int z) {
-        final long pos = ChunkMath.pack(x, z);
-        return Optional.ofNullable(chunkMap.get(pos));
+        return Optional.ofNullable(chunkMap.get(ChunkPos.of(x, z)));
     }
 }

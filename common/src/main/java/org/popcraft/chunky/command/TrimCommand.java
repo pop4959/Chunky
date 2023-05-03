@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.nbt.CompoundTag;
 import org.popcraft.chunky.nbt.LongTag;
+import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.Shape;
@@ -13,7 +14,6 @@ import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
-import org.popcraft.chunky.world.RegionFile;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
