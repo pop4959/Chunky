@@ -23,6 +23,7 @@ public class TranslatorTest {
         testTranslation("hi");
         testTranslation("hr");
         testTranslation("it");
+        testTranslation("ko");
         testTranslation("nl");
         testTranslation("no");
         testTranslation("pl");
@@ -35,6 +36,7 @@ public class TranslatorTest {
         testTranslation("vi");
         testTranslation("zh_CN");
         testTranslation("zh_HK");
+        testTranslation("zh_TW");
     }
 
     private void testTranslation(final String language) {
