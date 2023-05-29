@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "Devam edilecek bir fonksiyon bulunmuyor.",
   "format_trim_confirm": "&cUyarı: %1$s dünyasındaki %3$s, %4$s merkezli, %5$s yarıçaplı, %2$s alanın dışarısındaki herşey &4&lKALICI &r&colarak silinecektir. Potansiyel hasarı engellemek için lütfen yedek aldığınızdan emin olun. İşlem sona erdiğinde sunucunuzu tamamen yeniden başlatmanız gerekecek. Eğer riskleri anladıysanız ve devam etmek istiyorsanız, '%6$s' yazın.",
   "format_trim_confirm_inside": "&cUyarı: %1$s dünyasındaki %3$s, %4$s merkezli, %5$s yarıçaplı, %2$s alan &4&lKALICI &r&colarak silinecektir. Potansiyel hasarı engellemek için lütfen yedek aldığınızdan emin olun. İşlem sona erdiğinde sunucunuzu tamamen yeniden başlatmanız gerekecek. Eğer riskleri anladıysanız ve devam etmek istiyorsanız, '%6$s' yazın.",
+  "format_trim_confirm_inhabited": "&eNotice: Filtering chunks by a maximum inhabited time of %s ticks. Trim may take longer than usual to complete.",
   "format_pattern": "Yol %s olarak değiştirildi.",
   "format_pause": "Fonksiyon %s için durduruldu.",
   "format_pause_no_tasks": "Durdurulacak bir fonksiyon bulunmuyor.",
