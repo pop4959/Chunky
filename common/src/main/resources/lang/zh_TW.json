@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "沒有任何可以繼續的任務。",
   "format_trim_confirm": "&c警告： 在世界 %s 中形狀 %s 的區塊以 %s, %s 為中心 %s 為半徑的預生成行為將被永久刪除。 請確保您已經備份了您的伺服器再繼續，以避免對世界存檔潛在的影響與損害。 任務完成後您需要重新開機伺服器。如果您理解並想繼續，請輸入 '%s'。",
   "format_trim_confirm_inside": "&c警告： 在世界 %s 中 %s 形狀的區塊以 %s, %s 為中心 %s 為半徑的預生成行為將被永久刪除。 請確保您已經備份了您的伺服器再繼續以避免對世界存檔潛在的影響與損害。 任務完成後您需要重新啟動伺服器。如果您了解並想繼續，請輸入 '%s'。",
+  "format_trim_confirm_inhabited": "&eNotice: Filtering chunks by a maximum inhabited time of %s ticks. Trim may take longer than usual to complete.",
   "format_pattern": "預載方案改為 %s。",
   "format_pause": "%s 任務暫停了 。",
   "format_pause_no_tasks": "沒有任務可以暫停。",
