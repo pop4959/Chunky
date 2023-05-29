@@ -11,6 +11,7 @@ public final class CommandLiteral {
     public static final String CONTINUE = "continue";
     public static final String CORNERS = "corners";
     public static final String HELP = "help";
+    public static final String INHABITED = "inhabited";
     public static final String INTERVAL = "interval";
     public static final String PAGE = "page";
     public static final String PATTERN = "pattern";
@@ -27,6 +28,7 @@ public final class CommandLiteral {
     public static final String SPAWN = "spawn";
     public static final String START = "start";
     public static final String TRIM = "trim";
+    public static final String TRIM_MODE = "trimMode";
     public static final String WORLDBORDER = "worldborder";
     public static final String WORLD = "world";
     public static final String X = "x";
