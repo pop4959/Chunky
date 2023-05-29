@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "Nema procesa za nastavak.",
   "format_trim_confirm": "&cUpozorenje: Čankovi u %s izvan %s regije centrirani u %s, %s sa razdaljinom %s će biti trajno obrisani. Napravite rezervnu kopiju servera prije nego što nastavite da biste izbjegli potencijalnu štetu. Morate restartovati server kada se proces završi. Ako ste razumjeli i želite nastaviti, napišite '%s'.",
   "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
+  "format_trim_confirm_inhabited": "&eNotice: Filtering chunks by a maximum inhabited time of %s ticks. Trim may take longer than usual to complete.",
   "format_pattern": "Oblik promijenjen u %s.",
   "format_pause": "Proces za %s pauziran.",
   "format_pause_no_tasks": "Nema procesa za pauziranje.",
