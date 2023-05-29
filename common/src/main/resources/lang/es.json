@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "No hay tareas que continuar.",
   "format_trim_confirm": "&cAdvertencia: Los chunks en %s fuera de la región de forma %s, centrada en %s, %s con radio %s serán permanentemente borrados. Por favor asegúrate que has hecho un respaldo de tu servidor antes de continuar para evitar cualquier daño posible. Necesitarás reiniciar tu servidor por completo una vez la tarea termine. Si entiendes esto y deseas continuar, usa '%s'.",
   "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
+  "format_trim_confirm_inhabited": "&eNotice: Filtering chunks by a maximum inhabited time of %s ticks. Trim may take longer than usual to complete.",
   "format_pattern": "Patrón cambiado a %s.",
   "format_pause": "Tarea pausada para %s.",
   "format_pause_no_tasks": "No hay tareas que pausar.",
