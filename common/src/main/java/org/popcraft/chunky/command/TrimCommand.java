@@ -118,6 +118,9 @@ public class TrimCommand implements ChunkyCommand {
         });
         chunky.setPendingAction(sender, deletionAction);
         sender.sendMessagePrefixed(inside ? TranslationKey.FORMAT_TRIM_CONFIRM_INSIDE : TranslationKey.FORMAT_TRIM_CONFIRM, selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection), "/chunky confirm");
+        if (inhabitedTimeCheck) {
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED, Formatting.number(inhabitedTime));
+        }
     }
 
     private int checkRegion(final Path region, final Shape shape, final boolean inside, final boolean inhabitedTimeCheck, final int inhabitedTime) {
