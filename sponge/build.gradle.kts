@@ -2,7 +2,7 @@ import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
-    id("org.spongepowered.gradle.plugin") version "2.0.2"
+    id("org.spongepowered.gradle.plugin") version "2.1.1"
 }
 
 dependencies {
@@ -17,7 +17,7 @@ sponge {
     }
     license("GPL-3.0")
     plugin(rootProject.name) {
-        displayName(rootProject.name.capitalize())
+        displayName("${project.property("artifactName")}")
         version("${project.version}")
         entrypoint("${project.group}.${rootProject.name}.ChunkySponge")
         description("${project.property("description")}")

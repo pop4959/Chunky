@@ -1,18 +1,9 @@
 import java.io.ByteArrayOutputStream
 
-buildscript {
-    configurations.all {
-        resolutionStrategy {
-            force("org.ow2.asm:asm:9.3")
-            force("org.ow2.asm:asm-commons:9.3")
-        }
-    }
-}
-
 plugins {
     id("java-library")
     id("maven-publish")
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 subprojects {
@@ -45,7 +36,7 @@ subprojects {
         }
         shadowJar {
             archiveClassifier.set("")
-            archiveFileName.set("${rootProject.name.capitalize()}-${project.version}.jar")
+            archiveFileName.set("${project.property("artifactName")}-${project.version}.jar")
         }
         build {
             dependsOn(shadowJar)

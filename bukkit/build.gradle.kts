@@ -19,7 +19,7 @@ tasks {
     processResources {
         filesMatching("plugin.yml") {
             expand(
-                "name" to rootProject.name.capitalize(),
+                "name" to project.property("artifactName"),
                 "version" to project.version,
                 "group" to project.group,
                 "author" to project.property("author"),
