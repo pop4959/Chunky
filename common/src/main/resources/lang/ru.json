@@ -14,7 +14,7 @@
   "format_border_list_border": "Мир %s: %s с центром в %s, %s и радиусом %s.",
   "format_border_list_none": "Ни у одного мира не установлены границы.",
   "format_border_load": "Выделенное пространство было загружено для мира %s.",
-  "format_border_no_border": "Для мира %s не существует границ мира.",
+  "format_border_no_border": "Для мира %s не установлено границ мира.",
   "format_border_remove": "Граница мира %s была удалена.",
   "format_border_wrap": "Тип пограничного перемещения сменен на '%s' для мира %s.",
   "format_cancel": "Задача для %s отменена.",
