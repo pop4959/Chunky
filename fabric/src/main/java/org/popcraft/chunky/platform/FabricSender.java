@@ -51,6 +51,6 @@ public class FabricSender implements Sender {
 
     @Override
     public void sendMessage(final String key, final boolean prefixed, final Object... args) {
-        source.sendFeedback(Text.of(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
+        source.sendFeedback(() -> Text.of(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
     }
 }

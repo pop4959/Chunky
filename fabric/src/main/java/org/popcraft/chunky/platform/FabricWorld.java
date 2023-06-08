@@ -66,7 +66,12 @@ public class FabricWorld implements World {
             if (unloadedChunkHolder != null && unloadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-            return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos).thenApply(optionalNbt -> optionalNbt.map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false));
+            return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos)
+                    .thenApply(optionalNbt -> optionalNbt
+                            .filter(chunkNbt -> chunkNbt.contains("Status", 8))
+                            .map(chunkNbt -> chunkNbt.getString("Status"))
+                            .map(status -> "minecraft:full".equals(status) || "full".equals(status))
+                            .orElse(false));
         }
     }
 
@@ -123,7 +128,7 @@ public class FabricWorld implements World {
             while (pos.getY() > serverWorld.getBottomY()) {
                 pos = pos.move(Direction.DOWN);
                 final BlockState blockState = serverWorld.getBlockState(pos);
-                if (blockState.getMaterial().isSolid() && air > 1) {
+                if (blockState.isSolid() && air > 1) {
                     return pos.getY() + 1;
                 }
                 air = blockState.isAir() ? air + 1 : 0;
