@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "Keine Aufgaben zum Weitermachen.",
   "format_trim_confirm": "&cWarnung: Chunks in %s ausserhalb von der %s Region zentriert bei %s, %s mit Radius %s wird vollständig gelöscht. Bitte stelle sicher, dass du ein Backup von deinem Server gemacht hast, bevor du weiter machst, um eventuelle Schäden zu verhindern. Du musst deinen Server komplett neustarten nachdem die Aufgabe erledigt ist. Wenn du dies verstehst und weitermachen willst, schreibe '%s'.",
   "format_trim_confirm_inside": "&cWarnung: Chunks in %s der %s Region zentriert bei %s, %s mit Radius %s wird vollständig gelöscht. Bitte stelle sicher, dass du ein Backup von deinem Server gemacht hast, bevor du weiter machst, um eventuelle Schäden zu verhindern. Du musst deinen Server komplett neustarten nachdem die Aufgabe erledigt ist. Wenn du dies verstehst und weitermachen willst, schreibe '%s'.",
+  "format_trim_confirm_inhabited": "&eHinweis: Filtere Chunks nach einer maximalen bewohnten Zeit von %s ticks. Trimmen kann länger dauern als üblich zum abschliessen.",
   "format_pattern": "Muster geändert zu %s.",
   "format_pause": "Aufgabe pausiert für %s.",
   "format_pause_no_tasks": "Keine aufgaben zum pausieren.",

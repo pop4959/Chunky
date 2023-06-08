@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "Žádné úkoly k pokračování.",
   "format_trim_confirm": "&cVarování: chunky v %s mimo oblast %s se středem na %s, %s s poloměrem %s budou natrvalo odstraněny. Před pokračováním se ujistěte, že jste si vytvořili zálohu svého serveru a zabránili tak potenciálnímu poškození. Po dokončení úkolu budete muset plně restartovat server. Pokud souhlasíte a přejete si pokračovat, zadejte '%s'.",
   "format_trim_confirm_inside": "&cVarování: chunky v %s uvnitř oblasti %s se středem v %s, %s s poloměrem %s budou natrvalo odstraněny. Před pokračováním se ujistěte, že jste si vytvořili zálohu svého serveru a zabránili tak potenciálnímu poškození. Po dokončení úkolu budete muset plně restartovat server. Pokud souhlasíte a přejete si pokračovat, zadejte '%s'.",
+  "format_trim_confirm_inhabited": "&eUpozornění: Filtrování chunků podle maximální doby osídlení z %s tiků. Dokončení může trvat déle než obvykle.",
   "format_pattern": "Vzor změněn na %s.",
   "format_pause": "Úkol pozastaven pro %s.",
   "format_pause_no_tasks": "Žádné úkoly k pozastavení.",

@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "Няма задачи за възобновяване.",
   "format_trim_confirm": "&cПредупреждение: Чънкове в %s, извън %s региона центриран на %s, %s с радиус от %s ще бъдат перманентно изтрити. Моля, уверете се, че сте направили бакъп на Вашият сървър преди да продължите, за да избегнете потенциални щети. Ще бъдете задължени напълно да рестартирате Вашият сървър, след като задачата приключи. Ако разбирате и желаете да продължите напишете '%s'.",
   "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
+  "format_trim_confirm_inhabited": "&eNotice: Filtering chunks by a maximum inhabited time of %s ticks. Trim may take longer than usual to complete.",
   "format_pattern": "Шарка променена на %s.",
   "format_pause": "Задача поставена на пауза за %s.",
   "format_pause_no_tasks": "Няма задачи за поставяне на пауза.",

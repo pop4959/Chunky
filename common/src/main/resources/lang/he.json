@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "אין משימות להמשיך.",
   "format_trim_confirm": "&cאזהרה: צאנקים בעולם %s מחוץ לאזור ה %s הממורכז ב %s, %s עם רדיוס %s ימחקו לאלתר. אנא וודא כי שמרת גיבוי של השרת לפני שתמשיך כדי למנוע נזק אפשרי. אתה תצטרך להפעיל מחדש את השרת לגמרי לאחר שהמשימה הושלמה. אם אתה מבין ורוצה להמשיך, הקלד '%s'.",
   "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
+  "format_trim_confirm_inhabited": "&eNotice: Filtering chunks by a maximum inhabited time of %s ticks. Trim may take longer than usual to complete.",
   "format_pattern": "דפוס השתנה ל%s.",
   "format_pause": "משימה הושהתה עבור %s.",
   "format_pause_no_tasks": "אין משימות להשהות.",

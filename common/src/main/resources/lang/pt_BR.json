@@ -27,6 +27,7 @@
   "format_continue_no_tasks": "Nenhuma tarefa para continuar.",
   "format_trim_confirm": "&Aviso: Chunks no %s fora da região em forma de %s centralizados em %s, %s com raio %s serão excluídos para sempre. Faça um backup do servidor antes de continuar para evitar possíveis problemas. Reinicie o servidor completamente após a conclusão da tarefa. Se você entendeu e deseja continuar, digite \"%s\".",
   "format_trim_confirm_inside": "&cAtenção: os chunks (%s) dentro da região centralizada em %s, %s com raio %s serão apagados para sempre. Veja se há um backup do servidor antes de continuar para evitar possíveis danos. O servidor deverá ser reiniciado para concluir a tarefa. Se você entendeu e deseja continuar, digite \"%s\".",
+  "format_trim_confirm_inhabited": "&eNotice: Filtering chunks by a maximum inhabited time of %s ticks. Trim may take longer than usual to complete.",
   "format_pattern": "Padrão alterado para %s.",
   "format_pause": "Tarefa pausada no mundo %s.",
   "format_pause_no_tasks": "Nenhuma tarefa para pausar.",
