@@ -64,7 +64,12 @@ public class ForgeWorld implements World {
             if (unloadedChunkHolder != null && unloadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-            return chunkStorage.readChunk(chunkPos).thenApply(optionalNbt -> optionalNbt.map(chunkNbt -> chunkNbt.contains("Status", 8) && "full".equals(chunkNbt.getString("Status"))).orElse(false));
+            return chunkStorage.readChunk(chunkPos)
+                    .thenApply(optionalNbt -> optionalNbt
+                            .filter(chunkNbt -> chunkNbt.contains("Status", 8))
+                            .map(chunkNbt -> chunkNbt.getString("Status"))
+                            .map(status -> "minecraft:full".equals(status) || "full".equals(status))
+                            .orElse(false));
         }
     }
 
@@ -120,7 +125,7 @@ public class ForgeWorld implements World {
             while (pos.getY() > world.getMinBuildHeight()) {
                 pos = pos.move(Direction.DOWN);
                 final BlockState blockState = world.getBlockState(pos);
-                if (blockState.getMaterial().isSolid() && air > 1) {
+                if (blockState.isSolid() && air > 1) {
                     return pos.getY() + 1;
                 }
                 air = blockState.isAir() ? air + 1 : 0;
@@ -144,11 +149,11 @@ public class ForgeWorld implements World {
     @Override
     public void playSound(final Player player, final String sound) {
         final Location location = player.getLocation();
-            world.getServer()
-                    .registryAccess()
-                    .registry(Registries.SOUND_EVENT)
-                    .flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound)))
-                    .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
+        world.getServer()
+                .registryAccess()
+                .registry(Registries.SOUND_EVENT)
+                .flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound)))
+                .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
     }
 
     @Override
