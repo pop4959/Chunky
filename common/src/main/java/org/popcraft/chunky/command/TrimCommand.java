@@ -188,6 +188,8 @@ public class TrimCommand implements ChunkyCommand {
             if (regionFile.length() < 4096) {
                 return 0;
             }
+            final boolean poiValid = poiFile != null && poiFile.length() >= 4096;
+            final boolean entitiesValid = entitiesFile != null && entitiesFile.length() >= 4096;
             for (int offsetX = 0; offsetX < 32; ++offsetX) {
                 for (int offsetZ = 0; offsetZ < 32; ++offsetZ) {
                     final int offsetChunkX = chunkX + offsetX;
@@ -222,14 +224,14 @@ public class TrimCommand implements ChunkyCommand {
                             regionFile.writeInt(0);
                             ++deleted;
                         }
-                        if (poiFile != null) {
+                        if (poiValid) {
                             poiFile.seek(chunkLocation);
                             if (poiFile.readInt() != 0) {
                                 poiFile.seek(chunkLocation);
                                 poiFile.writeInt(0);
                             }
                         }
-                        if (entitiesFile != null) {
+                        if (entitiesValid) {
                             entitiesFile.seek(chunkLocation);
                             if (entitiesFile.readInt() != 0) {
                                 entitiesFile.seek(chunkLocation);
