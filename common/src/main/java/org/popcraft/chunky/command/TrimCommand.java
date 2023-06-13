@@ -90,24 +90,12 @@ public class TrimCommand implements ChunkyCommand {
         final Runnable deletionAction = () -> chunky.getScheduler().runTask(() -> {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_START, selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection));
             final Optional<Path> regionPath = selection.world().getRegionDirectory();
-            final Optional<Path> poiPath = selection.world().getPOIDirectory();
-            final Optional<Path> entitiesPath = selection.world().getEntitiesDirectory();
             final AtomicLong deleted = new AtomicLong();
             final long startTime = System.currentTimeMillis();
             try {
                 if (regionPath.isPresent()) {
                     try (final Stream<Path> regionWalker = Files.walk(regionPath.get())) {
-                        regionWalker.forEach(region -> deleted.getAndAdd(checkRegion(region, shape, inside, inhabitedTimeCheck, inhabitedTime)));
-                    }
-                }
-                if (poiPath.isPresent()) {
-                    try (final Stream<Path> poiWalker = Files.walk(poiPath.get())) {
-                        poiWalker.forEach(region -> checkRegion(region, shape, inside, inhabitedTimeCheck, inhabitedTime));
-                    }
-                }
-                if (entitiesPath.isPresent()) {
-                    try (final Stream<Path> entityWalker = Files.walk(entitiesPath.get())) {
-                        entityWalker.forEach(region -> checkRegion(region, shape, inside, inhabitedTimeCheck, inhabitedTime));
+                        regionWalker.forEach(region -> deleted.getAndAdd(checkRegion(selection.world(), region.getFileName().toString(), shape, inside, inhabitedTimeCheck, inhabitedTime)));
                     }
                 }
             } catch (IOException e) {
@@ -123,30 +111,29 @@ public class TrimCommand implements ChunkyCommand {
         }
     }
 
-    private int checkRegion(final Path region, final Shape shape, final boolean inside, final boolean inhabitedTimeCheck, final int inhabitedTime) {
-        final Optional<ChunkCoordinate> regionCoordinate = tryRegionCoordinate(region);
+    private int checkRegion(final World world, final String regionFileName, final Shape shape, final boolean inside, final boolean inhabitedTimeCheck, final int inhabitedTime) {
+        final Optional<ChunkCoordinate> regionCoordinate = tryRegionCoordinate(regionFileName);
         if (regionCoordinate.isEmpty()) {
             return 0;
         }
         final int chunkX = regionCoordinate.get().x() << 5;
         final int chunkZ = regionCoordinate.get().z() << 5;
         if (!inhabitedTimeCheck && shouldDeleteRegion(shape, inside, chunkX, chunkZ)) {
-            return deleteRegion(region);
+            return deleteRegion(world, regionFileName);
         } else {
-            return trimRegion(region, shape, inside, chunkX, chunkZ, inhabitedTimeCheck, inhabitedTime);
+            return trimRegion(world, regionFileName, shape, inside, chunkX, chunkZ, inhabitedTimeCheck, inhabitedTime);
         }
     }
 
-    private Optional<ChunkCoordinate> tryRegionCoordinate(final Path region) {
-        final String fileName = region.getFileName().toString();
-        if (!fileName.startsWith("r.")) {
+    private Optional<ChunkCoordinate> tryRegionCoordinate(final String regionFileName) {
+        if (!regionFileName.startsWith("r.")) {
             return Optional.empty();
         }
-        final int extension = fileName.indexOf(".mca");
+        final int extension = regionFileName.indexOf(".mca");
         if (extension < 2) {
             return Optional.empty();
         }
-        final String regionCoordinates = fileName.substring(2, extension);
+        final String regionCoordinates = regionFileName.substring(2, extension);
         final int separator = regionCoordinates.indexOf('.');
         final Optional<Integer> regionX = Input.tryInteger(regionCoordinates.substring(0, separator));
         final Optional<Integer> regionZ = Input.tryInteger(regionCoordinates.substring(separator + 1));
@@ -169,9 +156,18 @@ public class TrimCommand implements ChunkyCommand {
         return true;
     }
 
-    private int deleteRegion(final Path region) {
+    private int deleteRegion(final World world, final String regionFileName) {
         try {
-            Files.deleteIfExists(region);
+            final Path regionPath = world.getRegionDirectory().map(region -> region.resolve(regionFileName)).orElseThrow(IllegalStateException::new);
+            Files.deleteIfExists(regionPath);
+            final Path poiPath = world.getPOIDirectory().map(region -> region.resolve(regionFileName)).orElse(null);
+            if (poiPath != null) {
+                Files.deleteIfExists(poiPath);
+            }
+            final Path entitiesPath = world.getEntitiesDirectory().map(region -> region.resolve(regionFileName)).orElse(null);
+            if (entitiesPath != null) {
+                Files.deleteIfExists(entitiesPath);
+            }
             return 1024;
         } catch (IOException e) {
             e.printStackTrace();
@@ -179,11 +175,16 @@ public class TrimCommand implements ChunkyCommand {
         }
     }
 
-    private int trimRegion(final Path region, final Shape shape, final boolean inside, final int chunkX, final int chunkZ, final boolean inhabitedTimeCheck, final int inhabitedTime) {
+    private int trimRegion(final World world, final String regionFileName, final Shape shape, final boolean inside, final int chunkX, final int chunkZ, final boolean inhabitedTimeCheck, final int inhabitedTime) {
+        final Path regionPath = world.getRegionDirectory().map(region -> region.resolve(regionFileName)).orElseThrow(IllegalStateException::new);
+        final Path poiPath = world.getPOIDirectory().map(region -> region.resolve(regionFileName)).orElse(null);
+        final Path entitiesPath = world.getEntitiesDirectory().map(region -> region.resolve(regionFileName)).orElse(null);
         int marked = 0;
         int deleted = 0;
-        final RegionFile regionData = inhabitedTimeCheck ? new RegionFile(region.toFile()) : null;
-        try (final RandomAccessFile regionFile = new RandomAccessFile(region.toFile(), "rw")) {
+        final RegionFile regionData = inhabitedTimeCheck ? new RegionFile(regionPath.toFile()) : null;
+        try (final RandomAccessFile regionFile = new RandomAccessFile(regionPath.toFile(), "rw");
+             final RandomAccessFile poiFile = poiPath == null ? null : new RandomAccessFile(poiPath.toFile(), "rw");
+             final RandomAccessFile entitiesFile = entitiesPath == null ? null : new RandomAccessFile(entitiesPath.toFile(), "rw")) {
             if (regionFile.length() < 4096) {
                 return 0;
             }
@@ -221,6 +222,20 @@ public class TrimCommand implements ChunkyCommand {
                             regionFile.writeInt(0);
                             ++deleted;
                         }
+                        if (poiFile != null) {
+                            poiFile.seek(chunkLocation);
+                            if (poiFile.readInt() != 0) {
+                                poiFile.seek(chunkLocation);
+                                poiFile.writeInt(0);
+                            }
+                        }
+                        if (entitiesFile != null) {
+                            entitiesFile.seek(chunkLocation);
+                            if (entitiesFile.readInt() != 0) {
+                                entitiesFile.seek(chunkLocation);
+                                entitiesFile.writeInt(0);
+                            }
+                        }
                     }
                 }
             }
@@ -228,7 +243,7 @@ public class TrimCommand implements ChunkyCommand {
             e.printStackTrace();
         }
         if (inhabitedTimeCheck && marked == 1024) {
-            deleteRegion(region);
+            deleteRegion(world, regionFileName);
         }
         return deleted;
     }
