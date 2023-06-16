@@ -183,8 +183,8 @@ public class TrimCommand implements ChunkyCommand {
         int deleted = 0;
         final RegionFile regionData = inhabitedTimeCheck ? new RegionFile(regionPath.toFile()) : null;
         try (final RandomAccessFile regionFile = new RandomAccessFile(regionPath.toFile(), "rw");
-             final RandomAccessFile poiFile = poiPath == null ? null : new RandomAccessFile(poiPath.toFile(), "rw");
-             final RandomAccessFile entitiesFile = entitiesPath == null ? null : new RandomAccessFile(entitiesPath.toFile(), "rw")) {
+             final RandomAccessFile poiFile = poiPath == null || Files.notExists(poiPath) ? null : new RandomAccessFile(poiPath.toFile(), "rw");
+             final RandomAccessFile entitiesFile = entitiesPath == null || Files.notExists(entitiesPath) ? null : new RandomAccessFile(entitiesPath.toFile(), "rw")) {
             if (regionFile.length() < 4096) {
                 return 0;
             }
