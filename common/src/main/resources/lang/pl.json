@@ -27,7 +27,7 @@
   "format_continue_no_tasks": "Brak zadań do kontynuowania.",
   "format_trim_confirm": "&cOstrzeżenie: Chunki w %s poza obszarem %s wyśrodkowanym na %s, %s o promieniu %s zostaną trwale usunięte. Upewnij się, że zrobiłeś kopię zapasową serwera zanim będziesz mógł uniknąć potencjalnej utraty danych. Będziesz musiał zrestartować serwer po zakończeniu zadania. Jeśli rozumiesz i chcesz kontynuować, wpisz '%s'.",
   "format_trim_confirm_inside": "&cWarning: Chunks in %s inside of the %s region centered at %s, %s with radius %s will be permanently deleted. Please make sure you have taken a backup of your server before continuing to avoid potential damage. You will be required to restart your server fully after the task has finished. If you understand and wish to proceed, type '%s'.",
-  "format_trim_confirm_inhabited": "&eNotice: Filtering chunks by a maximum inhabited time of %s ticks. Trim may take longer than usual to complete.",
+  "format_trim_confirm_inhabited": "&eUwaga: Filtrowanie chunków według maksymalnego czasu przebywania wynoszącego %s ticków. Przycinanie może potrwać dłużej niż zazwyczaj.",
   "format_pattern": "Wzór zmieniony na %s.",
   "format_pause": "Zadanie wstrzymane dla %s.",
   "format_pause_no_tasks": "Brak zadań do wstrzymania.",
