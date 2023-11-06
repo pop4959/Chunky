@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.popcraft.chunky.platform.util.Location;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
@@ -64,15 +65,19 @@ public class BukkitPlayer extends BukkitSender implements Player {
         final Entity vehicle = player.getVehicle();
         teleportAsync(player, loc);
         if (vehicle != null) {
-            teleportAsync(vehicle, loc);
+            teleportAsync(vehicle, loc).thenAccept(success -> {
+                if (Boolean.TRUE.equals(success)) {
+                    vehicle.addPassenger(player);
+                }
+            });
         }
     }
 
-    private void teleportAsync(final Entity entity, final org.bukkit.Location location) {
+    private CompletableFuture<Boolean> teleportAsync(final Entity entity, final org.bukkit.Location location) {
         if (Paper.isPaper()) {
-            Paper.teleportAsync(entity, location);
+            return Paper.teleportAsync(entity, location);
         } else {
-            entity.teleport(location);
+            return CompletableFuture.completedFuture(entity.teleport(location));
         }
     }
 
