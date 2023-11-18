@@ -52,7 +52,7 @@ public class BukkitWorld implements World {
                 }
             });
         } else {
-            return CompletableFuture.completedFuture(false);
+            return CompletableFuture.completedFuture(world.getChunkAt(x, z, false).isGenerated());
         }
     }
 
