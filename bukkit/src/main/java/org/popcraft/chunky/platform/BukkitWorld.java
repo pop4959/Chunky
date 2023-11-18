@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -21,10 +22,22 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 public class BukkitWorld implements World {
+    private static final boolean IS_GENERATED_SUPPORTED;
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
     private final org.bukkit.World world;
     private final Border worldBorder;
+
+    static {
+        boolean isGeneratedSupported;
+        try {
+            Chunk.class.getMethod("isGenerated");
+            isGeneratedSupported = true;
+        } catch (NoSuchMethodException e) {
+            isGeneratedSupported = false;
+        }
+        IS_GENERATED_SUPPORTED = isGeneratedSupported;
+    }
 
     public BukkitWorld(final org.bukkit.World world) {
         this.world = world;
@@ -52,7 +65,11 @@ public class BukkitWorld implements World {
                 }
             });
         } else {
-            return CompletableFuture.completedFuture(false);
+            if (IS_GENERATED_SUPPORTED) {
+                return CompletableFuture.completedFuture(world.getChunkAt(x, z, false).isGenerated());
+            } else {
+                return CompletableFuture.completedFuture(false);
+            }
         }
     }
 
