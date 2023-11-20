@@ -76,14 +76,14 @@ public class BukkitPlayer extends BukkitSender implements Player {
             teleportAsync(vehicle, loc).thenAcceptAsync(vehicleTeleported -> {
                 if (Boolean.TRUE.equals(vehicleTeleported)) {
                     for (final Entity passenger : passengers) {
-                        teleportAsync(passenger, loc).thenAccept(passengerTeleported -> {
+                        teleportAsync(passenger, loc).thenAcceptAsync(passengerTeleported -> {
                             if (Boolean.TRUE.equals(passengerTeleported)) {
                                 vehicle.addPassenger(passenger);
                             }
-                        });
+                        }, command -> plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, command, 5));
                     }
                 }
-            }, command -> plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, command, 1));
+            }, command -> plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, command, 5));
         }
     }
 
