@@ -11,6 +11,19 @@ import org.popcraft.chunky.platform.util.Location;
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class FabricSender implements Sender {
+    private static final boolean HAS_PERMISSIONS;
+
+    static {
+        boolean hasPermissions;
+        try {
+            Class.forName("me.lucko.fabric.api.permissions.v0.Permissions");
+            hasPermissions = true;
+        } catch (ClassNotFoundException e) {
+            hasPermissions = false;
+        }
+        HAS_PERMISSIONS = hasPermissions;
+    }
+
     private final ServerCommandSource source;
 
     public FabricSender(final ServerCommandSource source) {
@@ -41,10 +54,9 @@ public class FabricSender implements Sender {
 
     @Override
     public boolean hasPermission(final String permission) {
-        try {
-            Class.forName("me.lucko.fabric.api.permissions.v0.Permissions");
+        if (HAS_PERMISSIONS) {
             return Permissions.check(source, permission, false);
-        } catch (final ClassNotFoundException e) {
+        } else {
             return source.hasPermissionLevel(2);
         }
     }
