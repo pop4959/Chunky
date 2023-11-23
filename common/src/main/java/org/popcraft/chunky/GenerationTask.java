@@ -23,6 +23,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class GenerationTask implements Runnable {
     private static final int MAX_WORKING_COUNT = Input.tryInteger(System.getProperty("chunky.maxWorkingCount")).orElse(50);
+    private static final double SAMPLE_INTERVAL = 1000d * Math.max(Input.tryInteger(System.getProperty("chunky.sampleInterval")).orElse(10), 10);
+    private static final double SAMPLE_SUB_INTERVAL = SAMPLE_INTERVAL / 5;
     private final Chunky chunky;
     private final Selection selection;
     private final Shape shape;
@@ -63,10 +65,10 @@ public class GenerationTask implements Runnable {
         final Pair<Long, AtomicLong> bin = updateSamples.peekLast();
         if (loaded) {
             worldState.setGenerated(chunkX, chunkZ);
-            if (bin != null && currentTime - bin.left() < 2e3) {
+            if (bin != null && currentTime - bin.left() < SAMPLE_SUB_INTERVAL) {
                 bin.right().addAndGet(1);
             } else if (updateSamples.add(Pair.of(currentTime, new AtomicLong(1)))) {
-                while (!updateSamples.isEmpty() && currentTime - updateSamples.peek().left() > 1e4) {
+                while (!updateSamples.isEmpty() && currentTime - updateSamples.peek().left() > SAMPLE_INTERVAL) {
                     updateSamples.poll();
                 }
             }
