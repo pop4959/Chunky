@@ -16,7 +16,7 @@
   "format_border_load": "已将世界 %s 的世界边界选中。",
   "format_border_no_border": "世界 %s 目前还没有世界边界。",
   "format_border_remove": "移除了世界 %s 的世界边界。",
-  "format_border_wrap": "",
+  "format_border_wrap": "World border wrap changed to %s for %s.",
   "format_cancel": "任务取消于 %s。",
   "format_cancel_all": "正在中止所有任务.",
   "format_cancel_confirm": "被取消的任务将无法继续。如果您确定要那么做，请输入 '%s'。",
