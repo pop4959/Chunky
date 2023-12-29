@@ -3,5 +3,5 @@ repositories {
 }
 
 dependencies {
-    compileOnly(group = "dev.folia", name = "folia-api", version = "1.19.4-R0.1-SNAPSHOT")
+    compileOnly(group = "dev.folia", name = "folia-api", version = "1.20.4-R0.1-SNAPSHOT")
 }
