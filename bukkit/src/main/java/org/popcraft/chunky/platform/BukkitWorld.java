@@ -11,7 +11,6 @@ import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -19,7 +18,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 public class BukkitWorld implements World {
     private static final boolean IS_GENERATED_SUPPORTED;
@@ -182,15 +180,19 @@ public class BukkitWorld implements World {
 
     @Override
     public Optional<Path> getDirectory(final String name) {
-        if (name != null) {
-            try (Stream<Path> paths = Files.walk(world.getWorldFolder().toPath())) {
-                return paths.filter(Files::isDirectory)
-                        .filter(path -> name.equals(path.getFileName().toString()))
-                        .findFirst();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (name == null) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        final org.bukkit.World.Environment environment = world.getEnvironment();
+        final String parent;
+        if (org.bukkit.World.Environment.NETHER.equals(environment)) {
+            parent = "DIM-1";
+        } else if (org.bukkit.World.Environment.THE_END.equals(environment)) {
+            parent = "DIM1";
+        } else {
+            parent = "";
+        }
+        final Path directory = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
+        return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 }
