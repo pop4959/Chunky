@@ -1,6 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ChunkTicketType;
@@ -68,7 +69,7 @@ public class FabricWorld implements World {
             }
             return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos)
                     .thenApply(optionalNbt -> optionalNbt
-                            .filter(chunkNbt -> chunkNbt.contains("Status", 8))
+                            .filter(chunkNbt -> chunkNbt.contains("Status", NbtElement.STRING_TYPE))
                             .map(chunkNbt -> chunkNbt.getString("Status"))
                             .map(status -> "minecraft:full".equals(status) || "full".equals(status))
                             .orElse(false));

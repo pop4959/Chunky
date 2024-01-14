@@ -3,6 +3,7 @@ package org.popcraft.chunky.platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
@@ -66,7 +67,7 @@ public class ForgeWorld implements World {
             }
             return chunkStorage.readChunk(chunkPos)
                     .thenApply(optionalNbt -> optionalNbt
-                            .filter(chunkNbt -> chunkNbt.contains("Status", 8))
+                            .filter(chunkNbt -> chunkNbt.contains("Status", Tag.TAG_STRING))
                             .map(chunkNbt -> chunkNbt.getString("Status"))
                             .map(status -> "minecraft:full".equals(status) || "full".equals(status))
                             .orElse(false));
