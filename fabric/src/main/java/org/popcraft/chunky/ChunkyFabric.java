@@ -58,7 +58,12 @@ public class ChunkyFabric implements ModInitializer {
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             final LiteralArgumentBuilder<ServerCommandSource> command = literal(CommandLiteral.CHUNKY)
-                    .requires(serverCommandSource -> new FabricSender(serverCommandSource).hasPermission("chunky.command"))
+                    .requires(serverCommandSource -> {
+                        if (serverCommandSource.getServer().isSingleplayer()) {
+                            return true;
+                        }
+                        return new FabricSender(serverCommandSource).hasPermission("chunky.command");
+                    })
                     .executes(context -> {
                         final Sender sender;
                         if (context.getSource().getEntity() instanceof final ServerPlayerEntity player) {

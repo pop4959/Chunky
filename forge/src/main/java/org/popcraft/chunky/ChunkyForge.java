@@ -62,7 +62,12 @@ public class ChunkyForge {
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
         final LiteralArgumentBuilder<CommandSourceStack> command = literal(CommandLiteral.CHUNKY)
-                .requires(serverCommandSource -> serverCommandSource.hasPermission(2))
+                .requires(serverCommandSource -> {
+                    if (serverCommandSource.getServer().isSingleplayer()) {
+                        return true;
+                    }
+                    return serverCommandSource.hasPermission(2);
+                })
                 .executes(context -> {
                     final Sender sender;
                     if (context.getSource().getEntity() instanceof final ServerPlayer player) {
