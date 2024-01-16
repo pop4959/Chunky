@@ -2,7 +2,7 @@ import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
-    id("org.spongepowered.gradle.plugin") version "2.1.1"
+    id("org.spongepowered.gradle.plugin") version "2.2.0"
 }
 
 dependencies {
