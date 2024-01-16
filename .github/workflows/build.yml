@@ -35,6 +35,11 @@ jobs:
         with:
           name: Forge
           path: "forge/build/libs/Chunky-*.jar"
+      - name: Upload NeoForge
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeoForge
+          path: "neoforge/build/libs/Chunky-*.jar"
       - name: Upload Sponge
         uses: actions/upload-artifact@v4
         with:
