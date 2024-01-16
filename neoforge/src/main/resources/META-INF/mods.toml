@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[38,)"
+license="GNU GPLv3"
+issueTrackerURL="${github}/issues"
+[[mods]]
+modId="${id}"
+version="${version}"
+displayName="${name}"
+displayURL="${github}"
+logoFile="icon.png"
+authors="${author}"
+description="${description}"
+[[dependencies.chunky]]
+   modId="neoforge"
+   mandatory=true
+   versionRange="[20.2,)"
+   ordering="NONE"
+   side="BOTH"
+[[dependencies.chunky]]
+   modId="minecraft"
+   mandatory=true
+   versionRange="[1.20,1.21)"
+   ordering="NONE"
+   side="BOTH"

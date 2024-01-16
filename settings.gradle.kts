@@ -17,6 +17,7 @@ sequenceOf(
     "bukkit",
     "fabric",
     "forge",
+    "neoforge",
     "sponge"
 ).forEach {
     include("${rootProject.name}-$it")
