@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class BukkitWorld implements World {
     private static final boolean IS_GENERATED_SUPPORTED;
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
+    private static final boolean AWAIT_TICKET_REMOVAL = Boolean.getBoolean("chunky.awaitTicketRemoval");
     private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
     private final org.bukkit.World world;
     private final Border worldBorder;
@@ -80,9 +81,13 @@ public class BukkitWorld implements World {
             chunkFuture = CompletableFuture.allOf(CompletableFuture.completedFuture(world.getChunkAt(x, z)));
         }
         if (TICKING_LOAD_DURATION > 0) {
+            final CompletableFuture<Void> removeTicketFuture = new CompletableFuture<>();
             chunkFuture.thenAccept(ignored -> {
                 final Runnable addTicketTask = () -> world.addPluginChunkTicket(x, z, plugin);
-                final Runnable removeTicketTask = () -> world.removePluginChunkTicket(x, z, plugin);
+                final Runnable removeTicketTask = () -> {
+                    world.removePluginChunkTicket(x, z, plugin);
+                    removeTicketFuture.complete(null);
+                };
                 if (Folia.isFolia()) {
                     final org.bukkit.Location location = new org.bukkit.Location(world, x << 4, 0, z << 4);
                     Folia.schedule(plugin, location, addTicketTask);
@@ -92,6 +97,9 @@ public class BukkitWorld implements World {
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, removeTicketTask, TICKING_LOAD_DURATION * 20L);
                 }
             });
+            if (AWAIT_TICKET_REMOVAL) {
+                return removeTicketFuture;
+            }
         }
         return chunkFuture;
     }
