@@ -3,8 +3,7 @@ package org.popcraft.chunky.listeners.bossbar;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.bossevents.CustomBossEvent;
-import net.minecraft.server.bossevents.CustomBossEvents;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.level.Level;
@@ -14,27 +13,31 @@ import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.platform.NeoForgeWorld;
 import org.popcraft.chunky.platform.World;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateEvent> {
+    private final Map<ResourceLocation, ServerBossEvent> bossBars;
+
+    public BossBarTaskUpdateListener(final Map<ResourceLocation, ServerBossEvent> bossBars) {
+        this.bossBars = bossBars;
+    }
+
     @Override
     public void accept(final GenerationTaskUpdateEvent event) {
         final GenerationTask task = event.generationTask();
         final Chunky chunky = task.getChunky();
         final World world = task.getSelection().world();
         final ResourceLocation worldIdentifier = ResourceLocation.tryParse(world.getKey());
-        final ResourceLocation barIdentifier = ResourceLocation.tryParse("chunky:progress_" + world.getKey().replace(':', '_'));
-        if (worldIdentifier == null || barIdentifier == null || !(world instanceof NeoForgeWorld)) {
+        if (worldIdentifier == null || !(world instanceof final NeoForgeWorld neoForgeWorld)) {
             return;
         }
-        final MinecraftServer server = ((NeoForgeWorld) world).getWorld().getServer();
-        final CustomBossEvents bossBarManager = server.getCustomBossEvents();
-        final CustomBossEvent existingBossBar = bossBarManager.get(barIdentifier);
-        final CustomBossEvent bossBar = existingBossBar == null ? createNewBossBar(bossBarManager, barIdentifier, worldIdentifier) : existingBossBar;
+        final ServerBossEvent bossBar = bossBars.computeIfAbsent(worldIdentifier, x -> createNewBossBar(worldIdentifier));
         final boolean silent = chunky.getConfig().isSilent();
         if (silent == bossBar.isVisible()) {
             bossBar.setVisible(!silent);
         }
+        final MinecraftServer server = neoForgeWorld.getWorld().getServer();
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (player.hasPermissions(2)) {
                 bossBar.addPlayer(player);
@@ -52,21 +55,33 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         bossBar.setProgress(task.getProgress().getPercentComplete() / 100f);
         if (progress.isComplete()) {
             bossBar.removeAllPlayers();
-            bossBarManager.remove(bossBar);
+            bossBars.remove(worldIdentifier);
         }
     }
 
-    private CustomBossEvent createNewBossBar(final CustomBossEvents bossBarManager, final ResourceLocation barIdentifier, final ResourceLocation worldIdentifier) {
-        final CustomBossEvent bossBar = bossBarManager.create(barIdentifier, Component.nullToEmpty(barIdentifier.toString()));
-        if (Level.OVERWORLD.location().equals(worldIdentifier)) {
-            bossBar.setColor(BossEvent.BossBarColor.GREEN);
-        } else if (Level.NETHER.location().equals(worldIdentifier)) {
-            bossBar.setColor(BossEvent.BossBarColor.RED);
-        } else if (Level.END.location().equals(worldIdentifier)) {
-            bossBar.setColor(BossEvent.BossBarColor.PURPLE);
-        } else {
-            bossBar.setColor(BossEvent.BossBarColor.BLUE);
-        }
+    private ServerBossEvent createNewBossBar(final ResourceLocation worldIdentifier) {
+        final ServerBossEvent bossBar = new ServerBossEvent(
+                Component.nullToEmpty(worldIdentifier.toString()),
+                bossBarColor(worldIdentifier),
+                BossEvent.BossBarOverlay.PROGRESS
+        );
+        bossBar.setDarkenScreen(false);
+        bossBar.setPlayBossMusic(false);
+        bossBar.setCreateWorldFog(false);
         return bossBar;
+    }
+
+    private static BossEvent.BossBarColor bossBarColor(ResourceLocation worldIdentifier) {
+        final BossEvent.BossBarColor bossBarColor;
+        if (Level.OVERWORLD.location().equals(worldIdentifier)) {
+            bossBarColor = BossEvent.BossBarColor.GREEN;
+        } else if (Level.NETHER.location().equals(worldIdentifier)) {
+            bossBarColor = BossEvent.BossBarColor.RED;
+        } else if (Level.END.location().equals(worldIdentifier)) {
+            bossBarColor = BossEvent.BossBarColor.PURPLE;
+        } else {
+            bossBarColor = BossEvent.BossBarColor.BLUE;
+        }
+        return bossBarColor;
     }
 }

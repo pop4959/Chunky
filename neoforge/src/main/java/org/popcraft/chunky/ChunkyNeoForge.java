@@ -4,7 +4,9 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -30,6 +32,7 @@ import org.popcraft.chunky.platform.impl.GsonConfig;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
@@ -42,6 +45,7 @@ import static net.minecraft.commands.arguments.DimensionArgument.dimension;
 public class ChunkyNeoForge {
     public static final String MOD_ID = "chunky";
     private Chunky chunky;
+    private final Map<ResourceLocation, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
     public ChunkyNeoForge() {
         NeoForge.EVENT_BUS.register(this);
@@ -55,8 +59,8 @@ public class ChunkyNeoForge {
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
         }
-        chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener());
-        chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener());
+        chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener(bossBars));
+        chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener(bossBars));
     }
 
     @SubscribeEvent

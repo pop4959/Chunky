@@ -7,8 +7,10 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
@@ -26,6 +28,7 @@ import org.popcraft.chunky.platform.impl.GsonConfig;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
@@ -37,6 +40,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class ChunkyFabric implements ModInitializer {
     private Chunky chunky;
+    private final Map<Identifier, ServerBossBar> bossBars = new ConcurrentHashMap<>();
 
     @Override
     public void onInitialize() {
@@ -46,8 +50,8 @@ public class ChunkyFabric implements ModInitializer {
             if (chunky.getConfig().getContinueOnRestart()) {
                 chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
             }
-            chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener());
-            chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener());
+            chunky.getEventBus().subscribe(GenerationTaskUpdateEvent.class, new BossBarTaskUpdateListener(bossBars));
+            chunky.getEventBus().subscribe(GenerationTaskFinishEvent.class, new BossBarTaskFinishListener(bossBars));
             FabricLoader.getInstance().getEntrypointContainers("chunky", ModInitializer.class)
                     .forEach(entryPoint -> entryPoint.getEntrypoint().onInitialize());
         });
