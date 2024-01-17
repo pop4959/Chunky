@@ -25,6 +25,9 @@ public final class RegionFile {
 
     public RegionFile(final File file) {
         try (final RandomAccessFile region = new RandomAccessFile(file, "r")) {
+            if (region.length() < 4096) {
+                return;
+            }
             final int[] offsetTable = new int[ENTRIES];
             final int[] sizeTable = new int[ENTRIES];
             for (int i = 0; i < ENTRIES; ++i) {
