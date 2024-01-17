@@ -9,10 +9,13 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.util.Formatting;
+import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class WorldBorderCommand implements ChunkyCommand {
     private final Chunky chunky;
@@ -23,6 +26,15 @@ public class WorldBorderCommand implements ChunkyCommand {
 
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
+        if (arguments.size() > 0) {
+            final Optional<World> world = arguments.next().flatMap(arg -> Input.tryWorld(chunky, arg));
+            if (world.isPresent()) {
+                chunky.getSelection().world(world.get());
+            } else {
+                sender.sendMessage(TranslationKey.HELP_WORLDBORDER);
+                return;
+            }
+        }
         final Selection previous = chunky.getSelection().build();
         if (!setBorderViaIntegration(previous.world())) {
             chunky.getSelection().worldborder();
@@ -41,6 +53,11 @@ public class WorldBorderCommand implements ChunkyCommand {
 
     @Override
     public List<String> suggestions(final CommandArguments arguments) {
+        if (arguments.size() == 1) {
+            final List<String> suggestions = new ArrayList<>();
+            chunky.getServer().getWorlds().forEach(world -> suggestions.add(world.getName()));
+            return suggestions;
+        }
         return List.of();
     }
 
