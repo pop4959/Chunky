@@ -86,6 +86,7 @@
   "shape_star": "כוכב",
   "shape_triangle": "משולש",
   "task_trim": "נמחק %s צאנקים מ%s ב%s שניות.",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "משימה הושלמה עבור %s. עובד: %s צאנקים (%s%%), זמן סך הכל: %s:%s:%s",
   "task_stopped": "משימה הופסקה עבור %s.",
   "task_update": "משימה פועלת עבור %s. עובד: %s צאנקים (%s%%), זמן משוער: %s:%s:%s, קצב: %s צאנקים לשנייה, כעת: %s, %s",
