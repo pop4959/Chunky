@@ -86,6 +86,7 @@
   "shape_star": "estrela",
   "shape_triangle": "triângulo",
   "task_trim": "%s chunks excluídos no mundo %s em %s segundos.",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "Tarefa concluída no mundo %s. Chunks processados: %s (%s%%), tempo total: %s:%s:%s",
   "task_stopped": "Tarefa interrompida no mundo %s.",
   "task_update": "Tarefa em execução no mundo %s. Chunks processados: %s (%s%%), tempo restante: %s:%s:%s, taxa: %s CPS, atual: %s, %s",
