@@ -86,6 +86,7 @@
   "shape_star": "Stern",
   "shape_triangle": "Dreieck",
   "task_trim": "Löschte %s Chunks von %s in %s Sekunden.",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "Aufgabe für %s beendet. Verarbeitet: %s Chunks (%s%%), Gesamte Zeit: %s:%s:%s",
   "task_stopped": "Aufgabe für %s gestoppt.",
   "task_update": "Aufgabe für %s läuft. Verarbeitet: %s Chunks (%s%%), ETA: %s:%s:%s, Rate: %s cps, Aktuell: %s, %s",
