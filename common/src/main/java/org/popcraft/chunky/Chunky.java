@@ -54,6 +54,7 @@ public class Chunky {
     private final Selection.Builder selection;
     private final TaskScheduler scheduler = new TaskScheduler();
     private final Map<String, GenerationTask> generationTasks = new ConcurrentHashMap<>();
+    private final Map<String, TrimCommand.Task> trimTasks = new ConcurrentHashMap<>();
     private final Map<String, PendingAction> pendingActions = new HashMap<>();
     private final RegionCache regionCache = new RegionCache();
     private final double limit;
@@ -149,6 +150,10 @@ public class Chunky {
 
     public Map<String, GenerationTask> getGenerationTasks() {
         return generationTasks;
+    }
+
+    public Map<String, TrimCommand.Task> getTrimTasks() {
+        return trimTasks;
     }
 
     public Map<String, ChunkyCommand> getCommands() {

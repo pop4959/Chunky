@@ -22,7 +22,10 @@ public class CancelCommand implements ChunkyCommand {
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
         final Map<String, GenerationTask> generationTasks = chunky.getGenerationTasks();
-        if (generationTasks.isEmpty() && chunky.getTaskLoader().loadTasks().stream().allMatch(GenerationTask::isCancelled)) {
+        final Map<String, TrimCommand.Task> trimTasks = chunky.getTrimTasks();
+        if (generationTasks.isEmpty()
+                && chunky.getTaskLoader().loadTasks().stream().allMatch(GenerationTask::isCancelled)
+                && trimTasks.isEmpty()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_CANCEL_NO_TASKS);
             return;
         }
@@ -39,6 +42,9 @@ public class CancelCommand implements ChunkyCommand {
                 if (chunky.getGenerationTasks().containsKey(world.get().getName())) {
                     chunky.getGenerationTasks().remove(world.get().getName()).stop(true);
                 }
+                if (chunky.getTrimTasks().containsKey(world.get().getName())) {
+                    chunky.getTrimTasks().remove(world.get().getName()).setCancelled(true);
+                }
             };
         } else {
             cancelAction = () -> {
@@ -47,6 +53,8 @@ public class CancelCommand implements ChunkyCommand {
                 chunky.getGenerationTasks().values().forEach(generationTask -> generationTask.stop(true));
                 chunky.getGenerationTasks().clear();
                 chunky.getScheduler().cancelTasks();
+                chunky.getTrimTasks().values().forEach(trimTask -> trimTask.setCancelled(true));
+                chunky.getTrimTasks().clear();
             };
         }
         chunky.setPendingAction(sender, cancelAction);

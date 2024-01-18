@@ -89,19 +89,42 @@ public class TrimCommand implements ChunkyCommand {
         final Shape shape = ShapeFactory.getShape(selection);
         final Runnable deletionAction = () -> chunky.getScheduler().runTask(() -> {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_START, selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection));
+            TrimCommand.Task trimTask = new TrimCommand.Task();
+            chunky.getTrimTasks().put(selection.world().getName(), trimTask);
             final Optional<Path> regionPath = selection.world().getRegionDirectory();
+            final AtomicLong finishedRegions = new AtomicLong();
             final AtomicLong deleted = new AtomicLong();
             final long startTime = System.currentTimeMillis();
+            final AtomicLong updateTime = new AtomicLong(startTime);
             try {
                 if (regionPath.isPresent()) {
-                    try (final Stream<Path> regionWalker = Files.walk(regionPath.get())) {
-                        regionWalker.forEach(region -> deleted.getAndAdd(checkRegion(selection.world(), region.getFileName().toString(), shape, inside, inhabitedTimeCheck, inhabitedTime)));
+                    try (final Stream<Path> files = Files.list(regionPath.get())) {
+                        final List<Path> regions = files
+                                .filter(file -> tryRegionCoordinate(file.getFileName().toString()).isPresent())
+                                .toList();
+                        final long totalRegions = regions.size();
+                        for (final Path region: regions) {
+                            if (trimTask.isCancelled()) {
+                                break;
+                            }
+                            deleted.getAndAdd(checkRegion(selection.world(), region.getFileName().toString(), shape, inside, inhabitedTimeCheck, inhabitedTime));
+                            finishedRegions.getAndIncrement();
+                            if (!trimTask.isCancelled() && !chunky.getConfig().isSilent()) {
+                                final long currentTime = System.currentTimeMillis();
+                                final boolean updateIntervalElapsed = ((currentTime - updateTime.get()) / 1e3) > chunky.getConfig().getUpdateInterval();
+                                if (updateIntervalElapsed) {
+                                    sender.sendMessagePrefixed(TranslationKey.TASK_TRIM_UPDATE, selection.world().getName(), finishedRegions.get(), String.format("%.2f", 100f * finishedRegions.get() / totalRegions));
+                                    updateTime.set(currentTime);
+                                }
+                            }
+                        }
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             final long totalTime = System.currentTimeMillis() - startTime;
+            chunky.getTrimTasks().remove(selection.world().getName());
             sender.sendMessagePrefixed(TranslationKey.TASK_TRIM, deleted.get(), selection.world().getName(), String.format("%.3f", totalTime / 1e3f));
         });
         chunky.setPendingAction(sender, deletionAction);
@@ -260,5 +283,17 @@ public class TrimCommand implements ChunkyCommand {
             return ShapeType.all();
         }
         return List.of();
+    }
+
+    public static final class Task {
+        private boolean cancelled;
+
+        public boolean isCancelled() {
+            return cancelled;
+        }
+
+        public void setCancelled(final boolean cancelled) {
+            this.cancelled = cancelled;
+        }
     }
 }
