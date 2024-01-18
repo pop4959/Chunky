@@ -86,6 +86,7 @@
   "shape_star": "तारा",
   "shape_triangle": "त्रिभुज",
   "task_trim": "%2$s वर्ल्ड में %1$s चंक %3$s सेकंड में हटाए गए।",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "%s के लिए कार्य पूरा किया गया। प्रसंस्कृत: %s चंक (%s%%), कुल समय: %s:%s:%s",
   "task_stopped": "%s के लिए कार्य रोका गया।",
   "task_update": "%s के लिए कार्य जारी है। प्रसंस्कृत: %s चंक (%s%%), ETA: %s:%s:%s, दर: %s cps, वर्तमान: %s,%s",
