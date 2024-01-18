@@ -86,6 +86,7 @@
   "shape_star": "hình ngôi sao",
   "shape_triangle": "hình tam giác",
   "task_trim": "Đã xóa %s chunks từ %s trong %s giây.",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "Đã hoàn tác vụ tại %s. Đã khởi tạo: %s chunks (%s%%), Tổng thời gian: %s:%s:%s",
   "task_stopped": "Đã dừng tác vụ tại %s.",
   "task_update": "Tác vụ đang hoạt động tại %s. Đã khởi tạo: %s chunks (%s%%), Thời gian dự kiến: %s:%s:%s, Tốc độ: %s cps, Tọa độ hiện tại %s, %s",
