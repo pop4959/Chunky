@@ -1,7 +1,11 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtString;
+import net.minecraft.nbt.scanner.NbtScanQuery;
+import net.minecraft.nbt.scanner.SelectiveNbtCollector;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ChunkTicketType;
@@ -33,6 +37,7 @@ public class FabricWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private static final ChunkTicketType<Unit> CHUNKY = ChunkTicketType.create("chunky", (unit, unit2) -> 0);
     private static final ChunkTicketType<Unit> CHUNKY_TICKING = ChunkTicketType.create("chunky_ticking", (unit, unit2) -> 0, TICKING_LOAD_DURATION * 20);
+    private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerWorld serverWorld;
     private final Border worldBorder;
 
@@ -57,7 +62,8 @@ public class FabricWorld implements World {
             return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), serverWorld.getServer()).join();
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
-            final ThreadedAnvilChunkStorage chunkStorage = serverWorld.getChunkManager().threadedAnvilChunkStorage;
+            final ServerChunkManager serverChunkManager = serverWorld.getChunkManager();
+            final ThreadedAnvilChunkStorage chunkStorage = serverChunkManager.threadedAnvilChunkStorage;
             final ThreadedAnvilChunkStorageMixin chunkStorageMixin = (ThreadedAnvilChunkStorageMixin) chunkStorage;
             final ChunkHolder loadedChunkHolder = chunkStorageMixin.invokeGetChunkHolder(chunkPos.toLong());
             if (loadedChunkHolder != null && loadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
@@ -67,12 +73,24 @@ public class FabricWorld implements World {
             if (unloadedChunkHolder != null && unloadedChunkHolder.getCurrentStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-            return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos)
-                    .thenApply(optionalNbt -> optionalNbt
-                            .filter(chunkNbt -> chunkNbt.contains("Status", NbtElement.STRING_TYPE))
-                            .map(chunkNbt -> chunkNbt.getString("Status"))
-                            .map(status -> "minecraft:full".equals(status) || "full".equals(status))
-                            .orElse(false));
+            if (UPDATE_CHUNK_NBT) {
+                return chunkStorageMixin.invokeGetUpdatedChunkNbt(chunkPos)
+                        .thenApply(optionalNbt -> optionalNbt
+                                .filter(chunkNbt -> chunkNbt.contains("Status", NbtElement.STRING_TYPE))
+                                .map(chunkNbt -> chunkNbt.getString("Status"))
+                                .map(status -> "minecraft:full".equals(status) || "full".equals(status))
+                                .orElse(false));
+            }
+            final NbtScanQuery statusQuery = new NbtScanQuery(NbtString.TYPE, "Status");
+            final SelectiveNbtCollector statusCollector = new SelectiveNbtCollector(statusQuery);
+            return serverChunkManager.getChunkIoWorker().scanChunk(chunkPos, statusCollector)
+                    .thenApply(ignored -> {
+                        if (statusCollector.getRoot() instanceof final NbtCompound chunkNbt) {
+                            final String status = chunkNbt.getString("Status");
+                            return "minecraft:full".equals(status) || "full".equals(status);
+                        }
+                        return false;
+                    });
         }
     }
 

@@ -3,7 +3,11 @@ package org.popcraft.chunky.platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.visitors.CollectFields;
+import net.minecraft.nbt.visitors.FieldSelector;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
@@ -32,6 +36,7 @@ public class ForgeWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private static final TicketType<Unit> CHUNKY = TicketType.create(ChunkyForge.MOD_ID, (unit, unit2) -> 0);
     private static final TicketType<Unit> CHUNKY_TICKING = TicketType.create("%s_ticking".formatted(ChunkyForge.MOD_ID), (unit, unit2) -> 0, TICKING_LOAD_DURATION * 20);
+    private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerLevel world;
     private final Border worldBorder;
 
@@ -56,7 +61,8 @@ public class ForgeWorld implements World {
             return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), world.getServer()).join();
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
-            final ChunkMap chunkStorage = world.getChunkSource().chunkMap;
+            final ServerChunkCache serverChunkCache = world.getChunkSource();
+            final ChunkMap chunkStorage = serverChunkCache.chunkMap;
             final ChunkHolder loadedChunkHolder = chunkStorage.getVisibleChunkIfPresent(chunkPos.toLong());
             if (loadedChunkHolder != null && loadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
@@ -65,12 +71,24 @@ public class ForgeWorld implements World {
             if (unloadedChunkHolder != null && unloadedChunkHolder.getLastAvailableStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-            return chunkStorage.readChunk(chunkPos)
-                    .thenApply(optionalNbt -> optionalNbt
-                            .filter(chunkNbt -> chunkNbt.contains("Status", Tag.TAG_STRING))
-                            .map(chunkNbt -> chunkNbt.getString("Status"))
-                            .map(status -> "minecraft:full".equals(status) || "full".equals(status))
-                            .orElse(false));
+            if (UPDATE_CHUNK_NBT) {
+                return chunkStorage.readChunk(chunkPos)
+                        .thenApply(optionalNbt -> optionalNbt
+                                .filter(chunkNbt -> chunkNbt.contains("Status", Tag.TAG_STRING))
+                                .map(chunkNbt -> chunkNbt.getString("Status"))
+                                .map(status -> "minecraft:full".equals(status) || "full".equals(status))
+                                .orElse(false));
+            }
+            final FieldSelector statusSelector = new FieldSelector(StringTag.TYPE, "Status");
+            final CollectFields statusCollector = new CollectFields(statusSelector);
+            return serverChunkCache.chunkScanner().scanChunk(chunkPos, statusCollector)
+                    .thenApply(ignored -> {
+                        if (statusCollector.getResult() instanceof final CompoundTag chunkNbt) {
+                            final String status = chunkNbt.getString("Status");
+                            return "minecraft:full".equals(status) || "full".equals(status);
+                        }
+                        return false;
+                    });
         }
     }
 
