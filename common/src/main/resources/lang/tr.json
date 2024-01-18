@@ -86,6 +86,7 @@
   "shape_star": "star",
   "shape_triangle": "triangle",
   "task_trim": "Deleted %s chunks from %s in %s seconds.",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "%s için fonksiyon tamamlandı. %s chunk (%s%%) işlendi. Toplam zaman: %s:%s:%s",
   "task_stopped": "%s için fonksiyon durduruldu.",
   "task_update": "%s için fonksiyon devam ediyor: %s chunk (%s%%) işlendi, Kalan süre: %s:%s:%s, Hız: Saniyede %s chunk, Şu anda işlenilen chunk: %s, %s",
