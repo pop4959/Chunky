@@ -86,6 +86,7 @@
   "shape_star": "zvezda",
   "shape_triangle": "trougao",
   "task_trim": "Obrisano %s čankova iz %s u %s sekundi.",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "Proces završen za %s. Obrađeno: %s čankova (%s%%), Proteklo vremena: %s:%s:%s",
   "task_stopped": "Proces zaustavljen za %s.",
   "task_update": "U toku je proces za %s. Obrađeno: %s čankova (%s%%), Preostalo: %s:%s:%s, Brzina: %s čps, Trenutno: %s, %s",
