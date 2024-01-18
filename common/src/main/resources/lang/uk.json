@@ -86,6 +86,7 @@
   "shape_star": "зірка",
   "shape_triangle": "трикутник",
   "task_trim": "Видалено %s чанків зі світу %s, секунд витрачено: %s.",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "Завдання для світу %s завершено. Опрацьовано: %s чанків (%s%%), Загальний час: %s:%s:%s",
   "task_stopped": "Завдання зупинено для світу %s.",
   "task_update": "Завдання активне для світу %s. Опрацьовано: %s chunks (%s%%), ETA: %s:%s:%s, Швидкість: %s cps, Поточний чанк: %s, %s",
