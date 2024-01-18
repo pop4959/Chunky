@@ -86,6 +86,7 @@
   "shape_star": "star",
   "shape_triangle": "triangle",
   "task_trim": "Deleted %s chunks from %s in %s seconds.",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "Tarefa terminada para %s. Processado: %s chunks (%s%%), Tempo total: %s:%s:%s",
   "task_stopped": "Tarefa parada para %s.",
   "task_update": "Tarefa em execução para %s. Processado: %s chunks (%s%%), ETA: %s:%s:%s, Taxa: %s cps, Actual: %s, %s",
