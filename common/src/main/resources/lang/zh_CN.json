@@ -86,6 +86,7 @@
   "shape_star": "星形",
   "shape_triangle": "三角形",
   "task_trim": "在 %3$s 秒内从 %2$s 删除了 %1$s 个区块。",
+  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
   "task_done": "任务结束于 %s。 处理了 %s 个区块 (%s%%), 总运行时长: %s:%s:%s",
   "task_stopped": "任务暂停于 %s。",
   "task_update": "任务运行于世界 %s。 处理了 %s 个区块 (%s%%), 预计距完成还有: %s:%s:%s, 速率: %s 区块/秒, 当前区块进度: %s, %s",
