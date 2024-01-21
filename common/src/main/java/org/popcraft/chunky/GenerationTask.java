@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GenerationTask implements Runnable {
     private static final int DEFAULT_WORKING_COUNT = 50 * Math.min(Runtime.getRuntime().availableProcessors(), 10);
     private static final int MAX_WORKING_COUNT = Input.tryInteger(System.getProperty("chunky.maxWorkingCount")).orElse(DEFAULT_WORKING_COUNT);
-    private static final double SAMPLE_INTERVAL = 1000d * Math.max(Input.tryInteger(System.getProperty("chunky.sampleInterval")).orElse(10), 10);
-    private static final double SAMPLE_SUB_INTERVAL = SAMPLE_INTERVAL / 5;
+    private static final double SAMPLE_INTERVAL = 1000d * Math.max(Input.tryInteger(System.getProperty("chunky.sampleInterval")).orElse(30), 30);
+    private static final double SAMPLE_SUB_INTERVAL = SAMPLE_INTERVAL / 30;
     private final Chunky chunky;
     private final Selection selection;
     private final Shape shape;
