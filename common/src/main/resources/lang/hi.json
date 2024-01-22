@@ -51,6 +51,7 @@
   "format_start_limit": "आपके होस्ट ने अत्यधिक डिस्क स्थान उपयोग से बचने के लिए अधिकतम प्री-जेनरेशन त्रिज्या %s कर दी है। यदि आप इस सीमा को हटाना चाहते हैं तो अपने होस्ट से संपर्क करें या सीमा कम रखें।",
   "format_started_already": "%s के लिए कार्य पहले से ही जारी है!",
   "format_world": "वर्ल्ड को %s से बदला गया।",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - कस्टम वर्ल्ड सीमायें प्रबंधित करना",
   "help_cancel": "&2chunky cancel&r - वर्तमान या सहजें गए कार्य रोकना या हटाना",
   "help_center": "&2chunky center <x> <z>&r - केंद्र ब्लॉक का स्थान सेट करना",
