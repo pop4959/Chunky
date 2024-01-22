@@ -51,6 +51,7 @@
   "format_start_limit": "Sua hospedagem limitou o raio máximo de pré-geração para %s a fim de evitar o uso excessivo de espaço em disco. Reduza o raio ou entre em contato com o serviço para remover o limite.",
   "format_started_already": "Tarefa já iniciada no mundo %s!",
   "format_world": "Mundo alterado para %s.",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Gerenciar barreiras de mundo personalizadas",
   "help_cancel": "&2chunky cancel&r - Parar e excluir tarefas atuais ou salvas",
   "help_center": "&2chunky center <x> <z>&r - Definir o local do bloco central",
