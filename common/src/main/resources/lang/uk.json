@@ -51,6 +51,7 @@
   "format_start_limit": "Ваш хост обмежив радіус передгенерації до %s аби уникнути надмірне споживання дискового простору. Зменште радіус, або зв'яжіться зі своїм хостом, щоб прибрати це обмеження.",
   "format_started_already": "Вже є активне завдання для світу %s!",
   "format_world": "Світ змінено на %s.",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Керування бар'єрами світів",
   "help_cancel": "&2chunky cancel&r - Зупинити та видалити поточні або збереженні завдання",
   "help_center": "&2chunky center <x> <z>&r - Встановити позицію центрального блока",
