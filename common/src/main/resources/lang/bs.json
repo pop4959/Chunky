@@ -51,6 +51,7 @@
   "format_start_limit": "Vaš host je ograničio maksimalnu razdaljinu pregenerisanja na %s da bi izbjegao veće korištenje memorije. Smanjite razdaljinu ili ih kontaktirajte da biste uklonili ovo ograničenje.",
   "format_started_already": "Proces je već pokrenut za %s!",
   "format_world": "Svijet promijenjen u %s.",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Upravljajte borderima svijetova",
   "help_cancel": "&2chunky cancel&r - Prekinite i obrišite trenutne ili sačuvane procese",
   "help_center": "&2chunky center <x> <z>&r - Postavite centralne koordinate",
