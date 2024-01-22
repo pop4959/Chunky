@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SpongeServer implements Server {
+    private static final int MAX_WORLD_SIZE = 29999984;
     private final ChunkySponge plugin;
     private final Map<String, Integration> integrations;
 
@@ -35,6 +36,11 @@ public class SpongeServer implements Server {
         final List<World> worlds = new ArrayList<>();
         plugin.getGame().server().worldManager().worlds().forEach(world -> worlds.add(new SpongeWorld(world)));
         return worlds;
+    }
+
+    @Override
+    public int getMaxWorldSize() {
+        return MAX_WORLD_SIZE;
     }
 
     @Override

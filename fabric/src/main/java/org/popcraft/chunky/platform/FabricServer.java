@@ -3,6 +3,7 @@ package org.popcraft.chunky.platform;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import org.popcraft.chunky.ChunkyFabric;
@@ -49,6 +50,15 @@ public class FabricServer implements Server {
         final List<World> worlds = new ArrayList<>();
         server.getWorlds().forEach(world -> worlds.add(new FabricWorld(world)));
         return worlds;
+    }
+
+    @Override
+    public int getMaxWorldSize() {
+        if (server instanceof final DedicatedServer dedicatedServer) {
+            return dedicatedServer.getProperties().maxWorldSize;
+        } else {
+            return server.getMaxWorldBorderRadius();
+        }
     }
 
     @Override

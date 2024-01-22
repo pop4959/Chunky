@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.ServerInterface;
 import net.minecraft.server.level.ServerLevel;
 import org.popcraft.chunky.ChunkyNeoForge;
 import org.popcraft.chunky.integration.Integration;
@@ -49,6 +50,15 @@ public class NeoForgeServer implements Server {
         final List<World> worlds = new ArrayList<>();
         server.getAllLevels().forEach(world -> worlds.add(new NeoForgeWorld(world)));
         return worlds;
+    }
+
+    @Override
+    public int getMaxWorldSize() {
+        if (server instanceof final ServerInterface serverInterface) {
+            return serverInterface.getProperties().maxWorldSize;
+        } else {
+            return server.getAbsoluteMaxWorldSize();
+        }
     }
 
     @Override

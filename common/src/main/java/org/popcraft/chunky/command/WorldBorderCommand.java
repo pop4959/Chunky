@@ -49,6 +49,9 @@ public class WorldBorderCommand implements ChunkyCommand {
         if (!previous.shape().equals(current.shape())) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, current.shape());
         }
+        if (current.radiusX() > chunky.getServer().getMaxWorldSize()) {
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLDBORDER_TOO_LARGE, chunky.getServer().getMaxWorldSize());
+        }
     }
 
     @Override

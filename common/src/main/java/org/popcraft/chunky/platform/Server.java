@@ -14,6 +14,8 @@ public interface Server {
 
     List<World> getWorlds();
 
+    int getMaxWorldSize();
+
     Sender getConsole();
 
     Collection<Player> getPlayers();

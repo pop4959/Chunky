@@ -38,6 +38,11 @@ public class BukkitServer implements Server {
     }
 
     @Override
+    public int getMaxWorldSize() {
+        return plugin.getServer().getMaxWorldSize();
+    }
+
+    @Override
     public Sender getConsole() {
         return new BukkitSender(plugin.getServer().getConsoleSender());
     }
