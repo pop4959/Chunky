@@ -51,6 +51,7 @@
   "format_start_limit": "מאחסן השרת שלך הגביל את הרדיוס המקסימלי עבור יצירה מראש ל%s כדי להימנע משימוש מופרז בשטח הדיסק. הקטן את הרדיוס או צור קשר עם מאחסן השרת אם ברצונך שתוסר ההגבלה.",
   "format_started_already": "משימה כבר החלה עבור %s!",
   "format_world": "עולם השתנה ל%s.",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - מנהל גבולות עולם מותאמות אישית",
   "help_cancel": "&2chunky cancel&r - עוצר ומוחק משימות שמורות או נוכחיות",
   "help_center": "&2chunky center <x> <z>&r - מגדיר את מיקום הבלוק המרכזי",
