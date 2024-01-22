@@ -51,6 +51,7 @@
   "format_start_limit": "Il tuo host ha limitato il raggio massimo di pre-generazione a %s per evitare un uso eccessivo dello spazio su disco. Riduci il raggio o contatta il tuo host se desideri che questo limite venga rimosso.",
   "format_started_already": "Attività già iniziata per %s!",
   "format_world": "Mondo cambiato in %s.",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Gestisci i confini personalizzati del mondo",
   "help_cancel": "&2chunky cancel&r - Ferma ed elimina le attività correnti o salvate",
   "help_center": "&2chunky center <x> <z>&r - Imposta la posizione del blocco centrale",
