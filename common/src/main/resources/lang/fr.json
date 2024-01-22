@@ -51,6 +51,7 @@
   "format_start_limit": "Votre hôte a limité le rayon de pré-génération maximum à %s pour éviter une utilisation excessive de l'espace disque. Réduisez le rayon ou contactez votre hôte si vous souhaitez que cette limite soit supprimée.",
   "format_started_already": "La tâche a déjà commencé pour %s !",
   "format_world": "Le monde est passé à %s.",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Gérer les bordures personnalisées du monde",
   "help_cancel": "&2chunky cancel&r - Arrêter et supprimer les tâches en cours ou enregistrées",
   "help_center": "&2chunky center <x> <z>&r - Définir l'emplacement du bloc central",
