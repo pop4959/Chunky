@@ -51,6 +51,7 @@
   "format_start_limit": "Sunucu sağlayıcınız aşırı fazla disk kullanımını engellemek için maksimum önden oluşturulmuş dünya yarıçapını %s olarak belirledi. Seçiminizin yarıçapını küçültün veya sunucu sağlayıcınızla iletişime geçin.",
   "format_started_already": "%s için fonksiyon zaten başlatıldı!",
   "format_world": "Dünya %s olarak değiştirildi.",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Özel dünya sınırlarını yönet",
   "help_cancel": "&2chunky cancel&r - Mevcut veya kayıtlı fonksiyonları durdurun ve silin",
   "help_center": "&2chunky center <x> <z>&r - Merkez blok konumunu ayarlayın",
