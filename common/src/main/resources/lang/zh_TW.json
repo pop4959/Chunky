@@ -51,6 +51,7 @@
   "format_start_limit": "您的主機已將最大預生成範圍半徑限制為 %s，以避免過度使用磁碟空間。 如果您希望取消此限制，請減小半徑或聯繫您的管理員。",
   "format_started_already": "%s 的任務已經開始！",
   "format_world": "世界被改變為 %s。",
+  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - 管理自定義世界邊界",
   "help_cancel": "&2chunky cancel&r - 停止和刪除目前或儲存的任務",
   "help_center": "&2chunky center <x> <z>&r - 設定中心點位置",
