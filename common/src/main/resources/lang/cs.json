@@ -51,7 +51,7 @@
   "format_start_limit": "Váš hostitel omezil maximální poloměr před generováním na %s, aby se zabránilo nadměrnému využívání místa na disku. Omezte poloměr nebo kontaktujte svého hostitele, pokud chcete odebrat tento limit.",
   "format_started_already": "Úkol byl již zahájen pro %s!",
   "format_world": "Svět změněn na %s.",
-  "format_worldborder_too_large": "&eNotice: Your world border is currently set larger than the maximum of %s configured in server.properties. This is normally an error and can cause issues.",
+  "format_worldborder_too_large": "&eUpozornění: Váše hranice světa je aktuálně nastavena větší než maximálních %s nakonfigurovaných v server.properties. To je obvykle chyba a může způsobit problémy.",
   "help_border": "&2chunky border <add|remove|wrap|list|load|bypass>&r - Spravujte vlastní hranice světa",
   "help_cancel": "&2chunky cancel&r - Zastaví a smaže aktuální nebo uložené úkoly",
   "help_center": "&2chunky center <x> <z>&r - Nastaví středový blok",
