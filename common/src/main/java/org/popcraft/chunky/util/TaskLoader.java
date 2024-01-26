@@ -102,10 +102,10 @@ public class TaskLoader {
         if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape)) {
             properties.setProperty(TaskProperty.RADIUS_Z.key(), String.valueOf(selection.radiusZ()));
         }
-        final String pattern = task.getChunkIterator().name();
-        properties.setProperty(TaskProperty.PATTERN.key(), pattern);
-        if (PatternType.CSV.equals(pattern)) {
-            task.getSelection().pattern().getValue().ifPresent(file -> properties.setProperty(TaskProperty.CSV.key(), file));
+        final Parameter pattern = Parameter.of(task.getChunkIterator().name());
+        properties.setProperty(TaskProperty.PATTERN.key(), pattern.getType());
+        if (PatternType.CSV.equals(pattern.getType())) {
+            pattern.getValue().ifPresent(file -> properties.setProperty(TaskProperty.CSV.key(), file));
         }
         properties.setProperty(TaskProperty.SHAPE.key(), shape);
         properties.setProperty(TaskProperty.CHUNKS.key(), String.valueOf(task.getCount()));
