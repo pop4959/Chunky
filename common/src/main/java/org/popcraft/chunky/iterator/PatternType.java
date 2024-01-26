@@ -8,8 +8,9 @@ public final class PatternType {
     public static final String SPIRAL = "spiral";
     public static final String CSV = "csv";
     public static final String REGION = "region";
+    public static final String WORLD = "world";
 
-    public static final List<String> ALL = List.of(CONCENTRIC, LOOP, SPIRAL, CSV, REGION);
+    public static final List<String> ALL = List.of(CONCENTRIC, LOOP, SPIRAL, CSV, REGION, WORLD);
 
     private PatternType() {
     }

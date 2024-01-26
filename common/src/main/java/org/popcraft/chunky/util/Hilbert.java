@@ -1,5 +1,8 @@
 package org.popcraft.chunky.util;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 public final class Hilbert {
     private static final ChunkCoordinate[] regionChunkCoordinateOffsets = {
             new ChunkCoordinate(0, 0), new ChunkCoordinate(0, 1), new ChunkCoordinate(1, 1),
@@ -351,5 +354,9 @@ public final class Hilbert {
 
     public static ChunkCoordinate regionDistanceToChunkCoordinateOffset(final int distance) {
         return regionChunkCoordinateOffsets[distance];
+    }
+
+    public static ChunkCoordinate[] chunkCoordinateOffsets() {
+        return regionChunkCoordinateOffsets;
     }
 }

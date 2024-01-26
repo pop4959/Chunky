@@ -8,4 +8,7 @@ public interface ChunkIterator extends Iterator<ChunkCoordinate> {
     long total();
 
     String name();
+
+    default void postInitialization() {
+    }
 }
