@@ -4,6 +4,7 @@ import org.popcraft.chunky.nbt.CompoundTag;
 import org.popcraft.chunky.nbt.IntTag;
 import org.popcraft.chunky.nbt.Tag;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -53,9 +54,13 @@ public final class RegionFile {
                 }
                 final byte[] compressed = new byte[length - 1];
                 region.readFully(compressed);
-                final DataInputStream input = new DataInputStream(new InflaterInputStream(new ByteArrayInputStream(compressed)));
-                if (Tag.load(input) instanceof final CompoundTag data) {
-                    chunks.add(new Chunk(data, timestampTable[i]));
+                try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed);
+                     final InflaterInputStream inflater = new InflaterInputStream(bytes);
+                     final BufferedInputStream buffer = new BufferedInputStream(inflater);
+                     final DataInputStream input = new DataInputStream(buffer)) {
+                    if (Tag.load(input) instanceof final CompoundTag data) {
+                        chunks.add(new Chunk(data, timestampTable[i]));
+                    }
                 }
             }
         } catch (IOException e) {
