@@ -78,6 +78,7 @@
   "pattern_spiral": "спираль",
   "pattern_csv": "csv",
   "pattern_region": "область",
+  "pattern_world": "world",
   "shape_circle": "круг",
   "shape_diamond": "ромб",
   "shape_ellipse": "эллипс",
