@@ -100,7 +100,7 @@ public class TrimCommand implements ChunkyCommand {
                 if (regionPath.isPresent()) {
                     try (final Stream<Path> files = Files.list(regionPath.get())) {
                         final List<Path> regions = files
-                                .filter(file -> tryRegionCoordinate(file.getFileName().toString()).isPresent())
+                                .filter(file -> ChunkCoordinate.fromRegionFile(file.getFileName().toString()).isPresent())
                                 .toList();
                         final long totalRegions = regions.size();
                         for (final Path region: regions) {
@@ -135,7 +135,7 @@ public class TrimCommand implements ChunkyCommand {
     }
 
     private int checkRegion(final World world, final String regionFileName, final Shape shape, final boolean inside, final boolean inhabitedTimeCheck, final int inhabitedTime) {
-        final Optional<ChunkCoordinate> regionCoordinate = tryRegionCoordinate(regionFileName);
+        final Optional<ChunkCoordinate> regionCoordinate = ChunkCoordinate.fromRegionFile(regionFileName);
         if (regionCoordinate.isEmpty()) {
             return 0;
         }
@@ -146,24 +146,6 @@ public class TrimCommand implements ChunkyCommand {
         } else {
             return trimRegion(world, regionFileName, shape, inside, chunkX, chunkZ, inhabitedTimeCheck, inhabitedTime);
         }
-    }
-
-    private Optional<ChunkCoordinate> tryRegionCoordinate(final String regionFileName) {
-        if (!regionFileName.startsWith("r.")) {
-            return Optional.empty();
-        }
-        final int extension = regionFileName.indexOf(".mca");
-        if (extension < 2) {
-            return Optional.empty();
-        }
-        final String regionCoordinates = regionFileName.substring(2, extension);
-        final int separator = regionCoordinates.indexOf('.');
-        final Optional<Integer> regionX = Input.tryInteger(regionCoordinates.substring(0, separator));
-        final Optional<Integer> regionZ = Input.tryInteger(regionCoordinates.substring(separator + 1));
-        if (regionX.isPresent() && regionZ.isPresent()) {
-            return Optional.of(new ChunkCoordinate(regionX.get(), regionZ.get()));
-        }
-        return Optional.empty();
     }
 
     private boolean shouldDeleteRegion(final Shape shape, final boolean inside, final int chunkX, final int chunkZ) {
