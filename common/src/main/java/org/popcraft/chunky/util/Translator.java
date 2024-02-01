@@ -31,7 +31,7 @@ public final class Translator {
 
     public static String translateKey(final String key, final boolean prefixed, final Object... args) {
         final StringBuilder translation = new StringBuilder();
-        final String message = translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, "Missing translation"));
+        final String message = translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, key));
         if (prefixed) {
             translation.append("[Chunky] ");
         }
