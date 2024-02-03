@@ -1,11 +1,13 @@
 package org.popcraft.chunky.iterator;
 
+import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.nbt.StringTag;
 import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Hilbert;
 import org.popcraft.chunky.util.Parameter;
+import org.popcraft.chunky.util.TranslationKey;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,6 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 public class WorldChunkIterator implements ChunkIterator {
+    private final Chunky chunky;
     private final int minRegionX;
     private final int minRegionZ;
     private final int maxRegionX;
@@ -27,6 +30,7 @@ public class WorldChunkIterator implements ChunkIterator {
     private final int minChunkZ;
     private final int maxChunkX;
     private final int maxChunkZ;
+    private final String worldName;
     private final Queue<ChunkCoordinate> chunks;
     private final AtomicLong total = new AtomicLong();
     private final Path savePath;
@@ -34,6 +38,7 @@ public class WorldChunkIterator implements ChunkIterator {
     private final String name;
 
     public WorldChunkIterator(final Selection selection) {
+        this.chunky = selection.chunky();
         final int centerRegionX = selection.centerRegionX();
         final int centerRegionZ = selection.centerRegionZ();
         final int radiusRegionsX = selection.radiusRegionsX();
@@ -51,7 +56,7 @@ public class WorldChunkIterator implements ChunkIterator {
         this.maxChunkX = centerChunkX + radiusChunksX;
         this.maxChunkZ = centerChunkZ + radiusChunksZ;
         this.chunks = new LinkedList<>();
-        final String worldName = selection.world().getName();
+        this.worldName = selection.world().getName();
         final String saveFile = worldName.substring(worldName.indexOf(':') + 1);
         this.savePath = selection.chunky().getConfig().getDirectory().resolve(String.format("%s.csv", saveFile));
         this.regionPath = selection.world().getRegionDirectory().orElse(null);
@@ -86,6 +91,8 @@ public class WorldChunkIterator implements ChunkIterator {
         if (regionPath == null) {
             return;
         }
+        final long startTime = System.currentTimeMillis();
+        final AtomicLong updateTime = new AtomicLong(startTime);
         final StringBuilder saveData = new StringBuilder();
         try (final Stream<Path> files = Files.list(regionPath)) {
             final List<Path> regions = files
@@ -95,6 +102,8 @@ public class WorldChunkIterator implements ChunkIterator {
                         return regionCoordinate != null && regionCoordinate.x() >= minRegionX && regionCoordinate.x() <= maxRegionX && regionCoordinate.z() >= minRegionZ && regionCoordinate.z() <= maxRegionZ;
                     })
                     .toList();
+            final long totalRegions = regions.size();
+            final AtomicLong finishedRegions = new AtomicLong();
             for (final Path region : regions) {
                 final ChunkCoordinate regionCoordinate = ChunkCoordinate.fromRegionFile(region.getFileName().toString())
                         .orElseThrow(IllegalStateException::new);
@@ -117,6 +126,15 @@ public class WorldChunkIterator implements ChunkIterator {
                             total.incrementAndGet();
                         }
                     });
+                }
+                finishedRegions.getAndIncrement();
+                if (!chunky.getConfig().isSilent()) {
+                    final long currentTime = System.currentTimeMillis();
+                    final boolean updateIntervalElapsed = ((currentTime - updateTime.get()) / 1e3) > chunky.getConfig().getUpdateInterval();
+                    if (updateIntervalElapsed || finishedRegions.get() == totalRegions) {
+                        chunky.getServer().getConsole().sendMessagePrefixed(TranslationKey.TASK_TRIM_UPDATE, worldName, finishedRegions.get(), String.format("%.2f", 100f * finishedRegions.get() / totalRegions));
+                        updateTime.set(currentTime);
+                    }
                 }
             }
             Files.writeString(savePath, saveData, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
