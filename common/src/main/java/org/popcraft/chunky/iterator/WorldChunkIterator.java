@@ -87,9 +87,9 @@ public class WorldChunkIterator implements ChunkIterator {
     }
 
     @Override
-    public void process() {
+    public boolean process() {
         if (regionPath == null) {
-            return;
+            return false;
         }
         final long startTime = System.currentTimeMillis();
         final AtomicLong updateTime = new AtomicLong(startTime);
@@ -136,10 +136,16 @@ public class WorldChunkIterator implements ChunkIterator {
                         updateTime.set(currentTime);
                     }
                 }
+                if (Thread.interrupted()) {
+                    Thread.currentThread().interrupt();
+                    return false;
+                }
             }
             Files.writeString(savePath, saveData, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

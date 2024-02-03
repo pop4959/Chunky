@@ -9,6 +9,7 @@ public interface ChunkIterator extends Iterator<ChunkCoordinate> {
 
     String name();
 
-    default void process() {
+    default boolean process() {
+        return true;
     }
 }
