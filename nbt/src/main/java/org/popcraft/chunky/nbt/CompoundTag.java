@@ -28,12 +28,29 @@ public class CompoundTag extends Tag {
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public void skip(final DataInput input) throws IOException {
+        while (TagType.END != Tag.pass(input)) ;
+    }
+
     @Override
     public void write(final DataOutput output) throws IOException {
         for (final Tag tag : value.values()) {
             Tag.save(output, tag);
         }
         output.writeByte(TagType.END);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public Tag search(final DataInput input, final byte type, final String name) throws IOException {
+        Tag tag;
+        while ((tag = Tag.find(input, type, name)) == null) ;
+        if (TagType.END == tag.type()) {
+            return null;
+        }
+        return tag;
     }
 
     @Override

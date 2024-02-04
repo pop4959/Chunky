@@ -22,8 +22,19 @@ public class ByteTag extends Tag {
     }
 
     @Override
+    public void skip(final DataInput input) throws IOException {
+        input.skipBytes(1);
+    }
+
+    @Override
     public void write(final DataOutput output) throws IOException {
         output.writeByte(value);
+    }
+
+    @Override
+    public Tag search(final DataInput input, final byte type, final String name) throws IOException {
+        skip(input);
+        return null;
     }
 
     @Override

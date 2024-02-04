@@ -22,8 +22,19 @@ public class ShortTag extends Tag {
     }
 
     @Override
+    public void skip(final DataInput input) throws IOException {
+        input.skipBytes(2);
+    }
+
+    @Override
     public void write(final DataOutput output) throws IOException {
         output.writeShort(value);
+    }
+
+    @Override
+    public Tag search(final DataInput input, final byte type, final String name) throws IOException {
+        skip(input);
+        return null;
     }
 
     @Override

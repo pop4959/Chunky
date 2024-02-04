@@ -22,8 +22,20 @@ public class StringTag extends Tag {
     }
 
     @Override
+    public void skip(final DataInput input) throws IOException {
+        final int size = input.readUnsignedShort();
+        input.skipBytes(size);
+    }
+
+    @Override
     public void write(final DataOutput output) throws IOException {
         output.writeUTF(value);
+    }
+
+    @Override
+    public Tag search(final DataInput input, final byte type, final String name) throws IOException {
+        skip(input);
+        return null;
     }
 
     @Override

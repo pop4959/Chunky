@@ -33,6 +33,16 @@ public class ListTag extends Tag {
     }
 
     @Override
+    public void skip(final DataInput input) throws IOException {
+        this.type = input.readByte();
+        final int size = input.readInt();
+        final Tag tag = Tag.create(type, "");
+        for (int i = 0; i < size; ++i) {
+            tag.skip(input);
+        }
+    }
+
+    @Override
     public void write(final DataOutput output) throws IOException {
         output.writeByte(type);
         final int size = value.size();
@@ -40,6 +50,12 @@ public class ListTag extends Tag {
         for (final Tag tag : value) {
             tag.write(output);
         }
+    }
+
+    @Override
+    public Tag search(final DataInput input, final byte type, final String name) throws IOException {
+        skip(input);
+        return null;
     }
 
     @Override

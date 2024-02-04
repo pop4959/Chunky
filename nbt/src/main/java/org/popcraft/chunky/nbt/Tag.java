@@ -23,6 +23,17 @@ public abstract class Tag {
         return tag;
     }
 
+    public static byte pass(final DataInput input) throws IOException {
+        final byte type = input.readByte();
+        if (TagType.END == type) {
+            return type;
+        }
+        final int size = input.readUnsignedShort();
+        input.skipBytes(size);
+        create(type, "").skip(input);
+        return type;
+    }
+
     public static void save(final DataOutput output, final Tag tag) throws IOException {
         final byte type = tag.type();
         output.writeByte(type);
@@ -31,6 +42,20 @@ public abstract class Tag {
         }
         output.writeUTF(tag.name());
         tag.write(output);
+    }
+
+    public static Tag find(final DataInput input, final byte type, final String name) throws IOException {
+        final byte t = input.readByte();
+        if (TagType.END == t) {
+            return new EndTag();
+        }
+        final String n = input.readUTF();
+        final Tag tag = create(t, n);
+        if (type == t && name.equals(n)) {
+            tag.read(input);
+            return tag;
+        }
+        return tag.search(input, type, name);
     }
 
     public static Tag create(final byte type, final String name) {
@@ -58,7 +83,11 @@ public abstract class Tag {
 
     abstract void read(final DataInput input) throws IOException;
 
+    abstract void skip(final DataInput input) throws IOException;
+
     abstract void write(final DataOutput output) throws IOException;
+
+    abstract Tag search(final DataInput input, final byte type, final String name) throws IOException;
 
     abstract byte type();
 
