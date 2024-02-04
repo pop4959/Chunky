@@ -3,6 +3,8 @@ package org.popcraft.chunky.iterator;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.nbt.StringTag;
+import org.popcraft.chunky.nbt.TagType;
+import org.popcraft.chunky.nbt.util.ChunkFilter;
 import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Hilbert;
@@ -16,6 +18,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
@@ -109,14 +112,16 @@ public class WorldChunkIterator implements ChunkIterator {
                         .orElseThrow(IllegalStateException::new);
                 final int regionX = regionCoordinate.x();
                 final int regionZ = regionCoordinate.z();
-                final RegionFile regionFile = new RegionFile(region.toFile());
+                final RegionFile regionFile = new RegionFile(region.toFile(), ChunkFilter.of(TagType.STRING, "Status"));
                 for (final ChunkCoordinate offset : Hilbert.chunkCoordinateOffsets()) {
                     final ChunkCoordinate chunkCoordinate = new ChunkCoordinate((regionX << 5) + offset.x(), (regionZ << 5) + offset.z());
                     if (chunkCoordinate.x() < minChunkX || chunkCoordinate.x() > maxChunkX || chunkCoordinate.z() < minChunkZ || chunkCoordinate.z() > maxChunkZ) {
                         continue;
                     }
                     regionFile.getChunk(chunkCoordinate.x(), chunkCoordinate.z()).ifPresent(chunk -> {
-                        final boolean generated = chunk.getData().getString("Status")
+                        final boolean generated = Optional.ofNullable(chunk.getData())
+                                .filter(StringTag.class::isInstance)
+                                .map(StringTag.class::cast)
                                 .map(StringTag::value)
                                 .map(status -> "minecraft:full".equals(status) || "full".equals(status))
                                 .orElse(false);

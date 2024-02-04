@@ -2,8 +2,10 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.Selection;
-import org.popcraft.chunky.nbt.CompoundTag;
 import org.popcraft.chunky.nbt.LongTag;
+import org.popcraft.chunky.nbt.Tag;
+import org.popcraft.chunky.nbt.TagType;
+import org.popcraft.chunky.nbt.util.ChunkFilter;
 import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
@@ -103,7 +105,7 @@ public class TrimCommand implements ChunkyCommand {
                                 .filter(file -> ChunkCoordinate.fromRegionFile(file.getFileName().toString()).isPresent())
                                 .toList();
                         final long totalRegions = regions.size();
-                        for (final Path region: regions) {
+                        for (final Path region : regions) {
                             if (trimTask.isCancelled()) {
                                 break;
                             }
@@ -112,7 +114,7 @@ public class TrimCommand implements ChunkyCommand {
                             if (!trimTask.isCancelled() && !chunky.getConfig().isSilent()) {
                                 final long currentTime = System.currentTimeMillis();
                                 final boolean updateIntervalElapsed = ((currentTime - updateTime.get()) / 1e3) > chunky.getConfig().getUpdateInterval();
-                                if (updateIntervalElapsed) {
+                                if (updateIntervalElapsed || finishedRegions.get() == totalRegions) {
                                     sender.sendMessagePrefixed(TranslationKey.TASK_TRIM_UPDATE, selection.world().getName(), finishedRegions.get(), String.format("%.2f", 100f * finishedRegions.get() / totalRegions));
                                     updateTime.set(currentTime);
                                 }
@@ -186,7 +188,7 @@ public class TrimCommand implements ChunkyCommand {
         final Path entitiesPath = world.getEntitiesDirectory().map(region -> region.resolve(regionFileName)).orElse(null);
         int marked = 0;
         int deleted = 0;
-        final RegionFile regionData = inhabitedTimeCheck ? new RegionFile(regionPath.toFile()) : null;
+        final RegionFile regionData = inhabitedTimeCheck ? new RegionFile(regionPath.toFile(), ChunkFilter.of(TagType.LONG, "InhabitedTime")) : null;
         try (final RandomAccessFile regionFile = new RandomAccessFile(regionPath.toFile(), "rw");
              final RandomAccessFile poiFile = poiPath == null || Files.notExists(poiPath) ? null : new RandomAccessFile(poiPath.toFile(), "rw");
              final RandomAccessFile entitiesFile = entitiesPath == null || Files.notExists(entitiesPath) ? null : new RandomAccessFile(entitiesPath.toFile(), "rw")) {
@@ -209,12 +211,8 @@ public class TrimCommand implements ChunkyCommand {
                     }
                     final boolean trimInhabited = regionData == null || regionData.getChunk(offsetChunkX, offsetChunkZ)
                             .map(chunk -> {
-                                final CompoundTag compoundTag = chunk.getData();
-                                if (compoundTag == null) {
-                                    return true;
-                                }
-                                final LongTag inhabited = compoundTag.getLong("InhabitedTime").orElse(null);
-                                if (inhabited == null) {
+                                final Tag tag = chunk.getData();
+                                if (!(tag instanceof final LongTag inhabited)) {
                                     return true;
                                 }
                                 return inhabited.value() <= inhabitedTime;
