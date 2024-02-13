@@ -40,6 +40,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 import static net.minecraft.commands.arguments.DimensionArgument.dimension;
+import static net.minecraft.commands.arguments.EntityArgument.player;
 
 @Mod(ChunkyForge.MOD_ID)
 public class ChunkyForge {
@@ -139,6 +140,27 @@ public class ChunkyForge {
         registerArguments(command, literal(CommandLiteral.WORLDBORDER));
         registerArguments(command, literal(CommandLiteral.WORLD),
                 argument(CommandLiteral.WORLD, dimension()));
+        final LiteralArgumentBuilder<CommandSourceStack> borderCommand = literal(CommandLiteral.BORDER)
+                .requires(serverCommandSource -> chunky != null && chunky.getCommands().containsKey(CommandLiteral.BORDER))
+                .executes(command.getCommand());
+        registerArguments(borderCommand, literal(CommandLiteral.ADD),
+                argument(CommandLiteral.WORLD, dimension()),
+                argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES),
+                argument(CommandLiteral.CENTER_X, word()),
+                argument(CommandLiteral.CENTER_Z, word()),
+                argument(CommandLiteral.RADIUS_X, word()),
+                argument(CommandLiteral.RADIUS_Z, word()));
+        registerArguments(borderCommand, literal(CommandLiteral.BYPASS),
+                argument(CommandLiteral.PLAYER, player()));
+        registerArguments(borderCommand, literal(CommandLiteral.HELP));
+        registerArguments(borderCommand, literal(CommandLiteral.LIST));
+        registerArguments(borderCommand, literal(CommandLiteral.LOAD),
+                argument(CommandLiteral.WORLD, dimension()));
+        registerArguments(borderCommand, literal(CommandLiteral.REMOVE),
+                argument(CommandLiteral.WORLD, dimension()));
+        registerArguments(borderCommand, literal(CommandLiteral.WRAP),
+                argument(CommandLiteral.WRAP, word()));
+        registerArguments(command, borderCommand);
         event.getDispatcher().register(command);
     }
 
