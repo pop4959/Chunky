@@ -66,7 +66,7 @@ public class ChunkyFabric implements ModInitializer {
                         if (serverCommandSource.getServer().isSingleplayer()) {
                             return true;
                         }
-                        return new FabricSender(serverCommandSource).hasPermission("chunky.command");
+                        return new FabricSender(serverCommandSource).hasPermission("chunky.command", true);
                     })
                     .executes(context -> {
                         final Sender sender;

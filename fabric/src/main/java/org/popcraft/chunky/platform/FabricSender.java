@@ -54,8 +54,16 @@ public class FabricSender implements Sender {
 
     @Override
     public boolean hasPermission(final String permission) {
+        return hasPermission(permission, false);
+    }
+
+    public boolean hasPermission(final String permission, final boolean defaultOp) {
         if (HAS_PERMISSIONS) {
-            return Permissions.check(source, permission, false);
+            if (defaultOp) {
+                return Permissions.check(source, permission, 2);
+            } else {
+                return Permissions.check(source, permission, false);
+            }
         } else {
             return source.hasPermissionLevel(2);
         }
