@@ -126,7 +126,7 @@ public class TrimCommand implements ChunkyCommand {
                                 final long currentTime = System.currentTimeMillis();
                                 final boolean updateIntervalElapsed = ((currentTime - updateTime.get()) / 1e3) > chunky.getConfig().getUpdateInterval();
                                 if (updateIntervalElapsed || finishedRegions.get() == totalRegions) {
-                                    sender.sendMessagePrefixed(TranslationKey.TASK_TRIM_UPDATE, selection.world().getName(), finishedRegions.get(), String.format("%.2f", 100f * finishedRegions.get() / totalRegions));
+                                    chunky.getServer().getConsole().sendMessagePrefixed(TranslationKey.TASK_TRIM_UPDATE, selection.world().getName(), finishedRegions.get(), String.format("%.2f", 100f * finishedRegions.get() / totalRegions));
                                     updateTime.set(currentTime);
                                 }
                             }
