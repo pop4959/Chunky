@@ -84,7 +84,18 @@ public class TrimCommand implements ChunkyCommand {
                 return;
             }
         }
-        final boolean inside = arguments.next().map(String::toLowerCase).map("inside"::equals).orElse(false);
+        final boolean inside;
+        if (arguments.size() > 6) {
+            final Optional<String> side = arguments.next().map(String::toLowerCase).filter(s -> "outside".equals(s) || "inside".equals(s));
+            if (side.isPresent()) {
+                inside = side.map("inside"::equals).orElse(false);
+            } else {
+                sender.sendMessage(TranslationKey.HELP_TRIM);
+                return;
+            }
+        } else {
+            inside = false;
+        }
         final int inhabitedTime = arguments.next().flatMap(Input::tryIntegerSuffixed).orElse(Integer.MAX_VALUE);
         final boolean inhabitedTimeCheck = inhabitedTime < Integer.MAX_VALUE;
         final Selection selection = chunky.getSelection().build();
