@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public class FabricWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
@@ -59,7 +60,7 @@ public class FabricWorld implements World {
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
         if (Thread.currentThread() != serverWorld.getServer().getThread()) {
-            return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), serverWorld.getServer()).join();
+            return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), serverWorld.getServer()).thenCompose(Function.identity());
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkManager serverChunkManager = serverWorld.getChunkManager();
@@ -97,7 +98,7 @@ public class FabricWorld implements World {
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         if (Thread.currentThread() != serverWorld.getServer().getThread()) {
-            return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), serverWorld.getServer()).join();
+            return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), serverWorld.getServer()).thenCompose(Function.identity());
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkManager serverChunkManager = serverWorld.getChunkManager();
