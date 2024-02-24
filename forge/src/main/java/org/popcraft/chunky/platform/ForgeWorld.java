@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public class ForgeWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
@@ -58,7 +59,7 @@ public class ForgeWorld implements World {
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
         if (Thread.currentThread() != world.getServer().getRunningThread()) {
-            return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), world.getServer()).join();
+            return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), world.getServer()).thenCompose(Function.identity());
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkCache serverChunkCache = world.getChunkSource();
@@ -95,7 +96,7 @@ public class ForgeWorld implements World {
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         if (Thread.currentThread() != world.getServer().getRunningThread()) {
-            return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), world.getServer()).join();
+            return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), world.getServer()).thenCompose(Function.identity());
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkCache serverChunkCache = world.getChunkSource();
