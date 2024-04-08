@@ -12,21 +12,7 @@ public class VerticalHexagon extends AbstractPolygon {
   
   public VerticalHexagon(final Selection selection,final boolean chunkAligned) {
     super(selection, chunkAligned);
-    /*
-    this.p1x = this.centerX + this.radiusX * Math.cos(Math.toRadians(270.0D));
-    this.p1z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(270.0D));
-    this.p2x = this.centerX + this.radiusX * Math.cos(Math.toRadians(330.0D));
-    this.p2z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(330.0D));
-    this.p3x = this.centerX + this.radiusX * Math.cos(Math.toRadians(30.0D));
-    this.p3z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(30.0D));
-    this.p4x = this.centerX + this.radiusX * Math.cos(Math.toRadians(90.0D));
-    this.p4z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(90.0D));
-    this.p5x = this.centerX + this.radiusX * Math.cos(Math.toRadians(150.0D));
-    this.p5z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(150.0D));
-    this.p6x = this.centerX + this.radiusX * Math.cos(Math.toRadians(210.0D));
-    this.p6z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(210.0D));
 
-     */
     this.p1x = centerX + radiusX * Math.cos(Math.toRadians(30));
     this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(30));
     this.p2x = centerX + radiusX * Math.cos(Math.toRadians(90));

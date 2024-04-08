@@ -14,18 +14,7 @@ public class HorizontalHexagon extends AbstractPolygon {
 
   public HorizontalHexagon(final Selection selection, final boolean chunkAligned) {
     super(selection, chunkAligned);
-    /*
-    this.p1x = centerX + radiusX * Math.cos(Math.toRadians(54));
-        this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(54));
-        this.p2x = centerX + radiusX * Math.cos(Math.toRadians(126));
-        this.p2z = centerZ + radiusX * Math.sin(Math.toRadians(126));
-        this.p3x = centerX + radiusX * Math.cos(Math.toRadians(198));
-        this.p3z = centerZ + radiusX * Math.sin(Math.toRadians(198));
-        this.p4x = centerX + radiusX * Math.cos(Math.toRadians(270));
-        this.p4z = centerZ + radiusX * Math.sin(Math.toRadians(270));
-        this.p5x = centerX + radiusX * Math.cos(Math.toRadians(342));
-        this.p5z = centerZ + radiusX * Math.sin(Math.toRadians(342));
-     */
+
     this.p1x = centerX + radiusX * Math.cos(Math.toRadians(60));
     this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(60));
     this.p2x = centerX + radiusX * Math.cos(Math.toRadians(120));
