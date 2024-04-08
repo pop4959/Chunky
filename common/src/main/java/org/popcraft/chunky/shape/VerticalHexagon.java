@@ -60,14 +60,14 @@ public class VerticalHexagon extends AbstractPolygon {
     final boolean inside23 = insideLine(p2x, p2z, p3x, p3z, x, z);
     final boolean inside34 = insideLine(p3x, p3z, p4x, p4z, x, z);
     final boolean inside45 = insideLine(p4x, p4z, p5x, p5z, x, z);
-    final boolean inside51 = insideLine(p5x, p5z, p1x, p1z, x, z);
+    final boolean inside51 = insideLine(p5x, p5z, p6x, p6z, x, z);
     final boolean inside61 = insideLine(p6x, p6z, p1x, p1z, x, z);
     return inside12 && inside23 && inside34 && inside45 && inside51 && inside61;
   }
 
   @Override
   public String name() {
-    return ShapeType.VERTICAL_HEXAGON;
+    return ShapeType.VERTICALHEXAGON;
   }
 
 }

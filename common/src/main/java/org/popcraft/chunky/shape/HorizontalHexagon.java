@@ -15,20 +15,17 @@ public class HorizontalHexagon extends AbstractPolygon {
   public HorizontalHexagon(final Selection selection, final boolean chunkAligned) {
     super(selection, chunkAligned);
     /*
-    this.p1x = this.centerX + this.radiusX * Math.cos(Math.toRadians(300.0D));
-    this.p1z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(300.0D));
-    this.p2x = this.centerX + this.radiusX * Math.cos(Math.toRadians(360.0D));
-    this.p2z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(360.0D));
-    this.p3x = this.centerX + this.radiusX * Math.cos(Math.toRadians(60.0D));
-    this.p3z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(60.0D));
-    this.p4x = this.centerX + this.radiusX * Math.cos(Math.toRadians(120.0D));
-    this.p4z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(120.0D));
-    this.p5x = this.centerX + this.radiusX * Math.cos(Math.toRadians(180.0D));
-    this.p5z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(180.0D));
-    this.p6x = this.centerX + this.radiusX * Math.cos(Math.toRadians(240.0D));
-    this.p6z = this.centerZ + this.radiusX * Math.sin(Math.toRadians(240.0D));
+    this.p1x = centerX + radiusX * Math.cos(Math.toRadians(54));
+        this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(54));
+        this.p2x = centerX + radiusX * Math.cos(Math.toRadians(126));
+        this.p2z = centerZ + radiusX * Math.sin(Math.toRadians(126));
+        this.p3x = centerX + radiusX * Math.cos(Math.toRadians(198));
+        this.p3z = centerZ + radiusX * Math.sin(Math.toRadians(198));
+        this.p4x = centerX + radiusX * Math.cos(Math.toRadians(270));
+        this.p4z = centerZ + radiusX * Math.sin(Math.toRadians(270));
+        this.p5x = centerX + radiusX * Math.cos(Math.toRadians(342));
+        this.p5z = centerZ + radiusX * Math.sin(Math.toRadians(342));
      */
-
     this.p1x = centerX + radiusX * Math.cos(Math.toRadians(60));
     this.p1z = centerZ + radiusX * Math.sin(Math.toRadians(60));
     this.p2x = centerX + radiusX * Math.cos(Math.toRadians(120));
@@ -62,14 +59,14 @@ public class HorizontalHexagon extends AbstractPolygon {
     final boolean inside23 = insideLine(p2x, p2z, p3x, p3z, x, z);
     final boolean inside34 = insideLine(p3x, p3z, p4x, p4z, x, z);
     final boolean inside45 = insideLine(p4x, p4z, p5x, p5z, x, z);
-    final boolean inside51 = insideLine(p5x, p5z, p1x, p1z, x, z);
+    final boolean inside51 = insideLine(p5x, p5z, p6x, p6z, x, z);
     final boolean inside61 = insideLine(p6x, p6z, p1x, p1z, x, z);
     return inside12 && inside23 && inside34 && inside45 && inside51 && inside61;
   }
 
   @Override
   public String name() {
-    return ShapeType.HORIZONTAL_HEXAGON;
+    return ShapeType.HORIZONTALHEXAGON;
   }
 
 }
