@@ -85,9 +85,7 @@ public final class TranslationKey {
     public static final String SHAPE_ELLIPSE = "shape_ellipse";
     public static final String SHAPE_PENTAGON = "shape_pentagon";
 
-    public static final String SHAPE_HORIZONTAL_HEXAGON = "shape_horizontal_hexagon";
-
-    public static final String SHAPE_VERTICAL_HEXAGON = "shape_vertical_hexagon";
+    public static final String SHAPE_HEXAGON = "shape_hexagon";
 
     public static final String SHAPE_OVAL = "shape_oval";
     public static final String SHAPE_RECTANGLE = "shape_rectangle";

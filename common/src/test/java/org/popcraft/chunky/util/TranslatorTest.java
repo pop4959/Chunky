@@ -122,8 +122,7 @@ public class TranslatorTest {
         translate(TranslationKey.SHAPE_DIAMOND);
         translate(TranslationKey.SHAPE_ELLIPSE);
         translate(TranslationKey.SHAPE_PENTAGON);
-        translate(TranslationKey.SHAPE_HORIZONTAL_HEXAGON);
-        translate(TranslationKey.SHAPE_VERTICAL_HEXAGON);
+        translate(TranslationKey.SHAPE_HEXAGON);
         translate(TranslationKey.SHAPE_RECTANGLE);
         translate(TranslationKey.SHAPE_SQUARE);
         translate(TranslationKey.SHAPE_STAR);
