@@ -1,6 +1,8 @@
 package org.popcraft.chunky.shape;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public final class ShapeType {
   public static final String CIRCLE = "circle";

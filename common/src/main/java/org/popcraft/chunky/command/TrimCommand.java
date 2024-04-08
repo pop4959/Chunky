@@ -272,7 +272,6 @@ public class TrimCommand implements ChunkyCommand {
             return suggestions;
         } else if (arguments.size() == 2) {
             return ShapeType.all();
-
         }
         return List.of();
     }
