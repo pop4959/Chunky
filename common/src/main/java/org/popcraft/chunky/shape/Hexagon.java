@@ -9,10 +9,10 @@ import java.util.List;
 
 import static org.popcraft.chunky.shape.ShapeUtil.insideLine;
 
-public class HorizontalHexagon extends AbstractPolygon {
+public class Hexagon extends AbstractPolygon {
   private final double p1x, p1z, p2x, p2z, p3x, p3z, p4x, p4z, p5x, p5z, p6x, p6z;
 
-  public HorizontalHexagon(final Selection selection, final boolean chunkAligned) {
+  public Hexagon(final Selection selection, final boolean chunkAligned) {
     super(selection, chunkAligned);
 
     this.p1x = centerX + radiusX * Math.cos(Math.toRadians(60));
@@ -55,7 +55,7 @@ public class HorizontalHexagon extends AbstractPolygon {
 
   @Override
   public String name() {
-    return ShapeType.HORIZONTALHEXAGON;
+    return ShapeType.HEXAGON;
   }
 
 }

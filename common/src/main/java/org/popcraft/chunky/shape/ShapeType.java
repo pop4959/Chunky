@@ -14,11 +14,9 @@ public final class ShapeType {
   public static final String STAR = "star";
   public static final String TRIANGLE = "triangle";
 
-  public static final String HORIZONTALHEXAGON = "horizontalhexagon";
+  public static final String HEXAGON = "hexagon";
 
-  public static final String VERTICALHEXAGON = "verticalhexagon";
-
-  private static final List<String> DEFAULTS = List.of(CIRCLE, DIAMOND, ELLIPSE, PENTAGON, RECTANGLE, SQUARE, STAR, TRIANGLE, VERTICALHEXAGON, HORIZONTALHEXAGON);
+  private static final List<String> DEFAULTS = List.of(CIRCLE, DIAMOND, ELLIPSE, PENTAGON, RECTANGLE, SQUARE, STAR, TRIANGLE, HEXAGON);
 
   private ShapeType() {
   }

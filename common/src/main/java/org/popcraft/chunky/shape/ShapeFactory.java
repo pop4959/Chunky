@@ -28,8 +28,7 @@ public class ShapeFactory {
       case ShapeType.RECTANGLE -> new Rectangle(selection, chunkAligned);
       case ShapeType.STAR -> new Star(selection, chunkAligned);
       case ShapeType.TRIANGLE -> new Triangle(selection, chunkAligned);
-      case ShapeType.HORIZONTALHEXAGON -> new HorizontalHexagon(selection, chunkAligned);
-      case ShapeType.VERTICALHEXAGON -> new VerticalHexagon(selection, chunkAligned);
+      case ShapeType.HEXAGON -> new Hexagon(selection, chunkAligned);
       default -> custom.getOrDefault(selection.shape(), Square::new).apply(selection, chunkAligned);
     };
   }
