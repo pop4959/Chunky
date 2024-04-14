@@ -16,7 +16,7 @@ public final class ShapeType {
     public static final String STAR = "star";
     public static final String TRIANGLE = "triangle";
 
-    private static final List<String> DEFAULTS = List.of(CIRCLE, DIAMOND, ELLIPSE, PENTAGON, RECTANGLE, SQUARE, STAR, TRIANGLE, HEXAGON);
+    private static final List<String> DEFAULTS = List.of(CIRCLE, DIAMOND, ELLIPSE, HEXAGON, PENTAGON, RECTANGLE, SQUARE, STAR, TRIANGLE);
 
     private ShapeType() {
     }

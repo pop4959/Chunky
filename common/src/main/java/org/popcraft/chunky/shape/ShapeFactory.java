@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-public class ShapeFactory {
+public final class ShapeFactory {
     private static final Map<String, BiFunction<Selection, Boolean, Shape>> custom = new HashMap<>();
 
     private ShapeFactory() {
@@ -23,11 +23,11 @@ public class ShapeFactory {
             case ShapeType.CIRCLE -> new Circle(selection, chunkAligned);
             case ShapeType.DIAMOND -> new Diamond(selection, chunkAligned);
             case ShapeType.ELLIPSE, ShapeType.OVAL -> new Ellipse(selection, chunkAligned);
+            case ShapeType.HEXAGON -> new Hexagon(selection, chunkAligned);
             case ShapeType.PENTAGON -> new Pentagon(selection, chunkAligned);
             case ShapeType.RECTANGLE -> new Rectangle(selection, chunkAligned);
             case ShapeType.STAR -> new Star(selection, chunkAligned);
             case ShapeType.TRIANGLE -> new Triangle(selection, chunkAligned);
-            case ShapeType.HEXAGON -> new Hexagon(selection, chunkAligned);
             default -> custom.getOrDefault(selection.shape(), Square::new).apply(selection, chunkAligned);
         };
     }
