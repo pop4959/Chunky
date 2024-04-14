@@ -82,6 +82,7 @@
   "shape_circle": "круг",
   "shape_diamond": "ромб",
   "shape_ellipse": "эллипс",
+  "shape_hexagon": "hexagon",
   "shape_pentagon": "пятиугольник",
   "shape_rectangle": "прямоугольник",
   "shape_square": "квадрат",

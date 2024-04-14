@@ -82,6 +82,7 @@
   "shape_circle": "cerchio",
   "shape_diamond": "diamante",
   "shape_ellipse": "ellisse",
+  "shape_hexagon": "hexagon",
   "shape_pentagon": "pentagono",
   "shape_rectangle": "rettangolo",
   "shape_square": "quadrato",
