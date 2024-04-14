@@ -82,6 +82,7 @@
   "shape_circle": "krug",
   "shape_diamond": "romb",
   "shape_ellipse": "elipsa",
+  "shape_hexagon": "hexagon",
   "shape_pentagon": "pentagon",
   "shape_rectangle": "pravokutnik",
   "shape_square": "kvadrat",
