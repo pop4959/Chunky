@@ -23,6 +23,7 @@ public final class ShapeFactory {
             case ShapeType.CIRCLE -> new Circle(selection, chunkAligned);
             case ShapeType.DIAMOND -> new Diamond(selection, chunkAligned);
             case ShapeType.ELLIPSE, ShapeType.OVAL -> new Ellipse(selection, chunkAligned);
+            case ShapeType.HEXAGON -> new Hexagon(selection, chunkAligned);
             case ShapeType.PENTAGON -> new Pentagon(selection, chunkAligned);
             case ShapeType.RECTANGLE -> new Rectangle(selection, chunkAligned);
             case ShapeType.STAR -> new Star(selection, chunkAligned);
