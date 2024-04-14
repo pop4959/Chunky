@@ -82,6 +82,7 @@
   "shape_circle": "sirkel",
   "shape_diamond": "diamant",
   "shape_ellipse": "ellipse",
+  "shape_hexagon": "hexagon",
   "shape_pentagon": "femkant",
   "shape_rectangle": "rektangel",
   "shape_square": "kvadrat",
