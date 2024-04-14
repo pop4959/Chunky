@@ -83,9 +83,8 @@ public final class TranslationKey {
     public static final String SHAPE_CIRCLE = "shape_circle";
     public static final String SHAPE_DIAMOND = "shape_diamond";
     public static final String SHAPE_ELLIPSE = "shape_ellipse";
-    public static final String SHAPE_PENTAGON = "shape_pentagon";
     public static final String SHAPE_HEXAGON = "shape_hexagon";
-    public static final String SHAPE_OVAL = "shape_oval";
+    public static final String SHAPE_PENTAGON = "shape_pentagon";
     public static final String SHAPE_RECTANGLE = "shape_rectangle";
     public static final String SHAPE_SQUARE = "shape_square";
     public static final String SHAPE_STAR = "shape_star";
