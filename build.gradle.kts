@@ -3,13 +3,13 @@ import java.io.ByteArrayOutputStream
 plugins {
     id("java-library")
     id("maven-publish")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 
 subprojects {
     plugins.apply("java-library")
     plugins.apply("maven-publish")
-    plugins.apply("com.github.johnrengelman.shadow")
+    plugins.apply("io.github.goooler.shadow")
 
     group = "${project.property("group")}"
     version = "${project.property("version")}.${commitsSinceLastTag()}"
@@ -21,7 +21,7 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
+            languageVersion.set(JavaLanguageVersion.of(21))
         }
         withSourcesJar()
     }
@@ -29,7 +29,7 @@ subprojects {
     tasks {
         withType<JavaCompile> {
             options.encoding = "UTF-8"
-            options.release = 17
+            options.release = 21
             options.compilerArgs.add("-Xlint:none")
         }
         jar {
