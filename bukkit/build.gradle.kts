@@ -5,7 +5,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.20.4-R0.1-SNAPSHOT")
+    compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.20.5-R0.1-SNAPSHOT")
     compileOnly(group = "com.github.Puremin0rez", name = "WorldBorder", version = "1.19") {
         isTransitive = false
     }
