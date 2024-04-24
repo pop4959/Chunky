@@ -106,7 +106,7 @@ public class FabricWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkManager.addTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            ((ServerChunkManagerMixin) serverChunkManager).invokeTick();
+            ((ServerChunkManagerMixin) serverChunkManager).invokeUpdateChunks();
             final ThreadedAnvilChunkStorage threadedAnvilChunkStorage = serverChunkManager.threadedAnvilChunkStorage;
             final ThreadedAnvilChunkStorageMixin threadedAnvilChunkStorageMixin = (ThreadedAnvilChunkStorageMixin) threadedAnvilChunkStorage;
             final ChunkHolder chunkHolder = threadedAnvilChunkStorageMixin.invokeGetChunkHolder(chunkPos.toLong());
