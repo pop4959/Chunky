@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[1,)"
+loaderVersion="[3,)"
 license="GNU GPLv3"
 issueTrackerURL="${github}/issues"
 [[mods]]
@@ -13,12 +13,12 @@ description="${description}"
 [[dependencies.chunky]]
    modId="neoforge"
    mandatory=true
-   versionRange="[20.2,)"
+   versionRange="[20.5-beta,)"
    ordering="NONE"
    side="BOTH"
 [[dependencies.chunky]]
    modId="minecraft"
    mandatory=true
-   versionRange="[1.20,1.21)"
+   versionRange="[1.20.5,1.21)"
    ordering="NONE"
    side="BOTH"

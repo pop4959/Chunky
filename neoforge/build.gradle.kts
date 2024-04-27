@@ -9,16 +9,16 @@ repositories {
 }
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.20.2")
+    minecraft(group = "com.mojang", name = "minecraft", version = "1.20.5")
     mappings(loom.officialMojangMappings())
-    neoForge(group = "net.neoforged", name = "neoforge", version = "20.2.88")
+    neoForge(group = "net.neoforged", name = "neoforge", version = "20.5.5-beta")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
 
 tasks {
     processResources {
-        filesMatching("META-INF/mods.toml") {
+        filesMatching("META-INF/neoforge.mods.toml") {
             expand(
                 "github" to project.property("github"),
                 "id" to rootProject.name,
