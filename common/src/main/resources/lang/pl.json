@@ -48,7 +48,7 @@
   "format_start": "Zadanie rozpoczęte w %s dla regionu %s o środku %s, %s oraz promieniu %s.",
   "format_start_confirm": "Zadanie dla tego świata zostało już uruchomione. Aby kontynuować uruchamianie, wpisz '%s'. Aby rozpocząć nowe zadanie, wpisz '%s'.",
   "format_start_disk": "Serwer ma tylko %s miejsca na dysku, gdy szacowana wymagana przestrzeń do tego zadania to %s. Jeśli chcesz rozpocząć mimo to, wpisz '%s'.",
-  "format_start_limit": "Twój host ograniczył maksymalny promień generowania do %s aby uniknąć dużego zużycia pamięci dyskowej. Zmniejsz promień albo skontaktuj się z twoim hostem jeżeli chcesz aby ten limit został usunięty.",
+  "format_start_limit": "Twój host ograniczył maksymalny promień generowania do %s aby uniknąć dużego wykorzystywania pamięci dyskowej. Zmniejsz promień albo skontaktuj się z twoim hostem, jeżeli chcesz, aby ten limit został usunięty.",
   "format_started_already": "Zadanie jest już rozpoczęte dla %s!",
   "format_world": "Świat zmieniony na %s.",
   "format_worldborder_too_large": "&eUwaga: Twoja granica świata jest obecnie ustawiona powyżej maksymalnej wartości %s skonfigurowanej w server.properties. Zazwyczaj jest to błąd i może powodować problemy.",
