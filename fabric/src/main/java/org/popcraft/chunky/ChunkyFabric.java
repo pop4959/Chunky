@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.boss.ServerBossBar;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -63,7 +64,8 @@ public class ChunkyFabric implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             final LiteralArgumentBuilder<ServerCommandSource> command = literal(CommandLiteral.CHUNKY)
                     .requires(serverCommandSource -> {
-                        if (serverCommandSource.getServer().isSingleplayer()) {
+                        final MinecraftServer minecraftServer = serverCommandSource.getServer();
+                        if (minecraftServer != null && minecraftServer.isSingleplayer()) {
                             return true;
                         }
                         return new FabricSender(serverCommandSource).hasPermission("chunky.command", true);

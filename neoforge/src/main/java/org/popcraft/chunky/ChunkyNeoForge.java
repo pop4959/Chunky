@@ -68,7 +68,9 @@ public class ChunkyNeoForge {
     public void onRegisterCommands(final RegisterCommandsEvent event) {
         final LiteralArgumentBuilder<CommandSourceStack> command = literal(CommandLiteral.CHUNKY)
                 .requires(serverCommandSource -> {
-                    if (serverCommandSource.getServer().isSingleplayer()) {
+                    final MinecraftServer server = serverCommandSource.getServer();
+                    //noinspection ConstantValue
+                    if (server != null && server.isSingleplayer()) {
                         return true;
                     }
                     return serverCommandSource.hasPermission(2);
