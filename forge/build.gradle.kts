@@ -38,11 +38,7 @@ tasks {
     }
     shadowJar {
         configurations = listOf(shade)
-        archiveClassifier.set("dev")
-        archiveFileName.set(null as String?)
-    }
-    remapJar {
-        inputFile.set(shadowJar.get().archiveFile)
+        archiveClassifier.set(null as String?)
         archiveFileName.set("${project.property("artifactName")}-${project.version}.jar")
     }
 }
