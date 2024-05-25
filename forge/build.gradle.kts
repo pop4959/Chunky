@@ -41,4 +41,7 @@ tasks {
         archiveClassifier.set(null as String?)
         archiveFileName.set("${project.property("artifactName")}-${project.version}.jar")
     }
+    remapJar {
+        enabled = false
+    }
 }
