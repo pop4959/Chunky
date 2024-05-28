@@ -25,6 +25,7 @@
   "mixins": [
     "chunky.mixins.json"
   ],
+  "accessWidener": "chunky.accesswidener",
   "depends": {
     "fabricloader": ">=0.15.10",
     "fabric": "*",

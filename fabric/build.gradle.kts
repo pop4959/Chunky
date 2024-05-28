@@ -14,6 +14,10 @@ dependencies {
     shade(project(":chunky-common"))
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/chunky.accesswidener")
+}
+
 tasks {
     processResources {
         filesMatching("fabric.mod.json") {
