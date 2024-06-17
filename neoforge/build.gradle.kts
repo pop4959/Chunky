@@ -9,9 +9,9 @@ repositories {
 }
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.20.5")
+    minecraft(group = "com.mojang", name = "minecraft", version = "1.21")
     mappings(loom.officialMojangMappings())
-    neoForge(group = "net.neoforged", name = "neoforge", version = "20.5.5-beta")
+    neoForge(group = "net.neoforged", name = "neoforge", version = "21.0.14-beta")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
