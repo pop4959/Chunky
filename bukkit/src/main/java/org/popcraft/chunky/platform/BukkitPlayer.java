@@ -8,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.platform.util.Location;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -63,7 +62,6 @@ public class BukkitPlayer extends BukkitSender implements Player {
         return player.getUniqueId();
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     @Override
     public void teleport(final Location location) {
         final org.bukkit.World world = Bukkit.getWorld(location.getWorld().getName());
@@ -71,20 +69,32 @@ public class BukkitPlayer extends BukkitSender implements Player {
         final Entity vehicle = player.getVehicle();
         if (vehicle == null) {
             teleportAsync(player, loc);
+        } else if (Paper.isPaper() && loc.getWorld() == player.getWorld()) {
+            Paper.teleportAsyncWithPassengers(vehicle, loc);
         } else {
-            final List<Entity> passengers = new ArrayList<>(vehicle.getPassengers());
+            if (Folia.isFolia() && !Folia.isTickThread(player.getLocation())) {
+                Folia.schedule(plugin, player, () -> teleport(location));
+                return;
+            }
+
+            final List<Entity> passengers = vehicle.getPassengers();
             vehicle.eject();
             teleportAsync(player, loc).thenAcceptAsync(ignored -> {
-                vehicle.teleport(player);
+                teleportAsync(vehicle, loc);
                 for (final Entity passenger : passengers) {
-                    passenger.teleport(player);
+                    teleportAsync(passenger, loc);
                     if (passenger instanceof final org.bukkit.entity.Player playerPassenger) {
                         playerPassenger.hideEntity(plugin, vehicle);
                         playerPassenger.showEntity(plugin, vehicle);
                     }
                     vehicle.addPassenger(passenger);
                 }
-            }, command -> plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, command, 1));
+            }, command -> {
+                if (Folia.isFolia())
+                    Folia.schedule(plugin, player, command);
+                else
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, command, 1);
+            });
         }
     }
 

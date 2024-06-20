@@ -1,9 +1,11 @@
 package org.popcraft.chunky.platform;
 
+import io.papermc.paper.entity.TeleportFlag;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,6 +25,10 @@ public final class Paper {
 
     public static CompletableFuture<Boolean> teleportAsync(final Entity entity, final Location location) {
         return entity.teleportAsync(location);
+    }
+
+    public static CompletableFuture<Boolean> teleportAsyncWithPassengers(final Entity entity, final Location location) {
+        return entity.teleportAsync(location, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.EntityState.RETAIN_PASSENGERS, TeleportFlag.EntityState.RETAIN_VEHICLE);
     }
 
     private static boolean classExists(final String clazz) {

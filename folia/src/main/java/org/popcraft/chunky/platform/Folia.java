@@ -3,9 +3,11 @@ package org.popcraft.chunky.platform;
 import io.papermc.paper.threadedregions.RegionizedServerInitEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public final class Folia {
     private static final boolean CONFIG_EXISTS = classExists("io.papermc.paper.threadedregions.RegionizedServer") || classExists("io.papermc.paper.threadedregions.RegionizedServerInitEvent");
@@ -21,6 +23,10 @@ public final class Folia {
         Bukkit.getServer().getRegionScheduler().execute(plugin, location, runnable);
     }
 
+    public static void schedule(final Plugin plugin, final Entity entity, final Runnable runnable) {
+        entity.getScheduler().execute(plugin, runnable, () -> {}, 1L);
+    }
+
     public static void scheduleFixed(final Plugin plugin, final Location location, final Runnable runnable, final long delay, final long period) {
         Bukkit.getServer().getRegionScheduler().runAtFixedRate(plugin, location, ignored -> runnable.run(), delay, period);
     }
@@ -31,6 +37,10 @@ public final class Folia {
 
     public static void cancelTasks(final Plugin plugin) {
         Bukkit.getServer().getGlobalRegionScheduler().cancelTasks(plugin);
+    }
+
+    public static boolean isTickThread(final @NotNull Location location) {
+        return Bukkit.getServer().isOwnedByCurrentRegion(location);
     }
 
     public static void onServerInit(final Plugin plugin, final Runnable runnable) {
