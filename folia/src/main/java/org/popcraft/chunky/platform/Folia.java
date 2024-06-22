@@ -23,8 +23,8 @@ public final class Folia {
         Bukkit.getServer().getRegionScheduler().execute(plugin, location, runnable);
     }
 
-    public static void schedule(final Plugin plugin, final Entity entity, final Runnable runnable) {
-        entity.getScheduler().execute(plugin, runnable, () -> {}, 1L);
+    public static void schedule(final Plugin plugin, final Entity entity, final Runnable runnable, final long delay) {
+        entity.getScheduler().execute(plugin, runnable, () -> {}, delay);
     }
 
     public static void scheduleFixed(final Plugin plugin, final Location location, final Runnable runnable, final long delay, final long period) {
