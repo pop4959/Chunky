@@ -69,14 +69,11 @@ public class BukkitPlayer extends BukkitSender implements Player {
         final Entity vehicle = player.getVehicle();
         if (vehicle == null) {
             teleportAsync(player, loc);
-        } else if (Paper.isPaper() && loc.getWorld() == player.getWorld()) {
+        } else if (Paper.isPaper() && player.getWorld().equals(loc.getWorld())) {
             Paper.teleportAsyncWithPassengers(vehicle, loc);
+        } else if (Folia.isFolia() && !Folia.isTickThread(player.getLocation())) {
+            Folia.schedule(plugin, player, () -> teleport(location));
         } else {
-            if (Folia.isFolia() && !Folia.isTickThread(player.getLocation())) {
-                Folia.schedule(plugin, player, () -> teleport(location));
-                return;
-            }
-
             final List<Entity> passengers = vehicle.getPassengers();
             vehicle.eject();
             teleportAsync(player, loc).thenAcceptAsync(ignored -> {
@@ -90,10 +87,11 @@ public class BukkitPlayer extends BukkitSender implements Player {
                     vehicle.addPassenger(passenger);
                 }
             }, command -> {
-                if (Folia.isFolia())
+                if (Folia.isFolia()) {
                     Folia.schedule(plugin, player, command);
-                else
+                } else {
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, command, 1);
+                }
             });
         }
     }
