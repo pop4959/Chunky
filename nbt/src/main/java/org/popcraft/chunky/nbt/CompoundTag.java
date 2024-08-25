@@ -3,6 +3,7 @@ package org.popcraft.chunky.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -75,6 +76,10 @@ public class CompoundTag extends Tag {
         }
         compoundBuilder.append(indent).append('}');
         return compoundBuilder.toString();
+    }
+
+    public Collection<Tag> values() {
+        return value.values();
     }
 
     public Optional<Tag> get(final String name) {

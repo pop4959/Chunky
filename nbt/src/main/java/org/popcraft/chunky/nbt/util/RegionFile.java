@@ -8,12 +8,14 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.InflaterInputStream;
 
 public final class RegionFile {
@@ -22,11 +24,7 @@ public final class RegionFile {
     private final Set<Chunk> chunks = new HashSet<>();
     private final Map<ChunkPos, Chunk> chunkMap = new HashMap<>();
 
-    public RegionFile(final File file) {
-        this(file, null);
-    }
-
-    public RegionFile(final File file, final ChunkFilter filter) {
+    public RegionFile(final File file, final ChunkFilter... filters) {
         try (final RandomAccessFile region = new RandomAccessFile(file, "r")) {
             if (region.length() < 4096) {
                 return;
@@ -81,10 +79,12 @@ public final class RegionFile {
                     final int x = (regionX * 32) + (i % 32);
                     final int z = (regionZ * 32) + (i / 32);
                     final Tag data;
-                    if (filter == null) {
+                    if (filters.length == 0) {
                         data = Tag.load(input);
+                    } else if (filters.length == 1) {
+                        data = Tag.find(input, filters[0].getType(), filters[0].getName());
                     } else {
-                        data = Tag.find(input, filter.getType(), filter.getName());
+                        data = Tag.multiFind(input, Arrays.stream(filters).collect(Collectors.toMap(ChunkFilter::getName, ChunkFilter::getType)));
                     }
                     final Chunk chunk = new Chunk(x, z, data, timestampTable[i]);
                     chunks.add(chunk);

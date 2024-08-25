@@ -3,6 +3,7 @@ package org.popcraft.chunky.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Map;
 
 public abstract class Tag {
     protected static final int INDENT = 2;
@@ -56,6 +57,30 @@ public abstract class Tag {
             return tag;
         }
         return tag.search(input, type, name);
+    }
+
+    public static CompoundTag multiFind(final DataInput input, final Map<String, Byte> tags) throws IOException {
+        final CompoundTag result = new CompoundTag("root");
+        byte t;
+
+        while(true) {
+            t = input.readByte();
+            if (TagType.END == t) {
+                return result;
+            }
+
+            final String n = input.readUTF();
+            final Tag tag = create(t, n);
+            if (tags.containsKey(n) && tags.get(n).equals(t)) {
+                tag.read(input);
+
+                result.put(tag);
+            } else if (t == TagType.COMPOUND) {
+                Tag.multiFind(input, tags).values().forEach(result::put);
+            } else {
+                tag.skip(input);
+            }
+        }
     }
 
     public static Tag create(final byte type, final String name) {
