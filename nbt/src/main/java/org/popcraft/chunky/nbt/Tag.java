@@ -60,22 +60,24 @@ public abstract class Tag {
     }
 
     public static CompoundTag multiFind(final DataInput input, final Map<String, Byte> tags) throws IOException {
-        final CompoundTag result = new CompoundTag("root");
-        byte t;
+        final CompoundTag result = new CompoundTag("");
+        byte type;
+        String name;
+        Tag tag;
 
-        while(true) {
-            t = input.readByte();
-            if (TagType.END == t) {
+        while (true) {
+            type = input.readByte();
+            if (TagType.END == type) {
                 return result;
             }
 
-            final String n = input.readUTF();
-            final Tag tag = create(t, n);
-            if (tags.containsKey(n) && tags.get(n).equals(t)) {
+            name = input.readUTF();
+            tag = create(type, name);
+            if (tags.containsKey(name) && tags.get(name).equals(type)) {
                 tag.read(input);
 
                 result.put(tag);
-            } else if (t == TagType.COMPOUND) {
+            } else if (type == TagType.COMPOUND) {
                 Tag.multiFind(input, tags).values().forEach(result::put);
             } else {
                 tag.skip(input);
