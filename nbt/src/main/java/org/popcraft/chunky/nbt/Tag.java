@@ -87,7 +87,10 @@ public abstract class Tag {
 
     abstract void write(final DataOutput output) throws IOException;
 
-    abstract Tag search(final DataInput input, final byte type, final String name) throws IOException;
+    Tag search(final DataInput input, final byte type, final String name) throws IOException  {
+        skip(input);
+        return null;
+    }
 
     abstract byte type();
 

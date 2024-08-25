@@ -42,12 +42,6 @@ public class IntArrayTag extends Tag {
     }
 
     @Override
-    public Tag search(final DataInput input, final byte type, final String name) throws IOException {
-        skip(input);
-        return null;
-    }
-
-    @Override
     public byte type() {
         return TagType.INT_ARRAY;
     }

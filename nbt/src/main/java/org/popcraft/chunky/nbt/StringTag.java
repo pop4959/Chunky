@@ -33,12 +33,6 @@ public class StringTag extends Tag {
     }
 
     @Override
-    public Tag search(final DataInput input, final byte type, final String name) throws IOException {
-        skip(input);
-        return null;
-    }
-
-    @Override
     public byte type() {
         return TagType.STRING;
     }
