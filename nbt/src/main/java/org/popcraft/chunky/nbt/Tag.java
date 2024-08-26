@@ -64,11 +64,17 @@ public abstract class Tag {
         byte type;
         String name;
         Tag tag;
+        int end_tag_count = -1;
 
         while (true) {
             type = input.readByte();
             if (TagType.END == type) {
-                return result;
+                if (end_tag_count <= 0) {
+                    return result;
+                } else {
+                    --end_tag_count;
+                    continue;
+                }
             }
 
             name = input.readUTF();
@@ -78,7 +84,7 @@ public abstract class Tag {
 
                 result.put(tag);
             } else if (type == TagType.COMPOUND) {
-                Tag.multiFind(input, tags).values().forEach(result::put);
+                ++end_tag_count;
             } else {
                 tag.skip(input);
             }
@@ -114,7 +120,7 @@ public abstract class Tag {
 
     abstract void write(final DataOutput output) throws IOException;
 
-    Tag search(final DataInput input, final byte type, final String name) throws IOException  {
+    Tag search(final DataInput input, final byte type, final String name) throws IOException {
         skip(input);
         return null;
     }
