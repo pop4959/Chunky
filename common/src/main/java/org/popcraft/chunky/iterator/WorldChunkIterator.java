@@ -114,7 +114,7 @@ public class WorldChunkIterator implements ChunkIterator {
                         .orElseThrow(IllegalStateException::new);
                 final int regionX = regionCoordinate.x();
                 final int regionZ = regionCoordinate.z();
-                final RegionFile regionFile = new RegionFile(region.toFile(), ChunkFilter.of(TagType.STRING, "Status"), ChunkFilter.of(TagType.BYTE, "TerrainPopulated"), ChunkFilter.of(TagType.BYTE, "LightPopulated"));
+                final RegionFile regionFile = new RegionFile(region.toFile(), ChunkFilter.of(TagType.STRING, "Status"), ChunkFilter.of(TagType.BYTE, "TerrainPopulated"));
                 for (final ChunkCoordinate offset : Hilbert.chunkCoordinateOffsets()) {
                     final ChunkCoordinate chunkCoordinate = new ChunkCoordinate((regionX << 5) + offset.x(), (regionZ << 5) + offset.z());
                     if (chunkCoordinate.x() < minChunkX || chunkCoordinate.x() > maxChunkX || chunkCoordinate.z() < minChunkZ || chunkCoordinate.z() > maxChunkZ) {
@@ -125,21 +125,19 @@ public class WorldChunkIterator implements ChunkIterator {
                                 .filter(CompoundTag.class::isInstance)
                                 .map(CompoundTag.class::cast)
                                 .flatMap(tags -> {
-                                    // This logic takes care of really old chunks that originally didn't have the `Status` tag
+                                    // This logic takes care of ancient chunks that originally didn't have the `Status`
+                                    // tag.
+                                    // An additional note is that there's also the `LightPopulated` tag, but we ignore
+                                    // this. The reason being that the only use case to ever end up here is using the
+                                    // world pattern. Also, the only way using this to make sense is with the
+                                    // `force-load-existing-chunks` setting, to try to load all existing chunks to allow
+                                    // full chunk migration and modernization. If this tag is set, then the chunk is
+                                    // generated enough to be considered "generated" (even if the light hasn't been
+                                    // generated), so it will be loaded and fully migrated.
                                     final Optional<ByteTag> terrainPopulated = tags.getByte("TerrainPopulated");
-                                    final Optional<ByteTag> lightPopulated = tags.getByte("LightPopulated");
 
-                                    if (terrainPopulated.isPresent() && lightPopulated.isPresent()) {
-                                        final byte terrainPopulatedValue = terrainPopulated.get().value();
-                                        final byte lightPopulatedValue = lightPopulated.get().value();
-
-                                        if (terrainPopulatedValue == 1) {
-                                            if (lightPopulatedValue == 1) {
-                                                return Optional.of("minecraft:full");
-                                            } else {
-                                                return Optional.of("minecraft:terrain");
-                                            }
-                                        }
+                                    if (terrainPopulated.map(ByteTag::value).orElse((byte) 0) == 1) {
+                                        return Optional.of("minecraft:full");
                                     }
 
                                     // Normal status logic
