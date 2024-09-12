@@ -127,8 +127,8 @@ public class BukkitWorld implements World {
 
     @Override
     public int getElevation(final int x, final int z) {
-        if (Folia.isFolia()) {
-            final org.bukkit.Location location = new org.bukkit.Location(world, x, 0, z);
+        final org.bukkit.Location location = new org.bukkit.Location(world, x, 0, z);
+        if (Folia.isFolia() && !Folia.isTickThread(location)) {
             return CompletableFuture
                     .supplyAsync(() -> getElevationForLocation(x, z), command -> Folia.schedule(plugin, location, command))
                     .join();
