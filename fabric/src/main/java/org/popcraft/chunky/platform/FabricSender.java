@@ -1,11 +1,11 @@
 package org.popcraft.chunky.platform;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Position;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import org.popcraft.chunky.platform.util.Location;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
@@ -24,32 +24,32 @@ public class FabricSender implements Sender {
         HAS_PERMISSIONS = hasPermissions;
     }
 
-    private final ServerCommandSource source;
+    private final CommandSourceStack source;
 
-    public FabricSender(final ServerCommandSource source) {
+    public FabricSender(final CommandSourceStack source) {
         this.source = source;
     }
 
     @Override
     public boolean isPlayer() {
-        return source.getEntity() instanceof ServerPlayerEntity;
+        return source.getEntity() instanceof ServerPlayer;
     }
 
     @Override
     public String getName() {
-        return source.getName();
+        return source.getTextName();
     }
 
     @Override
     public World getWorld() {
-        return new FabricWorld(source.getWorld());
+        return new FabricWorld(source.getLevel());
     }
 
     @Override
     public Location getLocation() {
-        final Position pos = source.getPosition();
-        final Vec2f rotation = source.getRotation();
-        return new Location(getWorld(), pos.getX(), pos.getY(), pos.getZ(), rotation.x, rotation.y);
+        final Vec3 pos = source.getPosition();
+        final Vec2 rot = source.getRotation();
+        return new Location(getWorld(), pos.x(), pos.y(), pos.z(), rot.x, rot.y);
     }
 
     @Override
@@ -65,12 +65,12 @@ public class FabricSender implements Sender {
                 return Permissions.check(source, permission, false);
             }
         } else {
-            return source.hasPermissionLevel(2);
+            return source.hasPermission(2);
         }
     }
 
     @Override
     public void sendMessage(final String key, final boolean prefixed, final Object... args) {
-        source.sendFeedback(() -> Text.of(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
+        source.sendSuccess(() -> Component.nullToEmpty(translateKey(key, prefixed, args).replaceAll("&[0-9a-fk-orA-FK-OR]", "")), false);
     }
 }

@@ -1,12 +1,12 @@
 package org.popcraft.chunky.command.suggestion;
 
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
 public final class SuggestionProviders {
-    public static final SuggestionProvider<ServerCommandSource> PATTERNS;
-    public static final SuggestionProvider<ServerCommandSource> SHAPES;
-    public static final SuggestionProvider<ServerCommandSource> TRIM_MODES;
+    public static final SuggestionProvider<CommandSourceStack> PATTERNS;
+    public static final SuggestionProvider<CommandSourceStack> SHAPES;
+    public static final SuggestionProvider<CommandSourceStack> TRIM_MODES;
 
     static {
         PATTERNS = new PatternSuggestionProvider();

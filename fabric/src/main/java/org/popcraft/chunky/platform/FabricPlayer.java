@@ -1,7 +1,7 @@
 package org.popcraft.chunky.platform;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import org.popcraft.chunky.platform.util.Location;
 
 import java.util.UUID;
@@ -9,10 +9,10 @@ import java.util.UUID;
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class FabricPlayer extends FabricSender implements Player {
-    private final ServerPlayerEntity player;
+    private final ServerPlayer player;
 
-    public FabricPlayer(final ServerPlayerEntity player) {
-        super(player.getCommandSource());
+    public FabricPlayer(final ServerPlayer player) {
+        super(player.createCommandSourceStack());
         this.player = player;
     }
 
@@ -23,40 +23,40 @@ public class FabricPlayer extends FabricSender implements Player {
 
     @Override
     public String getName() {
-        return player.getName().getString();
+        return player.getName().toString();
     }
 
     @Override
     public World getWorld() {
-        return new FabricWorld(player.getServerWorld());
+        return new FabricWorld(player.serverLevel());
     }
 
     @Override
     public Location getLocation() {
-        return new Location(getWorld(), player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch());
+        return new Location(getWorld(), player.getX(), player.getY(), player.getZ(), player.getXRot(), player.getYRot());
     }
 
     @Override
     public void sendMessage(final String key, final boolean prefixed, final Object... args) {
-        player.sendMessage(formatColored(translateKey(key, prefixed, args)), false);
+        player.sendSystemMessage(formatColored(translateKey(key, prefixed, args)));
     }
 
     @Override
     public UUID getUUID() {
-        return player.getUuid();
+        return player.getUUID();
     }
 
     @Override
     public void teleport(final Location location) {
-        player.teleport(((FabricWorld) location.getWorld()).getServerWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        player.teleportTo(((FabricWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
     @Override
     public void sendActionBar(final String key) {
-        player.sendMessage(formatColored(translateKey(key, false)), true);
+        player.displayClientMessage(formatColored(translateKey(key, false)), true);
     }
 
-    private Text formatColored(final String message) {
-        return Text.of(message.replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§"));
+    private Component formatColored(final String message) {
+        return Component.nullToEmpty(message.replaceAll("&(?=[0-9a-fk-orA-FK-OR])", "§"));
     }
 }

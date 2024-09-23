@@ -1,11 +1,11 @@
 package org.popcraft.chunky.platform;
 
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.DedicatedServer;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.ServerInterface;
+import net.minecraft.server.level.ServerLevel;
 import org.popcraft.chunky.ChunkyFabric;
 import org.popcraft.chunky.integration.Integration;
 
@@ -32,48 +32,48 @@ public class FabricServer implements Server {
 
     @Override
     public Optional<World> getWorld(final String name) {
-        return Optional.ofNullable(Identifier.tryParse(name))
-                .map(worldIdentifier -> server.getWorld(RegistryKey.of(RegistryKeys.WORLD, worldIdentifier)))
-                .or(() -> {
-                    for (final ServerWorld world : server.getWorlds()) {
-                        if (name.equals(world.getRegistryKey().getValue().getPath())) {
-                            return Optional.of(world);
-                        }
+        return Optional.ofNullable(ResourceLocation.tryParse(name))
+            .map(resourceLocation -> server.getLevel(ResourceKey.create(Registries.DIMENSION, resourceLocation)))
+            .or(() -> {
+                for (final ServerLevel level : server.getAllLevels()) {
+                    if (name.equals(level.dimension().location().getPath())) {
+                        return Optional.of(level);
                     }
-                    return Optional.empty();
-                })
-                .map(FabricWorld::new);
+                }
+                return Optional.empty();
+            })
+            .map(FabricWorld::new);
     }
 
     @Override
     public List<World> getWorlds() {
         final List<World> worlds = new ArrayList<>();
-        server.getWorlds().forEach(world -> worlds.add(new FabricWorld(world)));
+        server.getAllLevels().forEach(world -> worlds.add(new FabricWorld(world)));
         return worlds;
     }
 
     @Override
     public int getMaxWorldSize() {
-        if (server instanceof final DedicatedServer dedicatedServer) {
-            return dedicatedServer.getProperties().maxWorldSize;
+        if (server instanceof final ServerInterface serverInterface) {
+            return serverInterface.getProperties().maxWorldSize;
         } else {
-            return server.getMaxWorldBorderRadius();
+            return server.getAbsoluteMaxWorldSize();
         }
     }
 
     @Override
     public Sender getConsole() {
-        return new FabricSender(server.getCommandSource());
+        return new FabricSender(server.createCommandSourceStack());
     }
 
     @Override
     public Collection<Player> getPlayers() {
-        return server.getPlayerManager().getPlayerList().stream().map(FabricPlayer::new).collect(Collectors.toList());
+        return server.getPlayerList().getPlayers().stream().map(FabricPlayer::new).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Player> getPlayer(final String name) {
-        return Optional.ofNullable(server.getPlayerManager().getPlayer(name)).map(FabricPlayer::new);
+        return Optional.ofNullable(server.getPlayerList().getPlayerByName(name)).map(FabricPlayer::new);
     }
 
     @Override

@@ -4,15 +4,15 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.shape.ShapeType;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ShapeSuggestionProvider implements SuggestionProvider<ServerCommandSource> {
+public class ShapeSuggestionProvider implements SuggestionProvider<CommandSourceStack> {
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(final CommandContext<ServerCommandSource> context, final SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(final CommandContext<CommandSourceStack> context, final SuggestionsBuilder builder) {
         try {
             final String input = context.getArgument(CommandLiteral.SHAPE, String.class);
             ShapeType.all().forEach(shape -> {
