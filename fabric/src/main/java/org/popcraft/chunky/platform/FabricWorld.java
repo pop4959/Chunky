@@ -32,6 +32,7 @@ import java.util.function.Function;
 
 public class FabricWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
+    private static final TicketType<Unit> CHUNKY = TicketType.create("chunky", (unit, unit2) -> 0);
     private static final TicketType<Unit> CHUNKY_TICKING = TicketType.create("chunky_ticking", (unit, unit2) -> 0, TICKING_LOAD_DURATION * 20);
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerLevel world;
@@ -99,7 +100,9 @@ public class FabricWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 world.getChunkSource().addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            return CompletableFuture.allOf(((ServerChunkCacheMixin)world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
+            world.getChunkSource().addRegionTicket(CHUNKY, chunkPos, 1, Unit.INSTANCE);
+            return CompletableFuture.allOf(((ServerChunkCacheMixin)world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, true))
+                .whenCompleteAsync((unused, throwable) -> world.getChunkSource().removeRegionTicket(CHUNKY, chunkPos, 1, Unit.INSTANCE), world.getServer());
         }
     }
 
