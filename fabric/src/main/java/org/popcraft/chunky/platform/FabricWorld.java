@@ -9,11 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.visitors.CollectFields;
 import net.minecraft.nbt.visitors.FieldSelector;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ChunkMap;
-import net.minecraft.server.level.ServerChunkCache;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.TicketType;
+import net.minecraft.server.level.*;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.ChunkPos;
@@ -36,7 +32,6 @@ import java.util.function.Function;
 
 public class FabricWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
-    private static final TicketType<Unit> CHUNKY = TicketType.create("chunky", (unit, unit2) -> 0);
     private static final TicketType<Unit> CHUNKY_TICKING = TicketType.create("chunky_ticking", (unit, unit2) -> 0, TICKING_LOAD_DURATION * 20);
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerLevel world;
@@ -70,10 +65,10 @@ public class FabricWorld implements World {
             if (loadedChunkHolder != null && loadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-            final ChunkHolder unloadedChunkHolder = chunkMapMixin.getPendingUnloads().get(chunkPos.toLong());
-            if (unloadedChunkHolder != null && unloadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
-                return CompletableFuture.completedFuture(true);
-            }
+//            final ChunkHolder unloadedChunkHolder = chunkMapMixin.getPendingUnloads().get(chunkPos.toLong());
+//            if (unloadedChunkHolder != null && unloadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
+//                return CompletableFuture.completedFuture(true);
+//            }
             if (UPDATE_CHUNK_NBT) {
                 return chunkMapMixin.invokeReadChunk(chunkPos)
                     .thenApply(optionalNbt -> optionalNbt
@@ -101,18 +96,10 @@ public class FabricWorld implements World {
             return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), world.getServer()).thenCompose(Function.identity());
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
-            final ServerChunkCache serverChunkCache = world.getChunkSource();
-            serverChunkCache.addRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
             if (TICKING_LOAD_DURATION > 0) {
-                serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
+                world.getChunkSource().addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            ((ServerChunkCacheMixin)serverChunkCache).invokeRunDistanceManagerUpdates();
-            final ChunkMap chunkManager = serverChunkCache.chunkMap;
-            final ChunkMapMixin chunkMapMixin = (ChunkMapMixin) chunkManager;
-            final ChunkHolder chunkHolder = chunkMapMixin.invokeGetVisibleChunkIfPresent(chunkPos.toLong());
-            final CompletableFuture<Void> chunkFuture = chunkHolder == null ? CompletableFuture.completedFuture(null) : CompletableFuture.allOf(chunkHolder.scheduleChunkGenerationTask(ChunkStatus.FULL, chunkManager));
-            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
-            return chunkFuture;
+            return CompletableFuture.allOf(((ServerChunkCacheMixin)world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
         }
     }
 
