@@ -68,10 +68,6 @@ public class NeoForgeWorld implements World {
             if (loadedChunkHolder != null && loadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-//            final ChunkHolder unloadedChunkHolder = chunkStorage.pendingUnloads.get(chunkPos.toLong());
-//            if (unloadedChunkHolder != null && unloadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
-//                return CompletableFuture.completedFuture(true);
-//            }
             if (UPDATE_CHUNK_NBT) {
                 return chunkStorage.readChunk(chunkPos)
                         .thenApply(optionalNbt -> optionalNbt
