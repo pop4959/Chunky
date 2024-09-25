@@ -1,7 +1,7 @@
 package org.popcraft.chunky.listeners.bossbar;
 
-import net.minecraft.entity.boss.ServerBossBar;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerBossEvent;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.platform.World;
@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class BossBarTaskFinishListener implements Consumer<GenerationTaskFinishEvent> {
-    private final Map<Identifier, ServerBossBar> bossBars;
+    private final Map<ResourceLocation, ServerBossEvent> bossBars;
 
-    public BossBarTaskFinishListener(final Map<Identifier, ServerBossBar> bossBars) {
+    public BossBarTaskFinishListener(final Map<ResourceLocation, ServerBossEvent> bossBars) {
         this.bossBars = bossBars;
     }
 
@@ -20,13 +20,13 @@ public class BossBarTaskFinishListener implements Consumer<GenerationTaskFinishE
     public void accept(final GenerationTaskFinishEvent event) {
         final GenerationTask task = event.generationTask();
         final World world = task.getSelection().world();
-        final Identifier worldIdentifier = Identifier.tryParse(world.getKey());
+        final ResourceLocation worldIdentifier = ResourceLocation.tryParse(world.getKey());
         if (worldIdentifier == null) {
             return;
         }
-        final ServerBossBar bossBar = bossBars.get(worldIdentifier);
+        final ServerBossEvent bossBar = bossBars.get(worldIdentifier);
         if (bossBar != null) {
-            bossBar.clearPlayers();
+            bossBar.removeAllPlayers();
             bossBars.remove(worldIdentifier);
         }
     }

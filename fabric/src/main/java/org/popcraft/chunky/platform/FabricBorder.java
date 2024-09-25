@@ -1,6 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import net.minecraft.world.border.WorldBorder;
+import net.minecraft.world.level.border.WorldBorder;
 import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.ShapeType;
 
