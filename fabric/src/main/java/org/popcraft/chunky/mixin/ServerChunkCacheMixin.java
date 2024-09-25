@@ -11,8 +11,10 @@ import java.util.concurrent.CompletableFuture;
 
 @Mixin(ServerChunkCache.class)
 public interface ServerChunkCacheMixin {
+    @SuppressWarnings("UnnecessaryModifier")
     @Invoker("getChunkFutureMainThread")
-    public CompletableFuture<ChunkResult<ChunkAccess>> invokeGetChunkFutureMainThread(final int chunkX, final int chunkZ,
+    public CompletableFuture<ChunkResult<ChunkAccess>> invokeGetChunkFutureMainThread(final int chunkX,
+                                                                                      final int chunkZ,
                                                                                       final ChunkStatus toStatus,
                                                                                       final boolean create);
 }

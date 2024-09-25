@@ -33,16 +33,16 @@ public class FabricServer implements Server {
     @Override
     public Optional<World> getWorld(final String name) {
         return Optional.ofNullable(ResourceLocation.tryParse(name))
-            .map(resourceLocation -> server.getLevel(ResourceKey.create(Registries.DIMENSION, resourceLocation)))
-            .or(() -> {
-                for (final ServerLevel level : server.getAllLevels()) {
-                    if (name.equals(level.dimension().location().getPath())) {
-                        return Optional.of(level);
+                .map(resourceLocation -> server.getLevel(ResourceKey.create(Registries.DIMENSION, resourceLocation)))
+                .or(() -> {
+                    for (final ServerLevel level : server.getAllLevels()) {
+                        if (name.equals(level.dimension().location().getPath())) {
+                            return Optional.of(level);
+                        }
                     }
-                }
-                return Optional.empty();
-            })
-            .map(FabricWorld::new);
+                    return Optional.empty();
+                })
+                .map(FabricWorld::new);
     }
 
     @Override

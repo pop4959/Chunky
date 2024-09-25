@@ -47,12 +47,12 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         }
         final GenerationTask.Progress progress = task.getProgress();
         bossBar.setName(Component.nullToEmpty(String.format("%s | %s%% | %s:%s:%s",
-            worldIdentifier,
-            String.format("%.2f", progress.getPercentComplete()),
-            String.format("%01d", progress.getHours()),
-            String.format("%02d", progress.getMinutes()),
-            String.format("%02d", progress.getSeconds()))));
-        bossBar.setProgress(task.getProgress().getPercentComplete() / 100f);
+                worldIdentifier,
+                String.format("%.2f", progress.getPercentComplete()),
+                String.format("%01d", progress.getHours()),
+                String.format("%02d", progress.getMinutes()),
+                String.format("%02d", progress.getSeconds()))));
+        bossBar.setProgress(progress.getPercentComplete() / 100f);
         if (progress.isComplete()) {
             bossBar.removeAllPlayers();
             bossBars.remove(worldIdentifier);
@@ -61,9 +61,9 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
 
     private ServerBossEvent createNewBossBar(final ResourceLocation worldIdentifier) {
         final ServerBossEvent bossBar = new ServerBossEvent(
-            Component.nullToEmpty(worldIdentifier.toString()),
-            bossBarColor(worldIdentifier),
-            BossEvent.BossBarOverlay.PROGRESS
+                Component.nullToEmpty(worldIdentifier.toString()),
+                bossBarColor(worldIdentifier),
+                BossEvent.BossBarOverlay.PROGRESS
         );
         bossBar.setDarkenScreen(false);
         bossBar.setPlayBossMusic(false);
