@@ -68,10 +68,6 @@ public class NeoForgeWorld implements World {
             if (loadedChunkHolder != null && loadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-            final ChunkHolder unloadedChunkHolder = chunkStorage.pendingUnloads.get(chunkPos.toLong());
-            if (unloadedChunkHolder != null && unloadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
-                return CompletableFuture.completedFuture(true);
-            }
             if (UPDATE_CHUNK_NBT) {
                 return chunkStorage.readChunk(chunkPos)
                         .thenApply(optionalNbt -> optionalNbt
@@ -104,10 +100,7 @@ public class NeoForgeWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            serverChunkCache.runDistanceManagerUpdates();
-            final ChunkMap chunkManager = serverChunkCache.chunkMap;
-            final ChunkHolder chunkHolder = chunkManager.getVisibleChunkIfPresent(chunkPos.toLong());
-            final CompletableFuture<Void> chunkFuture = chunkHolder == null ? CompletableFuture.completedFuture(null) : CompletableFuture.allOf(chunkHolder.scheduleChunkGenerationTask(ChunkStatus.FULL, chunkManager));
+            final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(world.getChunkSource().getChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
             chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
             return chunkFuture;
         }

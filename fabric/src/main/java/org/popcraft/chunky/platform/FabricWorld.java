@@ -70,10 +70,6 @@ public class FabricWorld implements World {
             if (loadedChunkHolder != null && loadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-            final ChunkHolder unloadedChunkHolder = chunkMapMixin.getPendingUnloads().get(chunkPos.toLong());
-            if (unloadedChunkHolder != null && unloadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
-                return CompletableFuture.completedFuture(true);
-            }
             if (UPDATE_CHUNK_NBT) {
                 return chunkMapMixin.invokeReadChunk(chunkPos)
                         .thenApply(optionalNbt -> optionalNbt
@@ -106,11 +102,7 @@ public class FabricWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
-            final ChunkMap chunkManager = serverChunkCache.chunkMap;
-            final ChunkMapMixin chunkMapMixin = (ChunkMapMixin) chunkManager;
-            final ChunkHolder chunkHolder = chunkMapMixin.invokeGetVisibleChunkIfPresent(chunkPos.toLong());
-            final CompletableFuture<Void> chunkFuture = chunkHolder == null ? CompletableFuture.completedFuture(null) : CompletableFuture.allOf(chunkHolder.scheduleChunkGenerationTask(ChunkStatus.FULL, chunkManager));
+            final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
             chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
             return chunkFuture;
         }
