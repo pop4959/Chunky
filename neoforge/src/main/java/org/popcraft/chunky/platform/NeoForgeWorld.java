@@ -95,12 +95,14 @@ public class NeoForgeWorld implements World {
             return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), world.getServer()).thenCompose(Function.identity());
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
+            final ServerChunkCache serverChunkCache = world.getChunkSource();
+            serverChunkCache.addRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
             if (TICKING_LOAD_DURATION > 0) {
-                world.getChunkSource().addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
+                serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            world.getChunkSource().addRegionTicket(CHUNKY, chunkPos, 1, Unit.INSTANCE);
-            return CompletableFuture.allOf(world.getChunkSource().getChunkFutureMainThread(x, z, ChunkStatus.FULL, true))
-                .whenCompleteAsync((unused, throwable) -> world.getChunkSource().removeRegionTicket(CHUNKY, chunkPos, 1, Unit.INSTANCE), world.getServer());
+            final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(world.getChunkSource().getChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
+            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
+            return chunkFuture;
         }
     }
 

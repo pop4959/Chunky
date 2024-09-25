@@ -102,9 +102,8 @@ public class FabricWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            world.getChunkSource().addRegionTicket(CHUNKY, chunkPos, 1, Unit.INSTANCE);
             final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
-            chunkFuture.whenCompleteAsync((unused, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 1, Unit.INSTANCE), world.getServer());
+            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
             return chunkFuture;
         }
     }
