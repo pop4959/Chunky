@@ -76,22 +76,22 @@ public class FabricWorld implements World {
             }
             if (UPDATE_CHUNK_NBT) {
                 return chunkMapMixin.invokeReadChunk(chunkPos)
-                    .thenApply(optionalNbt -> optionalNbt
-                        .filter(chunkNbt -> chunkNbt.contains("Status", Tag.TAG_STRING))
-                        .map(chunkNbt -> chunkNbt.getString("Status"))
-                        .map(status -> "minecraft:full".equals(status) || "full".equals(status))
-                        .orElse(false));
+                        .thenApply(optionalNbt -> optionalNbt
+                                .filter(chunkNbt -> chunkNbt.contains("Status", Tag.TAG_STRING))
+                                .map(chunkNbt -> chunkNbt.getString("Status"))
+                                .map(status -> "minecraft:full".equals(status) || "full".equals(status))
+                                .orElse(false));
             }
             final FieldSelector statusSelector = new FieldSelector(StringTag.TYPE, "Status");
             final CollectFields statusCollector = new CollectFields(statusSelector);
             return serverChunkCache.chunkScanner().scanChunk(chunkPos, statusCollector)
-                .thenApply(ignored -> {
-                    if (statusCollector.getResult() instanceof final CompoundTag chunkNbt) {
-                        final String status = chunkNbt.getString("Status");
-                        return "minecraft:full".equals(status) || "full".equals(status);
-                    }
-                    return false;
-                });
+                    .thenApply(ignored -> {
+                        if (statusCollector.getResult() instanceof final CompoundTag chunkNbt) {
+                            final String status = chunkNbt.getString("Status");
+                            return "minecraft:full".equals(status) || "full".equals(status);
+                        }
+                        return false;
+                    });
         }
     }
 
@@ -106,7 +106,7 @@ public class FabricWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            ((ServerChunkCacheMixin)serverChunkCache).invokeRunDistanceManagerUpdates();
+            ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
             final ChunkMap chunkManager = serverChunkCache.chunkMap;
             final ChunkMapMixin chunkMapMixin = (ChunkMapMixin) chunkManager;
             final ChunkHolder chunkHolder = chunkMapMixin.invokeGetVisibleChunkIfPresent(chunkPos.toLong());
@@ -173,10 +173,10 @@ public class FabricWorld implements World {
     public void playSound(final Player player, final String sound) {
         final Location location = player.getLocation();
         world.getServer()
-            .registryAccess()
-            .registry(Registries.SOUND_EVENT)
-            .flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound)))
-            .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
+                .registryAccess()
+                .registry(Registries.SOUND_EVENT)
+                .flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound)))
+                .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
     }
 
     @Override

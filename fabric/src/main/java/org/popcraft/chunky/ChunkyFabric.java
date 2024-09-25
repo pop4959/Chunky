@@ -86,77 +86,77 @@ public class ChunkyFabric implements ModInitializer {
                         return Command.SINGLE_SUCCESS;
                     });
             registerArguments(command, literal(CommandLiteral.CANCEL),
-                argument(CommandLiteral.WORLD, dimension()));
+                    argument(CommandLiteral.WORLD, dimension()));
             registerArguments(command, literal(CommandLiteral.CENTER),
-                argument(CommandLiteral.X, word()),
-                argument(CommandLiteral.Z, word()));
+                    argument(CommandLiteral.X, word()),
+                    argument(CommandLiteral.Z, word()));
             registerArguments(command, literal(CommandLiteral.CONFIRM));
             registerArguments(command, literal(CommandLiteral.CONTINUE),
-                argument(CommandLiteral.WORLD, dimension()));
+                    argument(CommandLiteral.WORLD, dimension()));
             registerArguments(command, literal(CommandLiteral.CORNERS),
-                argument(CommandLiteral.X1, word()),
-                argument(CommandLiteral.Z1, word()),
-                argument(CommandLiteral.X2, word()),
-                argument(CommandLiteral.Z2, word()));
+                    argument(CommandLiteral.X1, word()),
+                    argument(CommandLiteral.Z1, word()),
+                    argument(CommandLiteral.X2, word()),
+                    argument(CommandLiteral.Z2, word()));
             registerArguments(command, literal(CommandLiteral.HELP),
-                argument(CommandLiteral.PAGE, integer()));
+                    argument(CommandLiteral.PAGE, integer()));
             registerArguments(command, literal(CommandLiteral.PATTERN),
-                argument(CommandLiteral.PATTERN, string()).suggests(SuggestionProviders.PATTERNS),
-                argument(CommandLiteral.VALUE, string()));
+                    argument(CommandLiteral.PATTERN, string()).suggests(SuggestionProviders.PATTERNS),
+                    argument(CommandLiteral.VALUE, string()));
             registerArguments(command, literal(CommandLiteral.PAUSE),
-                argument(CommandLiteral.WORLD, dimension()));
+                    argument(CommandLiteral.WORLD, dimension()));
             registerArguments(command, literal(CommandLiteral.PROGRESS));
             registerArguments(command, literal(CommandLiteral.QUIET),
-                argument(CommandLiteral.INTERVAL, integer()));
+                    argument(CommandLiteral.INTERVAL, integer()));
             registerArguments(command, literal(CommandLiteral.RADIUS),
-                argument(CommandLiteral.RADIUS, word()),
-                argument(CommandLiteral.RADIUS, word()));
+                    argument(CommandLiteral.RADIUS, word()),
+                    argument(CommandLiteral.RADIUS, word()));
             registerArguments(command, literal(CommandLiteral.RELOAD),
-                argument(CommandLiteral.TYPE, word()));
+                    argument(CommandLiteral.TYPE, word()));
             registerArguments(command, literal(CommandLiteral.SELECTION));
             registerArguments(command, literal(CommandLiteral.SHAPE),
-                argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES));
+                    argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES));
             registerArguments(command, literal(CommandLiteral.SILENT));
             registerArguments(command, literal(CommandLiteral.SPAWN));
             registerArguments(command, literal(CommandLiteral.START),
-                argument(CommandLiteral.WORLD, dimension()),
-                argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES),
-                argument(CommandLiteral.CENTER_X, word()),
-                argument(CommandLiteral.CENTER_Z, word()),
-                argument(CommandLiteral.RADIUS_X, word()),
-                argument(CommandLiteral.RADIUS_Z, word()));
+                    argument(CommandLiteral.WORLD, dimension()),
+                    argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES),
+                    argument(CommandLiteral.CENTER_X, word()),
+                    argument(CommandLiteral.CENTER_Z, word()),
+                    argument(CommandLiteral.RADIUS_X, word()),
+                    argument(CommandLiteral.RADIUS_Z, word()));
             registerArguments(command, literal(CommandLiteral.TRIM),
-                argument(CommandLiteral.WORLD, dimension()),
-                argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES),
-                argument(CommandLiteral.CENTER_X, word()),
-                argument(CommandLiteral.CENTER_Z, word()),
-                argument(CommandLiteral.RADIUS_X, word()),
-                argument(CommandLiteral.RADIUS_Z, word()),
-                argument(CommandLiteral.TRIM_MODE, string()).suggests(SuggestionProviders.TRIM_MODES),
-                argument(CommandLiteral.INHABITED, word()));
+                    argument(CommandLiteral.WORLD, dimension()),
+                    argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES),
+                    argument(CommandLiteral.CENTER_X, word()),
+                    argument(CommandLiteral.CENTER_Z, word()),
+                    argument(CommandLiteral.RADIUS_X, word()),
+                    argument(CommandLiteral.RADIUS_Z, word()),
+                    argument(CommandLiteral.TRIM_MODE, string()).suggests(SuggestionProviders.TRIM_MODES),
+                    argument(CommandLiteral.INHABITED, word()));
             registerArguments(command, literal(CommandLiteral.WORLDBORDER));
             registerArguments(command, literal(CommandLiteral.WORLD),
-                argument(CommandLiteral.WORLD, dimension()));
+                    argument(CommandLiteral.WORLD, dimension()));
             final LiteralArgumentBuilder<CommandSourceStack> borderCommand = literal(CommandLiteral.BORDER)
-                .requires(serverCommandSource -> chunky != null && chunky.getCommands().containsKey(CommandLiteral.BORDER))
-                .executes(command.getCommand());
+                    .requires(serverCommandSource -> chunky != null && chunky.getCommands().containsKey(CommandLiteral.BORDER))
+                    .executes(command.getCommand());
             registerArguments(borderCommand, literal(CommandLiteral.ADD),
-                argument(CommandLiteral.WORLD, dimension()),
-                argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES),
-                argument(CommandLiteral.CENTER_X, word()),
-                argument(CommandLiteral.CENTER_Z, word()),
-                argument(CommandLiteral.RADIUS_X, word()),
-                argument(CommandLiteral.RADIUS_Z, word()));
+                    argument(CommandLiteral.WORLD, dimension()),
+                    argument(CommandLiteral.SHAPE, string()).suggests(SuggestionProviders.SHAPES),
+                    argument(CommandLiteral.CENTER_X, word()),
+                    argument(CommandLiteral.CENTER_Z, word()),
+                    argument(CommandLiteral.RADIUS_X, word()),
+                    argument(CommandLiteral.RADIUS_Z, word()));
             registerArguments(borderCommand, literal(CommandLiteral.BYPASS),
-                argument(CommandLiteral.PLAYER, player()));
+                    argument(CommandLiteral.PLAYER, player()));
             registerArguments(borderCommand, literal(CommandLiteral.HELP));
             registerArguments(borderCommand, literal(CommandLiteral.LIST));
             registerArguments(borderCommand, literal(CommandLiteral.LOAD),
-                argument(CommandLiteral.WORLD, dimension()));
+                    argument(CommandLiteral.WORLD, dimension()));
             registerArguments(borderCommand, literal(CommandLiteral.REMOVE),
-                argument(CommandLiteral.WORLD, dimension()));
+                    argument(CommandLiteral.WORLD, dimension()));
             registerArguments(borderCommand, literal(CommandLiteral.WRAP),
-                argument(CommandLiteral.WRAP, word()));
+                    argument(CommandLiteral.WRAP, word()));
             registerArguments(command, borderCommand);
             dispatcher.register(command);
         });
