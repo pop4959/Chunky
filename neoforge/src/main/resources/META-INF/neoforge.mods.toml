@@ -12,13 +12,13 @@ authors="${author}"
 description="${description}"
 [[dependencies.chunky]]
    modId="neoforge"
-   mandatory=true
+   type="required"
    versionRange="[21.0-beta,)"
    ordering="NONE"
    side="BOTH"
 [[dependencies.chunky]]
    modId="minecraft"
-   mandatory=true
+   type="required"
    versionRange="[1.21,1.22)"
    ordering="NONE"
    side="BOTH"
