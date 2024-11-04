@@ -50,7 +50,7 @@ public class FabricPlayer extends FabricSender implements Player {
 
     @Override
     public void teleport(final Location location) {
-        player.teleportTo(((FabricWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ(), EnumSet.noneOf(Relative.class), location.getYaw(), location.getPitch(), true /* from TeleportCommand */);
+        player.teleportTo(((FabricWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ(), EnumSet.noneOf(Relative.class), location.getYaw(), location.getPitch(), true);
     }
 
     @Override

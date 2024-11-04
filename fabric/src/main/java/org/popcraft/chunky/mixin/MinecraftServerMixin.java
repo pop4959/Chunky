@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
-
-    @Shadow private int emptyTicks;
+    @Shadow
+    private int emptyTicks;
 
     @Inject(method = "tickServer", at = @At("HEAD"))
     private void preventPausing(CallbackInfo ci) {
@@ -19,5 +19,4 @@ public class MinecraftServerMixin {
             this.emptyTicks = 0;
         }
     }
-
 }
