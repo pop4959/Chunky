@@ -89,7 +89,7 @@
   "shape_star": "estrella",
   "shape_triangle": "triángulo",
   "task_trim": "Borrados %s chunks de %s en %s segundos.",
-  "task_trim_update": "Task running for %s. Processed: %s regions (%s%%)",
+  "task_trim_update": "Tarea en ejecución para %s. Procesado: %s regiones (%s%%)",
   "task_done": "Tarea finalizada en  %s. Chunks procesados: %s (%s%%), Tiempo total: %s:%s:%s",
   "task_stopped": "Tarea pausada por %s.",
   "task_update": "Tarea en %s. Chunks procesados: %s (%s%%), tiempo estimado restante: %s:%s:%s, Promedio de: %s cps, Chunk actual: %s, %s",
