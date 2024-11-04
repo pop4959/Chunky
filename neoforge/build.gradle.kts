@@ -47,6 +47,6 @@ tasks {
     }
     remapJar {
         inputFile.set(shadowJar.get().archiveFile)
-        archiveFileName.set("${project.property("artifactName")}-${project.version}.jar")
+        archiveFileName.set("${project.property("artifactName")}-NeoForge-${project.version}.jar")
     }
 }

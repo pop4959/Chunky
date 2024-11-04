@@ -35,3 +35,9 @@ sponge {
         }
     }
 }
+
+tasks {
+    shadowJar {
+        archiveFileName.set("${project.property("artifactName")}-Sponge-${project.version}.jar")
+    }
+}

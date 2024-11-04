@@ -34,6 +34,6 @@ tasks {
     }
     remapJar {
         inputFile.set(shadowJar.get().archiveFile)
-        archiveFileName.set("${project.property("artifactName")}-${project.version}.jar")
+        archiveFileName.set("${project.property("artifactName")}-Fabric-${project.version}.jar")
     }
 }

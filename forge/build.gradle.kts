@@ -39,7 +39,7 @@ tasks {
     shadowJar {
         configurations = listOf(shade)
         archiveClassifier.set(null as String?)
-        archiveFileName.set("${project.property("artifactName")}-${project.version}.jar")
+        archiveFileName.set("${project.property("artifactName")}-Forge-${project.version}.jar")
     }
     remapJar {
         enabled = false
