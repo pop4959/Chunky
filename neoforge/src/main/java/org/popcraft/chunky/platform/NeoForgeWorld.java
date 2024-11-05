@@ -102,6 +102,7 @@ public class NeoForgeWorld implements World {
             }
             final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(world.getChunkSource().getChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
             chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
+            chunkFuture.thenAcceptAsync((ignored) -> world.getServer().emptyTicks = 0);
             return chunkFuture;
         }
     }
@@ -135,7 +136,7 @@ public class NeoForgeWorld implements World {
         if (height >= logicalHeight) {
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, logicalHeight, z);
             int air = 0;
-            while (pos.getY() > world.getMinBuildHeight()) {
+            while (pos.getY() > world.getMinY()) {
                 pos = pos.move(Direction.DOWN);
                 final BlockState blockState = world.getBlockState(pos);
                 if (blockState.isSolid() && air > 1) {
@@ -164,8 +165,8 @@ public class NeoForgeWorld implements World {
         final Location location = player.getLocation();
         world.getServer()
                 .registryAccess()
-                .registry(Registries.SOUND_EVENT)
-                .flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound)))
+                .get(Registries.SOUND_EVENT)
+                .flatMap(soundEventRegistry -> soundEventRegistry.value().getOptional(ResourceLocation.tryParse(sound)))
                 .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
     }
 

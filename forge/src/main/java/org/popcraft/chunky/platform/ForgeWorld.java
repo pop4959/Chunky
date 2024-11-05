@@ -109,6 +109,7 @@ public class ForgeWorld implements World {
             final ChunkHolder chunkHolder = chunkManager.getVisibleChunkIfPresent(chunkPos.toLong());
             final CompletableFuture<Void> chunkFuture = chunkHolder == null ? CompletableFuture.completedFuture(null) : CompletableFuture.allOf(chunkHolder.scheduleChunkGenerationTask(ChunkStatus.FULL, chunkManager));
             chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
+            chunkFuture.thenAcceptAsync((ignored) -> world.getServer().emptyTicks = 0);
             return chunkFuture;
         }
     }
@@ -142,7 +143,7 @@ public class ForgeWorld implements World {
         if (height >= logicalHeight) {
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, logicalHeight, z);
             int air = 0;
-            while (pos.getY() > world.getMinBuildHeight()) {
+            while (pos.getY() > world.getMinY()) {
                 pos = pos.move(Direction.DOWN);
                 final BlockState blockState = world.getBlockState(pos);
                 if (blockState.isSolid() && air > 1) {
@@ -171,8 +172,8 @@ public class ForgeWorld implements World {
         final Location location = player.getLocation();
         world.getServer()
                 .registryAccess()
-                .registry(Registries.SOUND_EVENT)
-                .flatMap(soundEventRegistry -> soundEventRegistry.getOptional(ResourceLocation.tryParse(sound)))
+                .get(Registries.SOUND_EVENT)
+                .flatMap(soundEventRegistry -> soundEventRegistry.value().getOptional(ResourceLocation.tryParse(sound)))
                 .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
     }
 

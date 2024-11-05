@@ -2,8 +2,10 @@ package org.popcraft.chunky.platform;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Relative;
 import org.popcraft.chunky.platform.util.Location;
 
+import java.util.EnumSet;
 import java.util.UUID;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
@@ -48,7 +50,7 @@ public class NeoForgePlayer extends NeoForgeSender implements Player {
 
     @Override
     public void teleport(final Location location) {
-        player.teleportTo(((NeoForgeWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        player.teleportTo(((NeoForgeWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ(), EnumSet.noneOf(Relative.class), location.getYaw(), location.getPitch(), true);
     }
 
     @Override
