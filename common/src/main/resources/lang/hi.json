@@ -5,6 +5,7 @@
   "command_no_permission": "&cइस कमांड के लिए आपके पास अनुमति नहीं है।",
   "disabled": "निष्क्रिय",
   "enabled": "सक्रिय",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "यह प्लग-इन Minecraft के 1.13 से नीचे के संस्करणों के साथ संगत नहीं है।",
   "error_version_spigot": "यह प्लग-इन Spigot 1.13 के साथ संगत नहीं है!",
   "format_border_add": "%2$s में %1$s वर्ल्ड सीमा केंद्र %s,%s और त्रिज्या %s के साथ जोड़ी गयी।",

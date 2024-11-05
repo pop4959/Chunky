@@ -5,6 +5,7 @@
   "command_no_permission": "&cNemáš oprávnění k použití tohoto příkazu.",
   "disabled": "vypnuto",
   "enabled": "zapnuto",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Tento plugin není kompatibilní s Minecraft verzi nižší než 1.13.",
   "error_version_spigot": "Tento plugin není kompatibilní se Spigot 1.13!",
   "format_border_add": "%s okraj světa přidán do %s se středem %s, %sa poloměrem %s.",

@@ -5,6 +5,7 @@
   "command_no_permission": "&cNemate dozvolu za ovu komandu.",
   "disabled": "isključeno",
   "enabled": "uključeno",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Ovaj plugin nije kompatibilan sa Minecraft verzijama ispod 1.13.",
   "error_version_spigot": "Ovaj plugin nije kompatibilan sa Spigotom 1.13!",
   "format_border_add": "Dodat %s border sveta %s sa centrom u %s, %s, i razdaljinom %s.",

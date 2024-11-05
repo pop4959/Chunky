@@ -5,6 +5,7 @@
   "command_no_permission": "&cNie masz uprawnień, aby użyć tej komendy.",
   "disabled": "wyłączony",
   "enabled": "włączony",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Ten plugin nie jest kompatibilny z wersjami Minecraft poniżej 1.13.",
   "error_version_spigot": "Ten plugin nie jest kompatibilny ze Spigotem 1.13!",
   "format_border_add": "Dodano granicę %s do świata %s ze środkiem %s, %s, i promieniem %s.",

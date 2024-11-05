@@ -5,6 +5,7 @@
   "command_no_permission": "&c您没有足够权限来使用此指令。",
   "disabled": "已关闭",
   "enabled": "已启用",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Chunky无法与Minecraft版本低于 1.13 的服务器兼容。",
   "error_version_spigot": "Chunky无法加载在 Spigot 1.13 版本的服务器上",
   "format_border_add": "将 %s 的世界边界增加至 %s，目前边界中心坐标 %s, %s, 边界的半径为 %s。",

@@ -5,6 +5,7 @@
   "command_no_permission": "&cУ вас недостаточно прав для использования этой команды.",
   "disabled": "отключено",
   "enabled": "включено",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Этот плагин несовместим с версиями Minecraft ниже 1.13.",
   "error_version_spigot": "Этот плагин несовместим со Spigot 1.13!",
   "format_border_add": "Граница формы %s была установлена в мире %s с центром на %s, %s, и радиусом %s.",
