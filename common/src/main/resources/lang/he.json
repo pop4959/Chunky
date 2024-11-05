@@ -5,6 +5,7 @@
   "command_no_permission": "&cאין לך גישה להשתמש בפקודה זאת.",
   "disabled": "מבוטלת",
   "enabled": "מופעלת",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "פלאגין זה אינו מתאים למיינקראפט בגרסה שמתחת ל1.13.",
   "error_version_spigot": "פלאגין זה אינו מתאים לSpigot בגרסה 1.13!",
   "format_border_add": "נוסף %s גבול ל%s עם המרכז %s,%s, ורדיוס של %s.",
