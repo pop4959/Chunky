@@ -5,6 +5,7 @@
   "command_no_permission": "&cНямате достъп до тази команда.",
   "disabled": "деактивирано",
   "enabled": "активирано",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Този плъгин не е съвместим с версии на Minecraft по-стари от 1.13.",
   "error_version_spigot": "Този плъгин не е съвместим с Spigot 1.13!",
   "format_border_add": "Добавена %s световна граница към %s с център %s, %s и радиус %s.",
