@@ -5,6 +5,7 @@
   "command_no_permission": "&cNo tienes permiso para usar este comando.",
   "disabled": "deshabilitado",
   "enabled": "habilitado",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Chunky no es compatible con versiones menores a 1.13.",
   "error_version_spigot": "Chunky no es compatible con Spigot 1.13!",
   "format_border_add": "Añadido borde %s a %s con centro %s, %s y radio %s.",
