@@ -5,6 +5,7 @@
   "command_no_permission": "&cJe hebt geen toestemming om dit commando te gebruiken.",
   "disabled": "uitgeschakeld",
   "enabled": "ingeschakeld",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Deze plugin is niet compatibel met Minecraft versies onder 1.13.",
   "error_version_spigot": "Deze plugin is niet compatibel met Spigot 1.13!",
   "format_border_add": "%s wereldgrens toegevoegd aan %s met centrum %s, %s, en radius %s.",
