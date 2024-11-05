@@ -5,6 +5,7 @@
   "command_no_permission": "&cSinulla ei ole oikeutta tähän komentoon.",
   "disabled": "pois käytöstä",
   "enabled": "käytössä",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Tämä plugiini ei ole yhteensopiva alle Minecraft-version 1.13 kanssa.",
   "error_version_spigot": "Tämä plugiini ei ole yhteensopiva Spigot 1.13 kanssa!",
   "format_border_add": "Lisätty %s maailman raja %s keskipisteellä %s, %s, ja säteellä %s.",
