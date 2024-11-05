@@ -5,6 +5,7 @@
   "command_no_permission": "&cNon hai i permessi per questo comando.",
   "disabled": "disattivato",
   "enabled": "attivato",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Questo plugin non è compatibile con le versioni di Minecraft inferiori alla 1.13.",
   "error_version_spigot": "Questo plugin non è compatibile con Spigot 1.13!",
   "format_border_add": "Aggiunto il bordo %s a %s con centro %s, %s, e raggio %s.",
