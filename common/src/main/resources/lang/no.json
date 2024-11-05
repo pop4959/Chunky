@@ -5,6 +5,7 @@
   "command_no_permission": "&cDu har ikke tillatelse til å bruke denne kommandoen.",
   "disabled": "deaktivert",
   "enabled": "aktivert",
+  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
   "error_version": "Denne pluginen er ikke kompatibel med Minecraftversjoner under 1.13.",
   "error_version_spigot": "Denne pluginen er ikke kompatibel med Spigot 1.13!",
   "format_border_add": "Added %s world border to %s with center %s, %s, and radius %s.",
