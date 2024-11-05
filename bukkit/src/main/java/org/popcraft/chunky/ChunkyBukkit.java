@@ -23,14 +23,23 @@ import org.popcraft.chunky.platform.BukkitPlayer;
 import org.popcraft.chunky.platform.BukkitSender;
 import org.popcraft.chunky.platform.BukkitServer;
 import org.popcraft.chunky.platform.Folia;
+import org.popcraft.chunky.platform.Paper;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 import org.popcraft.chunky.util.Version;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
@@ -65,6 +74,9 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         final Metrics metrics = new Metrics(this, 8211);
         metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
         getServer().getPluginManager().registerEvents(this, this);
+        if (!Paper.isPaper()) {
+            disablePauseWhenEmptySeconds();
+        }
     }
 
     @Override
@@ -119,5 +131,26 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     @EventHandler
     public void onWorldInit(final WorldInitEvent event) {
         chunky.getRegionCache().clear(event.getWorld().getName());
+    }
+
+    private void disablePauseWhenEmptySeconds() {
+        final Path serverPropertiesPath = Path.of(".").resolve("server.properties");
+        final File serverPropertiesFile = serverPropertiesPath.toFile();
+        final Properties serverProperties = new Properties();
+        try (final FileInputStream serverPropertiesFileInputStream = new FileInputStream(serverPropertiesFile)) {
+            serverProperties.load(serverPropertiesFileInputStream);
+            final Optional<Integer> pauseWhenEmptySeconds = Input.tryInteger(serverProperties.getProperty("pause-when-empty-seconds"));
+            if (pauseWhenEmptySeconds.isPresent() && pauseWhenEmptySeconds.get() > 0) {
+                serverProperties.setProperty("pause-when-empty-seconds", "0");
+                try (final FileOutputStream serverPropertiesFileOutputStream = new FileOutputStream(serverPropertiesFile)) {
+                    serverProperties.store(serverPropertiesFileOutputStream, "Minecraft server properties");
+                    getLogger().warning(() -> translate(TranslationKey.ERROR_PAUSE_WHEN_EMPTY_SECONDS));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
     }
 }
