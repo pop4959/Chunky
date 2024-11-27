@@ -97,10 +97,10 @@ public class NeoForgeWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addTicketWithRadius(CHUNKY_TICKING, chunkPos, 1);
             }
-            final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(world.getChunkSource().getChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
-            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0), world.getServer());
-            chunkFuture.thenAcceptAsync((ignored) -> world.getServer().emptyTicks = 0);
-            return chunkFuture;
+            serverChunkCache.runDistanceManagerUpdates();
+            return serverChunkCache.getChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
+                    .whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0), world.getServer())
+                    .thenApply(ignored -> null);
         }
     }
 

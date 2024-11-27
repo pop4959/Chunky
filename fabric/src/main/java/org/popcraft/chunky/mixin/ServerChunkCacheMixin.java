@@ -17,4 +17,7 @@ public interface ServerChunkCacheMixin {
                                                                                       final int chunkZ,
                                                                                       final ChunkStatus toStatus,
                                                                                       final boolean create);
+
+    @Invoker
+    boolean invokeRunDistanceManagerUpdates();
 }
