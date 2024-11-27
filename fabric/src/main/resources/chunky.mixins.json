@@ -6,7 +6,8 @@
   "mixins": [
     "ChunkMapMixin",
     "MinecraftServerMixin",
-    "ServerChunkCacheMixin"
+    "ServerChunkCacheMixin",
+    "ServerLevelMixin"
   ],
   "client": [
     "client.IntegratedServerMixin"
