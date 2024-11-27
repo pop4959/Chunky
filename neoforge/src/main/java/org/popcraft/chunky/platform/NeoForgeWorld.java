@@ -100,10 +100,10 @@ public class NeoForgeWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(world.getChunkSource().getChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
-            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
-            chunkFuture.thenAcceptAsync((ignored) -> world.getServer().emptyTicks = 0);
-            return chunkFuture;
+            serverChunkCache.runDistanceManagerUpdates();
+            return serverChunkCache.getChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
+                    .whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer())
+                    .thenApply(ignored -> null);
         }
     }
 
