@@ -1,22 +1,43 @@
 package org.popcraft.chunky.mixin;
 
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import org.popcraft.chunky.ChunkyProvider;
+import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(MinecraftServer.class)
-public class MinecraftServerMixin {
-    @Shadow
-    private int emptyTicks;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
 
-    @Inject(method = "tickServer", at = @At("HEAD"))
-    private void preventPausing(CallbackInfo ci) {
-        if (!ChunkyProvider.get().getGenerationTasks().isEmpty()) {
-            this.emptyTicks = 0;
+@Mixin(MinecraftServer.class)
+public abstract class MinecraftServerMixin implements MinecraftServerExtension {
+
+    @Shadow public abstract Iterable<ServerLevel> getAllLevels();
+
+    @Unique
+    private final AtomicBoolean chunky$needChunkSystemHousekeeping = new AtomicBoolean(false);
+
+    @Inject(method = "tickServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;tickConnection()V"))
+    private void tickPaused(BooleanSupplier booleanSupplier, CallbackInfo ci) {
+        this.chunky$runChunkSystemHousekeeping(booleanSupplier);
+    }
+
+    @Override
+    public void chunky$runChunkSystemHousekeeping(BooleanSupplier haveTime) {
+        if (this.chunky$needChunkSystemHousekeeping.compareAndSet(true, false)) {
+            for (ServerLevel level : this.getAllLevels()) {
+                ((ChunkMapMixin) level.getChunkSource().chunkMap).invokeTick(haveTime);
+            }
         }
+    }
+
+    @Override
+    public void chunky$markChunkSystemHousekeeping() {
+        this.chunky$needChunkSystemHousekeeping.set(true);
     }
 }
