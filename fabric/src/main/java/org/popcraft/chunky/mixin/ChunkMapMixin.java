@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BooleanSupplier;
 
 @SuppressWarnings("UnnecessaryInterfaceModifier")
 @Mixin(ChunkMap.class)
@@ -18,4 +19,7 @@ public interface ChunkMapMixin {
 
     @Invoker("readChunk")
     public CompletableFuture<Optional<CompoundTag>> invokeReadChunk(ChunkPos pos);
+
+    @Invoker
+    void invokeTick(BooleanSupplier booleanSupplier);
 }

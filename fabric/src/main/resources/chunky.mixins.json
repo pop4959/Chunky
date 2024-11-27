@@ -9,6 +9,7 @@
     "ServerChunkCacheMixin"
   ],
   "client": [
+    "client.IntegratedServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
