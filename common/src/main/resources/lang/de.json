@@ -5,7 +5,7 @@
   "command_no_permission": "&cDu hast keine Berechtigung für diesen Befehl.",
   "disabled": "deaktiviert",
   "enabled": "aktiviert",
-  "error_pause_when_empty_seconds": "Dieses Plugin wird nicht korrekt funktionieren, wenn die Option \"pause-when-empty\" in den Servereinstellungen aktiviert ist. Dies wird automatisch in server.properties deaktiviert. Bitte starte deinen Server neu.",
+  "error_pause_when_empty_seconds": "Dieses Plugin wird nicht korrekt funktionieren, wenn die Option pause-when-empty-seconds in den Servereinstellungen aktiviert ist. Dies wird automatisch in server.properties deaktiviert. Bitte starte deinen Server neu.",
   "error_version": "Dieses Plugin ist nicht kompatibel mit Minecraft versionen unterhalb von 1.13.",
   "error_version_spigot": "Dieses Plugin ist nicht kompatibel mit Spigot 1.13!",
   "format_border_add": "Weltgrenze %s zu %s mit Zentrum %s, %s und Radius %s hinzugefügt.",
