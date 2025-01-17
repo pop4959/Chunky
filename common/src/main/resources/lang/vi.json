@@ -5,7 +5,7 @@
   "command_no_permission": "&cBạn không có quyền sử dụng lệnh này.",
   "disabled": "đã vô hiệu hóa",
   "enabled": "kích hoạt",
-  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
+  "error_pause_when_empty_seconds": "Plugin này sẽ không hoạt động đúng cách khi pause-when-empty-seconds được bật. Tự động tắt tính năng này trong server.properties. Vui lòng khởi động lại máy chủ của bạn.",
   "error_version": "Plugin này không tương thích với các phiên bản Minecraft dưới 1.13.",
   "error_version_spigot": "Plugin này không tương thích với phiên bản Spigot 1.13!",
   "format_border_add": "Đã thêm đường biên giới %s tại %s tại trung tâm %s, %s, và có bán kính %s.",
