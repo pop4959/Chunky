@@ -6,7 +6,7 @@
   "disabled": "停用",
   "enabled": "啟用",
   "error_pause_when_empty_seconds": "這個插件在啟用 pause-when-empty-seconds 時無法正常運作。已在 server.properties 中自動停用此設定。請重新啟動你的伺服器。",
-  "error_version": "這個插件與 Minecraft 版本低於 1.13 的伺服器不相容。",
+  "error_version": "此插件無法與 Minecraft 版本低於 1.13 的伺服器相容。",
   "error_version_spigot": "這個插件與 Spigot 1.13 不相容！",
   "format_border_add": "將 %s 的世界邊界增加至 %s，目前邊界中心座標 %s, %s, 邊界的半徑為 %s。",
   "format_border_bypass": "已為 %2$s %1$s臨時世界邊界繞過。",
