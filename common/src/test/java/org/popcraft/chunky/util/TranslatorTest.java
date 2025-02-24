@@ -23,6 +23,7 @@ public class TranslatorTest {
         testTranslation("hi");
         testTranslation("hr");
         testTranslation("it");
+        testTranslation("ja");
         testTranslation("ko");
         testTranslation("nl");
         testTranslation("no");
