@@ -22,7 +22,7 @@
   "format_cancel_all": "Abbrechen aller Aufgaben.",
   "format_cancel_confirm": "Abgebrochene Aufgaben können nicht fortgesetzt werden. Wenn du dir sicher bist, dass du es abbrechen willst, schreibe '%s'",
   "format_cancel_no_tasks": "Keine Aufgaben zum abbrechen.",
-  "format_center": "Mitte geändert zu %s, %s.",
+  "format_center": "Zentrum geändert zu %s, %s.",
   "format_confirm": "Nichts zum Bestätigen!",
   "format_continue": "Aufgabe für %s wird fortgesetzt.",
   "format_continue_no_tasks": "Keine Aufgaben zum Fortsetzen.",

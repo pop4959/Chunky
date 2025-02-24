@@ -8,7 +8,7 @@
   "error_pause_when_empty_seconds": "Плагин не может корректно функционировать при включённой настройке pause-when-empty-seconds. Она будет отключена в server.properties автоматически. Пожалуйста, перезапустите сервер.",
   "error_version": "Этот плагин несовместим с версиями Minecraft ниже 1.13.",
   "error_version_spigot": "Этот плагин несовместим со Spigot 1.13!",
-  "format_border_add": "Граница формы %s была установлена в мире %s с центром на %s, %s, и радиусом %s.",
+  "format_border_add": "Граница мира формы %s была установлена в мире %s с центром на %s, %s и радиусом %s.",
   "format_border_bypass": "Временное разрешение на обход границ: %s для игрока %s.",
   "format_border_bypass_no_target": "Не удалось найти игрока с именем %s.",
   "format_border_list": "Границы мира",
