@@ -22,6 +22,7 @@ import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
+import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.popcraft.chunky.mixin.ChunkMapMixin;
 import org.popcraft.chunky.mixin.ServerChunkCacheMixin;
 import org.popcraft.chunky.platform.util.Location;
@@ -102,9 +103,13 @@ public class FabricWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
             }
-            final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
-            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
-            return chunkFuture;
+            ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
+            return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
+                    .whenCompleteAsync((ignored, throwable) -> {
+                        serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
+                        ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
+                    }, world.getServer())
+                    .thenApply(ignored -> null);
         }
     }
 
