@@ -93,7 +93,7 @@
   "task_trim_update": "%s에 대한 작업이 실행 중입니다. 처리됨: %s 지역(%s%%)",
   "task_done": "%s에 대한 작업이 완료되었습니다. 처리됨: %s 청크(%s%%), 총 시간: %s:%s:%s",
   "task_stopped": "작업이 %s 동안 중지되었습니다.",
-  "task_update": "%s에 대해 작업이 실행 중입니다. 처리됨: %s 청크(%s%%), ETA: %s:%s:%s, 속도: %s cps, 현재: %s, %s",
+  "task_update": "%s에 대한 작업이 실행 중입니다. 처리됨: %s 청크(%s%%), ETA: %s:%s:%s, 속도: %s cps, 현재: %s, %s",
   "wrap_both": "both",
   "wrap_default": "default",
   "wrap_earth": "earth",
