@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class WorldChunkIterator implements ChunkIterator {
@@ -96,6 +97,9 @@ public class WorldChunkIterator implements ChunkIterator {
         }
         final long startTime = System.currentTimeMillis();
         final AtomicLong updateTime = new AtomicLong(startTime);
+        final Function<String, Boolean> chunkStatusFilter = chunky.getConfig().isForceLoadExistingChunks() ?
+                status -> !("minecraft:empty".equals(status) || "empty".equals(status)) :
+                status -> "minecraft:full".equals(status) || "full".equals(status);
         final StringBuilder saveData = new StringBuilder();
         try (final Stream<Path> files = Files.list(regionPath)) {
             final List<Path> regions = files
@@ -123,7 +127,7 @@ public class WorldChunkIterator implements ChunkIterator {
                                 .filter(StringTag.class::isInstance)
                                 .map(StringTag.class::cast)
                                 .map(StringTag::value)
-                                .map(status -> "minecraft:full".equals(status) || "full".equals(status))
+                                .map(chunkStatusFilter)
                                 .orElse(false);
                         if (generated) {
                             chunks.add(chunkCoordinate);
