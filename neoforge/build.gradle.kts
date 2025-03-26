@@ -1,5 +1,5 @@
 plugins {
-    id("dev.architectury.loom") version "1.7-SNAPSHOT"
+    id("dev.architectury.loom") version "1.9-SNAPSHOT"
 }
 
 val shade: Configuration by configurations.creating
