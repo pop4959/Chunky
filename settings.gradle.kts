@@ -3,7 +3,6 @@ pluginManagement {
         gradlePluginPortal()
         maven("https://maven.fabricmc.net/")
         maven("https://maven.minecraftforge.net")
-        maven("https://repo.redlance.org/public/") // https://github.com/architectury/architectury-loom/issues/271
         maven("https://maven.architectury.dev/")
     }
 }
