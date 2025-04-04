@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.visitors.CollectFields;
 import net.minecraft.nbt.visitors.FieldSelector;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +14,6 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Unit;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
@@ -36,8 +34,8 @@ import java.util.function.Function;
 
 public class FabricWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
-    private static final TicketType<Unit> CHUNKY = TicketType.create("chunky", (unit, unit2) -> 0);
-    private static final TicketType<Unit> CHUNKY_TICKING = TicketType.create("chunky_ticking", (unit, unit2) -> 0, TICKING_LOAD_DURATION * 20);
+    private static final TicketType CHUNKY = new TicketType(0L, false, TicketType.TicketUse.LOADING);
+    private static final TicketType CHUNKY_TICKING = new TicketType(TICKING_LOAD_DURATION * 20L, false, TicketType.TicketUse.LOADING_AND_SIMULATION);
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerLevel world;
     private final Border worldBorder;
@@ -73,8 +71,8 @@ public class FabricWorld implements World {
             if (UPDATE_CHUNK_NBT) {
                 return chunkMapMixin.invokeReadChunk(chunkPos)
                         .thenApply(optionalNbt -> optionalNbt
-                                .filter(chunkNbt -> chunkNbt.contains("Status", Tag.TAG_STRING))
-                                .map(chunkNbt -> chunkNbt.getString("Status"))
+                                .filter(chunkNbt -> chunkNbt.contains("Status"))
+                                .flatMap(chunkNbt -> chunkNbt.getString("Status"))
                                 .map(status -> "minecraft:full".equals(status) || "full".equals(status))
                                 .orElse(false));
             }
@@ -83,7 +81,7 @@ public class FabricWorld implements World {
             return serverChunkCache.chunkScanner().scanChunk(chunkPos, statusCollector)
                     .thenApply(ignored -> {
                         if (statusCollector.getResult() instanceof final CompoundTag chunkNbt) {
-                            final String status = chunkNbt.getString("Status");
+                            final String status = chunkNbt.getString("Status").orElse(null);
                             return "minecraft:full".equals(status) || "full".equals(status);
                         }
                         return false;
@@ -98,12 +96,12 @@ public class FabricWorld implements World {
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkCache serverChunkCache = world.getChunkSource();
-            serverChunkCache.addRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE);
+            serverChunkCache.addTicketWithRadius(CHUNKY, chunkPos, 0);
             if (TICKING_LOAD_DURATION > 0) {
-                serverChunkCache.addRegionTicket(CHUNKY_TICKING, chunkPos, 1, Unit.INSTANCE);
+                serverChunkCache.addTicketWithRadius(CHUNKY_TICKING, chunkPos, 1);
             }
             final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, true));
-            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeRegionTicket(CHUNKY, chunkPos, 0, Unit.INSTANCE), world.getServer());
+            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0), world.getServer());
             return chunkFuture;
         }
     }
