@@ -5,7 +5,7 @@
   "command_no_permission": "&cVocê não pode executar esse comando.",
   "disabled": "não",
   "enabled": "sim",
-  "error_pause_when_empty_seconds": "This plugin will not function correctly when pause-when-empty-seconds is enabled. Automatically disabling this in server.properties. Please restart your server.",
+  "error_pause_when_empty_seconds": "O plugin não funcionará adequadamente quando o modo pause-when-empty-seconds estiver ativado. Considere desativá-lo no arquivo server.properties do seu servidor. Por favor, reinicie o seu servidor.",
   "error_version": "O plugin é incompatível com as versões abaixo do Minecraft 1.13.",
   "error_version_spigot": "O plugin é incompatível com o Spigot 1.13!",
   "format_border_add": "Uma barreira de mundo com a forma %s foi adicionada no %s com o centro %s, %s, e raio %s.",
