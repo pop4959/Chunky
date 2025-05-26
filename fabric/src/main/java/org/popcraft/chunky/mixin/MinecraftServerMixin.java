@@ -16,8 +16,8 @@ import java.util.function.BooleanSupplier;
 
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin implements MinecraftServerExtension {
-
-    @Shadow public abstract Iterable<ServerLevel> getAllLevels();
+    @Shadow
+    public abstract Iterable<ServerLevel> getAllLevels();
 
     @Unique
     private final AtomicBoolean chunky$needChunkSystemHousekeeping = new AtomicBoolean(false);

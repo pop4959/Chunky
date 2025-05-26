@@ -8,8 +8,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(ServerLevel.class)
 public interface ServerLevelMixin {
-
     @Accessor
     PersistentEntitySectionManager<Entity> getEntityManager();
-
 }
