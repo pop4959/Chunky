@@ -20,6 +20,7 @@ import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
+import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
 
@@ -99,7 +100,10 @@ public class NeoForgeWorld implements World {
             }
             serverChunkCache.runDistanceManagerUpdates();
             return serverChunkCache.getChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
-                    .whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0), world.getServer())
+                    .whenCompleteAsync((ignored, throwable) -> {
+                        serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
+                        ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
+                    }, world.getServer())
                     .thenApply(ignored -> null);
         }
     }
