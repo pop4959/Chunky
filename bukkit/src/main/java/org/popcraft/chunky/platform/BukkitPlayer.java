@@ -83,7 +83,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
             teleportAsync(player, loc).thenAcceptAsync(ignored -> {
                 teleportAsync(vehicle, loc);
                 for (final Entity passenger : passengers) {
-                    teleportAsync(vehicle, loc);
+                    teleportAsync(passenger, loc);
                     if (passenger instanceof final org.bukkit.entity.Player playerPassenger) {
                         playerPassenger.hideEntity(plugin, vehicle);
                         playerPassenger.showEntity(plugin, vehicle);
