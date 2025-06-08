@@ -81,17 +81,9 @@ public class BukkitPlayer extends BukkitSender implements Player {
                 vehicle.eject();
             }
             teleportAsync(player, loc).thenAcceptAsync(ignored -> {
-                if (Folia.isFolia() && !Folia.isTickThread(vehicle.getLocation())) {
-                    Folia.schedule(plugin, vehicle, () -> teleportAsync(vehicle, loc), 1);
-                } else {
-                    teleportAsync(vehicle, loc);
-                }
+                teleportAsync(vehicle, loc);
                 for (final Entity passenger : passengers) {
-                    if (Folia.isFolia() && !Folia.isTickThread(passenger.getLocation())) {
-                        Folia.schedule(plugin, passenger, () -> teleportAsync(passenger, loc), 1);
-                    } else {
-                        teleportAsync(passenger, loc);
-                    }
+                    teleportAsync(vehicle, loc);
                     if (passenger instanceof final org.bukkit.entity.Player playerPassenger) {
                         playerPassenger.hideEntity(plugin, vehicle);
                         playerPassenger.showEntity(plugin, vehicle);
