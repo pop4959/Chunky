@@ -10,6 +10,8 @@ displayURL="${github}"
 logoFile="icon.png"
 authors="${author}"
 description="${description}"
+[[mixins]]
+config="chunky.mixins.json"
 [[dependencies.chunky]]
    modId="neoforge"
    type="required"
