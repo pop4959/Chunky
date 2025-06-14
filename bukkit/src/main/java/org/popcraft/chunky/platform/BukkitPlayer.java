@@ -75,7 +75,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
             Folia.schedule(plugin, player, () -> teleport(location), 1);
         } else {
             final List<Entity> passengers = vehicle.getPassengers();
-            if (Folia.isFolia() && !Folia.isTickThread(vehicle.getLocation())) {
+            if (Folia.isFolia()) {
                 Folia.schedule(plugin, vehicle, vehicle::eject, 1);
             } else {
                 vehicle.eject();
@@ -88,7 +88,11 @@ public class BukkitPlayer extends BukkitSender implements Player {
                         playerPassenger.hideEntity(plugin, vehicle);
                         playerPassenger.showEntity(plugin, vehicle);
                     }
-                    vehicle.addPassenger(passenger);
+                    if (Folia.isFolia()) {
+                        Folia.schedule(plugin, vehicle, () -> vehicle.addPassenger(passenger), 1);
+                    } else {
+                        vehicle.addPassenger(passenger);
+                    }
                 }
             }, command -> {
                 if (Folia.isFolia()) {
