@@ -30,7 +30,7 @@ public class ForgePlayer extends ForgeSender implements Player {
 
     @Override
     public World getWorld() {
-        return new ForgeWorld(player.serverLevel());
+        return new ForgeWorld(player.level());
     }
 
     @Override

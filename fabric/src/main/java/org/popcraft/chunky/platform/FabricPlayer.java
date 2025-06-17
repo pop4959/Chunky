@@ -30,7 +30,7 @@ public class FabricPlayer extends FabricSender implements Player {
 
     @Override
     public World getWorld() {
-        return new FabricWorld(player.serverLevel());
+        return new FabricWorld(player.level());
     }
 
     @Override
