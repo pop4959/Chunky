@@ -7,7 +7,7 @@ val shade: Configuration by configurations.creating
 dependencies {
     minecraft(group = "com.mojang", name = "minecraft", version = "1.21.6")
     mappings(loom.officialMojangMappings())
-    forge(group = "net.minecraftforge", name = "forge", version = "1.21.6-56.0.0")
+    forge(group = "net.minecraftforge", name = "forge", version = "1.21.6-56.0.4")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
