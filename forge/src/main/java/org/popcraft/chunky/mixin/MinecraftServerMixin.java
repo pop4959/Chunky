@@ -2,7 +2,6 @@ package org.popcraft.chunky.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import org.popcraft.chunky.ChunkyProvider;
 import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,8 +30,8 @@ public abstract class MinecraftServerMixin implements MinecraftServerExtension {
     public void chunky$runChunkSystemHousekeeping(BooleanSupplier haveTime) {
         if (this.chunky$needChunkSystemHousekeeping.compareAndSet(true, false)) {
             for (ServerLevel level : this.getAllLevels()) {
-                ((ChunkMapMixin) level.getChunkSource().chunkMap).invokeTick(haveTime);
-                ((ServerLevelMixin) level).getEntityManager().tick();
+                level.getChunkSource().chunkMap.tick(haveTime);
+                level.entityManager.tick();
             }
         }
     }
