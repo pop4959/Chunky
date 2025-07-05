@@ -20,6 +20,7 @@ import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
+import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
 
@@ -105,8 +106,10 @@ public class ForgeWorld implements World {
             final ChunkMap chunkManager = serverChunkCache.chunkMap;
             final ChunkHolder chunkHolder = chunkManager.getVisibleChunkIfPresent(chunkPos.toLong());
             final CompletableFuture<Void> chunkFuture = chunkHolder == null ? CompletableFuture.completedFuture(null) : CompletableFuture.allOf(chunkHolder.scheduleChunkGenerationTask(ChunkStatus.FULL, chunkManager));
-            chunkFuture.whenCompleteAsync((ignored, throwable) -> serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0), world.getServer());
-            chunkFuture.thenAcceptAsync((ignored) -> world.getServer().emptyTicks = 0);
+            chunkFuture.whenCompleteAsync((ignored, throwable) -> {
+                serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
+                ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
+            }, world.getServer());
             return chunkFuture;
         }
     }

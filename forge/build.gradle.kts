@@ -12,6 +12,12 @@ dependencies {
     shade(project(":chunky-common"))
 }
 
+loom {
+    forge {
+        mixinConfig("chunky.mixins.json")
+    }
+}
+
 tasks {
     processResources {
         filesMatching("META-INF/mods.toml") {

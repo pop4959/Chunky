@@ -4,10 +4,7 @@
   "package": "org.popcraft.chunky.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ChunkMapMixin",
-    "MinecraftServerMixin",
-    "ServerChunkCacheMixin",
-    "ServerLevelMixin"
+    "MinecraftServerMixin"
   ],
   "client": [
     "client.IntegratedServerMixin"
