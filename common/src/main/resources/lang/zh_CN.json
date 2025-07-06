@@ -79,7 +79,7 @@
   "pattern_spiral": "螺旋",
   "pattern_csv": "csv",
   "pattern_region": "region",
-  "pattern_world": "world",
+  "pattern_world": "世界",
   "shape_circle": "环形",
   "shape_diamond": "菱形",
   "shape_ellipse": "椭圆形",
@@ -97,8 +97,8 @@
   "wrap_both": "both",
   "wrap_default": "默认",
   "wrap_earth": "earth",
-  "wrap_none": "none",
-  "wrap_radial": "radial",
+  "wrap_none": "无",
+  "wrap_radial": "环形",
   "wrap_x": "x",
   "wrap_z": "z"
 }
