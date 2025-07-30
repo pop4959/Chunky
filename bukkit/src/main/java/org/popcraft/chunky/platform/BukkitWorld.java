@@ -146,7 +146,7 @@ public class BukkitWorld implements World {
     public static void runManagedBlock(org.bukkit.World world, CompletableFuture<Integer> toComplete) throws Exception {
         Object serverLevel = world.getClass().getMethod("getHandle").invoke(world);
 
-        java.lang.reflect.Field chunkSourceField = serverLevel.getClass().getField("chunkSource"); // public field
+        java.lang.reflect.Field chunkSourceField = serverLevel.getClass().getField("chunkSource");
         Object chunkSource = chunkSourceField.get(serverLevel);
 
         java.lang.reflect.Field mainThreadProcessorField = chunkSource.getClass().getDeclaredField("mainThreadProcessor");
