@@ -143,7 +143,7 @@ public class BukkitWorld implements World {
         }
     }
 
-    public static void runManagedBlock(org.bukkit.World world, CompletableFuture<Integer> toComplete) throws Exception {
+    private static void runManagedBlock(org.bukkit.World world, CompletableFuture<Integer> toComplete) throws Exception {
         Object serverLevel = world.getClass().getMethod("getHandle").invoke(world);
 
         java.lang.reflect.Field chunkSourceField = serverLevel.getClass().getField("chunkSource");
