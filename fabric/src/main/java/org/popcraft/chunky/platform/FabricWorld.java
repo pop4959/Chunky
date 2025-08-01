@@ -35,8 +35,8 @@ import java.util.function.Function;
 
 public class FabricWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
-    private static final TicketType CHUNKY = new TicketType(0L, false, TicketType.TicketUse.LOADING);
-    private static final TicketType CHUNKY_TICKING = new TicketType(TICKING_LOAD_DURATION * 20L, false, TicketType.TicketUse.LOADING_AND_SIMULATION);
+    private static final TicketType CHUNKY = new TicketType(0L, TicketType.FLAG_LOADING);
+    private static final TicketType CHUNKY_TICKING = new TicketType(TICKING_LOAD_DURATION * 20L, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION);
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerLevel world;
     private final Border worldBorder;
