@@ -53,6 +53,10 @@ public class BukkitWorld implements World {
         return world.getKey().toString();
     }
 
+    public org.bukkit.World getBukkitWorld() {
+        return this.world;
+    }
+
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
         if (Paper.isPaper()) {
