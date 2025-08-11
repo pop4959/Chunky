@@ -17,6 +17,7 @@ public class TranslatorTest {
         testTranslation("de");
         testTranslation("en");
         testTranslation("es");
+        testTranslation("es_AR");
         testTranslation("fi");
         testTranslation("fr");
         testTranslation("he");
