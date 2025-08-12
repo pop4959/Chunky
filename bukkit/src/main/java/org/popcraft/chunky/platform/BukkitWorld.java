@@ -72,14 +72,20 @@ public class BukkitWorld implements World {
         }
     }
 
-    @Override
-    public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
+    private CompletableFuture<Void> getChunkFuture(final int x, final int z) {
         final CompletableFuture<Void> chunkFuture;
         if (Paper.isPaper()) {
             chunkFuture = CompletableFuture.allOf(Paper.getChunkAtAsync(world, x, z));
         } else {
             chunkFuture = CompletableFuture.allOf(CompletableFuture.completedFuture(world.getChunkAt(x, z)));
         }
+
+        return chunkFuture;
+    }
+
+    @Override
+    public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
+        final CompletableFuture<Void> chunkFuture = this.getChunkFuture(x, z);
         if (TICKING_LOAD_DURATION > 0) {
             final CompletableFuture<Void> removeTicketFuture = new CompletableFuture<>();
             chunkFuture.thenAccept(ignored -> {
@@ -127,38 +133,16 @@ public class BukkitWorld implements World {
 
     @Override
     public int getElevation(final int x, final int z) {
-        final org.bukkit.Location location = new org.bukkit.Location(world, x, 0, z);
-        if (Folia.isFolia() && !Folia.isTickThread(location)) {
-            CompletableFuture<Integer> future =
-                CompletableFuture.supplyAsync(() -> getElevationForLocation(x, z), command
-                    -> Folia.schedule(plugin, location, command));
-            try {
-                runManagedBlock(world, future);
-                return future.get();
-            } catch (Exception e) {
-                throw new RuntimeException("Couldn't run managed block for fetching elevation", e);
-            }
+        if (Folia.isFolia() && !Folia.isTickThread(this.world, x >> 4, z >> 4)) {
+            throw new IllegalStateException("Async getElevation call");
         } else {
             return getElevationForLocation(x, z);
         }
     }
 
-    private static void runManagedBlock(org.bukkit.World world, CompletableFuture<Integer> toComplete) throws Exception {
-        Object runningLevel = world.getClass().getMethod("getHandle").invoke(world);
-        Object currentWorldData = runningLevel.getClass().getMethod("getCurrentWorldData").invoke(world);
-
-        java.lang.reflect.Field worldField = currentWorldData.getClass().getField("world");
-        Object serverLevel = worldField.get(currentWorldData);
-
-        java.lang.reflect.Field chunkSourceField = serverLevel.getClass().getField("chunkSource");
-        Object chunkSource = chunkSourceField.get(serverLevel);
-
-        java.lang.reflect.Field mainThreadProcessorField = chunkSource.getClass().getDeclaredField("mainThreadProcessor");
-        mainThreadProcessorField.setAccessible(true);
-        Object mainThreadProcessor = mainThreadProcessorField.get(chunkSource);
-
-        java.lang.reflect.Method managedBlockMethod = mainThreadProcessor.getClass().getMethod("managedBlock", java.util.function.BooleanSupplier.class);
-        managedBlockMethod.invoke(mainThreadProcessor, (java.util.function.BooleanSupplier) toComplete::isDone);
+    @Override
+    public CompletableFuture<Integer> getElevationAtAsync(final int x, final int z) {
+        return this.getChunkFuture(x >> 4, z >> 4).thenApply(ignored -> this.getElevationForLocation(x, z));
     }
 
     private int getElevationForLocation(final int x, final int z) {

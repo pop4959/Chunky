@@ -26,6 +26,10 @@ public interface World {
 
     int getElevation(int x, int z);
 
+    default CompletableFuture<Integer> getElevationAtAsync(int x, int z) {
+        return CompletableFuture.completedFuture(this.getElevation(x, z));
+    }
+
     int getMaxElevation();
 
     void playEffect(Player player, String effect);
