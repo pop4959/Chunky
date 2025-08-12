@@ -5,6 +5,7 @@ import org.popcraft.chunky.platform.util.Location;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.world.server.ServerLocation;
 import org.spongepowered.math.vector.Vector3d;
+import org.spongepowered.math.vector.Vector3f;
 
 import java.util.UUID;
 
@@ -36,8 +37,8 @@ public class SpongePlayer extends SpongeSender implements Player {
     @Override
     public Location getLocation() {
         final ServerLocation loc = player.serverLocation();
-        final Vector3d rot = player.rotation();
-        return new Location(getWorld(), loc.x(), loc.y(), loc.z(), rot.floorX(), rot.floorY());
+        final Vector3f rot = player.rotation().toFloat();
+        return new Location(getWorld(), loc.x(), loc.y(), loc.z(), rot.y(), rot.x());
     }
 
     @Override

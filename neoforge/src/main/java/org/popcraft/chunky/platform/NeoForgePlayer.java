@@ -35,7 +35,7 @@ public class NeoForgePlayer extends NeoForgeSender implements Player {
 
     @Override
     public Location getLocation() {
-        return new Location(getWorld(), player.getX(), player.getY(), player.getZ(), player.getXRot(), player.getYRot());
+        return new Location(getWorld(), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
     }
 
     @Override
