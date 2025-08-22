@@ -23,9 +23,6 @@ public class BukkitWorld implements World {
     private static final boolean IS_GENERATED_SUPPORTED;
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private static final boolean AWAIT_TICKET_REMOVAL = Boolean.getBoolean("chunky.awaitTicketRemoval");
-    private final JavaPlugin plugin = JavaPlugin.getPlugin(AbstractChunkyBukkit.class);
-    private final org.bukkit.World world;
-    private final Border worldBorder;
 
     static {
         boolean isGeneratedSupported;
@@ -37,6 +34,10 @@ public class BukkitWorld implements World {
         }
         IS_GENERATED_SUPPORTED = isGeneratedSupported;
     }
+
+    private final JavaPlugin plugin = JavaPlugin.getPlugin(AbstractChunkyBukkit.class);
+    private final org.bukkit.World world;
+    private final Border worldBorder;
 
     public BukkitWorld(final org.bukkit.World world) {
         this.world = world;
@@ -72,17 +73,6 @@ public class BukkitWorld implements World {
         }
     }
 
-    private CompletableFuture<Void> getChunkFuture(final int x, final int z) {
-        final CompletableFuture<Void> chunkFuture;
-        if (Paper.isPaper()) {
-            chunkFuture = CompletableFuture.allOf(Paper.getChunkAtAsync(world, x, z));
-        } else {
-            chunkFuture = CompletableFuture.allOf(CompletableFuture.completedFuture(world.getChunkAt(x, z)));
-        }
-
-        return chunkFuture;
-    }
-
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         final CompletableFuture<Void> chunkFuture = this.getChunkFuture(x, z);
@@ -107,6 +97,17 @@ public class BukkitWorld implements World {
                 return removeTicketFuture;
             }
         }
+        return chunkFuture;
+    }
+
+    private CompletableFuture<Void> getChunkFuture(final int x, final int z) {
+        final CompletableFuture<Void> chunkFuture;
+        if (Paper.isPaper()) {
+            chunkFuture = CompletableFuture.allOf(Paper.getChunkAtAsync(world, x, z));
+        } else {
+            chunkFuture = CompletableFuture.allOf(CompletableFuture.completedFuture(world.getChunkAt(x, z)));
+        }
+
         return chunkFuture;
     }
 
@@ -143,24 +144,6 @@ public class BukkitWorld implements World {
     @Override
     public CompletableFuture<Integer> getElevationAtAsync(final int x, final int z) {
         return this.getChunkFuture(x >> 4, z >> 4).thenApply(ignored -> this.getElevationForLocation(x, z));
-    }
-
-    private int getElevationForLocation(final int x, final int z) {
-        final int height = world.getHighestBlockYAt(x, z) + 1;
-        final int logicalHeight = world.getLogicalHeight();
-        if (height >= logicalHeight) {
-            Block block = world.getBlockAt(x, logicalHeight, z);
-            int air = 0;
-            while (block.getY() > world.getMinHeight()) {
-                block = block.getRelative(BlockFace.DOWN);
-                final Material type = block.getType();
-                if (type.isSolid() && air > 1) {
-                    return block.getY() + 1;
-                }
-                air = type.isAir() ? air + 1 : 0;
-            }
-        }
-        return height;
     }
 
     @Override
@@ -210,5 +193,23 @@ public class BukkitWorld implements World {
         }
         final Path directory = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
+    }
+
+    private int getElevationForLocation(final int x, final int z) {
+        final int height = world.getHighestBlockYAt(x, z) + 1;
+        final int logicalHeight = world.getLogicalHeight();
+        if (height >= logicalHeight) {
+            Block block = world.getBlockAt(x, logicalHeight, z);
+            int air = 0;
+            while (block.getY() > world.getMinHeight()) {
+                block = block.getRelative(BlockFace.DOWN);
+                final Material type = block.getType();
+                if (type.isSolid() && air > 1) {
+                    return block.getY() + 1;
+                }
+                air = type.isAir() ? air + 1 : 0;
+            }
+        }
+        return height;
     }
 }

@@ -9,7 +9,7 @@ import org.popcraft.chunky.command.CommandLiteral;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class TrimModeSuggestionProvider <S> implements SuggestionProvider<S> {
+public class TrimModeSuggestionProvider<S> implements SuggestionProvider<S> {
     private static final List<String> TRIM_MODES = List.of("inside", "outside");
 
     @Override

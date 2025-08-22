@@ -16,7 +16,6 @@ import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class BukkitPlayer extends BukkitSender implements Player {
     private static final boolean ACTION_BAR_SUPPORTED;
-    private final JavaPlugin plugin = JavaPlugin.getPlugin(AbstractChunkyBukkit.class);
 
     static {
         boolean barSupported;
@@ -30,6 +29,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
     }
 
     final org.bukkit.entity.Player player;
+    private final JavaPlugin plugin = JavaPlugin.getPlugin(AbstractChunkyBukkit.class);
 
     public BukkitPlayer(final org.bukkit.entity.Player player) {
         super(player);
@@ -104,14 +104,6 @@ public class BukkitPlayer extends BukkitSender implements Player {
         }
     }
 
-    private CompletableFuture<Boolean> teleportAsync(final Entity entity, final org.bukkit.Location location) {
-        if (Paper.isPaper()) {
-            return Paper.teleportAsync(entity, location);
-        } else {
-            return CompletableFuture.completedFuture(entity.teleport(location));
-        }
-    }
-
     @Override
     public void sendActionBar(final String key) {
         if (ACTION_BAR_SUPPORTED) {
@@ -119,6 +111,14 @@ public class BukkitPlayer extends BukkitSender implements Player {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
         } else {
             this.sendMessage(key);
+        }
+    }
+
+    private CompletableFuture<Boolean> teleportAsync(final Entity entity, final org.bukkit.Location location) {
+        if (Paper.isPaper()) {
+            return Paper.teleportAsync(entity, location);
+        } else {
+            return CompletableFuture.completedFuture(entity.teleport(location));
         }
     }
 }

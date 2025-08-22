@@ -22,7 +22,6 @@ public abstract class BrigadierChunkyCommand<S, D, P> {
 
     protected abstract ArgumentType<P> playerArgumentType();
 
-
     protected abstract boolean rootRequirement(S source);
 
     protected abstract boolean borderRequirement(S source);
@@ -32,7 +31,6 @@ public abstract class BrigadierChunkyCommand<S, D, P> {
     protected boolean nodeRequirement(S source, String literal) {
         return true;
     }
-
 
     public LiteralArgumentBuilder<S> construct(SuggestionProviders<S> suggestionProviders) {
         final LiteralArgumentBuilder<S> command = literal(CommandLiteral.CHUNKY)

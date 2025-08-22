@@ -9,7 +9,7 @@ import org.popcraft.chunky.shape.ShapeType;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ShapeSuggestionProvider <S> implements SuggestionProvider<S> {
+public class ShapeSuggestionProvider<S> implements SuggestionProvider<S> {
     @Override
     public CompletableFuture<Suggestions> getSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
         try {

@@ -17,7 +17,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
@@ -26,6 +31,27 @@ public final class ChunkyBukkit extends AbstractChunkyBukkit {
     @Override
     protected void postEnable() {
         disablePauseWhenEmptySeconds();
+    }
+
+    private void disablePauseWhenEmptySeconds() {
+        final Path serverPropertiesPath = Path.of(".").resolve("server.properties");
+        final File serverPropertiesFile = serverPropertiesPath.toFile();
+        final Properties serverProperties = new Properties();
+        try (final FileInputStream serverPropertiesFileInputStream = new FileInputStream(serverPropertiesFile)) {
+            serverProperties.load(serverPropertiesFileInputStream);
+            final Optional<Integer> pauseWhenEmptySeconds = Input.tryInteger(serverProperties.getProperty("pause-when-empty-seconds"));
+            if (pauseWhenEmptySeconds.isPresent() && pauseWhenEmptySeconds.get() > 0) {
+                serverProperties.setProperty("pause-when-empty-seconds", "0");
+                try (final FileOutputStream serverPropertiesFileOutputStream = new FileOutputStream(serverPropertiesFile)) {
+                    serverProperties.store(serverPropertiesFileOutputStream, "Minecraft server properties");
+                    getLogger().warning(() -> translate(TranslationKey.ERROR_PAUSE_WHEN_EMPTY_SECONDS));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("NullableProblems")
@@ -63,26 +89,5 @@ public final class ChunkyBukkit extends AbstractChunkyBukkit {
         return suggestions.stream()
             .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
             .toList();
-    }
-
-    private void disablePauseWhenEmptySeconds() {
-        final Path serverPropertiesPath = Path.of(".").resolve("server.properties");
-        final File serverPropertiesFile = serverPropertiesPath.toFile();
-        final Properties serverProperties = new Properties();
-        try (final FileInputStream serverPropertiesFileInputStream = new FileInputStream(serverPropertiesFile)) {
-            serverProperties.load(serverPropertiesFileInputStream);
-            final Optional<Integer> pauseWhenEmptySeconds = Input.tryInteger(serverProperties.getProperty("pause-when-empty-seconds"));
-            if (pauseWhenEmptySeconds.isPresent() && pauseWhenEmptySeconds.get() > 0) {
-                serverProperties.setProperty("pause-when-empty-seconds", "0");
-                try (final FileOutputStream serverPropertiesFileOutputStream = new FileOutputStream(serverPropertiesFile)) {
-                    serverProperties.store(serverPropertiesFileOutputStream, "Minecraft server properties");
-                    getLogger().warning(() -> translate(TranslationKey.ERROR_PAUSE_WHEN_EMPTY_SECONDS));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
     }
 }

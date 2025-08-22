@@ -9,7 +9,7 @@ import org.popcraft.chunky.iterator.PatternType;
 
 import java.util.concurrent.CompletableFuture;
 
-public class PatternSuggestionProvider <S> implements SuggestionProvider<S> {
+public class PatternSuggestionProvider<S> implements SuggestionProvider<S> {
     @Override
     public CompletableFuture<Suggestions> getSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
         try {

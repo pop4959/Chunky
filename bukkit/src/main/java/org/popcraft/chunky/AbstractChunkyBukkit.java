@@ -29,10 +29,11 @@ public abstract class AbstractChunkyBukkit extends JavaPlugin implements Listene
 
     protected abstract void postEnable();
 
-    protected void validateServerVersion(Version version) {
-        if (version.isValid() && Version.MINECRAFT_1_13_2.isHigherThan(version)) {
-            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
-            getServer().getPluginManager().disablePlugin(this);
+    @Override
+    public void onDisable() {
+        HandlerList.unregisterAll((Plugin) this);
+        if (chunky != null) {
+            chunky.disable();
         }
     }
 
@@ -66,11 +67,10 @@ public abstract class AbstractChunkyBukkit extends JavaPlugin implements Listene
         postEnable();
     }
 
-    @Override
-    public void onDisable() {
-        HandlerList.unregisterAll((Plugin) this);
-        if (chunky != null) {
-            chunky.disable();
+    protected void validateServerVersion(Version version) {
+        if (version.isValid() && Version.MINECRAFT_1_13_2.isHigherThan(version)) {
+            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
+            getServer().getPluginManager().disablePlugin(this);
         }
     }
 
