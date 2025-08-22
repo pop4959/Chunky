@@ -1,7 +1,5 @@
 package org.popcraft.chunky;
 
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
@@ -51,16 +49,8 @@ public class ChunkyNeoForge {
 
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
-        NeoForgeChunkyCommand command = new NeoForgeChunkyCommand(chunky);
+        final NeoForgeChunkyCommand command = new NeoForgeChunkyCommand(this::getChunky);
         event.getDispatcher().register(command.construct(new SuggestionProviders<>()));
-    }
-
-    @SafeVarargs
-    private <S> void registerArguments(final LiteralArgumentBuilder<S> command, final ArgumentBuilder<S, ?>... arguments) {
-        for (int i = arguments.length - 1; i > 0; --i) {
-            arguments[i - 1].then(arguments[i].executes(command.getCommand()));
-        }
-        command.then(arguments[0].executes(command.getCommand()));
     }
 
     @SubscribeEvent

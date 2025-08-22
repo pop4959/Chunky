@@ -49,7 +49,7 @@ public class ChunkyForge {
 
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
-        ForgeChunkyCommand command = new ForgeChunkyCommand(chunky);
+        final ForgeChunkyCommand command = new ForgeChunkyCommand(this::getChunky);
         event.getDispatcher().register(command.construct(new SuggestionProviders<>()));
     }
 

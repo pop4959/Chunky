@@ -23,12 +23,13 @@ import org.popcraft.chunky.platform.Sender;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class FabricChunkyCommand extends BrigadierChunkyCommand<CommandSourceStack, ResourceLocation, EntitySelector> {
 
-    private final Chunky chunky;
+    private final Supplier<Chunky> chunky;
 
-    public FabricChunkyCommand(Chunky chunky) {
+    public FabricChunkyCommand(final Supplier<Chunky> chunky) {
         this.chunky = chunky;
     }
 
@@ -58,7 +59,7 @@ public class FabricChunkyCommand extends BrigadierChunkyCommand<CommandSourceSta
     }
 
     protected boolean borderRequirement(CommandSourceStack source) {
-        return chunky != null && chunky.getCommands().containsKey(CommandLiteral.BORDER);
+        return chunky.get() != null && chunky.get().getCommands().containsKey(CommandLiteral.BORDER);
     }
 
     protected int rootExecutes(CommandContext<CommandSourceStack> context) {
@@ -68,8 +69,8 @@ public class FabricChunkyCommand extends BrigadierChunkyCommand<CommandSourceSta
         } else {
             sender = new FabricSender(context.getSource());
         }
-        final Map<String, ChunkyCommand> commands = chunky.getCommands();
-        final String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
+        final Map<String, ChunkyCommand> commands = chunky.get().getCommands();
+        final String input = context.getInput().substring(context.getLastChild().getNodes().getFirst().getRange().getStart());
         final String[] tokens = input.split(" ");
         final String subCommand = tokens.length > 1 && commands.containsKey(tokens[1]) ? tokens[1] : CommandLiteral.HELP;
         final CommandArguments arguments = tokens.length > 2 ? CommandArguments.of(Arrays.copyOfRange(tokens, 2, tokens.length)) : CommandArguments.empty();
