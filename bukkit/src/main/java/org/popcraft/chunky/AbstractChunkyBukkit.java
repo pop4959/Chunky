@@ -24,6 +24,7 @@ import static org.popcraft.chunky.util.Translator.translate;
 
 public abstract class AbstractChunkyBukkit extends JavaPlugin implements Listener {
 
+    protected static final String COMMAND_PERMISSION_KEY = "chunky.command.";
     protected Chunky chunky;
 
     protected abstract void postEnable();

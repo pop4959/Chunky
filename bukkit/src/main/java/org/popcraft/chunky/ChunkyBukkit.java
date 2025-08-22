@@ -23,8 +23,6 @@ import static org.popcraft.chunky.util.Translator.translate;
 
 public final class ChunkyBukkit extends AbstractChunkyBukkit {
 
-    private static final String COMMAND_PERMISSION_KEY = "chunky.command.";
-
     @Override
     protected void postEnable() {
         disablePauseWhenEmptySeconds();

@@ -18,6 +18,6 @@ public final class ChunkyPaper extends AbstractChunkyBukkit {
 
     @Override
     protected void postEnable() {
-        Paper.registerCommand(this, chunky, BukkitSender::new, BukkitSender::new);
+        Paper.registerCommand(this, chunky, BukkitSender::new, BukkitSender::new, COMMAND_PERMISSION_KEY);
     }
 }

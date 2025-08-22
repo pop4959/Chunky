@@ -28,11 +28,13 @@ public class PaperChunkyCommand extends BrigadierChunkyCommand<CommandSourceStac
     private final Chunky chunky;
     private final Function<CommandSender, Sender> commandSenderFunction;
     private final Function<Player, Sender> playerSenderFunction;
+    private final String nodePermission;
 
-    public PaperChunkyCommand(Chunky chunky, Function<CommandSender, Sender> commandSenderFunction, Function<Player, Sender> playerSenderFunction) {
+    public PaperChunkyCommand(Chunky chunky, Function<CommandSender, Sender> commandSenderFunction, Function<Player, Sender> playerSenderFunction, String rootPermission) {
         this.chunky = chunky;
         this.commandSenderFunction = commandSenderFunction;
         this.playerSenderFunction = playerSenderFunction;
+        this.nodePermission = rootPermission;
     }
 
     @Override
@@ -80,5 +82,10 @@ public class PaperChunkyCommand extends BrigadierChunkyCommand<CommandSourceStac
         final CommandArguments arguments = tokens.length > 2 ? CommandArguments.of(Arrays.copyOfRange(tokens, 2, tokens.length)) : CommandArguments.empty();
         commands.get(subCommand).execute(sender, arguments);
         return Command.SINGLE_SUCCESS;
+    }
+
+    @Override
+    protected boolean nodeRequirement(CommandSourceStack source, String literal) {
+        return source.getSender().hasPermission(nodePermission + literal);
     }
 }

@@ -40,10 +40,10 @@ public final class Paper {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static void registerCommand(JavaPlugin plugin, Chunky chunky, Function<CommandSender, Sender> commandSenderFunction, Function<Player, Sender> playerSenderFunction) {
+    public static void registerCommand(JavaPlugin plugin, Chunky chunky, Function<CommandSender, Sender> commandSenderFunction, Function<Player, Sender> playerSenderFunction, String nodePermission) {
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS.newHandler(
             event -> {
-                final PaperChunkyCommand command = new PaperChunkyCommand(chunky, commandSenderFunction, playerSenderFunction);
+                final PaperChunkyCommand command = new PaperChunkyCommand(chunky, commandSenderFunction, playerSenderFunction, nodePermission);
                 event.registrar().register(command.construct(new SuggestionProviders<>()).build(), "Generates chunks", List.of("cy"));
             }
         ));

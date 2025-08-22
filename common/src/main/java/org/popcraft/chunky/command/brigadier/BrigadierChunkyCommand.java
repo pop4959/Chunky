@@ -29,6 +29,10 @@ public abstract class BrigadierChunkyCommand<S, D, P> {
 
     protected abstract int rootExecutes(CommandContext<S> context);
 
+    protected boolean nodeRequirement(S source, String literal) {
+        return true;
+    }
+
 
     public LiteralArgumentBuilder<S> construct(SuggestionProviders<S> suggestionProviders) {
         final LiteralArgumentBuilder<S> command = literal(CommandLiteral.CHUNKY)
@@ -113,10 +117,17 @@ public abstract class BrigadierChunkyCommand<S, D, P> {
     }
 
     @SafeVarargs
-    private void registerArguments(final LiteralArgumentBuilder<S> command, final ArgumentBuilder<S, ?>... arguments) {
+    private void registerArguments(final LiteralArgumentBuilder<S> command, final LiteralArgumentBuilder<S> literal, final ArgumentBuilder<S, ?>... arguments) {
         for (int i = arguments.length - 1; i > 0; --i) {
             arguments[i - 1].then(arguments[i].executes(command.getCommand()));
         }
-        command.then(arguments[0].executes(command.getCommand()));
+
+        if (arguments.length > 0) {
+            literal.then(arguments[0].executes(command.getCommand()));
+        }
+
+        command.then(literal
+            .executes(command.getCommand())
+            .requires(source -> nodeRequirement(source, literal.getLiteral())));
     }
 }
