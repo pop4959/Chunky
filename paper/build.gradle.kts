@@ -3,5 +3,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly(group = "io.papermc.paper", name = "paper-api", version = "1.20.4-R0.1-SNAPSHOT")
+    compileOnly(group = "io.papermc.paper", name = "paper-api", version = "1.21.1-R0.1-SNAPSHOT")
+    implementation(project(":chunky-common"))
 }

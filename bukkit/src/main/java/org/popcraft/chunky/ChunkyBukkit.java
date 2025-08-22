@@ -1,90 +1,33 @@
 package org.popcraft.chunky;
 
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.world.WorldInitEvent;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.popcraft.chunky.api.ChunkyAPI;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
-import org.popcraft.chunky.integration.WorldBorderIntegration;
-import org.popcraft.chunky.platform.BukkitConfig;
 import org.popcraft.chunky.platform.BukkitPlayer;
 import org.popcraft.chunky.platform.BukkitSender;
-import org.popcraft.chunky.platform.BukkitServer;
-import org.popcraft.chunky.platform.Folia;
-import org.popcraft.chunky.platform.Paper;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
-import org.popcraft.chunky.util.Version;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 import static org.popcraft.chunky.util.Translator.translate;
 
-public final class ChunkyBukkit extends JavaPlugin implements Listener {
+public final class ChunkyBukkit extends AbstractChunkyBukkit {
+
     private static final String COMMAND_PERMISSION_KEY = "chunky.command.";
-    private Chunky chunky;
 
     @Override
-    public void onEnable() {
-        this.chunky = new Chunky(new BukkitServer(this), new BukkitConfig(this));
-        final Version currentVersion = new Version(Bukkit.getBukkitVersion(), true);
-        if (currentVersion.isValid() && Version.MINECRAFT_1_13_2.isHigherThan(currentVersion)) {
-            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
-            getServer().getPluginManager().disablePlugin(this);
-        }
-        if (!isEnabled()) {
-            return;
-        }
-        getServer().getServicesManager().register(Chunky.class, chunky, this, ServicePriority.Normal);
-        getServer().getServicesManager().register(ChunkyAPI.class, chunky.getApi(), this, ServicePriority.Normal);
-        if (chunky.getConfig().getContinueOnRestart()) {
-            final Runnable continueTask = () -> chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
-            if (Folia.isFolia()) {
-                Folia.onServerInit(this, continueTask);
-            } else {
-                getServer().getScheduler().scheduleSyncDelayedTask(this, continueTask);
-            }
-        }
-        if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
-            chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
-        }
-        final Metrics metrics = new Metrics(this, 8211);
-        metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
-        getServer().getPluginManager().registerEvents(this, this);
-        if (!Paper.isPaper()) {
-            disablePauseWhenEmptySeconds();
-        }
-    }
-
-    @Override
-    public void onDisable() {
-        HandlerList.unregisterAll((Plugin) this);
-        if (chunky != null) {
-            chunky.disable();
-        }
+    protected void postEnable() {
+        disablePauseWhenEmptySeconds();
     }
 
     @SuppressWarnings("NullableProblems")
@@ -120,17 +63,8 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
             suggestions.addAll(commands.get(args[0].toLowerCase()).suggestions(arguments));
         }
         return suggestions.stream()
-                .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
-                .toList();
-    }
-
-    public Chunky getChunky() {
-        return chunky;
-    }
-
-    @EventHandler
-    public void onWorldInit(final WorldInitEvent event) {
-        chunky.getRegionCache().clear(event.getWorld().getName());
+            .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
+            .toList();
     }
 
     private void disablePauseWhenEmptySeconds() {

@@ -1,20 +1,30 @@
 name: ${name}
 version: ${version}
-main: ${group}.chunky.ChunkyBukkit
-api-version: 1.13
+main: ${group}.chunky.ChunkyPaper
+api-version: 1.21
 folia-supported: true
-softdepend: [dynmap, BlueMap, squaremap, WorldBorder]
+
+dependencies:
+  server:
+    dynmap:
+      required: false
+      load: BEFORE
+    BlueMap:
+      required: false
+      load: BEFORE
+    squaremap:
+      required: false
+      load: BEFORE
+    WorldBorder:
+      required: false
+      load: BEFORE
+
 load: POSTWORLD
 authors: [${author}]
 description: ${description}
-website: https://www.spigotmc.org/resources/chunky.81534/
-commands:
-  chunky:
-    description: Generates chunks
-    aliases: [cy]
-    permission: chunky.command
-    usage: /chunky
-permissions: # TODO: reflect any changes here in the Paper module's paper-plugin.yml as well
+website: https://modrinth.com/plugin/chunky
+
+permissions:
   chunky.command:
     default: op
   chunky.command.border:
