@@ -1,6 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import org.popcraft.chunky.AbstractChunkyBukkit;
+import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.integration.Integration;
 
 import java.util.ArrayList;
@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class BukkitServer implements Server {
-    private final AbstractChunkyBukkit plugin;
+    private final ChunkyBukkit plugin;
     private final Map<String, Integration> integrations;
 
-    public BukkitServer(final AbstractChunkyBukkit plugin) {
+    public BukkitServer(final ChunkyBukkit plugin) {
         this.plugin = plugin;
         this.integrations = new HashMap<>();
     }

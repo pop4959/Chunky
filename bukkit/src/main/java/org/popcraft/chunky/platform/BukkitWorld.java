@@ -7,7 +7,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.popcraft.chunky.AbstractChunkyBukkit;
+import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
 
@@ -35,7 +35,7 @@ public class BukkitWorld implements World {
         IS_GENERATED_SUPPORTED = isGeneratedSupported;
     }
 
-    private final JavaPlugin plugin = JavaPlugin.getPlugin(AbstractChunkyBukkit.class);
+    private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
     private final org.bukkit.World world;
     private final Border worldBorder;
 

@@ -5,7 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.popcraft.chunky.AbstractChunkyBukkit;
+import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.platform.util.Location;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
     }
 
     final org.bukkit.entity.Player player;
-    private final JavaPlugin plugin = JavaPlugin.getPlugin(AbstractChunkyBukkit.class);
+    private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
 
     public BukkitPlayer(final org.bukkit.entity.Player player) {
         super(player);

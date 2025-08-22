@@ -14,7 +14,7 @@ commands:
     aliases: [cy]
     permission: chunky.command
     usage: /chunky
-permissions: # TODO: reflect any changes here in the Paper module's paper-plugin.yml as well
+permissions:
   chunky.command:
     default: op
   chunky.command.border:
