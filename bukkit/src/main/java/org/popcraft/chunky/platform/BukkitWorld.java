@@ -148,6 +148,7 @@ public class BukkitWorld implements World {
     private int getElevationForLocation(final int x, final int z) {
         final int height = world.getHighestBlockYAt(x, z) + 1;
         final int logicalHeight = world.getLogicalHeight();
+        final CompletableFuture loadedChunk = getChunkAtAsync(x >> 4, y >> 4);
         if (height >= logicalHeight) {
             Block block = world.getBlockAt(x, logicalHeight, z);
             int air = 0;

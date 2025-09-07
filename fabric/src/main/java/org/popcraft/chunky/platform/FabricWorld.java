@@ -137,6 +137,7 @@ public class FabricWorld implements World {
     public int getElevation(final int x, final int z) {
         final int height = world.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) + 1;
         final int logicalHeight = world.getLogicalHeight();
+        final CompletableFuture loadedChunk = getChunkAtAsync(x >> 4, y >> 4);
         if (height >= logicalHeight) {
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, logicalHeight, z);
             int air = 0;
