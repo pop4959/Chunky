@@ -123,9 +123,10 @@ public class FabricWorld implements World {
 
     @Override
     public Location getSpawn() {
-        final BlockPos pos = world.getSharedSpawnPos();
-        final float rot = world.getSharedSpawnAngle();
-        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), rot, 0);
+        final BlockPos pos = world.getRespawnData().pos();
+        final float yaw = world.getRespawnData().yaw();
+        final float pitch = world.getRespawnData().pitch();
+        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), yaw, pitch);
     }
 
     @Override
