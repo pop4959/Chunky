@@ -20,8 +20,10 @@ import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
+import org.popcraft.chunky.ChunkyFabric;
 import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.popcraft.chunky.mixin.ChunkMapMixin;
+import org.popcraft.chunky.mixin.MinecraftServerAccess;
 import org.popcraft.chunky.mixin.ServerChunkCacheMixin;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
@@ -102,10 +104,17 @@ public class FabricWorld implements World {
                 serverChunkCache.addTicketWithRadius(CHUNKY_TICKING, chunkPos, 1);
             }
             ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
-            return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
+            // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
+            // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
+            boolean create = ChunkyFabric.ENABLE_MOONRISE_WORKAROUNDS;
+            return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
                     .whenCompleteAsync((ignored, throwable) -> {
                         serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
                         ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
+                        if (ChunkyFabric.ENABLE_MOONRISE_WORKAROUNDS) {
+                            // note: to prevent pausing on dedicated server when Moonrise is present
+                            ((MinecraftServerAccess) world.getServer()).setEmptyTicks(0);
+                        }
                     }, world.getServer())
                     .thenApply(ignored -> null);
         }

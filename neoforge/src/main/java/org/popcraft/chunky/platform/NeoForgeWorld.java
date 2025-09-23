@@ -20,6 +20,7 @@ import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
+import org.popcraft.chunky.ChunkyNeoForge;
 import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
@@ -99,10 +100,17 @@ public class NeoForgeWorld implements World {
                 serverChunkCache.addTicketWithRadius(CHUNKY_TICKING, chunkPos, 1);
             }
             serverChunkCache.runDistanceManagerUpdates();
-            return serverChunkCache.getChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
+            // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
+            // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
+            boolean create = ChunkyNeoForge.ENABLE_MOONRISE_WORKAROUNDS;
+            return serverChunkCache.getChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
                     .whenCompleteAsync((ignored, throwable) -> {
                         serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
                         ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
+                        if (ChunkyNeoForge.ENABLE_MOONRISE_WORKAROUNDS) {
+                            // note: to prevent pausing on dedicated server when Moonrise is present
+                            world.getServer().emptyTicks = 0;
+                        }
                     }, world.getServer())
                     .thenApply(ignored -> null);
         }
