@@ -1,14 +1,14 @@
 plugins {
-    id("dev.architectury.loom") version "1.10-SNAPSHOT"
+    id("dev.architectury.loom") version "1.11-SNAPSHOT"
 }
 
 val shade: Configuration by configurations.creating
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.9-pre2")
+    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.9-pre4")
     mappings(loom.officialMojangMappings())
-    modImplementation(group = "net.fabricmc", name = "fabric-loader", version = "0.17.0")
-    modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.133.10+1.21.9")
+    modImplementation(group = "net.fabricmc", name = "fabric-loader", version = "0.17.2")
+    modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.133.11+1.21.9")
     modCompileOnly(group = "me.lucko", name = "fabric-permissions-api", version = "0.4.0")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
