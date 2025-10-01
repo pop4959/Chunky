@@ -40,6 +40,7 @@ import static net.minecraft.commands.arguments.DimensionArgument.dimension;
 import static net.minecraft.commands.arguments.EntityArgument.player;
 
 public class ChunkyFabric implements ModInitializer {
+    public static final boolean ENABLE_MOONRISE_WORKAROUNDS = FabricLoader.getInstance().isModLoaded("moonrise");
     private Chunky chunky;
     private final Map<ResourceLocation, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
