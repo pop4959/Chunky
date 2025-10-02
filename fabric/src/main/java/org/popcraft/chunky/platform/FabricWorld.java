@@ -37,8 +37,9 @@ import java.util.function.Function;
 
 public class FabricWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
-    private static final TicketType CHUNKY = new TicketType(0L, false, TicketType.TicketUse.LOADING);
-    private static final TicketType CHUNKY_TICKING = new TicketType(TICKING_LOAD_DURATION * 20L, false, TicketType.TicketUse.LOADING_AND_SIMULATION);
+    // In 1.21.9, TicketType constructor is (long timeout, int flags)
+    private static final TicketType CHUNKY = new TicketType(0L, TicketType.FLAG_LOADING);
+    private static final TicketType CHUNKY_TICKING = new TicketType(TICKING_LOAD_DURATION * 20L, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION);
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerLevel world;
     private final Border worldBorder;
@@ -132,8 +133,10 @@ public class FabricWorld implements World {
 
     @Override
     public Location getSpawn() {
-        final BlockPos pos = world.getSharedSpawnPos();
-        final float rot = world.getSharedSpawnAngle();
+        // In 1.21.9, spawn is now in RespawnData
+        var respawnData = world.getRespawnData();
+        final BlockPos pos = respawnData.pos();
+        final float rot = respawnData.yaw();
         return new Location(this, pos.getX(), pos.getY(), pos.getZ(), rot, 0);
     }
 
