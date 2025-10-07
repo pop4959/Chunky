@@ -17,7 +17,7 @@ dependencies {
 
 tasks {
     processResources {
-        filesMatching("plugin.yml") {
+        filesMatching("*plugin.yml") {
             expand(
                 "name" to project.property("artifactName"),
                 "version" to project.version,
