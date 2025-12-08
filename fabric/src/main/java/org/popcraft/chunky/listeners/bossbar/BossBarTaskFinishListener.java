@@ -1,6 +1,6 @@
 package org.popcraft.chunky.listeners.bossbar;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerBossEvent;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class BossBarTaskFinishListener implements Consumer<GenerationTaskFinishEvent> {
-    private final Map<ResourceLocation, ServerBossEvent> bossBars;
+    private final Map<Identifier, ServerBossEvent> bossBars;
 
-    public BossBarTaskFinishListener(final Map<ResourceLocation, ServerBossEvent> bossBars) {
+    public BossBarTaskFinishListener(final Map<Identifier, ServerBossEvent> bossBars) {
         this.bossBars = bossBars;
     }
 
@@ -20,7 +20,7 @@ public class BossBarTaskFinishListener implements Consumer<GenerationTaskFinishE
     public void accept(final GenerationTaskFinishEvent event) {
         final GenerationTask task = event.generationTask();
         final World world = task.getSelection().world();
-        final ResourceLocation worldIdentifier = ResourceLocation.tryParse(world.getKey());
+        final Identifier worldIdentifier = Identifier.tryParse(world.getKey());
         if (worldIdentifier == null) {
             return;
         }
