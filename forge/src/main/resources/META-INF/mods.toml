@@ -13,12 +13,12 @@ description="${description}"
 [[dependencies.chunky]]
    modId="forge"
    mandatory=true
-   versionRange="[56,)"
+   versionRange="[59,)"
    ordering="NONE"
    side="BOTH"
 [[dependencies.chunky]]
    modId="minecraft"
    mandatory=true
-   versionRange="[1.21.6,1.22)"
+   versionRange="[1.21.9,1.22)"
    ordering="NONE"
    side="BOTH"
