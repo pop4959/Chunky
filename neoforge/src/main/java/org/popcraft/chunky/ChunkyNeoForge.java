@@ -4,10 +4,11 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
@@ -48,7 +49,7 @@ public class ChunkyNeoForge {
     public static final String MOD_ID = "chunky";
     public static final boolean ENABLE_MOONRISE_WORKAROUNDS = ModList.get().isLoaded("moonrise");
     private Chunky chunky;
-    private final Map<ResourceLocation, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
+    private final Map<Identifier, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
     public ChunkyNeoForge() {
         NeoForge.EVENT_BUS.register(this);
@@ -75,7 +76,7 @@ public class ChunkyNeoForge {
                     if (server != null && server.isSingleplayer()) {
                         return true;
                     }
-                    return serverCommandSource.hasPermission(2);
+                    return serverCommandSource.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
                 })
                 .executes(context -> {
                     final Sender sender;

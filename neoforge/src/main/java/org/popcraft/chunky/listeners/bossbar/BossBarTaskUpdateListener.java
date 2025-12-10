@@ -1,10 +1,11 @@
 package org.popcraft.chunky.listeners.bossbar;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.level.Level;
 import org.popcraft.chunky.Chunky;
@@ -17,9 +18,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateEvent> {
-    private final Map<ResourceLocation, ServerBossEvent> bossBars;
+    private final Map<Identifier, ServerBossEvent> bossBars;
 
-    public BossBarTaskUpdateListener(final Map<ResourceLocation, ServerBossEvent> bossBars) {
+    public BossBarTaskUpdateListener(final Map<Identifier, ServerBossEvent> bossBars) {
         this.bossBars = bossBars;
     }
 
@@ -28,7 +29,7 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         final GenerationTask task = event.generationTask();
         final Chunky chunky = task.getChunky();
         final World world = task.getSelection().world();
-        final ResourceLocation worldIdentifier = ResourceLocation.tryParse(world.getKey());
+        final Identifier worldIdentifier = Identifier.tryParse(world.getKey());
         if (worldIdentifier == null || !(world instanceof final NeoForgeWorld neoForgeWorld)) {
             return;
         }
@@ -39,7 +40,7 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         }
         final MinecraftServer server = neoForgeWorld.getWorld().getServer();
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (player.hasPermissions(2)) {
+            if (player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
                 bossBar.addPlayer(player);
             } else {
                 bossBar.removePlayer(player);
@@ -59,7 +60,7 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         }
     }
 
-    private ServerBossEvent createNewBossBar(final ResourceLocation worldIdentifier) {
+    private ServerBossEvent createNewBossBar(final Identifier worldIdentifier) {
         final ServerBossEvent bossBar = new ServerBossEvent(
                 Component.nullToEmpty(worldIdentifier.toString()),
                 bossBarColor(worldIdentifier),
@@ -71,13 +72,13 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         return bossBar;
     }
 
-    private static BossEvent.BossBarColor bossBarColor(ResourceLocation worldIdentifier) {
+    private static BossEvent.BossBarColor bossBarColor(Identifier worldIdentifier) {
         final BossEvent.BossBarColor bossBarColor;
-        if (Level.OVERWORLD.location().equals(worldIdentifier)) {
+        if (Level.OVERWORLD.identifier().equals(worldIdentifier)) {
             bossBarColor = BossEvent.BossBarColor.GREEN;
-        } else if (Level.NETHER.location().equals(worldIdentifier)) {
+        } else if (Level.NETHER.identifier().equals(worldIdentifier)) {
             bossBarColor = BossEvent.BossBarColor.RED;
-        } else if (Level.END.location().equals(worldIdentifier)) {
+        } else if (Level.END.identifier().equals(worldIdentifier)) {
             bossBarColor = BossEvent.BossBarColor.PURPLE;
         } else {
             bossBarColor = BossEvent.BossBarColor.BLUE;
