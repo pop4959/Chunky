@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.visitors.CollectFields;
 import net.minecraft.nbt.visitors.FieldSelector;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
@@ -46,7 +46,7 @@ public class ForgeWorld implements World {
 
     @Override
     public String getName() {
-        return world.dimension().location().toString();
+        return world.dimension().identifier().toString();
     }
 
     @Override
@@ -174,7 +174,7 @@ public class ForgeWorld implements World {
         world.getServer()
                 .registryAccess()
                 .get(Registries.SOUND_EVENT)
-                .flatMap(soundEventRegistry -> soundEventRegistry.value().getOptional(ResourceLocation.tryParse(sound)))
+                .flatMap(soundEventRegistry -> soundEventRegistry.value().getOptional(Identifier.tryParse(sound)))
                 .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
     }
 

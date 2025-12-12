@@ -4,10 +4,11 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -46,7 +47,7 @@ import static net.minecraft.commands.arguments.EntityArgument.player;
 public class ChunkyForge {
     public static final String MOD_ID = "chunky";
     private Chunky chunky;
-    private final Map<ResourceLocation, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
+    private final Map<Identifier, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
     public ChunkyForge() {
         MinecraftForge.EVENT_BUS.register(this);
@@ -73,7 +74,7 @@ public class ChunkyForge {
                     if (server != null && server.isSingleplayer()) {
                         return true;
                     }
-                    return serverCommandSource.hasPermission(2);
+                    return serverCommandSource.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
                 })
                 .executes(context -> {
                     final Sender sender;
