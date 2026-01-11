@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import org.popcraft.chunky.platform.impl.NOOPBatcher;
 import org.popcraft.chunky.platform.util.Location;
 
 import java.nio.file.Path;
@@ -37,6 +38,10 @@ public interface World {
     void playSound(Player player, String sound);
 
     Optional<Path> getDirectory(String name);
+
+    default Batcher getBatcher() {
+        return NOOPBatcher.INSTANCE;
+    }
 
     default Optional<Path> getEntitiesDirectory() {
         return getDirectory("entities");

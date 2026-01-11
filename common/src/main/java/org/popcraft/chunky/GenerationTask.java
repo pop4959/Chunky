@@ -6,6 +6,7 @@ import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.iterator.ChunkIterator;
 import org.popcraft.chunky.iterator.ChunkIteratorFactory;
+import org.popcraft.chunky.platform.Batcher;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
@@ -22,7 +23,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GenerationTask implements Runnable {
-    private static final int MAX_WORKING_COUNT = Input.tryInteger(System.getProperty("chunky.maxWorkingCount")).orElse(50);
+    public static final int MAX_WORKING_COUNT = Input.tryInteger(System.getProperty("chunky.maxWorkingCount")).orElse(50);
     private static final double SAMPLE_INTERVAL = 1000d * Math.max(Input.tryInteger(System.getProperty("chunky.sampleInterval")).orElse(30), 30);
     private static final double SAMPLE_SUB_INTERVAL = SAMPLE_INTERVAL / 30;
     private final Chunky chunky;
@@ -123,6 +124,8 @@ public class GenerationTask implements Runnable {
         }
         final Semaphore working = new Semaphore(MAX_WORKING_COUNT);
         final boolean forceLoadExistingChunks = chunky.getConfig().isForceLoadExistingChunks();
+        final Batcher batcher = selection.world().getBatcher();
+        batcher.resume();
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             final ChunkCoordinate chunk = chunkIterator.next();
@@ -154,10 +157,14 @@ public class GenerationTask implements Runnable {
                             return selection.world().getChunkAtAsync(chunk.x(), chunk.z());
                         }
                     }).whenComplete((ignored, throwable) -> {
+                        if (throwable != null) {
+                            throwable.printStackTrace();
+                        }
                         working.release();
                         update(chunk.x(), chunk.z(), true);
                     });
         }
+        batcher.shutdown();
         if (stopped) {
             chunky.getServer().getConsole().sendMessagePrefixed(TranslationKey.TASK_STOPPED, selection.world().getName());
         } else {
