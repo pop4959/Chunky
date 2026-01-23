@@ -2,6 +2,7 @@ package org.popcraft.chunky.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.profiling.InactiveProfiler;
 import org.popcraft.chunky.ChunkyNeoForge;
 import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,6 +33,7 @@ public abstract class MinecraftServerMixin implements MinecraftServerExtension {
         if (this.chunky$needChunkSystemHousekeeping.compareAndSet(true, false)) {
             for (ServerLevel level : this.getAllLevels()) {
                 level.getChunkSource().chunkMap.tick(() -> true); // push the vanilla chunk system to unload unneeded chunks ASAP
+                level.getChunkSource().broadcastChangedChunks(InactiveProfiler.INSTANCE);
                 if (!ChunkyNeoForge.ENABLE_MOONRISE_WORKAROUNDS) {
                     // note: Moonrise destroys the vanilla entity system, so skip it here if it's present
                     level.entityManager.tick();
