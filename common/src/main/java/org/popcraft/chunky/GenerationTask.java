@@ -157,9 +157,6 @@ public class GenerationTask implements Runnable {
                             return selection.world().getChunkAtAsync(chunk.x(), chunk.z());
                         }
                     }).whenComplete((ignored, throwable) -> {
-                        if (throwable != null) {
-                            throwable.printStackTrace();
-                        }
                         working.release();
                         update(chunk.x(), chunk.z(), true);
                     });

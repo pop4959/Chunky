@@ -1,4 +1,4 @@
-package org.popcraft.chunky.platform.impl;
+package org.popcraft.chunky.platform.impl.batcher;
 
 import org.popcraft.chunky.platform.Batcher;
 

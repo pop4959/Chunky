@@ -112,9 +112,6 @@ public class FabricWorld implements World {
                 return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
                         .thenApplyAsync(Function.identity(), ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor()) // workaround to prevent memory leaks in vanilla chunk system
                         .whenCompleteAsync((ignored, throwable) -> {
-                            if (throwable != null) {
-                                throwable.printStackTrace();
-                            }
                             serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
                             ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
                             if (ChunkyFabric.ENABLE_MOONRISE_WORKAROUNDS) {
@@ -123,7 +120,7 @@ public class FabricWorld implements World {
                             }
                         }, this.batcher.getTicketRemoveExecutor())
                         .thenApply(ignored -> (Void) null);
-            }, this.batcher.getFutureFetchExecutor()).thenCompose(Function.identity());
+            }, this.batcher.getChunkLoadExecutor()).thenCompose(Function.identity());
         }
     }
 

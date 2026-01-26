@@ -1,6 +1,6 @@
 package org.popcraft.chunky.platform;
 
-import org.popcraft.chunky.platform.impl.NOOPBatcher;
+import org.popcraft.chunky.platform.impl.batcher.NOOPBatcher;
 import org.popcraft.chunky.platform.util.Location;
 
 import java.nio.file.Path;
@@ -39,10 +39,6 @@ public interface World {
 
     Optional<Path> getDirectory(String name);
 
-    default Batcher getBatcher() {
-        return NOOPBatcher.INSTANCE;
-    }
-
     default Optional<Path> getEntitiesDirectory() {
         return getDirectory("entities");
     }
@@ -53,5 +49,9 @@ public interface World {
 
     default Optional<Path> getRegionDirectory() {
         return getDirectory("region");
+    }
+
+    default Batcher getBatcher() {
+        return NOOPBatcher.INSTANCE;
     }
 }

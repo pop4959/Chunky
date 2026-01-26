@@ -2,18 +2,12 @@ package org.popcraft.chunky.platform;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import org.popcraft.chunky.platform.impl.AbstractNMSBatcher;
+import org.popcraft.chunky.platform.impl.batcher.AbstractBatcher;
 
-public class NeoForgeBatcher extends AbstractNMSBatcher {
+public class NeoForgeBatcher extends AbstractBatcher {
     private final ServerLevel world;
 
-    public NeoForgeBatcher(int maxWorkingCount, ServerLevel world) {
-        super(maxWorkingCount);
-        this.world = world;
-    }
-
-    public NeoForgeBatcher(ServerLevel world) {
-        super();
+    public NeoForgeBatcher(final ServerLevel world) {
         this.world = world;
     }
 
@@ -23,8 +17,8 @@ public class NeoForgeBatcher extends AbstractNMSBatcher {
     }
 
     @Override
-    protected void executeSyncRaw(Runnable command) {
-        MinecraftServer server = this.world.getServer();
+    protected void runSync(final Runnable command) {
+        final MinecraftServer server = this.world.getServer();
         server.schedule(server.wrapRunnable(command));
     }
 }

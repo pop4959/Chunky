@@ -108,9 +108,6 @@ public class NeoForgeWorld implements World {
                 return world.getChunkSource().getChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
                         .thenApplyAsync(Function.identity(), serverChunkCache.chunkMap.mainThreadExecutor) // workaround to prevent memory leaks in vanilla chunk system
                         .whenCompleteAsync((ignored, throwable) -> {
-                            if (throwable != null) {
-                                throwable.printStackTrace();
-                            }
                             serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
                             ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
                             if (ChunkyNeoForge.ENABLE_MOONRISE_WORKAROUNDS) {
@@ -119,7 +116,7 @@ public class NeoForgeWorld implements World {
                             }
                         }, this.batcher.getTicketRemoveExecutor())
                         .thenApply(ignored -> (Void) null);
-            }, this.batcher.getFutureFetchExecutor()).thenCompose(Function.identity());
+            }, this.batcher.getChunkLoadExecutor()).thenCompose(Function.identity());
         }
     }
 
