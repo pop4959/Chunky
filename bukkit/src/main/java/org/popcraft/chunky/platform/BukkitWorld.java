@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 public class BukkitWorld implements World {
@@ -142,7 +143,10 @@ public class BukkitWorld implements World {
 
     @Override
     public CompletableFuture<Integer> getElevationAtAsync(final int x, final int z) {
-        return this.getChunkFuture(x >> 4, z >> 4).thenApply(ignored -> this.getElevationForLocation(x, z));
+        final int chunkX = x >> 4;
+        final int chunkZ = z >> 4;
+
+        return this.getChunkFuture(chunkX, chunkZ).thenApplyAsync(ignored -> this.getElevationForLocation(x, z), getMainThreadExecutor(chunkX, chunkZ));
     }
 
     private int getElevationForLocation(final int x, final int z) {
@@ -161,6 +165,30 @@ public class BukkitWorld implements World {
             }
         }
         return height;
+    }
+
+    /**
+     * {@return a new executor that executes tasks on the main thread}
+     * <p>
+     * Must not be passed around different threads, since it shortcuts to immediately running tasks if the calling thread is already a main thread.
+     *
+     * @param chunkX The chunk x coord (for Folia)
+     * @param chunkZ The chunk z coord (for Folia)
+     */
+    private Executor getMainThreadExecutor(final int chunkX, final int chunkZ) {
+        if (!Folia.isFolia()) {
+            if (plugin.getServer().isPrimaryThread()) {
+                return Runnable::run;
+            } else {
+                return runnable -> plugin.getServer().getScheduler().runTask(plugin, runnable);
+            }
+        }
+
+        if (Folia.isTickThread(world, chunkX, chunkZ)) {
+            return Runnable::run;
+        } else {
+            return runnable -> Folia.schedule(plugin, world, chunkX, chunkZ, runnable);
+        }
     }
 
     @Override
