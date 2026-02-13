@@ -42,10 +42,12 @@ public class FabricWorld implements World {
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerLevel world;
     private final Border worldBorder;
+    private final FabricBatcher batcher;
 
     public FabricWorld(final ServerLevel world) {
         this.world = world;
         this.worldBorder = new FabricBorder(world.getWorldBorder());
+        this.batcher = new FabricBatcher(world);
     }
 
     @Override
@@ -95,7 +97,7 @@ public class FabricWorld implements World {
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         if (Thread.currentThread() != world.getServer().getRunningThread()) {
-            return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), world.getServer()).thenCompose(Function.identity());
+            return CompletableFuture.supplyAsync(() -> getChunkAtAsync(x, z), this.batcher.getTicketAddExecutor()).thenCompose(Function.identity());
         } else {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkCache serverChunkCache = world.getChunkSource();
@@ -103,20 +105,22 @@ public class FabricWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addTicketWithRadius(CHUNKY_TICKING, chunkPos, 1);
             }
-            ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
-            // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
-            // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
-            boolean create = ChunkyFabric.ENABLE_MOONRISE_WORKAROUNDS;
-            return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
-                    .whenCompleteAsync((ignored, throwable) -> {
-                        serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
-                        ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
-                        if (ChunkyFabric.ENABLE_MOONRISE_WORKAROUNDS) {
-                            // note: to prevent pausing on dedicated server when Moonrise is present
-                            ((MinecraftServerAccess) world.getServer()).setEmptyTicks(0);
-                        }
-                    }, world.getServer())
-                    .thenApply(ignored -> null);
+            return CompletableFuture.supplyAsync(() -> {
+                // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
+                // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
+                boolean create = ChunkyFabric.ENABLE_MOONRISE_WORKAROUNDS;
+                return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
+                        .thenApplyAsync(Function.identity(), ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor()) // workaround to prevent memory leaks in vanilla chunk system
+                        .whenCompleteAsync((ignored, throwable) -> {
+                            serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
+                            ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
+                            if (ChunkyFabric.ENABLE_MOONRISE_WORKAROUNDS) {
+                                // note: to prevent pausing on dedicated server when Moonrise is present
+                                ((MinecraftServerAccess) world.getServer()).setEmptyTicks(0);
+                            }
+                        }, this.batcher.getTicketRemoveExecutor())
+                        .thenApply(ignored -> (Void) null);
+            }, this.batcher.getChunkLoadExecutor()).thenCompose(Function.identity());
         }
     }
 
@@ -191,6 +195,11 @@ public class FabricWorld implements World {
         }
         final Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT)).normalize().resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
+    }
+
+    @Override
+    public Batcher getBatcher() {
+        return this.batcher;
     }
 
     public ServerLevel getWorld() {
