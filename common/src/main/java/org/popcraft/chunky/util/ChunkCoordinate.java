@@ -8,6 +8,9 @@ public record ChunkCoordinate(int x, int z) implements Comparable<ChunkCoordinat
         if (!regionFileName.startsWith("r.")) {
             return Optional.empty();
         }
+        if (!regionFileName.endsWith(".mca")) {
+            return Optional.empty();
+        }
         final int extension = regionFileName.indexOf(".mca");
         if (extension < 2) {
             return Optional.empty();
