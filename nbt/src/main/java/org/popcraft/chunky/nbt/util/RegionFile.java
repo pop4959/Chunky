@@ -35,6 +35,9 @@ public final class RegionFile {
             if (!regionFileName.startsWith("r.")) {
                 return;
             }
+            if (!regionFileName.endsWith(".mca")) {
+                return;
+            }
             final int extension = regionFileName.indexOf(".mca");
             if (extension < 2) {
                 return;
