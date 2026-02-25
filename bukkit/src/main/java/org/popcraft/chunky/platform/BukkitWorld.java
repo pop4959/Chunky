@@ -57,13 +57,13 @@ public class BukkitWorld implements World {
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
         if (Paper.isPaper()) {
-            return CompletableFuture.supplyAsync(() -> {
-                try {
-                    return world.isChunkGenerated(x, z);
-                } catch (CompletionException e) {
-                    return false;
-                }
-            });
+            // Paper's isChunkGenerated() is thread-safe — it reads from the internal chunk status map.
+            // Calling it directly avoids submitting thousands of tiny tasks to the common fork-join pool.
+            try {
+                return CompletableFuture.completedFuture(world.isChunkGenerated(x, z));
+            } catch (Exception e) {
+                return CompletableFuture.completedFuture(false);
+            }
         } else {
             if (IS_GENERATED_SUPPORTED) {
                 return CompletableFuture.completedFuture(world.getChunkAt(x, z, false).isGenerated());
@@ -87,6 +87,12 @@ public class BukkitWorld implements World {
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
         final CompletableFuture<Void> chunkFuture = this.getChunkFuture(x, z);
+        // Post-generation heap eviction (Paper only, opt-in via -Dchunky.unloadAfterGenerate=true).
+        // Requesting an unload immediately after generation keeps heap flat during large pre-gens.
+        // Paper handles the unload asynchronously after confirming the chunk is saved to disk.
+        if (Paper.isPaper() && Paper.UNLOAD_AFTER_GENERATE) {
+            chunkFuture.thenRun(() -> Paper.unloadChunkRequest(world, x, z));
+        }
         if (TICKING_LOAD_DURATION > 0) {
             final CompletableFuture<Void> removeTicketFuture = new CompletableFuture<>();
             chunkFuture.thenAccept(ignored -> {

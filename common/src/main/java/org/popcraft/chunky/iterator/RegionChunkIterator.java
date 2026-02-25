@@ -2,6 +2,7 @@ package org.popcraft.chunky.iterator;
 
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.ChunkCoordinate;
+import org.popcraft.chunky.util.ChunkMath;
 import org.popcraft.chunky.util.Hilbert;
 
 import java.util.NoSuchElementException;
@@ -95,14 +96,14 @@ public class RegionChunkIterator implements ChunkIterator {
         if (!hasNext) {
             throw new NoSuchElementException();
         }
-        final ChunkCoordinate chunkCoord = currentRegionProgress.next();
+        final long packed = currentRegionProgress.nextLong();
         while (currentRegionProgress != null && !currentRegionProgress.hasNext()) {
             currentRegionProgress = nextRegionChunkProgress();
         }
         if (currentRegionProgress == null) {
             hasNext = false;
         }
-        return chunkCoord;
+        return new ChunkCoordinate(ChunkMath.unpackX(packed), ChunkMath.unpackZ(packed));
     }
 
     private RegionChunkProgress nextRegionChunkProgress() {
@@ -197,7 +198,7 @@ public class RegionChunkIterator implements ChunkIterator {
                 this.total = sizeX * sizeZ;
                 this.full = total == 1024;
             }
-            this.name = "region_chunk_progress_%d_%d".formatted(x, z);
+            this.name = "rcp_" + x + "_" + z;
         }
 
         @Override
@@ -206,16 +207,19 @@ public class RegionChunkIterator implements ChunkIterator {
         }
 
         @Override
-        public ChunkCoordinate next() {
+        public long nextLong() {
             if (!hasNext) {
                 throw new NoSuchElementException();
             }
-            final ChunkCoordinate chunkCoord;
+            final long packed;
             if (full) {
-                final ChunkCoordinate offset = Hilbert.regionDistanceToChunkCoordinateOffset(current);
-                chunkCoord = new ChunkCoordinate(minX + offset.x(), minZ + offset.z());
+                // Zero-allocation: read packed (offsetX, offsetZ) directly from Hilbert table.
+                final long offsetPacked = Hilbert.regionDistanceToPackedOffset(current);
+                final int ox = ChunkMath.unpackX(offsetPacked);
+                final int oz = ChunkMath.unpackZ(offsetPacked);
+                packed = ChunkMath.pack(minX + ox, minZ + oz);
             } else {
-                chunkCoord = new ChunkCoordinate(minX + offsetX, minZ + offsetZ);
+                packed = ChunkMath.pack(minX + offsetX, minZ + offsetZ);
                 if (++offsetZ >= sizeZ) {
                     offsetZ = 0;
                     ++offsetX;
@@ -225,7 +229,13 @@ public class RegionChunkIterator implements ChunkIterator {
             if (current >= total) {
                 hasNext = false;
             }
-            return chunkCoord;
+            return packed;
+        }
+
+        @Override
+        public ChunkCoordinate next() {
+            final long packed = nextLong();
+            return new ChunkCoordinate(ChunkMath.unpackX(packed), ChunkMath.unpackZ(packed));
         }
 
         @Override

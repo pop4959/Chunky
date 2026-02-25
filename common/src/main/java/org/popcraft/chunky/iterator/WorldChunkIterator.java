@@ -7,6 +7,7 @@ import org.popcraft.chunky.nbt.TagType;
 import org.popcraft.chunky.nbt.util.ChunkFilter;
 import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.util.ChunkCoordinate;
+import org.popcraft.chunky.util.ChunkMath;
 import org.popcraft.chunky.util.Hilbert;
 import org.popcraft.chunky.util.Parameter;
 import org.popcraft.chunky.util.TranslationKey;
@@ -15,11 +16,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -35,7 +34,10 @@ public class WorldChunkIterator implements ChunkIterator {
     private final int maxChunkX;
     private final int maxChunkZ;
     private final String worldName;
-    private final Queue<ChunkCoordinate> chunks;
+    private final long[] chunkKeys; // packed primitive ring-buffer — no heap node per element
+    private int chunkHead = 0;
+    private int chunkTail = 0;
+    private int chunkCount = 0;
     private final AtomicLong total = new AtomicLong();
     private final Path savePath;
     private final Path regionPath;
@@ -59,7 +61,11 @@ public class WorldChunkIterator implements ChunkIterator {
         this.minChunkZ = centerChunkZ - radiusChunksZ;
         this.maxChunkX = centerChunkX + radiusChunksX;
         this.maxChunkZ = centerChunkZ + radiusChunksZ;
-        this.chunks = new LinkedList<>();
+        // Pre-allocate ring buffer. A single 512×512 chunk world has at most ~4 M chunks;
+        // for the scan phase we cap at Integer.MAX_VALUE/8 to avoid OOM on impossibly large worlds.
+        // In practice the scan is bounded by the selection radius.
+        final int regionCount = (maxRegionX - minRegionX + 1) * (maxRegionZ - minRegionZ + 1);
+        this.chunkKeys = new long[Math.min((long) regionCount * 1024L > Integer.MAX_VALUE ? Integer.MAX_VALUE : regionCount * 1024 + 1, 1 << 24)]; // up to 16M slots
         this.worldName = selection.world().getName();
         final String saveFile = worldName.substring(worldName.indexOf(':') + 1);
         this.savePath = selection.chunky().getConfig().getDirectory().resolve(String.format("%s.csv", saveFile));
@@ -69,15 +75,24 @@ public class WorldChunkIterator implements ChunkIterator {
 
     @Override
     public boolean hasNext() {
-        return !chunks.isEmpty();
+        return chunkCount > 0;
+    }
+
+    @Override
+    public long nextLong() {
+        if (chunkCount == 0) {
+            throw new NoSuchElementException();
+        }
+        final long key = chunkKeys[chunkHead];
+        chunkHead = (chunkHead + 1) % chunkKeys.length;
+        --chunkCount;
+        return key;
     }
 
     @Override
     public ChunkCoordinate next() {
-        if (chunks.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        return chunks.poll();
+        final long packed = nextLong();
+        return new ChunkCoordinate(ChunkMath.unpackX(packed), ChunkMath.unpackZ(packed));
     }
 
     @Override
@@ -122,7 +137,7 @@ public class WorldChunkIterator implements ChunkIterator {
                     if (chunkCoordinate.x() < minChunkX || chunkCoordinate.x() > maxChunkX || chunkCoordinate.z() < minChunkZ || chunkCoordinate.z() > maxChunkZ) {
                         continue;
                     }
-                    regionFile.getChunk(chunkCoordinate.x(), chunkCoordinate.z()).ifPresent(chunk -> {
+                regionFile.getChunk(chunkCoordinate.x(), chunkCoordinate.z()).ifPresent(chunk -> {
                         final boolean generated = Optional.ofNullable(chunk.getData())
                                 .filter(StringTag.class::isInstance)
                                 .map(StringTag.class::cast)
@@ -130,7 +145,13 @@ public class WorldChunkIterator implements ChunkIterator {
                                 .map(chunkStatusFilter)
                                 .orElse(false);
                         if (generated) {
-                            chunks.add(chunkCoordinate);
+                            // Enqueue as a packed long — no LinkedList node allocation.
+                            final long key = ChunkMath.pack(chunkCoordinate.x(), chunkCoordinate.z());
+                            if (chunkCount < chunkKeys.length) {
+                                chunkKeys[chunkTail] = key;
+                                chunkTail = (chunkTail + 1) % chunkKeys.length;
+                                ++chunkCount;
+                            }
                             saveData.append(chunkCoordinate.x()).append(',').append(chunkCoordinate.z()).append('\n');
                             total.incrementAndGet();
                         }

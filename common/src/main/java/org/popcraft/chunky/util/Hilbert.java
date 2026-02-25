@@ -1,8 +1,5 @@
 package org.popcraft.chunky.util;
 
-import java.util.Arrays;
-import java.util.Iterator;
-
 public final class Hilbert {
     private static final ChunkCoordinate[] regionChunkCoordinateOffsets = {
             new ChunkCoordinate(0, 0), new ChunkCoordinate(0, 1), new ChunkCoordinate(1, 1),
@@ -349,11 +346,36 @@ public final class Hilbert {
             new ChunkCoordinate(31, 0)
     };
 
+    /**
+     * Pre-packed version of {@link #regionChunkCoordinateOffsets} — each entry is
+     * {@code ChunkMath.pack(x, z)} so callers in the hot path avoid object allocation.
+     */
+    private static final long[] PACKED_OFFSETS;
+
+    static {
+        PACKED_OFFSETS = new long[regionChunkCoordinateOffsets.length];
+        for (int i = 0; i < regionChunkCoordinateOffsets.length; i++) {
+            final ChunkCoordinate c = regionChunkCoordinateOffsets[i];
+            PACKED_OFFSETS[i] = ChunkMath.pack(c.x(), c.z());
+        }
+    }
+
     private Hilbert() {
     }
 
     public static ChunkCoordinate regionDistanceToChunkCoordinateOffset(final int distance) {
         return regionChunkCoordinateOffsets[distance];
+    }
+
+    /**
+     * Returns the Hilbert-curve offset for the given intra-region distance as a packed {@code long}
+     * (upper 32 bits = x-offset, lower 32 bits = z-offset).
+     *
+     * <p>This is the zero-allocation counterpart of {@link #regionDistanceToChunkCoordinateOffset}.
+     * Use {@link ChunkMath#unpackX} / {@link ChunkMath#unpackZ} to extract the components.
+     */
+    public static long regionDistanceToPackedOffset(final int distance) {
+        return PACKED_OFFSETS[distance];
     }
 
     public static ChunkCoordinate[] chunkCoordinateOffsets() {
