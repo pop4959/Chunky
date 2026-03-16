@@ -16,8 +16,8 @@ sequenceOf(
     "folia",
     "bukkit",
     "fabric",
-    "forge",
-    "neoforge",
+//    "forge",
+//    "neoforge",
     "sponge"
 ).forEach {
     include("${rootProject.name}-$it")

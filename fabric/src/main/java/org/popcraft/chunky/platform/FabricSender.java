@@ -1,6 +1,5 @@
 package org.popcraft.chunky.platform;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,14 +13,15 @@ public class FabricSender implements Sender {
     private static final boolean HAS_PERMISSIONS;
 
     static {
-        boolean hasPermissions;
-        try {
-            Class.forName("me.lucko.fabric.api.permissions.v0.Permissions");
-            hasPermissions = true;
-        } catch (ClassNotFoundException e) {
-            hasPermissions = false;
-        }
-        HAS_PERMISSIONS = hasPermissions;
+//        boolean hasPermissions;
+//        try {
+//            Class.forName("me.lucko.fabric.api.permissions.v0.Permissions");
+//            hasPermissions = true;
+//        } catch (ClassNotFoundException e) {
+//            hasPermissions = false;
+//        }
+//        HAS_PERMISSIONS = hasPermissions;
+        HAS_PERMISSIONS = false;
     }
 
     private final CommandSourceStack source;
@@ -58,15 +58,15 @@ public class FabricSender implements Sender {
     }
 
     public boolean hasPermission(final String permission, final boolean defaultOp) {
-        if (HAS_PERMISSIONS) {
-            if (defaultOp) {
-                return Permissions.check(source, permission, 2);
-            } else {
-                return Permissions.check(source, permission, false);
-            }
-        } else {
+//        if (HAS_PERMISSIONS) {
+//            if (defaultOp) {
+//                return Permissions.check(source, permission, 2);
+//            } else {
+//                return Permissions.check(source, permission, false);
+//            }
+//        } else {
             return source.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
-        }
+//        }
     }
 
     @Override

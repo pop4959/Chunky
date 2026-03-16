@@ -67,7 +67,7 @@ public class FabricWorld implements World {
             final ServerChunkCache serverChunkCache = world.getChunkSource();
             final ChunkMap chunkStorage = serverChunkCache.chunkMap;
             final ChunkMapMixin chunkMapMixin = (ChunkMapMixin) chunkStorage;
-            final ChunkHolder loadedChunkHolder = chunkMapMixin.invokeGetVisibleChunkIfPresent(chunkPos.toLong());
+            final ChunkHolder loadedChunkHolder = chunkMapMixin.invokeGetVisibleChunkIfPresent(chunkPos.pack());
             if (loadedChunkHolder != null && loadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }

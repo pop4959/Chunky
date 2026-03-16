@@ -1,15 +1,15 @@
 plugins {
-    id("dev.architectury.loom") version "1.13-SNAPSHOT"
+    id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT"
 }
 
 val shade: Configuration by configurations.creating
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.11")
-    mappings(loom.officialMojangMappings())
-    modImplementation(group = "net.fabricmc", name = "fabric-loader", version = "0.18.1")
-    modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.139.4+1.21.11")
-    modCompileOnly(group = "me.lucko", name = "fabric-permissions-api", version = "0.6.1")
+    minecraft(group = "com.mojang", name = "minecraft", version = "26.1-pre-2")
+//    mappings(loom.officialMojangMappings())
+    implementation(group = "net.fabricmc", name = "fabric-loader", version = "0.18.4")
+    implementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.143.14+26.1")
+//    modCompileOnly(group = "me.lucko", name = "fabric-permissions-api", version = "0.6.1")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
@@ -29,11 +29,10 @@ tasks {
     }
     shadowJar {
         configurations = listOf(shade)
-        archiveClassifier.set("dev")
-        archiveFileName.set(null as String?)
-    }
-    remapJar {
-        inputFile.set(shadowJar.get().archiveFile)
         archiveFileName.set("${project.property("artifactName")}-Fabric-${project.version}.jar")
     }
+//    remapJar {
+//        inputFile.set(shadowJar.get().archiveFile)
+//        archiveFileName.set("${project.property("artifactName")}-Fabric-${project.version}.jar")
+//    }
 }
