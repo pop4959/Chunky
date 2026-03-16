@@ -19,11 +19,11 @@ tasks {
     processResources {
         filesMatching("plugin.yml") {
             expand(
-                "name" to project.property("artifactName"),
+                "name" to project.property("artifactName")!!,
                 "version" to project.version,
                 "group" to project.group,
-                "author" to project.property("author"),
-                "description" to project.property("description"),
+                "author" to project.property("author")!!,
+                "description" to project.property("description")!!,
             )
         }
     }

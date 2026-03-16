@@ -20,12 +20,12 @@ tasks {
     processResources {
         filesMatching("META-INF/neoforge.mods.toml") {
             expand(
-                "github" to project.property("github"),
+                "github" to project.property("github")!!,
                 "id" to rootProject.name,
                 "version" to project.version,
-                "name" to project.property("artifactName"),
-                "author" to project.property("author"),
-                "description" to project.property("description")
+                "name" to project.property("artifactName")!!,
+                "author" to project.property("author")!!,
+                "description" to project.property("description")!!
             )
         }
     }
@@ -35,7 +35,7 @@ tasks {
                 mapOf(
                     "Implementation-Title" to rootProject.name,
                     "Implementation-Version" to project.version,
-                    "Implementation-Vendor" to project.property("author")
+                    "Implementation-Vendor" to project.property("author")!!
                 )
             )
         }
