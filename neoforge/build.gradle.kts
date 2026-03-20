@@ -1,4 +1,5 @@
 plugins {
+    id("common")
     id("dev.architectury.loom") version "1.13-SNAPSHOT"
 }
 
@@ -9,24 +10,25 @@ repositories {
 }
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.11")
+    minecraft("com.mojang:minecraft:1.21.11")
     mappings(loom.officialMojangMappings())
-    neoForge(group = "net.neoforged", name = "neoforge", version = "21.11.0-beta")
+    neoForge("net.neoforged:neoforge:21.11.0-beta")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
 
 tasks {
     processResources {
+        val props = mapOf(
+            "github" to project.property("github")!!,
+            "id" to rootProject.name,
+            "version" to project.version,
+            "name" to project.property("artifactName")!!,
+            "author" to project.property("author")!!,
+            "description" to project.property("description")!!
+        )
         filesMatching("META-INF/neoforge.mods.toml") {
-            expand(
-                "github" to project.property("github")!!,
-                "id" to rootProject.name,
-                "version" to project.version,
-                "name" to project.property("artifactName")!!,
-                "author" to project.property("author")!!,
-                "description" to project.property("description")!!
-            )
+            expand(props)
         }
     }
     jar {
