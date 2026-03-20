@@ -1,0 +1,75 @@
+import org.gradle.internal.extensions.stdlib.capitalized
+
+plugins {
+    id("java-library")
+    id("maven-publish")
+    id("com.gradleup.shadow")
+}
+
+val chunkyExtension: ChunkyExtension = extensions.create("chunky", ChunkyExtension::class.java)
+
+version = "${rootProject.version}.${commitsSinceLastTag()}"
+
+repositories {
+    mavenCentral()
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    withSourcesJar()
+}
+
+tasks {
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+        options.release = 21
+        options.compilerArgs.add("-Xlint:none")
+    }
+    withType<AbstractArchiveTask>() {
+        archiveBaseName = project.property("artifactName") as String?
+        archiveAppendix = chunkyExtension.name.orElse(provider { project.name.split("-")[1].capitalized() })
+    }
+    jar {
+        archiveClassifier.set("noshade")
+    }
+    build {
+        dependsOn(shadowJar)
+    }
+}
+
+publishing {
+    repositories {
+        if (project.hasProperty("mavenUsername") && project.hasProperty("mavenPassword")) {
+            maven {
+                credentials {
+                    username = "${project.property("mavenUsername")}"
+                    password = "${project.property("mavenPassword")}"
+                }
+                url = uri("https://repo.codemc.io/repository/maven-releases/")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "${project.group}"
+            artifactId = project.name
+            version = "${project.version}"
+            from(components["java"])
+        }
+    }
+}
+
+fun commitsSinceLastTag(): String {
+    val tagDescription = providers.exec {
+        commandLine("git", "describe", "--tags")
+    }.standardOutput.asText
+    if (tagDescription.get().indexOf('-') < 0) {
+        return "0"
+    }
+    return tagDescription.get().split('-')[1]
+}
+
+abstract class ChunkyExtension @Inject constructor(objects: ObjectFactory) {
+    val name: Property<String> = objects.property(String::class.java)
+}
