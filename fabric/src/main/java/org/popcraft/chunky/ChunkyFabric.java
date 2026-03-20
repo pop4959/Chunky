@@ -43,7 +43,6 @@ public class ChunkyFabric implements ModInitializer {
                 chunky.disable();
             }
         });
-
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             final FabricChunkyCommand command = new FabricChunkyCommand(this::getChunky);
             dispatcher.register(command.construct(new SuggestionProviders<>()));

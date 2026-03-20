@@ -60,11 +60,9 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
             getLogger().severe("Please update your server or use an older version of the plugin instead.");
             getServer().getPluginManager().disablePlugin(this);
         }
-
         if (!isEnabled()) {
             return;
         }
-
         getServer().getServicesManager().register(Chunky.class, chunky, this, ServicePriority.Normal);
         getServer().getServicesManager().register(ChunkyAPI.class, chunky.getApi(), this, ServicePriority.Normal);
         if (chunky.getConfig().getContinueOnRestart()) {
@@ -81,7 +79,6 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         final Metrics metrics = new Metrics(this, 8211);
         metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
         getServer().getPluginManager().registerEvents(this, this);
-
         if (Paper.isPaper()) {
             Paper.registerCommand(this, chunky, BukkitSender::new, BukkitSender::new, COMMAND_PERMISSION_KEY);
         } else {
@@ -95,11 +92,6 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         if (chunky != null) {
             chunky.disable();
         }
-    }
-
-    @EventHandler
-    public void onWorldInit(final WorldInitEvent event) {
-        chunky.getRegionCache().clear(event.getWorld().getName());
     }
 
     @SuppressWarnings("NullableProblems")
@@ -135,8 +127,17 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
             suggestions.addAll(commands.get(args[0].toLowerCase()).suggestions(arguments));
         }
         return suggestions.stream()
-            .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
-            .toList();
+                .filter(s -> s.toLowerCase().contains(args[args.length - 1].toLowerCase()))
+                .toList();
+    }
+
+    public Chunky getChunky() {
+        return chunky;
+    }
+
+    @EventHandler
+    public void onWorldInit(final WorldInitEvent event) {
+        chunky.getRegionCache().clear(event.getWorld().getName());
     }
 
     private void disablePauseWhenEmptySeconds() {
@@ -158,9 +159,5 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         } catch (final IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Chunky getChunky() {
-        return chunky;
     }
 }
