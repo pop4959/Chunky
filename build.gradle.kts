@@ -1,13 +1,15 @@
+import java.io.ByteArrayOutputStream
+
 plugins {
     id("java-library")
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.4.0"
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 
 subprojects {
     plugins.apply("java-library")
     plugins.apply("maven-publish")
-    plugins.apply("com.gradleup.shadow")
+    plugins.apply("io.github.goooler.shadow")
 
     group = "${project.property("group")}"
     version = "${project.property("version")}.${commitsSinceLastTag()}"
@@ -67,11 +69,13 @@ subprojects {
 }
 
 fun commitsSinceLastTag(): String {
-    val tagDescription = providers.exec {
+    val tagDescription = ByteArrayOutputStream()
+    exec {
         commandLine("git", "describe", "--tags")
-    }.standardOutput.asText
-    if (tagDescription.get().indexOf('-') < 0) {
+        standardOutput = tagDescription
+    }
+    if (tagDescription.toString().indexOf('-') < 0) {
         return "0"
     }
-    return tagDescription.get().split('-')[1]
+    return tagDescription.toString().split('-')[1]
 }
