@@ -1,7 +1,7 @@
 name: ${name}
 version: ${version}
 main: ${group}.chunky.ChunkyBukkit
-api-version: 1.21
+api-version: 1.21.1
 folia-supported: true
 
 dependencies:
