@@ -6,11 +6,11 @@ plugins {
 val shade: Configuration by configurations.creating
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.11")
+    minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:0.18.1")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.139.4+1.21.11")
-    modCompileOnly("me.lucko:fabric-permissions-api:0.6.1")
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
+    modCompileOnly(libs.fabric.permissions.api)
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }

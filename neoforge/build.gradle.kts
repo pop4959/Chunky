@@ -10,9 +10,9 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.11")
+    minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
-    neoForge("net.neoforged:neoforge:21.11.0-beta")
+    neoForge(libs.neoforge)
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }

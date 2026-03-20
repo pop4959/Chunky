@@ -6,9 +6,9 @@ plugins {
 val shade: Configuration by configurations.creating
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.11")
+    minecraft(libs.minecraft)
     mappings(loom.officialMojangMappings())
-    forge("net.minecraftforge:forge:1.21.11-61.0.2")
+    forge(libs.forge)
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }

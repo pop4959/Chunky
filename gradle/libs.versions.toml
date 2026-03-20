@@ -1,0 +1,41 @@
+[versions]
+gson = "2.8.9"
+junit = "4.13.2"
+bstats = "3.0.2"
+
+# Modded
+minecraft = "1.21.11"
+
+fabric-loader = "0.18.1"
+fabric-api = "0.139.4+1.21.11"
+fabric-permissions-api = "0.6.1"
+
+forge = "1.21.11-61.0.2"
+neoforge = "21.11.0-beta"
+
+# Bukkit
+spigot-api = "1.21.2-R0.1-SNAPSHOT"
+paper-api = "1.20.4-R0.1-SNAPSHOT"
+folia-api = "1.20.2-R0.1-SNAPSHOT"
+worldborder = "1.19"
+
+[libraries]
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+junit = { module = "junit:junit", version.ref = "junit" }
+
+# Modded
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+fabric-permissions-api = { module = "me.lucko:fabric-permissions-api", version.ref = "fabric-permissions-api" }
+
+forge = { module = "net.minecraftforge:forge", version.ref = "forge" }
+neoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
+
+# Bukkit
+spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api" }
+folia-api = { module = "dev.folia:folia-api", version.ref = "folia-api" }
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
+worldborder = { module = "com.github.Puremin0rez:WorldBorder", version.ref = "worldborder" }

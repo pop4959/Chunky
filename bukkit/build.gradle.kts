@@ -9,11 +9,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.21.2-R0.1-SNAPSHOT")
-    compileOnly("com.github.Puremin0rez:WorldBorder:1.19") {
+    compileOnly(libs.spigot.api)
+    compileOnly(libs.worldborder) {
         isTransitive = false
     }
-    implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation(libs.bstats.bukkit)
     implementation(project(":chunky-common"))
     implementation(project(":chunky-paper"))
     implementation(project(":chunky-folia"))
