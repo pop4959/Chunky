@@ -9,9 +9,10 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandArguments;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class FabricChunkyCommand extends BrigadierChunkyCommand<CommandSourceStack, ResourceLocation, EntitySelector> {
+public class FabricChunkyCommand extends BrigadierChunkyCommand<CommandSourceStack, Identifier, EntitySelector> {
 
     private final Supplier<Chunky> chunky;
 
@@ -41,7 +42,7 @@ public class FabricChunkyCommand extends BrigadierChunkyCommand<CommandSourceSta
         return RequiredArgumentBuilder.argument(name, argumentType);
     }
 
-    protected ArgumentType<ResourceLocation> dimensionArgumentType() {
+    protected ArgumentType<Identifier> dimensionArgumentType() {
         return DimensionArgument.dimension();
     }
 
@@ -55,7 +56,7 @@ public class FabricChunkyCommand extends BrigadierChunkyCommand<CommandSourceSta
         if (server != null && server.isSingleplayer()) {
             return true;
         }
-        return source.hasPermission(2);
+        return source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
     }
 
     protected boolean borderRequirement(CommandSourceStack source) {

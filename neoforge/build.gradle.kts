@@ -1,5 +1,5 @@
 plugins {
-    id("dev.architectury.loom") version "1.10-SNAPSHOT"
+    id("dev.architectury.loom") version "1.13-SNAPSHOT"
 }
 
 val shade: Configuration by configurations.creating
@@ -9,9 +9,9 @@ repositories {
 }
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.6")
+    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.11")
     mappings(loom.officialMojangMappings())
-    neoForge(group = "net.neoforged", name = "neoforge", version = "21.6.10-beta")
+    neoForge(group = "net.neoforged", name = "neoforge", version = "21.11.0-beta")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }

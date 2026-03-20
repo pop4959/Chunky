@@ -1,6 +1,6 @@
 package org.popcraft.chunky;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChunkyForge {
     public static final String MOD_ID = "chunky";
     private Chunky chunky;
-    private final Map<ResourceLocation, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
+    private final Map<Identifier, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
     public ChunkyForge() {
         MinecraftForge.EVENT_BUS.register(this);

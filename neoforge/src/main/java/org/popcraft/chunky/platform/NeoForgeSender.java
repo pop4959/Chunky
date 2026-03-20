@@ -3,6 +3,7 @@ package org.popcraft.chunky.platform;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.popcraft.chunky.platform.util.Location;
@@ -40,7 +41,7 @@ public class NeoForgeSender implements Sender {
 
     @Override
     public boolean hasPermission(final String permission) {
-        return source.hasPermission(2);
+        return source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
     }
 
     @Override

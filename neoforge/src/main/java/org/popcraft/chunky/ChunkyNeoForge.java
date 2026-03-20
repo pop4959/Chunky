@@ -1,9 +1,10 @@
 package org.popcraft.chunky;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.common.NeoForge;
@@ -28,8 +29,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mod(ChunkyNeoForge.MOD_ID)
 public class ChunkyNeoForge {
     public static final String MOD_ID = "chunky";
+    public static final boolean ENABLE_MOONRISE_WORKAROUNDS = ModList.get().isLoaded("moonrise");
     private Chunky chunky;
-    private final Map<ResourceLocation, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
+    private final Map<Identifier, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
     public ChunkyNeoForge() {
         NeoForge.EVENT_BUS.register(this);

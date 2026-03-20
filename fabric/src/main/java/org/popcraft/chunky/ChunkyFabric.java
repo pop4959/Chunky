@@ -4,7 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerBossEvent;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
@@ -22,8 +22,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChunkyFabric implements ModInitializer {
+    public static final boolean ENABLE_MOONRISE_WORKAROUNDS = FabricLoader.getInstance().isModLoaded("moonrise");
     private Chunky chunky;
-    private final Map<ResourceLocation, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
+    private final Map<Identifier, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
     @Override
     public void onInitialize() {

@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.visitors.CollectFields;
 import net.minecraft.nbt.visitors.FieldSelector;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerChunkCache;
@@ -33,8 +33,8 @@ import java.util.function.Function;
 
 public class ForgeWorld implements World {
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
-    private static final TicketType CHUNKY = new TicketType(0L, false, TicketType.TicketUse.LOADING);
-    private static final TicketType CHUNKY_TICKING = new TicketType(TICKING_LOAD_DURATION * 20L, false, TicketType.TicketUse.LOADING_AND_SIMULATION);
+    private static final TicketType CHUNKY = new TicketType(0L, TicketType.FLAG_LOADING);
+    private static final TicketType CHUNKY_TICKING = new TicketType(TICKING_LOAD_DURATION * 20L, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION);
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private final ServerLevel world;
     private final Border worldBorder;
@@ -46,7 +46,7 @@ public class ForgeWorld implements World {
 
     @Override
     public String getName() {
-        return world.dimension().location().toString();
+        return world.dimension().identifier().toString();
     }
 
     @Override
@@ -126,9 +126,10 @@ public class ForgeWorld implements World {
 
     @Override
     public Location getSpawn() {
-        final BlockPos pos = world.getSharedSpawnPos();
-        final float rot = world.getSharedSpawnAngle();
-        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), rot, 0);
+        final BlockPos pos = world.getRespawnData().pos();
+        final float yaw = world.getRespawnData().yaw();
+        final float pitch = world.getRespawnData().pitch();
+        return new Location(this, pos.getX(), pos.getY(), pos.getZ(), yaw, pitch);
     }
 
     @Override
@@ -173,7 +174,7 @@ public class ForgeWorld implements World {
         world.getServer()
                 .registryAccess()
                 .get(Registries.SOUND_EVENT)
-                .flatMap(soundEventRegistry -> soundEventRegistry.value().getOptional(ResourceLocation.tryParse(sound)))
+                .flatMap(soundEventRegistry -> soundEventRegistry.value().getOptional(Identifier.tryParse(sound)))
                 .ifPresent(soundEvent -> world.playSound(null, location.getX(), location.getY(), location.getZ(), soundEvent, SoundSource.MASTER, 2f, 1f));
     }
 

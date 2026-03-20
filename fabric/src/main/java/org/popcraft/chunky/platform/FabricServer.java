@@ -1,8 +1,8 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerInterface;
 import net.minecraft.server.level.ServerLevel;
@@ -32,11 +32,11 @@ public class FabricServer implements Server {
 
     @Override
     public Optional<World> getWorld(final String name) {
-        return Optional.ofNullable(ResourceLocation.tryParse(name))
+        return Optional.ofNullable(Identifier.tryParse(name))
                 .map(resourceLocation -> server.getLevel(ResourceKey.create(Registries.DIMENSION, resourceLocation)))
                 .or(() -> {
                     for (final ServerLevel level : server.getAllLevels()) {
-                        if (name.equals(level.dimension().location().getPath())) {
+                        if (name.equals(level.dimension().identifier().getPath())) {
                             return Optional.of(level);
                         }
                     }

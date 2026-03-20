@@ -44,7 +44,6 @@ import java.util.Properties;
 import static org.popcraft.chunky.util.Translator.translate;
 
 public final class ChunkyBukkit extends JavaPlugin implements Listener {
-
     private static final String COMMAND_PERMISSION_KEY = "chunky.command.";
     private Chunky chunky;
 

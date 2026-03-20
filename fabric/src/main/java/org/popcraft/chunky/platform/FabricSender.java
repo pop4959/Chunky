@@ -65,7 +65,7 @@ public class FabricSender implements Sender {
                 return Permissions.check(source, permission, false);
             }
         } else {
-            return source.hasPermission(2);
+            return source.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
         }
     }
 

@@ -2,6 +2,7 @@ package org.popcraft.chunky.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import org.popcraft.chunky.ChunkyNeoForge;
 import org.popcraft.chunky.ducks.MinecraftServerExtension;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,7 +32,10 @@ public abstract class MinecraftServerMixin implements MinecraftServerExtension {
         if (this.chunky$needChunkSystemHousekeeping.compareAndSet(true, false)) {
             for (ServerLevel level : this.getAllLevels()) {
                 level.getChunkSource().chunkMap.tick(haveTime);
-                level.entityManager.tick();
+                if (!ChunkyNeoForge.ENABLE_MOONRISE_WORKAROUNDS) {
+                    // note: Moonrise destroys the vanilla entity system, so skip it here if it's present
+                    level.entityManager.tick();
+                }
             }
         }
     }
