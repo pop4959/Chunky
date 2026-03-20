@@ -42,6 +42,5 @@ tasks {
         manifest {
             attributes("paperweight-mappings-namespace" to "mojang")
         }
-        archiveFileName.set("${project.property("artifactName")}-Bukkit-${project.version}.jar")
     }
 }

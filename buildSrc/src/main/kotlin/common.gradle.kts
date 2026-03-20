@@ -1,8 +1,12 @@
+import org.gradle.internal.extensions.stdlib.capitalized
+
 plugins {
     id("java-library")
     id("maven-publish")
     id("com.gradleup.shadow")
 }
+
+val chunkyExtension: ChunkyExtension = extensions.create("chunky", ChunkyExtension::class.java)
 
 version = "${rootProject.version}.${commitsSinceLastTag()}"
 
@@ -22,12 +26,12 @@ tasks {
         options.release = 21
         options.compilerArgs.add("-Xlint:none")
     }
+    withType<AbstractArchiveTask>() {
+        archiveBaseName = project.property("artifactName") as String?
+        archiveAppendix = chunkyExtension.name.orElse(provider { project.name.split("-")[1].capitalized() })
+    }
     jar {
         archiveClassifier.set("noshade")
-    }
-    shadowJar {
-        archiveClassifier.set("")
-        archiveFileName.set("${project.property("artifactName")}-${project.version}.jar")
     }
     build {
         dependsOn(shadowJar)
@@ -64,4 +68,8 @@ fun commitsSinceLastTag(): String {
         return "0"
     }
     return tagDescription.get().split('-')[1]
+}
+
+abstract class ChunkyExtension @Inject constructor(objects: ObjectFactory) {
+    val name: Property<String> = objects.property(String::class.java)
 }
