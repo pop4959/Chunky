@@ -2,6 +2,7 @@ package org.popcraft.chunky.mixin;
 
 import net.minecraft.server.level.ChunkResult;
 import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,4 +21,7 @@ public interface ServerChunkCacheMixin {
 
     @Invoker
     boolean invokeRunDistanceManagerUpdates();
+
+    @Invoker
+    void invokeBroadcastChangedChunks(ProfilerFiller arg);
 }
