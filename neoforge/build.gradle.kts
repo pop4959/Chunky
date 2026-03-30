@@ -1,5 +1,7 @@
+import org.gradle.kotlin.dsl.accessors.runtime.maybeRegister
+
 plugins {
-    id("dev.architectury.loom") version "1.13-SNAPSHOT"
+    id("org.relativitymc.neo-loom") version "1.16.0-alpha.4"
 }
 
 val shade: Configuration by configurations.creating
@@ -9,11 +11,22 @@ repositories {
 }
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.11")
-    mappings(loom.officialMojangMappings())
-    neoForge(group = "net.neoforged", name = "neoforge", version = "21.11.0-beta")
+    minecraft(group = "com.mojang", name = "minecraft", version = "26.1")
+    forgeUserdev(group = "net.neoforged", name = "neoforge", version = "26.1.0.15-beta", classifier = "userdev")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
+}
+
+loom {
+    runs.forEach {
+        it.ideConfigGenerated(true)
+    }
+    mods {
+        create("main") {
+            sourceSet(project.sourceSets.main.get())
+            dependency(project.dependencyFactory.create(project(":chunky-common")))
+        }
+    }
 }
 
 tasks {
@@ -42,11 +55,6 @@ tasks {
     }
     shadowJar {
         configurations = listOf(shade)
-        archiveClassifier.set("dev")
-        archiveFileName.set(null as String?)
-    }
-    remapJar {
-        inputFile.set(shadowJar.get().archiveFile)
         archiveFileName.set("${project.property("artifactName")}-NeoForge-${project.version}.jar")
     }
 }

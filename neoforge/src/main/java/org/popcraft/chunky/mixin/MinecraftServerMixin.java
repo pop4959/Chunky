@@ -31,10 +31,10 @@ public abstract class MinecraftServerMixin implements MinecraftServerExtension {
     public void chunky$runChunkSystemHousekeeping(BooleanSupplier haveTime) {
         if (this.chunky$needChunkSystemHousekeeping.compareAndSet(true, false)) {
             for (ServerLevel level : this.getAllLevels()) {
-                level.getChunkSource().chunkMap.tick(haveTime);
+                ((ChunkMapMixin) level.getChunkSource().chunkMap).invokeTick(haveTime);
                 if (!ChunkyNeoForge.ENABLE_MOONRISE_WORKAROUNDS) {
                     // note: Moonrise destroys the vanilla entity system, so skip it here if it's present
-                    level.entityManager.tick();
+                    ((ServerLevelMixin) level).getEntityManager().tick();
                 }
             }
         }
