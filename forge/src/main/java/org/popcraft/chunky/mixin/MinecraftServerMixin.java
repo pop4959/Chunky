@@ -30,8 +30,8 @@ public abstract class MinecraftServerMixin implements MinecraftServerExtension {
     public void chunky$runChunkSystemHousekeeping(BooleanSupplier haveTime) {
         if (this.chunky$needChunkSystemHousekeeping.compareAndSet(true, false)) {
             for (ServerLevel level : this.getAllLevels()) {
-                level.getChunkSource().chunkMap.tick(haveTime);
-                level.entityManager.tick();
+                ((ChunkMapMixin) level.getChunkSource().chunkMap).invokeTick(haveTime);
+                ((ServerLevelMixin) level).getEntityManager().tick();
             }
         }
     }

@@ -21,6 +21,9 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
 import org.popcraft.chunky.ducks.MinecraftServerExtension;
+import org.popcraft.chunky.mixin.ChunkMapMixin;
+import org.popcraft.chunky.mixin.MinecraftServerAccess;
+import org.popcraft.chunky.mixin.ServerChunkCacheMixin;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
 
@@ -62,16 +65,13 @@ public class ForgeWorld implements World {
             final ChunkPos chunkPos = new ChunkPos(x, z);
             final ServerChunkCache serverChunkCache = world.getChunkSource();
             final ChunkMap chunkStorage = serverChunkCache.chunkMap;
-            final ChunkHolder loadedChunkHolder = chunkStorage.getVisibleChunkIfPresent(chunkPos.toLong());
+            final ChunkMapMixin chunkMapMixin = (ChunkMapMixin) chunkStorage;
+            final ChunkHolder loadedChunkHolder = chunkMapMixin.invokeGetVisibleChunkIfPresent(chunkPos.pack());
             if (loadedChunkHolder != null && loadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
                 return CompletableFuture.completedFuture(true);
             }
-            final ChunkHolder unloadedChunkHolder = chunkStorage.pendingUnloads.get(chunkPos.toLong());
-            if (unloadedChunkHolder != null && unloadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
-                return CompletableFuture.completedFuture(true);
-            }
             if (UPDATE_CHUNK_NBT) {
-                return chunkStorage.readChunk(chunkPos)
+                return chunkMapMixin.invokeReadChunk(chunkPos)
                         .thenApply(optionalNbt -> optionalNbt
                                 .filter(chunkNbt -> chunkNbt.contains("Status"))
                                 .flatMap(chunkNbt -> chunkNbt.getString("Status"))
@@ -102,15 +102,16 @@ public class ForgeWorld implements World {
             if (TICKING_LOAD_DURATION > 0) {
                 serverChunkCache.addTicketWithRadius(CHUNKY_TICKING, chunkPos, 1);
             }
-            serverChunkCache.runDistanceManagerUpdates();
-            final ChunkMap chunkManager = serverChunkCache.chunkMap;
-            final ChunkHolder chunkHolder = chunkManager.getVisibleChunkIfPresent(chunkPos.toLong());
-            final CompletableFuture<Void> chunkFuture = chunkHolder == null ? CompletableFuture.completedFuture(null) : CompletableFuture.allOf(chunkHolder.scheduleChunkGenerationTask(ChunkStatus.FULL, chunkManager));
-            chunkFuture.whenCompleteAsync((ignored, throwable) -> {
-                serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
-                ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
-            }, world.getServer());
-            return chunkFuture;
+            ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
+            // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
+            // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
+            return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
+                    .whenCompleteAsync((ignored, throwable) -> {
+                        serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
+                        ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
+                        ((MinecraftServerAccess) world.getServer()).setEmptyTicks(0);
+                    }, world.getServer())
+                    .thenApply(ignored -> null);
         }
     }
 

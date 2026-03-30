@@ -17,7 +17,7 @@ sequenceOf(
     "folia",
     "bukkit",
     "fabric",
-//    "forge",
+    "forge",
     "neoforge",
     "sponge"
 ).forEach {
