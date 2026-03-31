@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.accessors.runtime.maybeRegister
-
 plugins {
     id("org.relativitymc.neo-loom") version "1.16.0-alpha.4"
 }
