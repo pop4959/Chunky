@@ -46,7 +46,8 @@ tasks {
                 mapOf(
                     "Implementation-Title" to rootProject.name,
                     "Implementation-Version" to project.version,
-                    "Implementation-Vendor" to project.property("author")!!
+                    "Implementation-Vendor" to project.property("author")!!,
+                    "MixinConfigs" to "chunky.mixins.json"
                 )
             )
         }
