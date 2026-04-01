@@ -1,17 +1,22 @@
 plugins {
-    id("dev.architectury.loom") version "1.13-SNAPSHOT"
+    id("org.relativitymc.neo-loom") version "1.16.0-alpha.4"
 }
 
 val shade: Configuration by configurations.creating
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.11")
-    mappings(loom.officialMojangMappings())
-    modImplementation(group = "net.fabricmc", name = "fabric-loader", version = "0.18.1")
-    modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.139.4+1.21.11")
-    modCompileOnly(group = "me.lucko", name = "fabric-permissions-api", version = "0.6.1")
+    minecraft(group = "com.mojang", name = "minecraft", version = "26.1")
+    implementation(group = "net.fabricmc", name = "fabric-loader", version = "0.18.5")
+    implementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.144.3+26.1")
+    compileOnly(group = "me.lucko", name = "fabric-permissions-api", version = "0.7.0")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
+}
+
+loom {
+    runs.forEach {
+        it.ideConfigGenerated(true)
+    }
 }
 
 tasks {
@@ -20,20 +25,15 @@ tasks {
             expand(
                 "id" to rootProject.name,
                 "version" to project.version,
-                "name" to project.property("artifactName"),
-                "description" to project.property("description"),
-                "author" to project.property("author"),
-                "github" to project.property("github")
+                "name" to project.property("artifactName")!!,
+                "description" to project.property("description")!!,
+                "author" to project.property("author")!!,
+                "github" to project.property("github")!!
             )
         }
     }
     shadowJar {
         configurations = listOf(shade)
-        archiveClassifier.set("dev")
-        archiveFileName.set(null as String?)
-    }
-    remapJar {
-        inputFile.set(shadowJar.get().archiveFile)
         archiveFileName.set("${project.property("artifactName")}-Fabric-${project.version}.jar")
     }
 }
