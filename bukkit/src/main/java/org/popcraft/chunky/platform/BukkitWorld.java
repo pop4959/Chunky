@@ -227,16 +227,7 @@ public class BukkitWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        final org.bukkit.World.Environment environment = world.getEnvironment();
-        final String parent;
-        if (org.bukkit.World.Environment.NETHER.equals(environment)) {
-            parent = "DIM-1";
-        } else if (org.bukkit.World.Environment.THE_END.equals(environment)) {
-            parent = "DIM1";
-        } else {
-            parent = "";
-        }
-        final Path directory = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
+        final Path directory = world.getWorldFolder().toPath().normalize().resolve(name);
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 }
