@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Version implements Comparable<Version> {
     public static final Version INVALID = new Version(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
     public static final Version MINECRAFT_1_13_2 = new Version(1, 13, 2);
+    public static final Version MINECRAFT_1_21_1 = new Version(1, 21, 1);
     private int major = 0, minor = 0, patch = 0;
 
     public Version(final int major, final int minor, final int patch) {
