@@ -236,7 +236,9 @@ public class BukkitWorld implements World {
         } else {
             parent = "";
         }
-        final Path directory = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
+        final Path bukkitDir = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
+        final Path vanillaDir = world.getWorldFolder().toPath().normalize().resolve(name);
+        final Path directory = Files.isDirectory(bukkitDir) ? bukkitDir : vanillaDir;
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 }
