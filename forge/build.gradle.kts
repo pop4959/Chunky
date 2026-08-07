@@ -25,6 +25,7 @@ loom {
             dependency(project.dependencyFactory.createProjectDependency(":chunky-common"))
         }
     }
+    forgeExtraMixinConfigs.add("chunky.mixins.json")
 }
 
 tasks {
