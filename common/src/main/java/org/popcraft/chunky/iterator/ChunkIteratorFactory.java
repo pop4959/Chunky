@@ -8,6 +8,9 @@ public final class ChunkIteratorFactory {
     }
 
     public static ChunkIterator getChunkIterator(final Selection selection, final long count) {
+        if (selection.pattern().getType().equals(PatternType.STRIP)) {
+            return new StripChunkIterator(selection, count);
+        }
         if (selection.pattern().getType().equals(PatternType.WORLD)) {
             return new WorldChunkIterator(selection);
         }

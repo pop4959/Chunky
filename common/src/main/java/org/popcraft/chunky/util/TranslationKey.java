@@ -78,6 +78,7 @@ public final class TranslationKey {
     public static final String HELP_WORLDBORDER = "help_worldborder";
     public static final String PATTERN_CONCENTRIC = "pattern_concentric";
     public static final String PATTERN_LOOP = "pattern_loop";
+    public static final String PATTERN_STRIP = "pattern_strip";
     public static final String PATTERN_SPIRAL = "pattern_spiral";
     public static final String PATTERN_CSV = "pattern_csv";
     public static final String PATTERN_REGION = "pattern_region";

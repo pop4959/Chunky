@@ -27,7 +27,7 @@ public class PatternCommand implements ChunkyCommand {
             return;
         }
         final String type = optionalType.get();
-        final Optional<String> value = arguments.next();
+        final Optional<String> value = PatternType.CSV.equals(type) ? arguments.next() : Optional.empty();
         if (PatternType.CSV.equals(type) && value.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_PATTERN);
             return;

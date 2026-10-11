@@ -117,6 +117,7 @@ public class TranslatorTest {
         translate(TranslationKey.HELP_WORLDBORDER);
         translate(TranslationKey.PATTERN_CONCENTRIC);
         translate(TranslationKey.PATTERN_LOOP);
+        translate(TranslationKey.PATTERN_STRIP);
         translate(TranslationKey.PATTERN_SPIRAL);
         translate(TranslationKey.PATTERN_CSV);
         translate(TranslationKey.PATTERN_REGION);
