@@ -29,7 +29,7 @@ public final class Paper {
     public static CompletableFuture<Boolean> isChunkGeneratedAsync(final World world, final int x, final int z) {
         return world.getChunkGenerationStateAsync(x, z)
                 .thenApply(state -> state == ChunkGenerationState.GENERATED
-                        || state == ChunkGenerationState.GENERATED_OUTDATED && !LOAD_OUTDATED_CHUNKS)
+                        || state == ChunkGenerationState.OUTDATED && !LOAD_OUTDATED_CHUNKS)
                 .exceptionally(ignored -> false);
     }
 
