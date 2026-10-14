@@ -20,27 +20,27 @@ jobs:
       - name: Build
         run: ./gradlew build
       - name: Upload Bukkit
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: Bukkit
           path: "bukkit/build/libs/Chunky-*.jar"
+          archive: false
       - name: Upload Fabric
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: Fabric
           path: "fabric/build/libs/Chunky-*.jar"
+          archive: false
       - name: Upload Forge
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: Forge
           path: "forge/build/libs/Chunky-*.jar"
+          archive: false
       - name: Upload NeoForge
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: NeoForge
           path: "neoforge/build/libs/Chunky-*.jar"
+          archive: false
       - name: Upload Sponge
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: Sponge
           path: "sponge/build/libs/Chunky-*.jar"
+          archive: false
