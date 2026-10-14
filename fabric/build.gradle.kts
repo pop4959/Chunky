@@ -1,5 +1,5 @@
 plugins {
-    id("org.relativitymc.neo-loom") version "1.16.0-alpha.4"
+    id("org.relativitymc.neo-loom") version "1.17-SNAPSHOT"
 }
 
 val shade: Configuration by configurations.creating
