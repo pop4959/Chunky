@@ -11,6 +11,7 @@ repositories {
 dependencies {
     minecraft(group = "com.mojang", name = "minecraft", version = "26.1")
     forgeUserdev(group = "net.minecraftforge", name = "forge", version = "26.1-62.0.9", classifier = "userdev")
+    compileOnly(group = "io.github.llamalad7", name = "mixinextras-common", version = "0.5.3")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
