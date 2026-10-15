@@ -56,6 +56,9 @@ public class BukkitWorld implements World {
 
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
+        if (Paper.isPaper() && Paper.hasChunkGenerationState()) {
+            return Paper.isChunkGeneratedAsync(world, x, z);
+        }
         if (Paper.isPaper()) {
             return CompletableFuture.supplyAsync(() -> {
                 try {
