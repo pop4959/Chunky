@@ -3,6 +3,7 @@ package org.popcraft.chunky.iterator;
 import org.junit.Test;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.ChunkCoordinate;
+import org.popcraft.chunky.util.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,30 @@ public class ConstructorTest {
         for (int i = 0; i < total; ++i) {
             final List<ChunkCoordinate> continueChunks = new ArrayList<>();
             final ChunkIterator continueIterator = new Loop2ChunkIterator(SELECTION, i);
+            continueIterator.forEachRemaining(continueChunks::add);
+            final int continueTotal = (int) continueIterator.total();
+            assertEquals("Total", total, continueTotal);
+            final int size = chunks.size(), continueSize = continueChunks.size();
+            assertEquals("Continued Size", size - i, continueSize);
+            for (int j = 0; j < continueSize; ++j) {
+                final int chunkX = chunks.get(j + i).x(), chunkZ = chunks.get(j + i).z();
+                final int continueChunkX = continueChunks.get(j).x(), continueChunkZ = continueChunks.get(j).z();
+                assertTrue(chunkX == continueChunkX && chunkZ == continueChunkZ);
+            }
+        }
+    }
+
+    @Test
+    public void strip() {
+        final Selection selection = Selection.builder(null, null).center(-25, 25).radius(50)
+                .pattern(Parameter.of("strip=2")).build();
+        final List<ChunkCoordinate> chunks = new ArrayList<>();
+        final ChunkIterator chunkIterator = new StripChunkIterator(selection);
+        chunkIterator.forEachRemaining(chunks::add);
+        final int total = (int) chunkIterator.total();
+        for (int i = 0; i < total; ++i) {
+            final List<ChunkCoordinate> continueChunks = new ArrayList<>();
+            final ChunkIterator continueIterator = new StripChunkIterator(selection, i);
             continueIterator.forEachRemaining(continueChunks::add);
             final int continueTotal = (int) continueIterator.total();
             assertEquals("Total", total, continueTotal);
