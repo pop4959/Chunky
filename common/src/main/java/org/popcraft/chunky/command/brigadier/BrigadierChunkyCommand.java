@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
 
@@ -19,6 +20,10 @@ public abstract class BrigadierChunkyCommand<S, D, P> {
     protected abstract <T> RequiredArgumentBuilder<S, T> argument(String name, ArgumentType<T> argumentType);
 
     protected abstract ArgumentType<D> dimensionArgumentType();
+
+    protected SuggestionProvider<S> dimensionArgumentSuggestions() {
+        return null;
+    }
 
     protected abstract ArgumentType<P> playerArgumentType();
 
@@ -87,7 +92,8 @@ public abstract class BrigadierChunkyCommand<S, D, P> {
             argument(CommandLiteral.INHABITED, word()));
         registerArguments(command, literal(CommandLiteral.WORLDBORDER));
         registerArguments(command, literal(CommandLiteral.WORLD),
-            argument(CommandLiteral.WORLD, dimensionArgumentType()));
+            argument(CommandLiteral.WORLD, dimensionArgumentType()).suggests(dimensionArgumentSuggestions())
+        );
 
         final LiteralArgumentBuilder<S> borderCommand = literal(CommandLiteral.BORDER)
             .requires(this::borderRequirement)

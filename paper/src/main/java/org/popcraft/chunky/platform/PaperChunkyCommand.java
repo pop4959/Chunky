@@ -2,14 +2,15 @@ package org.popcraft.chunky.platform;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.popcraft.chunky.Chunky;
@@ -22,8 +23,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 
-@SuppressWarnings("UnstableApiUsage")
-public class PaperChunkyCommand extends BrigadierChunkyCommand<CommandSourceStack, World, PlayerSelectorArgumentResolver> {
+public class PaperChunkyCommand extends BrigadierChunkyCommand<CommandSourceStack, String, PlayerSelectorArgumentResolver> {
 
     private final Chunky chunky;
     private final Function<CommandSender, Sender> commandSenderFunction;
@@ -48,8 +48,18 @@ public class PaperChunkyCommand extends BrigadierChunkyCommand<CommandSourceStac
     }
 
     @Override
-    protected ArgumentType<World> dimensionArgumentType() {
-        return ArgumentTypes.world();
+    protected ArgumentType<String> dimensionArgumentType() {
+        return StringArgumentType.string();
+    }
+
+    @Override
+    protected SuggestionProvider<CommandSourceStack> dimensionArgumentSuggestions() {
+        return (source, suggestions) -> {
+            for (World world : chunky.getServer().getWorlds()) {
+                suggestions.suggest(world.getName());
+            }
+            return suggestions.buildFuture();
+        };
     }
 
     @Override
