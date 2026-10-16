@@ -54,6 +54,10 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         if (currentVersion.isValid() && Version.MINECRAFT_1_13_2.isHigherThan(currentVersion)) {
             getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
             getServer().getPluginManager().disablePlugin(this);
+        } else if (Paper.isPaper() && !currentVersion.isHigherThanOrEqualTo(Version.MINECRAFT_1_21_1)) {
+            getLogger().severe("This version of the Chunky plugin only support Paper versions 1.21.1 and above!");
+            getLogger().severe("Please update your server or use an older version of the plugin instead.");
+            getServer().getPluginManager().disablePlugin(this);
         }
         if (!isEnabled()) {
             return;
@@ -74,7 +78,9 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         final Metrics metrics = new Metrics(this, 8211);
         metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
         getServer().getPluginManager().registerEvents(this, this);
-        if (!Paper.isPaper()) {
+        if (Paper.isPaper()) {
+            Paper.registerCommand(this, chunky, BukkitSender::new, BukkitSender::new, COMMAND_PERMISSION_KEY);
+        } else {
             disablePauseWhenEmptySeconds();
         }
     }

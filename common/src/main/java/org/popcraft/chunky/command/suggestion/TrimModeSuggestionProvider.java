@@ -4,17 +4,16 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.commands.CommandSourceStack;
 import org.popcraft.chunky.command.CommandLiteral;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class TrimModeSuggestionProvider implements SuggestionProvider<CommandSourceStack> {
+public class TrimModeSuggestionProvider<S> implements SuggestionProvider<S> {
     private static final List<String> TRIM_MODES = List.of("inside", "outside");
 
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(final CommandContext<CommandSourceStack> context, final SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
         try {
             final String input = context.getArgument(CommandLiteral.TRIM_MODE, String.class);
             TRIM_MODES.forEach(shape -> {
