@@ -1,5 +1,5 @@
 plugins {
-    id("dev.architectury.loom") version "1.13-SNAPSHOT"
+    id("org.relativitymc.neo-loom") version "1.16.0-alpha.4"
 }
 
 val shade: Configuration by configurations.creating
@@ -9,23 +9,34 @@ repositories {
 }
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "1.21.11")
-    mappings(loom.officialMojangMappings())
-    neoForge(group = "net.neoforged", name = "neoforge", version = "21.11.0-beta")
+    minecraft(group = "com.mojang", name = "minecraft", version = "26.1")
+    forgeUserdev(group = "net.neoforged", name = "neoforge", version = "26.1.0.15-beta", classifier = "userdev")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
+}
+
+loom {
+    runs.forEach {
+        it.ideConfigGenerated(true)
+    }
+    mods {
+        create("main") {
+            sourceSet(project.sourceSets.main.get())
+            dependency(project.dependencyFactory.create(project(":chunky-common")))
+        }
+    }
 }
 
 tasks {
     processResources {
         filesMatching("META-INF/neoforge.mods.toml") {
             expand(
-                "github" to project.property("github"),
+                "github" to project.property("github")!!,
                 "id" to rootProject.name,
                 "version" to project.version,
-                "name" to project.property("artifactName"),
-                "author" to project.property("author"),
-                "description" to project.property("description")
+                "name" to project.property("artifactName")!!,
+                "author" to project.property("author")!!,
+                "description" to project.property("description")!!
             )
         }
     }
@@ -35,18 +46,13 @@ tasks {
                 mapOf(
                     "Implementation-Title" to rootProject.name,
                     "Implementation-Version" to project.version,
-                    "Implementation-Vendor" to project.property("author")
+                    "Implementation-Vendor" to project.property("author")!!
                 )
             )
         }
     }
     shadowJar {
         configurations = listOf(shade)
-        archiveClassifier.set("dev")
-        archiveFileName.set(null as String?)
-    }
-    remapJar {
-        inputFile.set(shadowJar.get().archiveFile)
         archiveFileName.set("${project.property("artifactName")}-NeoForge-${project.version}.jar")
     }
 }

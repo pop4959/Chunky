@@ -55,7 +55,7 @@ public class ForgePlayer extends ForgeSender implements Player {
 
     @Override
     public void sendActionBar(final String key) {
-        player.displayClientMessage(formatColored(translateKey(key, false)), true);
+        player.sendOverlayMessage(formatColored(translateKey(key, false)));
     }
 
     private Component formatColored(final String message) {

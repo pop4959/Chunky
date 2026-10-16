@@ -15,6 +15,7 @@ import org.popcraft.chunky.platform.ForgeWorld;
 import org.popcraft.chunky.platform.World;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateEvent> {
@@ -62,6 +63,7 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
 
     private ServerBossEvent createNewBossBar(final Identifier worldIdentifier) {
         final ServerBossEvent bossBar = new ServerBossEvent(
+                UUID.randomUUID(),
                 Component.nullToEmpty(worldIdentifier.toString()),
                 bossBarColor(worldIdentifier),
                 BossEvent.BossBarOverlay.PROGRESS

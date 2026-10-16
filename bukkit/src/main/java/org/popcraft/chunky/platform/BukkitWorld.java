@@ -56,6 +56,9 @@ public class BukkitWorld implements World {
 
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
+        if (Paper.isPaper() && Paper.hasChunkGenerationState()) {
+            return Paper.isChunkGeneratedAsync(world, x, z);
+        }
         if (Paper.isPaper()) {
             return CompletableFuture.supplyAsync(() -> {
                 try {
@@ -236,7 +239,9 @@ public class BukkitWorld implements World {
         } else {
             parent = "";
         }
-        final Path directory = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
+        final Path bukkitDir = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
+        final Path vanillaDir = world.getWorldFolder().toPath().normalize().resolve(name);
+        final Path directory = Files.isDirectory(bukkitDir) ? bukkitDir : vanillaDir;
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 }
