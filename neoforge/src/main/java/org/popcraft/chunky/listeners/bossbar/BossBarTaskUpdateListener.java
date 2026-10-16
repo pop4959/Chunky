@@ -41,7 +41,7 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         }
         final MinecraftServer server = neoForgeWorld.getWorld().getServer();
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
+            if (hasBossBarPermission(server, player)) {
                 bossBar.addPlayer(player);
             } else {
                 bossBar.removePlayer(player);
@@ -59,6 +59,13 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
             bossBar.removeAllPlayers();
             bossBars.remove(worldIdentifier);
         }
+    }
+
+    private static boolean hasBossBarPermission(final MinecraftServer server, final ServerPlayer player) {
+        if (server != null && server.isSingleplayer()) {
+            return true;
+        }
+        return player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
     }
 
     private ServerBossEvent createNewBossBar(final Identifier worldIdentifier) {
