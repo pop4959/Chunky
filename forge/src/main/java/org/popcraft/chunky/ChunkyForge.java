@@ -46,6 +46,7 @@ import static net.minecraft.commands.arguments.EntityArgument.player;
 @Mod(ChunkyForge.MOD_ID)
 public class ChunkyForge {
     public static final String MOD_ID = "chunky";
+    public static final boolean SYNC_CHUNK_WRITES = Boolean.getBoolean("chunky.syncChunkWrites");
     private Chunky chunky;
     private final Map<Identifier, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
