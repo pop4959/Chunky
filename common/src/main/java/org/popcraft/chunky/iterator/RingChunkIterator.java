@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 
 public class RingChunkIterator implements ChunkIterator {
     private static final boolean SPLIT = Boolean.getBoolean("chunky.ringSplit");
-    private static final int WIDTH = Math.max(1, Input.tryInteger(System.getProperty("chunky.ringWidth")).orElse(32));
+    private static final int WIDTH = Math.max(1, Input.tryInteger(System.getProperty("chunky.ringWidth")).orElse(64));
     private static final int CENTER_RADIUS = (WIDTH - 1) / 2;
     private final int centerX;
     private final int centerZ;
