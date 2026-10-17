@@ -7,6 +7,7 @@ import org.popcraft.chunky.util.Input;
 import java.util.NoSuchElementException;
 
 public class RingChunkIterator implements ChunkIterator {
+    private static final boolean SPLIT = Boolean.getBoolean("chunky.ringSplit");
     private static final int WIDTH = Math.max(1, Input.tryInteger(System.getProperty("chunky.ringWidth")).orElse(32));
     private static final int CENTER_RADIUS = (WIDTH - 1) / 2;
     private final int centerX;
@@ -120,8 +121,9 @@ public class RingChunkIterator implements ChunkIterator {
                 dx = (int) (current % side) - outer;
                 dz = (int) (current / side) - outer;
             } else {
-                final long step = current / 2;
-                final int sign = current % 2 == 0 ? 1 : -1;
+                final boolean mirrored = SPLIT ? current % 2 != 0 : current >= total / 2;
+                final long step = SPLIT ? current / 2 : mirrored ? current - total / 2 : current;
+                final int sign = mirrored ? -1 : 1;
                 if (step < firstSideChunks) {
                     dx = sign * ((int) (step / length) - outer);
                     dz = sign * (-inner - 1 - (int) (step % length));
