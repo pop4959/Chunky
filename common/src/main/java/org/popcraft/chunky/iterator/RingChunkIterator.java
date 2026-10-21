@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 
 public class RingChunkIterator implements ChunkIterator {
     private static final boolean SPLIT = Boolean.getBoolean("chunky.ringSplit");
+    private static final boolean ALTERNATING = Boolean.getBoolean("chunky.ringAlternating");
     private static final int WIDTH = Math.max(1, Input.tryInteger(System.getProperty("chunky.ringWidth")).orElse(64));
     private static final int CENTER_RADIUS = (WIDTH - 1) / 2;
     private final int centerX;
@@ -83,6 +84,7 @@ public class RingChunkIterator implements ChunkIterator {
     }
 
     public final class RingChunkProgress implements ChunkIterator {
+        private final boolean alternate;
         private final int inner;
         private final int outer;
         private final int length;
@@ -94,6 +96,7 @@ public class RingChunkIterator implements ChunkIterator {
         private boolean hasNext;
 
         public RingChunkProgress(final int ring, final int inner, final int outer, final long count) {
+            this.alternate = ALTERNATING && ring % 2 == 1;
             this.inner = inner;
             this.outer = outer;
             this.length = outer - inner;
@@ -137,7 +140,7 @@ public class RingChunkIterator implements ChunkIterator {
             if (current >= total) {
                 hasNext = false;
             }
-            return new ChunkCoordinate(centerX + dx, centerZ + dz);
+            return alternate ? new ChunkCoordinate(centerX + dz, centerZ + dx) : new ChunkCoordinate(centerX + dx, centerZ + dz);
         }
 
         @Override
