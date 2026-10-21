@@ -63,7 +63,7 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
                 getServer().getScheduler().scheduleSyncDelayedTask(this, continueTask);
             }
         }
-        if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
+        if (getServer().getPluginManager().getPlugin("WorldBorder") != null && WorldBorderIntegration.isSupported()) {
             chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
         final Metrics metrics = new Metrics(this, 8211);

@@ -35,7 +35,7 @@ public final class ChunkyPaper extends JavaPlugin implements Listener {
         this.chunky = new Chunky(new PaperServer(this), new PaperConfig(this));
         getServer().getServicesManager().register(Chunky.class, chunky, this, ServicePriority.Normal);
         getServer().getServicesManager().register(ChunkyAPI.class, chunky.getApi(), this, ServicePriority.Normal);
-        if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
+        if (getServer().getPluginManager().getPlugin("WorldBorder") != null && WorldBorderIntegration.isSupported()) {
             chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
         final Metrics metrics = new Metrics(this, 8211);

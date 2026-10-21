@@ -7,8 +7,21 @@ import org.bukkit.NamespacedKey;
 import org.popcraft.chunky.platform.Border;
 import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.ShapeType;
+import org.popcraft.chunky.util.Reflection;
 
 public class WorldBorderIntegration implements BorderIntegration {
+    public static boolean isSupported() {
+        return Reflection.classExists("com.wimbli.WorldBorder.Config")
+                && Reflection.classExists("com.wimbli.WorldBorder.BorderData")
+                && Reflection.methodExists(Config.class, "Border", String.class)
+                && Reflection.methodExists(Config.class, "ShapeRound")
+                && Reflection.methodExists(BorderData.class, "getX")
+                && Reflection.methodExists(BorderData.class, "getZ")
+                && Reflection.methodExists(BorderData.class, "getRadiusX")
+                && Reflection.methodExists(BorderData.class, "getRadiusZ")
+                && Reflection.methodExists(BorderData.class, "getShape");
+    }
+
     @Override
     public boolean hasBorder(final String world) {
         return Config.Border(bukkitName(world)) != null;
