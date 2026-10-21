@@ -20,14 +20,18 @@ public class ShapeCommand implements ChunkyCommand {
 
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
-        final Optional<String> inputShape = arguments.next().flatMap(Input::tryShape);
-        if (inputShape.isEmpty()) {
+        final Optional<String> shapeName = arguments.next();
+        if (shapeName.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_SHAPE);
             return;
         }
-        final String shape = inputShape.get();
-        chunky.getSelection().shape(shape);
-        sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, translate("shape_" + shape));
+        final Optional<String> shape = Input.tryShape(shapeName.get());
+        if (shape.isEmpty()) {
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE_NOT_FOUND, shapeName.get(), String.join(", ", ShapeType.all().stream().sorted().toList()));
+            return;
+        }
+        chunky.getSelection().shape(shape.get());
+        sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, translate("shape_" + shape.get()));
     }
 
     @Override

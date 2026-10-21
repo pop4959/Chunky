@@ -26,20 +26,22 @@ public class StartCommand implements ChunkyCommand {
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
         if (arguments.size() > 0) {
-            final Optional<World> world = arguments.next().flatMap(arg -> Input.tryWorld(chunky, arg));
+            final String worldName = arguments.next().orElse("");
+            final Optional<World> world = Input.tryWorld(chunky, worldName);
             if (world.isPresent()) {
                 chunky.getSelection().world(world.get());
             } else {
-                sender.sendMessage(TranslationKey.HELP_START);
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLD_NOT_FOUND, worldName, Formatting.worlds(chunky.getServer().getWorlds()));
                 return;
             }
         }
         if (arguments.size() > 1) {
-            final Optional<String> shape = arguments.next().flatMap(Input::tryShape);
+            final String shapeName = arguments.next().orElse("");
+            final Optional<String> shape = Input.tryShape(shapeName);
             if (shape.isPresent()) {
                 chunky.getSelection().shape(shape.get());
             } else {
-                sender.sendMessage(TranslationKey.HELP_START);
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE_NOT_FOUND, shapeName, String.join(", ", ShapeType.all().stream().sorted().toList()));
                 return;
             }
         }

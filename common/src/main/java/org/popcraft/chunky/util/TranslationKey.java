@@ -30,6 +30,7 @@ public final class TranslationKey {
     public static final String FORMAT_TRIM_CONFIRM_INSIDE = "format_trim_confirm_inside";
     public static final String FORMAT_TRIM_CONFIRM_INHABITED = "format_trim_confirm_inhabited";
     public static final String FORMAT_PATTERN = "format_pattern";
+    public static final String FORMAT_PATTERN_NOT_FOUND = "format_pattern_not_found";
     public static final String FORMAT_PAUSE = "format_pause";
     public static final String FORMAT_PAUSE_NO_TASKS = "format_pause_no_tasks";
     public static final String FORMAT_PROGRESS_NO_TASKS = "format_progress_no_tasks";
@@ -45,6 +46,7 @@ public final class TranslationKey {
     public static final String FORMAT_SELECTION_SHAPE = "format_selection_shape";
     public static final String FORMAT_SELECTION_WORLD = "format_selection_world";
     public static final String FORMAT_SHAPE = "format_shape";
+    public static final String FORMAT_SHAPE_NOT_FOUND = "format_shape_not_found";
     public static final String FORMAT_SILENT = "format_silent";
     public static final String FORMAT_START = "format_start";
     public static final String FORMAT_START_CONFIRM = "format_start_confirm";
@@ -52,6 +54,7 @@ public final class TranslationKey {
     public static final String FORMAT_START_LIMIT = "format_start_limit";
     public static final String FORMAT_STARTED_ALREADY = "format_started_already";
     public static final String FORMAT_WORLD = "format_world";
+    public static final String FORMAT_WORLD_NOT_FOUND = "format_world_not_found";
     public static final String FORMAT_WORLDBORDER_TOO_LARGE = "format_worldborder_too_large";
     public static final String HELP_BORDER = "help_border";
     public static final String HELP_CANCEL = "help_cancel";

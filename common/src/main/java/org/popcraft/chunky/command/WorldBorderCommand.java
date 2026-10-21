@@ -29,11 +29,12 @@ public class WorldBorderCommand implements ChunkyCommand {
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
         if (arguments.size() > 0) {
-            final Optional<World> world = arguments.next().flatMap(arg -> Input.tryWorld(chunky, arg));
+            final String worldName = arguments.next().orElse("");
+            final Optional<World> world = Input.tryWorld(chunky, worldName);
             if (world.isPresent()) {
                 chunky.getSelection().world(world.get());
             } else {
-                sender.sendMessage(TranslationKey.HELP_WORLDBORDER);
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLD_NOT_FOUND, worldName, Formatting.worlds(chunky.getServer().getWorlds()));
                 return;
             }
         }

@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
@@ -31,9 +32,10 @@ public class CancelCommand implements ChunkyCommand {
         }
         final Runnable cancelAction;
         if (arguments.size() > 0) {
-            final Optional<World> world = Input.tryWorld(chunky, arguments.joined());
+            final String worldName = arguments.joined();
+            final Optional<World> world = Input.tryWorld(chunky, worldName);
             if (world.isEmpty()) {
-                sender.sendMessage(TranslationKey.HELP_CANCEL);
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLD_NOT_FOUND, worldName, Formatting.worlds(chunky.getServer().getWorlds()));
                 return;
             }
             cancelAction = () -> {

@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
@@ -23,9 +24,10 @@ public class ContinueCommand implements ChunkyCommand {
     public void execute(final Sender sender, final CommandArguments arguments) {
         final List<GenerationTask> loadTasks;
         if (arguments.size() > 0) {
-            final Optional<World> world = Input.tryWorld(chunky, arguments.joined());
+            final String worldName = arguments.joined();
+            final Optional<World> world = Input.tryWorld(chunky, worldName);
             if (world.isEmpty()) {
-                sender.sendMessage(TranslationKey.HELP_CONTINUE);
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLD_NOT_FOUND, worldName, Formatting.worlds(chunky.getServer().getWorlds()));
                 return;
             }
             loadTasks = chunky.getTaskLoader().loadTask(world.get()).map(List::of).orElse(List.of());

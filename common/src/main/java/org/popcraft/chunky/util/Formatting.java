@@ -1,9 +1,12 @@
 package org.popcraft.chunky.util;
 
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.ShapeType;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Formatting {
     private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("#.##");
@@ -34,6 +37,12 @@ public final class Formatting {
         } else {
             return String.format("%s", number(selection.radiusX()));
         }
+    }
+
+    public static String worlds(final List<World> worlds) {
+        final List<String> names = new ArrayList<>();
+        worlds.forEach(world -> names.add(world.getName().startsWith("minecraft:") ? world.getName().substring("minecraft:".length()) : world.getName()));
+        return String.join(", ", names);
     }
 
     public static synchronized String number(final double number) {

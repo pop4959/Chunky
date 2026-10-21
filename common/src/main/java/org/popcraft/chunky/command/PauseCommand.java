@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
@@ -27,8 +28,11 @@ public class PauseCommand implements ChunkyCommand {
             return;
         }
         if (arguments.size() > 0) {
-            final Optional<World> world = Input.tryWorld(chunky, arguments.joined());
-            if (world.isEmpty() || !generationTasks.containsKey(world.get().getName())) {
+            final String worldName = arguments.joined();
+            final Optional<World> world = Input.tryWorld(chunky, worldName);
+            if (world.isEmpty()) {
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLD_NOT_FOUND, worldName, Formatting.worlds(chunky.getServer().getWorlds()));
+            } else if (!generationTasks.containsKey(world.get().getName())) {
                 sender.sendMessage(TranslationKey.HELP_PAUSE);
             } else {
                 generationTasks.get(world.get().getName()).stop(false);

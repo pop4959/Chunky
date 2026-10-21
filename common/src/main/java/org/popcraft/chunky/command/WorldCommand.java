@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.platform.Player;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
+import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
@@ -19,14 +20,19 @@ public class WorldCommand implements ChunkyCommand {
 
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
+        final String worldName = arguments.joined();
         final World world;
         if (arguments.size() == 0 && sender instanceof final Player player) {
             world = player.getWorld();
         } else {
-            world = Input.tryWorld(chunky, arguments.joined()).orElse(null);
+            world = Input.tryWorld(chunky, worldName).orElse(null);
         }
         if (world == null) {
-            sender.sendMessage(TranslationKey.HELP_WORLD);
+            if (arguments.size() > 0) {
+                sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLD_NOT_FOUND, worldName, Formatting.worlds(chunky.getServer().getWorlds()));
+            } else {
+                sender.sendMessage(TranslationKey.HELP_WORLD);
+            }
             return;
         }
         chunky.getSelection().world(world);

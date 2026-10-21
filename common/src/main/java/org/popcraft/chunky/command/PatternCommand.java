@@ -21,9 +21,14 @@ public class PatternCommand implements ChunkyCommand {
 
     @Override
     public void execute(final Sender sender, final CommandArguments arguments) {
-        final Optional<String> optionalType = arguments.next().flatMap(Input::tryPattern);
-        if (optionalType.isEmpty()) {
+        final Optional<String> patternName = arguments.next();
+        if (patternName.isEmpty()) {
             sender.sendMessage(TranslationKey.HELP_PATTERN);
+            return;
+        }
+        final Optional<String> optionalType = Input.tryPattern(patternName.get());
+        if (optionalType.isEmpty()) {
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_PATTERN_NOT_FOUND, patternName.get(), String.join(", ", PatternType.ALL.stream().sorted().toList()));
             return;
         }
         final String type = optionalType.get();

@@ -72,6 +72,7 @@ public class TranslatorTest {
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INSIDE, "world", translate(TranslationKey.SHAPE_SQUARE), Formatting.number(1), Formatting.number(2), "500", "/chunky confirm");
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED, Formatting.number(0));
         translate(TranslationKey.FORMAT_PATTERN, "concentric");
+        translate(TranslationKey.FORMAT_PATTERN_NOT_FOUND, "pattern", "concentric, loop, spiral");
         translate(TranslationKey.FORMAT_PAUSE, "world");
         translate(TranslationKey.FORMAT_PAUSE_NO_TASKS);
         translate(TranslationKey.FORMAT_PROGRESS_NO_TASKS);
@@ -87,6 +88,7 @@ public class TranslatorTest {
         translate(TranslationKey.FORMAT_SELECTION_SHAPE, "square");
         translate(TranslationKey.FORMAT_SELECTION_WORLD, "world");
         translate(TranslationKey.FORMAT_SHAPE, "square");
+        translate(TranslationKey.FORMAT_SHAPE_NOT_FOUND, "shape", "square, circle, diamond");
         translate(TranslationKey.FORMAT_SILENT, TranslationKey.ENABLED);
         translate(TranslationKey.FORMAT_START, "world", translate(TranslationKey.SHAPE_SQUARE), Formatting.number(1), Formatting.number(2), "500");
         translate(TranslationKey.FORMAT_START_CONFIRM, "/chunky continue", "chunky confirm");
@@ -94,6 +96,7 @@ public class TranslatorTest {
         translate(TranslationKey.FORMAT_START_LIMIT, Formatting.number(10000));
         translate(TranslationKey.FORMAT_STARTED_ALREADY, "world");
         translate(TranslationKey.FORMAT_WORLD, "world");
+        translate(TranslationKey.FORMAT_WORLD_NOT_FOUND, "test", "world, world_nether, world_the_end");
         translate(TranslationKey.FORMAT_WORLDBORDER_TOO_LARGE, 29999984);
         translate(TranslationKey.HELP_BORDER);
         translate(TranslationKey.HELP_CANCEL);
