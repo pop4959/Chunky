@@ -3,6 +3,7 @@ package org.popcraft.chunky.platform;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -230,18 +231,34 @@ public class BukkitWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
+        final NamespacedKey worldKey = world.getKey();
         final org.bukkit.World.Environment environment = world.getEnvironment();
         final String parent;
+        final String dimension;
         if (org.bukkit.World.Environment.NETHER.equals(environment)) {
             parent = "DIM-1";
+            dimension = "the_nether";
         } else if (org.bukkit.World.Environment.THE_END.equals(environment)) {
             parent = "DIM1";
+            dimension = "the_end";
+        } else if (org.bukkit.World.Environment.CUSTOM.equals(environment)) {
+            parent = "";
+            dimension = worldKey.getKey();
         } else {
             parent = "";
+            dimension = "overworld";
         }
         final Path bukkitDir = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
         final Path vanillaDir = world.getWorldFolder().toPath().normalize().resolve(name);
-        final Path directory = Files.isDirectory(bukkitDir) ? bukkitDir : vanillaDir;
+        final Path spigotDir = world.getWorldFolder().toPath().resolve("dimensions").resolve(worldKey.getNamespace()).resolve(dimension).resolve(name);
+        final Path directory;
+        if (Files.isDirectory(bukkitDir)) {
+            directory = bukkitDir;
+        } else if (Files.isDirectory(vanillaDir)) {
+            directory = vanillaDir;
+        } else {
+            directory = spigotDir;
+        }
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 }
