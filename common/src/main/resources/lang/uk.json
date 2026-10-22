@@ -90,6 +90,7 @@
   "shape_star": "зірка",
   "shape_triangle": "трикутник",
   "task_trim": "Видалено %s чанків зі світу %s, секунд витрачено: %s.",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "Завдання запущено для %s. Оброблено: %s регіонів (%s%%)",
   "task_done": "Завдання для світу %s завершено. Опрацьовано: %s чанків (%s%%), Загальний час: %s:%s:%s",
   "task_stopped": "Завдання зупинено для світу %s.",
