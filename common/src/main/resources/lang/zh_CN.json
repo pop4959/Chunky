@@ -90,6 +90,7 @@
   "shape_star": "星形",
   "shape_triangle": "三角形",
   "task_trim": "在 %3$s 秒内从 %2$s 删除了 %1$s 个区块。",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "任务进行的时间：%s。已处理：%s(%s%%)",
   "task_done": "任务结束于 %s。 处理了 %s 个区块 (%s%%), 总运行时长: %s:%s:%s",
   "task_stopped": "任务暂停于 %s。",
