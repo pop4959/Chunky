@@ -120,7 +120,12 @@ public class TrimCommand implements ChunkyCommand {
                             if (trimTask.isCancelled()) {
                                 break;
                             }
-                            deleted.getAndAdd(checkRegion(selection.world(), region.getFileName().toString(), shape, inside, inhabitedTimeCheck, inhabitedTime));
+                            try {
+                                deleted.getAndAdd(checkRegion(selection.world(), region.getFileName().toString(), shape, inside, inhabitedTimeCheck, inhabitedTime));
+                            } catch (final UnsupportedOperationException e) {
+                                sender.sendMessagePrefixed(TranslationKey.TASK_TRIM_UNSUPPORTED_COMPRESSION, selection.world().getName(), region.getFileName().toString(), e.getMessage());
+                                break;
+                            }
                             finishedRegions.getAndIncrement();
                             if (!trimTask.isCancelled() && !chunky.getConfig().isSilent()) {
                                 final long currentTime = System.currentTimeMillis();

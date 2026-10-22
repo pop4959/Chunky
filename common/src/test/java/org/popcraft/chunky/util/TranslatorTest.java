@@ -133,6 +133,7 @@ public class TranslatorTest {
         translate(TranslationKey.SHAPE_STAR);
         translate(TranslationKey.SHAPE_TRIANGLE);
         translate(TranslationKey.TASK_TRIM, 5000, "world", String.format("%.3f", 1f));
+        translate(TranslationKey.TASK_TRIM_UNSUPPORTED_COMPRESSION, "world", "r.0.0.mca", "Unsupported compression type 127");
         translate(TranslationKey.TASK_TRIM_UPDATE, "world", 50, String.format("%.2f", 50f));
         translate(TranslationKey.TASK_DONE, "world", 5000, String.format("%.2f", 50f), "0", "01", "15");
         translate(TranslationKey.TASK_STOPPED, "world");
