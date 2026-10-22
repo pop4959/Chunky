@@ -90,6 +90,7 @@
   "shape_star": "星行",
   "shape_triangle": "三角形",
   "task_trim": "在 %3$s 秒內從 %2$s刪除了 %1$s 個區塊。",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "任務執行時間：%s。已處理：%s 區域 (%s%%)",
   "task_done": "%s 的任務已完成。已處理：%s 個區塊 (%s%%)，總時間：%s:%s:%s",
   "task_stopped": "%s 任務停止了。",
