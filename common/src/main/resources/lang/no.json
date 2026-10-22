@@ -90,6 +90,7 @@
   "shape_star": "stjerne",
   "shape_triangle": "triangel",
   "task_trim": "Slettet %s chunker fra %s på %s sekunder.",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "Oppgave som kjører for %s. Behandlet: %s regioner (%s%%)",
   "task_done": "Oppgave fullført for %s. Behandlet: %s chunker (%s%%), tid brukt: %s:%s:%s",
   "task_stopped": "Oppgaven ble stoppet for %s.",
