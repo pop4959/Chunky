@@ -90,6 +90,7 @@
   "shape_star": "yıldız",
   "shape_triangle": "üçgen",
   "task_trim": "%s saniye içinde %s parça %s'den silindi.",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "Görev %s için çalışıyor. İşlendi: %s bölge (%s%%)",
   "task_done": "%s için fonksiyon tamamlandı. %s chunk (%s%%) işlendi. Toplam zaman: %s:%s:%s",
   "task_stopped": "%s için fonksiyon durduruldu.",
