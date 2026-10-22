@@ -90,6 +90,7 @@
   "shape_star": "hvězda",
   "shape_triangle": "trojúhelník",
   "task_trim": "Smazáno %s chunků z %s za %s vteřin.",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "Úkol běží pro %s. Zpracováno: %s oblastí (%s%%)",
   "task_done": "Úkol pro %s byl dokončen. Zpracováno: %s chunků (%s%%), Celkový čas: %s:%s:%s",
   "task_stopped": "Úkol pro %s byl zastaven.",
