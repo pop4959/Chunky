@@ -90,6 +90,7 @@
   "shape_star": "звезда",
   "shape_triangle": "треугольник",
   "task_trim": "Удалено %s чанков из %s за %s секунд.",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "Задача для %s выполняется. Обработано %s регионов (%s%%)",
   "task_done": "Задача для %s выполнена. Обработано: %s чанков (%s%%), Заняло времени: %s:%s:%s",
   "task_stopped": "Задача для %s остановлена.",
