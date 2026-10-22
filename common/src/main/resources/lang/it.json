@@ -90,6 +90,7 @@
   "shape_star": "stella",
   "shape_triangle": "triangolo",
   "task_trim": "Eliminati %s chunk da %s in %s secondi.",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "Attività in esecuzione per %s. Elaborato: regioni %s (%s%%)",
   "task_done": "Attività terminata per %s. Elaborati: %s chunk (%s%%), Tempo totale: %s:%s:%s",
   "task_stopped": "Attività interrotta per %s.",
