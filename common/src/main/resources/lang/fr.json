@@ -90,6 +90,7 @@
   "shape_star": "étoile",
   "shape_triangle": "triangle",
   "task_trim": "%s tronçons supprimés de %s en %s secondes.",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "Tâche en cours d'exécution pour %s. Traitée : %s régions (%s%%)",
   "task_done": "Tâche terminée pour %s. Traité: %s tronçons (%s%%), Durée totale: %s:%s:%s",
   "task_stopped": "Tâche arrêtée pour %s.",
