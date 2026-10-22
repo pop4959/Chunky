@@ -6,6 +6,7 @@ import org.popcraft.chunky.nbt.LongTag;
 import org.popcraft.chunky.nbt.Tag;
 import org.popcraft.chunky.nbt.TagType;
 import org.popcraft.chunky.nbt.util.ChunkFilter;
+import org.popcraft.chunky.nbt.util.CompressionType;
 import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
@@ -238,21 +239,27 @@ public class TrimCommand implements ChunkyCommand {
                         ++marked;
                         final int chunkLocation = ((offsetX % 32) + (offsetZ % 32) * 32) * 4;
                         regionFile.seek(chunkLocation);
-                        if (regionFile.readInt() != 0) {
+                        final int regionLocation = regionFile.readInt();
+                        if (regionLocation != 0) {
+                            deleteExternalChunk(regionFile, regionPath, regionLocation, offsetChunkX, offsetChunkZ);
                             regionFile.seek(chunkLocation);
                             regionFile.writeInt(0);
                             ++deleted;
                         }
                         if (poiValid) {
                             poiFile.seek(chunkLocation);
-                            if (poiFile.readInt() != 0) {
+                            final int poiLocation = poiFile.readInt();
+                            if (poiLocation != 0) {
+                                deleteExternalChunk(poiFile, poiPath, poiLocation, offsetChunkX, offsetChunkZ);
                                 poiFile.seek(chunkLocation);
                                 poiFile.writeInt(0);
                             }
                         }
                         if (entitiesValid) {
                             entitiesFile.seek(chunkLocation);
-                            if (entitiesFile.readInt() != 0) {
+                            final int entitiesLocation = entitiesFile.readInt();
+                            if (entitiesLocation != 0) {
+                                deleteExternalChunk(entitiesFile, entitiesPath, entitiesLocation, offsetChunkX, offsetChunkZ);
                                 entitiesFile.seek(chunkLocation);
                                 entitiesFile.writeInt(0);
                             }
@@ -267,6 +274,13 @@ public class TrimCommand implements ChunkyCommand {
             deleteRegion(world, regionFileName);
         }
         return deleted;
+    }
+
+    private void deleteExternalChunk(final RandomAccessFile file, final Path path, final int location, final int chunkX, final int chunkZ) throws IOException {
+        file.seek(((location >> 8) & 0xFFFFFF) * 4096 + 4);
+        if ((file.readByte() & CompressionType.EXTERNAL_FLAG) != 0) {
+            Files.deleteIfExists(path.getParent().resolve("c.%d.%d.mcc".formatted(chunkX, chunkZ)));
+        }
     }
 
     @Override
