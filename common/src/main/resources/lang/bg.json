@@ -90,6 +90,7 @@
   "shape_star": "звезден",
   "shape_triangle": "триъгълен",
   "task_trim": "Изтрити %s чънка от %s за %s секунди.",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "Задачата се изпълнява за %s. Обработени: %s региона (%s%%)",
   "task_done": "Завършена задача за %s. Обработени: %s чънкове (%s%%), Общо време: %s:%s:%s",
   "task_stopped": "Задача спряна за %s.",
