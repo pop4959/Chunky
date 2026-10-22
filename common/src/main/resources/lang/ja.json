@@ -90,6 +90,7 @@
   "shape_star": "星形",
   "shape_triangle": "三角形",
   "task_trim": "%3$s秒で%2$sから%1$sチャンクを削除しました。",
+  "task_trim_unsupported_compression": "&cWarning: Task stopped for %s. Region %s could not be read (%s). Chunks in this region and any remaining regions were not trimmed.",
   "task_trim_update": "%sでタスク実行中。処理済み: %s領域(%s%%)",
   "task_done": "%sのタスクが完了しました。処理済: %s チャンク (%s%%), 合計時間: %s:%s:%s",
   "task_stopped": "%sのタスクが停止しました。",
