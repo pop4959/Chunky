@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - वर्ल्ड सीमा के केंद्र और त्रिज्या का उपयोग करना",
   "pattern_concentric": "संकेंद्रिक",
   "pattern_loop": "लूप",
+  "pattern_strip": "strip",
   "pattern_spiral": "कुंडली",
   "pattern_csv": "csv",
   "pattern_region": "क्षेत्र",
