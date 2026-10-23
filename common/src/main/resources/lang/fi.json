@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Use the world border center & radius",
   "pattern_concentric": "concentric",
   "pattern_loop": "loop",
+  "pattern_strip": "strip",
   "pattern_spiral": "spiral",
   "pattern_csv": "csv",
   "pattern_region": "region",
