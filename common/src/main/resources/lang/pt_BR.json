@@ -6,8 +6,6 @@
   "disabled": "não",
   "enabled": "sim",
   "error_pause_when_empty_seconds": "O plugin não funcionará adequadamente quando o modo pause-when-empty-seconds estiver ativado. Considere desativá-lo no arquivo server.properties do seu servidor. Por favor, reinicie o seu servidor.",
-  "error_version": "O plugin é incompatível com as versões abaixo do Minecraft 1.13.",
-  "error_version_spigot": "O plugin é incompatível com o Spigot 1.13!",
   "format_border_add": "Uma barreira de mundo com a forma %s foi adicionada no %s com o centro %s, %s, e raio %s.",
   "format_border_bypass": "Ignorar barreiras temporariamente: %s (para %s).",
   "format_border_bypass_no_target": "Nenhum jogador encontrado com o nome \"%s\".",
