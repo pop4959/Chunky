@@ -6,8 +6,6 @@
   "disabled": "停用",
   "enabled": "啟用",
   "error_pause_when_empty_seconds": "當 pause-when-empty-seconds 啟用時，此插件將無法正常運作。已在 server.properties 中自動停用此設定。請重新啟動您的伺服器。",
-  "error_version": "這個插件與 Minecraft 版本低於 1.13 的伺服器不相容。",
-  "error_version_spigot": "這個插件與 Spigot 1.13 不相容！",
   "format_border_add": "已新增 %s 世界邊界至世界 %s，中心點為 %s, %s，半徑 %s。",
   "format_border_bypass": "已為 %2$s %1$s臨時世界邊界繞過。",
   "format_border_bypass_no_target": "找不到名為 %s 的玩家。",
