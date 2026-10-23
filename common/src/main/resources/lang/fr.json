@@ -79,6 +79,7 @@
   "pattern_spiral": "spirale",
   "pattern_csv": "csv",
   "pattern_region": "région",
+  "pattern_ring": "ring",
   "pattern_world": "monde",
   "shape_circle": "cercle",
   "shape_diamond": "diamant",
