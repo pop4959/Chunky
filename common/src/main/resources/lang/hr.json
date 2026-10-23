@@ -6,8 +6,6 @@
   "disabled": "isključeno",
   "enabled": "uključeno",
   "error_pause_when_empty_seconds": "Ovaj plugin neće funkcionirati ispravno kada je pause-when-empty-seconds opcija uključena. Automatski isključujemo ovu opciju u server.properties. Molimo vas da ponovno pokrenete svoj server.",
-  "error_version": "Ovaj plugin nije kompatibilan sa Minecraft verzijama ispod 1.13.",
-  "error_version_spigot": "Ovaj plugin nije kompatibilan sa Spigotom 1.13!",
   "format_border_add": "Dodat %s border sveta %s sa centrom u %s, %s, i razdaljinom %s.",
   "format_border_bypass": "Privremeno zaobilaženje bordera %s za %s.",
   "format_border_bypass_no_target": "Nismo pronašli igrača po imenu %s.",
