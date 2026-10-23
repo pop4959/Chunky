@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Usa il centro del bordo del mondo e il rispettivo raggio",
   "pattern_concentric": "concentrico",
   "pattern_loop": "loop",
+  "pattern_strip": "strip",
   "pattern_spiral": "spirale",
   "pattern_csv": "csv",
   "pattern_region": "regione",
