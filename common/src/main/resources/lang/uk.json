@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Використовувати стандартні бар'єр та центр світу",
   "pattern_concentric": "концентричний",
   "pattern_loop": "пошаровий",
+  "pattern_strip": "strip",
   "pattern_spiral": "спіральний",
   "pattern_csv": "csv",
   "pattern_region": "регіон",
