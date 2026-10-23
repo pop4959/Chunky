@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 public class StripChunkIterator implements ChunkIterator {
     private static final int WIDTH = Math.max(1, Input.tryInteger(System.getProperty("chunky.stripWidth")).orElse(64));
-    private final int minX, minZ, width;
+    private final int minX, minZ;
     private final long sizeX, sizeZ, total;
     private long current;
 
@@ -19,15 +19,12 @@ public class StripChunkIterator implements ChunkIterator {
     }
 
     public StripChunkIterator(final Selection selection) {
-        final int radiusX = selection.radiusChunksX();
         final String shape = selection.shape();
-        final int radiusZ = ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape) || ShapeType.OVAL.equals(shape)
-                ? selection.radiusChunksZ() : radiusX;
-        this.minX = selection.centerChunkX() - radiusX;
-        this.minZ = selection.centerChunkZ() - radiusZ;
-        this.sizeX = 2L * radiusX + 1;
-        this.sizeZ = 2L * radiusZ + 1;
-        this.width = (int) Math.min(sizeX, WIDTH);
+        final boolean useZ = ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape) || ShapeType.OVAL.equals(shape);
+        this.minX = selection.centerChunkX() - selection.radiusChunksX();
+        this.minZ = selection.centerChunkZ() - (useZ ? selection.radiusChunksZ() : selection.radiusChunksX());
+        this.sizeX = selection.diameterChunksX();
+        this.sizeZ = useZ ? selection.diameterChunksZ() : selection.diameterChunksX();
         this.total = sizeX * sizeZ;
     }
 
@@ -41,13 +38,13 @@ public class StripChunkIterator implements ChunkIterator {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        final long stripSize = width * sizeZ;
-        final long stripX = current / stripSize * width;
+        final long stripSize = WIDTH * sizeZ;
+        final long stripX = current / stripSize * WIDTH;
         final long offset = current % stripSize;
-        final long stripWidth = Math.min(width, sizeX - stripX);
+        final long currentWidth = Math.min(WIDTH, sizeX - stripX);
         ++current;
-        return new ChunkCoordinate((int) (minX + stripX + offset % stripWidth),
-                (int) (minZ + offset / stripWidth));
+        return new ChunkCoordinate((int) (minX + stripX + offset % currentWidth),
+                (int) (minZ + offset / currentWidth));
     }
 
     @Override
