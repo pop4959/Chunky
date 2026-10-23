@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Définir le centre et le rayon de la bordure du monde",
   "pattern_concentric": "concentrique",
   "pattern_loop": "boucle",
+  "pattern_strip": "strip",
   "pattern_spiral": "spirale",
   "pattern_csv": "csv",
   "pattern_region": "région",
