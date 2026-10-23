@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Postavite centar i razdaljinu preko bordera svijeta",
   "pattern_concentric": "koncentrično",
   "pattern_loop": "petlja",
+  "pattern_strip": "strip",
   "pattern_spiral": "spirala",
   "pattern_csv": "csv",
   "pattern_region": "regija",
