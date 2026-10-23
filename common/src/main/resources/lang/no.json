@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Bruk verdensgrensens midtpunkt og radius",
   "pattern_concentric": "konsentrisk",
   "pattern_loop": "loop",
+  "pattern_strip": "strip",
   "pattern_spiral": "spiral",
   "pattern_csv": "csv",
   "pattern_region": "region",
