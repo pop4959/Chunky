@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Ustaw środek i promień zgodnie z granicą świata",
   "pattern_concentric": "koncentryczny",
   "pattern_loop": "pętla",
+  "pattern_strip": "strip",
   "pattern_spiral": "spirala",
   "pattern_csv": "csv",
   "pattern_region": "region",
