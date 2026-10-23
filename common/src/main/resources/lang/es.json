@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Genera todo el terreno dentro del worldborder",
   "pattern_concentric": "concéntrico",
   "pattern_loop": "bucle",
+  "pattern_strip": "strip",
   "pattern_spiral": "espiral",
   "pattern_csv": "csv",
   "pattern_region": "region",
