@@ -3,7 +3,6 @@ package org.popcraft.chunky.iterator;
 import org.junit.Test;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.util.ChunkCoordinate;
-import org.popcraft.chunky.util.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,15 +63,13 @@ public class ConstructorTest {
 
     @Test
     public void strip() {
-        final Selection selection = Selection.builder(null, null).center(-25, 25).radius(50)
-                .pattern(Parameter.of("strip=2")).build();
         final List<ChunkCoordinate> chunks = new ArrayList<>();
-        final ChunkIterator chunkIterator = new StripChunkIterator(selection);
+        final ChunkIterator chunkIterator = new StripChunkIterator(SELECTION);
         chunkIterator.forEachRemaining(chunks::add);
         final int total = (int) chunkIterator.total();
         for (int i = 0; i < total; ++i) {
             final List<ChunkCoordinate> continueChunks = new ArrayList<>();
-            final ChunkIterator continueIterator = new StripChunkIterator(selection, i);
+            final ChunkIterator continueIterator = new StripChunkIterator(SELECTION, i);
             continueIterator.forEachRemaining(continueChunks::add);
             final int continueTotal = (int) continueIterator.total();
             assertEquals("Total", total, continueTotal);

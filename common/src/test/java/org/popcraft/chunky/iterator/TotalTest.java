@@ -29,7 +29,7 @@ public class TotalTest {
             assertEquals(loop2Iterator.total(), spiralIterator.total());
             assertEquals(spiralIterator.total(), regionIterator.total());
             assertEquals(regionIterator.total(), stripIterator.total());
-            assertEquals(regionIterator.total(), ringIterator.total());
+            assertEquals(stripIterator.total(), ringIterator.total());
         }
     }
 
@@ -52,7 +52,7 @@ public class TotalTest {
                 assertEquals(loop2Iterator.total(), spiralIterator.total());
                 assertEquals(spiralIterator.total(), regionIterator.total());
                 assertEquals(regionIterator.total(), stripIterator.total());
-                assertEquals(regionIterator.total(), ringIterator.total());
+                assertEquals(stripIterator.total(), ringIterator.total());
             }
         }
     }

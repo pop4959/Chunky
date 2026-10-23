@@ -3,13 +3,12 @@ package org.popcraft.chunky.iterator;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.ChunkCoordinate;
-import org.popcraft.chunky.util.GenerationSettings;
-import org.popcraft.chunky.util.Parameter;
+import org.popcraft.chunky.util.Input;
 
 import java.util.NoSuchElementException;
 
-/** Traverses short X rows within each strip before advancing to the next strip. */
 public class StripChunkIterator implements ChunkIterator {
+    private static final int WIDTH = Math.max(1, Input.tryInteger(System.getProperty("chunky.stripWidth")).orElse(64));
     private final int minX, minZ, width;
     private final long sizeX, sizeZ, total;
     private long current;
@@ -28,12 +27,7 @@ public class StripChunkIterator implements ChunkIterator {
         this.minZ = selection.centerChunkZ() - radiusZ;
         this.sizeX = 2L * radiusX + 1;
         this.sizeZ = 2L * radiusZ + 1;
-        final int maxWidth = selection.pattern().getValue().map(Integer::parseInt)
-                .orElseGet(GenerationSettings::maxWorkingCount);
-        if (maxWidth < 1) {
-            throw new IllegalArgumentException("Strip width must be positive");
-        }
-        this.width = (int) Math.min(sizeX, maxWidth);
+        this.width = (int) Math.min(sizeX, WIDTH);
         this.total = sizeX * sizeZ;
     }
 
@@ -63,6 +57,6 @@ public class StripChunkIterator implements ChunkIterator {
 
     @Override
     public String name() {
-        return Parameter.of(PatternType.STRIP, String.valueOf(width)).toString();
+        return PatternType.STRIP;
     }
 }

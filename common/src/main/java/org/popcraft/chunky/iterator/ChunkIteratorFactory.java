@@ -8,9 +8,6 @@ public final class ChunkIteratorFactory {
     }
 
     public static ChunkIterator getChunkIterator(final Selection selection, final long count) {
-        if (selection.pattern().getType().equals(PatternType.STRIP)) {
-            return new StripChunkIterator(selection, count);
-        }
         if (selection.pattern().getType().equals(PatternType.WORLD)) {
             return new WorldChunkIterator(selection);
         }
@@ -23,6 +20,7 @@ public final class ChunkIteratorFactory {
             case PatternType.SPIRAL -> new SpiralChunkIterator(selection, count);
             case PatternType.CSV -> new CsvChunkIterator(selection, count);
             case PatternType.CONCENTRIC -> new ConcentricChunkIterator(selection, count);
+            case PatternType.STRIP -> new StripChunkIterator(selection, count);
             case PatternType.RING -> new RingChunkIterator(selection, count);
             default -> new RegionChunkIterator(selection, count);
         };

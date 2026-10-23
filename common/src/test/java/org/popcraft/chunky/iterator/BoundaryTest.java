@@ -63,8 +63,8 @@ public class BoundaryTest {
         assertEquals(spiralPoint1.z(), regionPoint1.z());
         assertEquals(regionPoint1.x(), stripPoint1.x());
         assertEquals(regionPoint1.z(), stripPoint1.z());
-        assertEquals(regionPoint1.x(), ringPoint1.x());
-        assertEquals(regionPoint1.z(), ringPoint1.z());
+        assertEquals(stripPoint1.x(), ringPoint1.x());
+        assertEquals(stripPoint1.z(), ringPoint1.z());
         assertEquals(concentricPoint2.x(), loop2Point2.x());
         assertEquals(concentricPoint2.z(), loop2Point2.z());
         assertEquals(loop2Point2.x(), spiralPoint2.x());
@@ -73,7 +73,7 @@ public class BoundaryTest {
         assertEquals(spiralPoint2.z(), regionPoint2.z());
         assertEquals(regionPoint2.x(), stripPoint2.x());
         assertEquals(regionPoint2.z(), stripPoint2.z());
-        assertEquals(regionPoint2.x(), ringPoint2.x());
-        assertEquals(regionPoint2.z(), ringPoint2.z());
+        assertEquals(stripPoint2.x(), ringPoint2.x());
+        assertEquals(stripPoint2.z(), ringPoint2.z());
     }
 }

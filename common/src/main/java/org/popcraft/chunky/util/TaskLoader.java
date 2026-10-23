@@ -67,15 +67,14 @@ public class TaskLoader {
         final double radiusX = Input.tryDouble(task.getProperty(TaskProperty.RADIUS_X.key())).orElse(Selection.DEFAULT_RADIUS);
         final double radiusZ = Input.tryDouble(task.getProperty(TaskProperty.RADIUS_Z.key())).orElse(radiusX);
         final String pattern = task.getProperty(TaskProperty.PATTERN.key(), PatternType.REGION);
-        final String value = task.getProperty(PatternType.STRIP.equals(pattern)
-                ? TaskProperty.STRIP_WIDTH.key() : TaskProperty.CSV.key());
+        final String file = task.getProperty(TaskProperty.CSV.key());
         final String shape = task.getProperty(TaskProperty.SHAPE.key(), ShapeType.SQUARE);
         final Selection.Builder selection = Selection.builder(chunky, world)
                 .centerX(centerX)
                 .centerZ(centerZ)
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
-                .pattern(Parameter.of(pattern, value))
+                .pattern(Parameter.of(pattern, file))
                 .shape(shape);
         final long chunks = Input.tryLong(task.getProperty(TaskProperty.CHUNKS.key())).orElse(0L);
         final long time = Input.tryLong(task.getProperty(TaskProperty.TIME.key())).orElse(0L);
@@ -105,11 +104,8 @@ public class TaskLoader {
         }
         final Parameter pattern = Parameter.of(task.getChunkIterator().name());
         properties.setProperty(TaskProperty.PATTERN.key(), pattern.getType());
-        properties.remove(TaskProperty.STRIP_WIDTH.key());
         if (PatternType.CSV.equals(pattern.getType())) {
             pattern.getValue().ifPresent(file -> properties.setProperty(TaskProperty.CSV.key(), file));
-        } else if (PatternType.STRIP.equals(pattern.getType())) {
-            pattern.getValue().ifPresent(width -> properties.setProperty(TaskProperty.STRIP_WIDTH.key(), width));
         }
         properties.setProperty(TaskProperty.SHAPE.key(), shape);
         properties.setProperty(TaskProperty.CHUNKS.key(), String.valueOf(task.getCount()));
@@ -163,7 +159,6 @@ public class TaskLoader {
         SHAPE("shape"),
         PATTERN("pattern"),
         CSV("csv"),
-        STRIP_WIDTH("strip-width"),
         CHUNKS("chunks"),
         TIME("time");
 
