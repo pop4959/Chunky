@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Setze die Mitte und den Radius der Weltgrenze",
   "pattern_concentric": "Konzentrisch",
   "pattern_loop": "Schleife",
+  "pattern_strip": "strip",
   "pattern_spiral": "Spirale",
   "pattern_csv": "csv",
   "pattern_region": "region",
