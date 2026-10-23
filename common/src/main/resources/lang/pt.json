@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Definir o centro e o raio até à fronteira do mundo",
   "pattern_concentric": "concentric",
   "pattern_loop": "loop",
+  "pattern_strip": "strip",
   "pattern_spiral": "spiral",
   "pattern_csv": "csv",
   "pattern_region": "region",
