@@ -23,6 +23,7 @@ public final class ChunkIteratorFactory {
             case PatternType.SPIRAL -> new SpiralChunkIterator(selection, count);
             case PatternType.CSV -> new CsvChunkIterator(selection, count);
             case PatternType.CONCENTRIC -> new ConcentricChunkIterator(selection, count);
+            case PatternType.RING -> new RingChunkIterator(selection, count);
             default -> new RegionChunkIterator(selection, count);
         };
     }

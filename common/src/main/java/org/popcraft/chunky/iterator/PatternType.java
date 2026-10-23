@@ -10,8 +10,9 @@ public final class PatternType {
     public static final String CSV = "csv";
     public static final String REGION = "region";
     public static final String WORLD = "world";
+    public static final String RING = "ring";
 
-    public static final List<String> ALL = List.of(CONCENTRIC, LOOP, STRIP, SPIRAL, CSV, REGION, WORLD);
+    public static final List<String> ALL = List.of(CONCENTRIC, LOOP, STRIP, SPIRAL, CSV, REGION, WORLD, RING);
 
     private PatternType() {
     }

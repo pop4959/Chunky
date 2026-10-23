@@ -24,21 +24,25 @@ public class BoundaryTest {
         final ChunkIterator spiralIterator = new SpiralChunkIterator(SELECTION);
         final ChunkIterator regionIterator = new RegionChunkIterator(SELECTION);
         final ChunkIterator stripIterator = new StripChunkIterator(SELECTION);
+        final ChunkIterator ringIterator = new RingChunkIterator(SELECTION);
         final List<ChunkCoordinate> concentricCoordinates = new ArrayList<>();
         final List<ChunkCoordinate> loop2Coordinates = new ArrayList<>();
         final List<ChunkCoordinate> spiralCoordinates = new ArrayList<>();
         final List<ChunkCoordinate> regionCoordinates = new ArrayList<>();
         final List<ChunkCoordinate> stripCoordinates = new ArrayList<>();
+        final List<ChunkCoordinate> ringCoordinates = new ArrayList<>();
         concentricIterator.forEachRemaining(concentricCoordinates::add);
         loop2Iterator.forEachRemaining(loop2Coordinates::add);
         spiralIterator.forEachRemaining(spiralCoordinates::add);
         regionIterator.forEachRemaining(regionCoordinates::add);
         stripIterator.forEachRemaining(stripCoordinates::add);
+        ringIterator.forEachRemaining(ringCoordinates::add);
         Collections.sort(concentricCoordinates);
         Collections.sort(loop2Coordinates);
         Collections.sort(spiralCoordinates);
         Collections.sort(regionCoordinates);
         Collections.sort(stripCoordinates);
+        Collections.sort(ringCoordinates);
         final ChunkCoordinate concentricPoint1 = concentricCoordinates.get(0);
         final ChunkCoordinate concentricPoint2 = concentricCoordinates.get(concentricCoordinates.size() - 1);
         final ChunkCoordinate loop2Point1 = loop2Coordinates.get(0);
@@ -49,6 +53,8 @@ public class BoundaryTest {
         final ChunkCoordinate regionPoint2 = regionCoordinates.get(regionCoordinates.size() - 1);
         final ChunkCoordinate stripPoint1 = stripCoordinates.get(0);
         final ChunkCoordinate stripPoint2 = stripCoordinates.get(stripCoordinates.size() - 1);
+        final ChunkCoordinate ringPoint1 = ringCoordinates.get(0);
+        final ChunkCoordinate ringPoint2 = ringCoordinates.get(ringCoordinates.size() - 1);
         assertEquals(concentricPoint1.x(), loop2Point1.x());
         assertEquals(concentricPoint1.z(), loop2Point1.z());
         assertEquals(loop2Point1.x(), spiralPoint1.x());
@@ -57,6 +63,8 @@ public class BoundaryTest {
         assertEquals(spiralPoint1.z(), regionPoint1.z());
         assertEquals(regionPoint1.x(), stripPoint1.x());
         assertEquals(regionPoint1.z(), stripPoint1.z());
+        assertEquals(regionPoint1.x(), ringPoint1.x());
+        assertEquals(regionPoint1.z(), ringPoint1.z());
         assertEquals(concentricPoint2.x(), loop2Point2.x());
         assertEquals(concentricPoint2.z(), loop2Point2.z());
         assertEquals(loop2Point2.x(), spiralPoint2.x());
@@ -65,5 +73,7 @@ public class BoundaryTest {
         assertEquals(spiralPoint2.z(), regionPoint2.z());
         assertEquals(regionPoint2.x(), stripPoint2.x());
         assertEquals(regionPoint2.z(), stripPoint2.z());
+        assertEquals(regionPoint2.x(), ringPoint2.x());
+        assertEquals(regionPoint2.z(), ringPoint2.z());
     }
 }
