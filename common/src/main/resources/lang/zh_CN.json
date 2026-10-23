@@ -6,8 +6,6 @@
   "disabled": "已关闭",
   "enabled": "已启用",
   "error_pause_when_empty_seconds": "当 pause-when-empty-seconds 功能启用时，此插件将无法正常运行。已自动在 server.properties 中禁用该功能。请重启您的服务器。",
-  "error_version": "Chunky 无法与 Minecraft 版本低于 1.13 的服务器兼容。",
-  "error_version_spigot": "Chunky 无法加载在 Spigot 1.13 版本的服务器上！",
   "format_border_add": "将 %s 的世界边界增加至 %s，目前边界中心坐标 %s, %s, 边界的半径为 %s。",
   "format_border_bypass": "已临时 %s 世界边界绕过给玩家 %s。",
   "format_border_bypass_no_target": "无法找到名为 %s 的玩家 。",
