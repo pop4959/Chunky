@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Usar o centro e raio da barreira do mundo",
   "pattern_concentric": "concêntrico",
   "pattern_loop": "loop",
+  "pattern_strip": "strip",
   "pattern_spiral": "espiral",
   "pattern_csv": "csv",
   "pattern_region": "região",
