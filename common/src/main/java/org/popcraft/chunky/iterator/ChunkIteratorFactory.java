@@ -13,16 +13,19 @@ public final class ChunkIteratorFactory {
         }
         final String shape = selection.shape();
         if (ShapeType.RECTANGLE.equals(shape) || ShapeType.ELLIPSE.equals(shape) || ShapeType.OVAL.equals(shape)) {
-            return new Loop2ChunkIterator(selection, count);
+            return switch (selection.pattern().getType()) {
+                case PatternType.LOOP -> new Loop2ChunkIterator(selection, count);
+                default -> new StripChunkIterator(selection, count);
+            };
         }
         return switch (selection.pattern().getType()) {
             case PatternType.LOOP -> new Loop2ChunkIterator(selection, count);
             case PatternType.SPIRAL -> new SpiralChunkIterator(selection, count);
             case PatternType.CSV -> new CsvChunkIterator(selection, count);
+            case PatternType.REGION -> new RegionChunkIterator(selection, count);
             case PatternType.CONCENTRIC -> new ConcentricChunkIterator(selection, count);
             case PatternType.STRIP -> new StripChunkIterator(selection, count);
-            case PatternType.RING -> new RingChunkIterator(selection, count);
-            default -> new RegionChunkIterator(selection, count);
+            default -> new RingChunkIterator(selection, count);
         };
     }
 
