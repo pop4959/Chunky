@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - 使用世界邊界的中心和範圍",
   "pattern_concentric": "同心圓",
   "pattern_loop": "循環",
+  "pattern_strip": "strip",
   "pattern_spiral": "螺旋",
   "pattern_csv": "csv",
   "pattern_region": "區域",
