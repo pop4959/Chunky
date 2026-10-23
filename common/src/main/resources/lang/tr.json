@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Merkezi ve yarıçapı dünya sınırına ayarlayın",
   "pattern_concentric": "eşmerkezli",
   "pattern_loop": "döngü",
+  "pattern_strip": "strip",
   "pattern_spiral": "sarmal",
   "pattern_csv": "csv",
   "pattern_region": "bölge",
