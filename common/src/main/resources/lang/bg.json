@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Задаване на центъра и радиуса на границата на света",
   "pattern_concentric": "концентричен",
   "pattern_loop": "цикличен",
+  "pattern_strip": "strip",
   "pattern_spiral": "спирален",
   "pattern_csv": "цсв",
   "pattern_region": "регион",
