@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - 세계 경계 중심 및 반경 사용",
   "pattern_concentric": "concentric",
   "pattern_loop": "loop",
+  "pattern_strip": "strip",
   "pattern_spiral": "spiral",
   "pattern_csv": "csv",
   "pattern_region": "지역",
