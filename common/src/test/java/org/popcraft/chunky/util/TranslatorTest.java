@@ -50,8 +50,6 @@ public class TranslatorTest {
         translate(TranslationKey.DISABLED);
         translate(TranslationKey.ENABLED);
         translate(TranslationKey.ERROR_PAUSE_WHEN_EMPTY_SECONDS);
-        translate(TranslationKey.ERROR_VERSION);
-        translate(TranslationKey.ERROR_VERSION_SPIGOT);
         translate(TranslationKey.FORMAT_BORDER_ADD, "square", "world", Formatting.number(1), Formatting.number(2), Formatting.number(500));
         translate(TranslationKey.FORMAT_BORDER_BYPASS, "enabled", "pop4959");
         translate(TranslationKey.FORMAT_BORDER_BYPASS_NO_TARGET, "pop4959");

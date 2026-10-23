@@ -8,8 +8,6 @@ public final class TranslationKey {
     public static final String DISABLED = "disabled";
     public static final String ENABLED = "enabled";
     public static final String ERROR_PAUSE_WHEN_EMPTY_SECONDS = "error_pause_when_empty_seconds";
-    public static final String ERROR_VERSION = "error_version";
-    public static final String ERROR_VERSION_SPIGOT = "error_version_spigot";
     public static final String FORMAT_BORDER_ADD = "format_border_add";
     public static final String FORMAT_BORDER_BYPASS = "format_border_bypass";
     public static final String FORMAT_BORDER_BYPASS_NO_TARGET = "format_border_bypass_no_target";

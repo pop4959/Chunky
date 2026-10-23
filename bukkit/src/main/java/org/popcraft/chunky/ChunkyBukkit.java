@@ -2,7 +2,6 @@ package org.popcraft.chunky;
 
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,7 +26,6 @@ import org.popcraft.chunky.platform.Paper;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
-import org.popcraft.chunky.util.Version;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,14 +48,6 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         this.chunky = new Chunky(new BukkitServer(this), new BukkitConfig(this));
-        final Version currentVersion = new Version(Bukkit.getBukkitVersion(), true);
-        if (currentVersion.isValid() && Version.MINECRAFT_1_13_2.isHigherThan(currentVersion)) {
-            getLogger().severe(() -> translate(TranslationKey.ERROR_VERSION));
-            getServer().getPluginManager().disablePlugin(this);
-        }
-        if (!isEnabled()) {
-            return;
-        }
         getServer().getServicesManager().register(Chunky.class, chunky, this, ServicePriority.Normal);
         getServer().getServicesManager().register(ChunkyAPI.class, chunky.getApi(), this, ServicePriority.Normal);
         if (chunky.getConfig().getContinueOnRestart()) {
