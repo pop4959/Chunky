@@ -6,8 +6,6 @@
   "disabled": "desactivado",
   "enabled": "activado",
   "error_pause_when_empty_seconds": "Este plugin no va a funcionar bien si 'pause-when-empty-seconds' está activado. Se va a desactivar automáticamente en server.properties. Por favor, reiniciá tu servidor.",
-  "error_version": "Este plugin no es compatible con versiones de Minecraft anteriores a la 1.13.",
-  "error_version_spigot": "¡Este plugin no es compatible con Spigot 1.13!",
   "format_border_add": "Se agregó el borde de mundo %s a %s con centro en %s, %s, y radio %s.",
   "format_border_bypass": "Salto de borde temporal %s para %s.",
   "format_border_bypass_no_target": "No se encontró un jugador con el nombre %s.",
