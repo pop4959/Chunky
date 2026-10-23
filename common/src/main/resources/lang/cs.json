@@ -6,8 +6,6 @@
   "disabled": "vypnuto",
   "enabled": "zapnuto",
   "error_pause_when_empty_seconds": "Tento plugin nebude správně fungovat, pokud je pause-when-empty-seconds aktivováno. Automaticky zakázáno v server.properties, restartujte prosím server.",
-  "error_version": "Tento plugin není kompatibilní s Minecraft verzemi nižšími než 1.13.",
-  "error_version_spigot": "Tento plugin není kompatibilní se Spigot 1.13!",
   "format_border_add": "%s okraj světa přidán do %s se středem %s, %s a poloměrem %s.",
   "format_border_bypass": "Dočasné obejití hranice %s pro %s.",
   "format_border_bypass_no_target": "Nelze najít hráče se jménem %s.",
