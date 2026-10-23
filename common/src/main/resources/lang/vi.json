@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Sử dụng tâm và bán kính đường biên giới thế giới",
   "pattern_concentric": "đồng tâm",
   "pattern_loop": "vòng lặp",
+  "pattern_strip": "strip",
   "pattern_spiral": "xoắn ốc",
   "pattern_csv": "csv",
   "pattern_region": "khu vực",
