@@ -6,8 +6,6 @@
   "disabled": "disattivato",
   "enabled": "attivato",
   "error_pause_when_empty_seconds": "Questo plugin non funzionerà correttamente quando pause-when-empty-seconds è abilitato. Disattivalo automaticamente in server.properties. Riavvia il server.",
-  "error_version": "Questo plugin non è compatibile con le versioni di Minecraft inferiori alla 1.13.",
-  "error_version_spigot": "Questo plugin non è compatibile con Spigot 1.13!",
   "format_border_add": "Aggiunto il bordo %s a %s con centro %s, %s, e raggio %s.",
   "format_border_bypass": "Il bypass del bordo è stato temporaneamente %s per %s.",
   "format_border_bypass_no_target": "Impossibile trovare un giocatore chiamato %s.",
