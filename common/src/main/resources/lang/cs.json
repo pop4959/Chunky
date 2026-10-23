@@ -76,6 +76,7 @@
   "help_worldborder": "&2chunky worldborder&r - Použije hranice světa pro střed a poloměr generace",
   "pattern_concentric": "soustředný",
   "pattern_loop": "opakování",
+  "pattern_strip": "strip",
   "pattern_spiral": "spirála",
   "pattern_csv": "csv",
   "pattern_region": "oblast",
