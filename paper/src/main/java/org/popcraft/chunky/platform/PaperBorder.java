@@ -4,10 +4,10 @@ import org.bukkit.WorldBorder;
 import org.popcraft.chunky.platform.util.Vector2;
 import org.popcraft.chunky.shape.ShapeType;
 
-public class BukkitBorder implements Border {
+public class PaperBorder implements Border {
     final WorldBorder worldBorder;
 
-    public BukkitBorder(final WorldBorder worldBorder) {
+    public PaperBorder(final WorldBorder worldBorder) {
         this.worldBorder = worldBorder;
     }
 

@@ -8,12 +8,12 @@ import org.popcraft.chunky.platform.util.Location;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
-public class BukkitSender implements Sender {
+public class PaperSender implements Sender {
     protected static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder().character('&').hexColors().build();
 
     private final CommandSender sender;
 
-    public BukkitSender(final CommandSender sender) {
+    public PaperSender(final CommandSender sender) {
         this.sender = sender;
     }
 
@@ -29,7 +29,7 @@ public class BukkitSender implements Sender {
 
     @Override
     public World getWorld() {
-        return new BukkitWorld(Bukkit.getWorlds().get(0));
+        return new PaperWorld(Bukkit.getWorlds().get(0));
     }
 
     @Override

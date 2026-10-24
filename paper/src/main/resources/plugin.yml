@@ -1,6 +1,6 @@
 name: ${name}
 version: ${version}
-main: ${group}.chunky.ChunkyBukkit
+main: ${group}.chunky.ChunkyPaper
 api-version: 1.21.8
 folia-supported: true
 softdepend: [dynmap, BlueMap, squaremap, WorldBorder]

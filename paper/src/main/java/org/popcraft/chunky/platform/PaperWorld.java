@@ -9,7 +9,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.popcraft.chunky.ChunkyBukkit;
+import org.popcraft.chunky.ChunkyPaper;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Reflection;
@@ -23,18 +23,18 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
-public class BukkitWorld implements World {
+public class PaperWorld implements World {
     private static final boolean CHUNK_GENERATION_STATE_EXISTS = Reflection.methodExists(org.bukkit.World.class, "getChunkGenerationStateAsync", int.class, int.class);
     private static final boolean LOAD_OUTDATED_CHUNKS = Boolean.getBoolean("chunky.loadOutdatedChunks");
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private static final boolean AWAIT_TICKET_REMOVAL = Boolean.getBoolean("chunky.awaitTicketRemoval");
-    private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
+    private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyPaper.class);
     private final org.bukkit.World world;
     private final Border worldBorder;
 
-    public BukkitWorld(final org.bukkit.World world) {
+    public PaperWorld(final org.bukkit.World world) {
         this.world = world;
-        this.worldBorder = new BukkitBorder(world.getWorldBorder());
+        this.worldBorder = new PaperBorder(world.getWorldBorder());
     }
 
     @Override
@@ -169,8 +169,8 @@ public class BukkitWorld implements World {
             return;
         }
         final Location location = player.getLocation();
-        final org.bukkit.Location bukkitLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        world.playEffect(bukkitLocation, effectType, 0);
+        final org.bukkit.Location paperLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        world.playEffect(paperLocation, effectType, 0);
     }
 
     @Override
@@ -185,8 +185,8 @@ public class BukkitWorld implements World {
             return;
         }
         final Location location = player.getLocation();
-        final org.bukkit.Location bukkitLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        world.playSound(bukkitLocation, soundType, 2f, 1f);
+        final org.bukkit.Location paperLocation = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        world.playSound(paperLocation, soundType, 2f, 1f);
     }
 
     @Override
@@ -213,14 +213,14 @@ public class BukkitWorld implements World {
         }
         final Path bukkitDir = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
         final Path vanillaDir = world.getWorldFolder().toPath().normalize().resolve(name);
-        final Path spigotDir = world.getWorldFolder().toPath().resolve("dimensions").resolve(worldKey.getNamespace()).resolve(dimension).resolve(name);
+        final Path paperDir = world.getWorldFolder().toPath().resolve("dimensions").resolve(worldKey.getNamespace()).resolve(dimension).resolve(name);
         final Path directory;
         if (Files.isDirectory(bukkitDir)) {
             directory = bukkitDir;
         } else if (Files.isDirectory(vanillaDir)) {
             directory = vanillaDir;
         } else {
-            directory = spigotDir;
+            directory = paperDir;
         }
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }

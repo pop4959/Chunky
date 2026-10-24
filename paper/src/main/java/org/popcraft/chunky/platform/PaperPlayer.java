@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.popcraft.chunky.ChunkyBukkit;
+import org.popcraft.chunky.ChunkyPaper;
 import org.popcraft.chunky.platform.util.Location;
 
 import java.util.List;
@@ -13,12 +13,12 @@ import java.util.UUID;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
-public class BukkitPlayer extends BukkitSender implements Player {
-    private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
+public class PaperPlayer extends PaperSender implements Player {
+    private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyPaper.class);
 
     final org.bukkit.entity.Player player;
 
-    public BukkitPlayer(final org.bukkit.entity.Player player) {
+    public PaperPlayer(final org.bukkit.entity.Player player) {
         super(player);
         this.player = player;
     }
@@ -35,7 +35,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
 
     @Override
     public World getWorld() {
-        return new BukkitWorld(player.getWorld());
+        return new PaperWorld(player.getWorld());
     }
 
     @Override

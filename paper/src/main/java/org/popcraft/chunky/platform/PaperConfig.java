@@ -1,7 +1,7 @@
 package org.popcraft.chunky.platform;
 
 import org.bukkit.configuration.file.FileConfigurationOptions;
-import org.popcraft.chunky.ChunkyBukkit;
+import org.popcraft.chunky.ChunkyPaper;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
 
@@ -9,11 +9,11 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-public class BukkitConfig implements Config {
+public class PaperConfig implements Config {
     private static final List<String> HEADER = Arrays.asList("Chunky Configuration", "https://github.com/pop4959/Chunky/wiki/Configuration");
-    private final ChunkyBukkit plugin;
+    private final ChunkyPaper plugin;
 
-    public BukkitConfig(final ChunkyBukkit plugin) {
+    public PaperConfig(final ChunkyPaper plugin) {
         this.plugin = plugin;
         final FileConfigurationOptions options = plugin.getConfig().options();
         options.copyDefaults(true);

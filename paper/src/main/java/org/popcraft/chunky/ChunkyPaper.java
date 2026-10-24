@@ -18,10 +18,10 @@ import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.integration.WorldBorderIntegration;
-import org.popcraft.chunky.platform.BukkitConfig;
-import org.popcraft.chunky.platform.BukkitPlayer;
-import org.popcraft.chunky.platform.BukkitSender;
-import org.popcraft.chunky.platform.BukkitServer;
+import org.popcraft.chunky.platform.PaperConfig;
+import org.popcraft.chunky.platform.PaperPlayer;
+import org.popcraft.chunky.platform.PaperSender;
+import org.popcraft.chunky.platform.PaperServer;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.util.TranslationKey;
 
@@ -30,13 +30,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public final class ChunkyBukkit extends JavaPlugin implements Listener {
+public final class ChunkyPaper extends JavaPlugin implements Listener {
     private static final String COMMAND_PERMISSION_KEY = "chunky.command.";
     private Chunky chunky;
 
     @Override
     public void onEnable() {
-        this.chunky = new Chunky(new BukkitServer(this), new BukkitConfig(this));
+        this.chunky = new Chunky(new PaperServer(this), new PaperConfig(this));
         getServer().getServicesManager().register(Chunky.class, chunky, this, ServicePriority.Normal);
         getServer().getServicesManager().register(ChunkyAPI.class, chunky.getApi(), this, ServicePriority.Normal);
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
@@ -58,17 +58,17 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
     @SuppressWarnings("NullableProblems")
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-        final Sender bukkitSender = sender instanceof final Player player ? new BukkitPlayer(player) : new BukkitSender(sender);
+        final Sender paperSender = sender instanceof final Player player ? new PaperPlayer(player) : new PaperSender(sender);
         final Map<String, ChunkyCommand> commands = chunky.getCommands();
         final CommandArguments arguments = CommandArguments.of(Arrays.copyOfRange(args, Math.min(1, args.length), args.length));
         if (args.length > 0 && commands.containsKey(args[0].toLowerCase())) {
             if (sender.hasPermission(COMMAND_PERMISSION_KEY + args[0].toLowerCase())) {
-                commands.get(args[0].toLowerCase()).execute(bukkitSender, arguments);
+                commands.get(args[0].toLowerCase()).execute(paperSender, arguments);
             } else {
-                bukkitSender.sendMessage(TranslationKey.COMMAND_NO_PERMISSION);
+                paperSender.sendMessage(TranslationKey.COMMAND_NO_PERMISSION);
             }
         } else {
-            commands.get(CommandLiteral.HELP).execute(bukkitSender, arguments);
+            commands.get(CommandLiteral.HELP).execute(paperSender, arguments);
         }
         return true;
     }
