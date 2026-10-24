@@ -13,8 +13,7 @@ rootProject.name = "chunky"
 sequenceOf(
     "nbt",
     "common",
-    "paper",
-    "folia",
+    "paperlib",
     "bukkit",
     "fabric",
     "forge",

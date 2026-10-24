@@ -11,8 +11,7 @@ dependencies {
     }
     implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.0.2")
     implementation(project(":chunky-common"))
-    implementation(project(":chunky-paper"))
-    implementation(project(":chunky-folia"))
+    implementation(project(":chunky-paperlib"))
 }
 
 tasks {
@@ -30,8 +29,7 @@ tasks {
     shadowJar {
         minimize {
             exclude(project(":chunky-common"))
-            exclude(project(":chunky-paper"))
-            exclude(project(":chunky-folia"))
+            exclude(project(":chunky-paperlib"))
         }
         relocate("org.bstats", "${project.group}.${rootProject.name}.lib.bstats")
         manifest {
