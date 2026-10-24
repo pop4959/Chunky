@@ -1,16 +1,17 @@
 package org.popcraft.chunky.platform;
 
+import io.papermc.paper.entity.TeleportFlag;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.platform.util.Location;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import static org.popcraft.chunky.util.Translator.translateKey;
 
@@ -56,47 +57,25 @@ public class BukkitPlayer extends BukkitSender implements Player {
         final org.bukkit.Location loc = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         final Entity vehicle = player.getVehicle();
         if (vehicle == null) {
-            teleportAsync(player, loc);
-        } else if (Paper.isPaper() && player.getWorld().equals(loc.getWorld())) {
-            Paper.teleportAsyncWithPassengers(vehicle, loc);
-        } else if (Folia.isFolia() && !Folia.isTickThread(player.getLocation())) {
-            Folia.schedule(plugin, player, () -> teleport(location), 1);
+            player.teleportAsync(loc);
+        } else if (player.getWorld().equals(loc.getWorld())) {
+            vehicle.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.EntityState.RETAIN_PASSENGERS, TeleportFlag.EntityState.RETAIN_VEHICLE);
+        } else if (!plugin.getServer().isOwnedByCurrentRegion(player.getLocation())) {
+            player.getScheduler().execute(plugin, () -> teleport(location), null, 1);
         } else {
             final List<Entity> passengers = vehicle.getPassengers();
-            if (Folia.isFolia()) {
-                Folia.schedule(plugin, vehicle, vehicle::eject, 1);
-            } else {
-                vehicle.eject();
-            }
-            teleportAsync(player, loc).thenAcceptAsync(ignored -> {
-                teleportAsync(vehicle, loc);
+            vehicle.getScheduler().execute(plugin, vehicle::eject, null, 1);
+            player.teleportAsync(loc).thenAcceptAsync(ignored -> {
+                vehicle.teleportAsync(loc);
                 for (final Entity passenger : passengers) {
-                    teleportAsync(passenger, loc);
+                    passenger.teleportAsync(loc);
                     if (passenger instanceof final org.bukkit.entity.Player playerPassenger) {
                         playerPassenger.hideEntity(plugin, vehicle);
                         playerPassenger.showEntity(plugin, vehicle);
                     }
-                    if (Folia.isFolia()) {
-                        Folia.schedule(plugin, vehicle, () -> vehicle.addPassenger(passenger), 1);
-                    } else {
-                        vehicle.addPassenger(passenger);
-                    }
+                    vehicle.getScheduler().execute(plugin, () -> vehicle.addPassenger(passenger), null, 1);
                 }
-            }, command -> {
-                if (Folia.isFolia()) {
-                    Folia.schedule(plugin, player, command, 1);
-                } else {
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, command, 1);
-                }
-            });
-        }
-    }
-
-    private CompletableFuture<Boolean> teleportAsync(final Entity entity, final org.bukkit.Location location) {
-        if (Paper.isPaper()) {
-            return Paper.teleportAsync(entity, location);
-        } else {
-            return CompletableFuture.completedFuture(entity.teleport(location));
+            }, command -> player.getScheduler().execute(plugin, command, null, 1));
         }
     }
 

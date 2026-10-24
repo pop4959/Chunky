@@ -1,5 +1,6 @@
 package org.popcraft.chunky;
 
+import io.papermc.paper.threadedregions.RegionizedServerInitEvent;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.command.Command;
@@ -21,25 +22,13 @@ import org.popcraft.chunky.platform.BukkitConfig;
 import org.popcraft.chunky.platform.BukkitPlayer;
 import org.popcraft.chunky.platform.BukkitSender;
 import org.popcraft.chunky.platform.BukkitServer;
-import org.popcraft.chunky.platform.Folia;
-import org.popcraft.chunky.platform.Paper;
 import org.popcraft.chunky.platform.Sender;
-import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.TranslationKey;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-
-import static org.popcraft.chunky.util.Translator.translate;
 
 public final class ChunkyBukkit extends JavaPlugin implements Listener {
     private static final String COMMAND_PERMISSION_KEY = "chunky.command.";
@@ -50,23 +39,12 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         this.chunky = new Chunky(new BukkitServer(this), new BukkitConfig(this));
         getServer().getServicesManager().register(Chunky.class, chunky, this, ServicePriority.Normal);
         getServer().getServicesManager().register(ChunkyAPI.class, chunky.getApi(), this, ServicePriority.Normal);
-        if (chunky.getConfig().getContinueOnRestart()) {
-            final Runnable continueTask = () -> chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
-            if (Folia.isFolia()) {
-                Folia.onServerInit(this, continueTask);
-            } else {
-                getServer().getScheduler().scheduleSyncDelayedTask(this, continueTask);
-            }
-        }
         if (getServer().getPluginManager().getPlugin("WorldBorder") != null) {
             chunky.getServer().getIntegrations().put("border", new WorldBorderIntegration());
         }
         final Metrics metrics = new Metrics(this, 8211);
         metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
         getServer().getPluginManager().registerEvents(this, this);
-        if (!Paper.isPaper()) {
-            disablePauseWhenEmptySeconds();
-        }
     }
 
     @Override
@@ -123,24 +101,10 @@ public final class ChunkyBukkit extends JavaPlugin implements Listener {
         chunky.getRegionCache().clear(event.getWorld().getName());
     }
 
-    private void disablePauseWhenEmptySeconds() {
-        final Path serverPropertiesPath = Path.of(".").resolve("server.properties");
-        final File serverPropertiesFile = serverPropertiesPath.toFile();
-        final Properties serverProperties = new Properties();
-        try (final FileInputStream serverPropertiesFileInputStream = new FileInputStream(serverPropertiesFile)) {
-            serverProperties.load(serverPropertiesFileInputStream);
-            final Optional<Integer> pauseWhenEmptySeconds = Input.tryInteger(serverProperties.getProperty("pause-when-empty-seconds"));
-            if (pauseWhenEmptySeconds.isPresent() && pauseWhenEmptySeconds.get() > 0) {
-                serverProperties.setProperty("pause-when-empty-seconds", "0");
-                try (final FileOutputStream serverPropertiesFileOutputStream = new FileOutputStream(serverPropertiesFile)) {
-                    serverProperties.store(serverPropertiesFileOutputStream, "Minecraft server properties");
-                    getLogger().warning(() -> translate(TranslationKey.ERROR_PAUSE_WHEN_EMPTY_SECONDS));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (final IOException e) {
-            e.printStackTrace();
+    @EventHandler
+    public void onRegionizedServerInit(final RegionizedServerInitEvent event) {
+        if (chunky.getConfig().getContinueOnRestart()) {
+            chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import io.papermc.paper.world.chunk.ChunkGenerationState;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -10,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.Reflection;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +23,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 public class BukkitWorld implements World {
+    private static final boolean CHUNK_GENERATION_STATE_EXISTS = Reflection.methodExists(org.bukkit.World.class, "getChunkGenerationStateAsync", int.class, int.class);
+    private static final boolean LOAD_OUTDATED_CHUNKS = Boolean.getBoolean("chunky.loadOutdatedChunks");
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private static final boolean AWAIT_TICKET_REMOVAL = Boolean.getBoolean("chunky.awaitTicketRemoval");
     private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
@@ -44,36 +48,21 @@ public class BukkitWorld implements World {
 
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
-        if (Paper.isPaper() && Paper.hasChunkGenerationState()) {
-            return Paper.isChunkGeneratedAsync(world, x, z);
+        if (CHUNK_GENERATION_STATE_EXISTS) {
+            return ChunkGenerationStateCheck.isChunkGeneratedAsync(world, x, z);
         }
-        if (Paper.isPaper()) {
-            return CompletableFuture.supplyAsync(() -> {
-                try {
-                    return world.isChunkGenerated(x, z);
-                } catch (CompletionException e) {
-                    return false;
-                }
-            });
-        } else {
-            return CompletableFuture.completedFuture(world.getChunkAt(x, z, false).isGenerated());
-        }
-    }
-
-    private CompletableFuture<Void> getChunkFuture(final int x, final int z) {
-        final CompletableFuture<Void> chunkFuture;
-        if (Paper.isPaper()) {
-            chunkFuture = CompletableFuture.allOf(Paper.getChunkAtAsync(world, x, z));
-        } else {
-            chunkFuture = CompletableFuture.allOf(CompletableFuture.completedFuture(world.getChunkAt(x, z)));
-        }
-
-        return chunkFuture;
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return world.isChunkGenerated(x, z);
+            } catch (CompletionException e) {
+                return false;
+            }
+        });
     }
 
     @Override
     public CompletableFuture<Void> getChunkAtAsync(final int x, final int z) {
-        final CompletableFuture<Void> chunkFuture = this.getChunkFuture(x, z);
+        final CompletableFuture<Void> chunkFuture = CompletableFuture.allOf(world.getChunkAtAsync(x, z, true));
         if (TICKING_LOAD_DURATION > 0) {
             final CompletableFuture<Void> removeTicketFuture = new CompletableFuture<>();
             chunkFuture.thenAccept(ignored -> {
@@ -82,14 +71,9 @@ public class BukkitWorld implements World {
                     world.removePluginChunkTicket(x, z, plugin);
                     removeTicketFuture.complete(null);
                 };
-                if (Folia.isFolia()) {
-                    final org.bukkit.Location location = new org.bukkit.Location(world, x << 4, 0, z << 4);
-                    Folia.schedule(plugin, location, addTicketTask);
-                    CompletableFuture.runAsync(() -> Folia.schedule(plugin, location, removeTicketTask), CompletableFuture.delayedExecutor(TICKING_LOAD_DURATION, TimeUnit.SECONDS));
-                } else {
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, addTicketTask);
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, removeTicketTask, TICKING_LOAD_DURATION * 20L);
-                }
+                final org.bukkit.Location location = new org.bukkit.Location(world, x << 4, 0, z << 4);
+                plugin.getServer().getRegionScheduler().execute(plugin, location, addTicketTask);
+                CompletableFuture.runAsync(() -> plugin.getServer().getRegionScheduler().execute(plugin, location, removeTicketTask), CompletableFuture.delayedExecutor(TICKING_LOAD_DURATION, TimeUnit.SECONDS));
             });
             if (AWAIT_TICKET_REMOVAL) {
                 return removeTicketFuture;
@@ -121,7 +105,7 @@ public class BukkitWorld implements World {
 
     @Override
     public int getElevation(final int x, final int z) {
-        if (Folia.isFolia() && !Folia.isTickThread(this.world, x >> 4, z >> 4)) {
+        if (!plugin.getServer().isOwnedByCurrentRegion(this.world, x >> 4, z >> 4)) {
             throw new IllegalStateException("Async getElevation call");
         } else {
             return getElevationForLocation(x, z);
@@ -133,7 +117,7 @@ public class BukkitWorld implements World {
         final int chunkX = x >> 4;
         final int chunkZ = z >> 4;
 
-        return this.getChunkFuture(chunkX, chunkZ).thenApplyAsync(ignored -> this.getElevationForLocation(x, z), getMainThreadExecutor(chunkX, chunkZ));
+        return world.getChunkAtAsync(chunkX, chunkZ, true).thenApplyAsync(ignored -> this.getElevationForLocation(x, z), getMainThreadExecutor(chunkX, chunkZ));
     }
 
     private int getElevationForLocation(final int x, final int z) {
@@ -163,18 +147,10 @@ public class BukkitWorld implements World {
      * @param chunkZ The chunk z coord (for Folia)
      */
     private Executor getMainThreadExecutor(final int chunkX, final int chunkZ) {
-        if (!Folia.isFolia()) {
-            if (plugin.getServer().isPrimaryThread()) {
-                return Runnable::run;
-            } else {
-                return runnable -> plugin.getServer().getScheduler().runTask(plugin, runnable);
-            }
-        }
-
-        if (Folia.isTickThread(world, chunkX, chunkZ)) {
+        if (plugin.getServer().isOwnedByCurrentRegion(world, chunkX, chunkZ)) {
             return Runnable::run;
         } else {
-            return runnable -> Folia.schedule(plugin, world, chunkX, chunkZ, runnable);
+            return runnable -> plugin.getServer().getRegionScheduler().execute(plugin, world, chunkX, chunkZ, runnable);
         }
     }
 
@@ -243,5 +219,14 @@ public class BukkitWorld implements World {
             directory = spigotDir;
         }
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
+    }
+
+    private static final class ChunkGenerationStateCheck {
+        private static CompletableFuture<Boolean> isChunkGeneratedAsync(final org.bukkit.World world, final int x, final int z) {
+            return world.getChunkGenerationStateAsync(x, z)
+                    .thenApply(state -> state == ChunkGenerationState.GENERATED
+                            || state == ChunkGenerationState.OUTDATED && !LOAD_OUTDATED_CHUNKS)
+                    .exceptionally(ignored -> false);
+        }
     }
 }
