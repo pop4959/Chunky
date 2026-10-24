@@ -11,7 +11,6 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.command.ChunkyCommand;
@@ -21,20 +20,13 @@ import org.popcraft.chunky.command.brigadier.BrigadierChunkyCommand;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Function;
 
 public class PaperChunkyCommand extends BrigadierChunkyCommand<CommandSourceStack, String, PlayerSelectorArgumentResolver> {
-
+    private static final String COMMAND_PERMISSION_KEY = "chunky.command.";
     private final Chunky chunky;
-    private final Function<CommandSender, Sender> commandSenderFunction;
-    private final Function<Player, Sender> playerSenderFunction;
-    private final String nodePermission;
 
-    public PaperChunkyCommand(Chunky chunky, Function<CommandSender, Sender> commandSenderFunction, Function<Player, Sender> playerSenderFunction, String rootPermission) {
+    public PaperChunkyCommand(Chunky chunky) {
         this.chunky = chunky;
-        this.commandSenderFunction = commandSenderFunction;
-        this.playerSenderFunction = playerSenderFunction;
-        this.nodePermission = rootPermission;
     }
 
     @Override
@@ -81,9 +73,9 @@ public class PaperChunkyCommand extends BrigadierChunkyCommand<CommandSourceStac
     protected int rootExecutes(CommandContext<CommandSourceStack> context) {
         final Sender sender;
         if (context.getSource().getExecutor() instanceof final Player player) {
-            sender = playerSenderFunction.apply(player);
+            sender = new PaperPlayer(player);
         } else {
-            sender = commandSenderFunction.apply(context.getSource().getSender());
+            sender = new PaperSender(context.getSource().getSender());
         }
         final Map<String, ChunkyCommand> commands = chunky.getCommands();
         final String input = context.getInput().substring(context.getLastChild().getNodes().get(0).getRange().getStart());
@@ -96,6 +88,6 @@ public class PaperChunkyCommand extends BrigadierChunkyCommand<CommandSourceStac
 
     @Override
     protected boolean nodeRequirement(CommandSourceStack source, String literal) {
-        return source.getSender().hasPermission(nodePermission + literal);
+        return source.getSender().hasPermission(COMMAND_PERMISSION_KEY + literal);
     }
 }
