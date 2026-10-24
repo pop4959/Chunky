@@ -15,6 +15,7 @@ sequenceOf(
     "common",
     "paperlib",
     "bukkit",
+    "paper",
     "fabric",
     "forge",
     "neoforge",

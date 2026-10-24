@@ -24,6 +24,11 @@ jobs:
         with:
           path: "bukkit/build/libs/Chunky-*.jar"
           archive: false
+      - name: Upload Paper
+        uses: actions/upload-artifact@v7
+        with:
+          path: "paper/build/libs/Chunky-*.jar"
+          archive: false
       - name: Upload Fabric
         uses: actions/upload-artifact@v7
         with:
