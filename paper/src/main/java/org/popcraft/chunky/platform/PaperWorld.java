@@ -225,6 +225,15 @@ public class PaperWorld implements World {
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 
+    public String getDimension() {
+        return switch (world.getEnvironment()) {
+            case NORMAL -> "overworld";
+            case NETHER -> "nether";
+            case THE_END -> "end";
+            default -> "custom";
+        };
+    }
+
     private static final class ChunkGenerationStateCheck {
         private static CompletableFuture<Boolean> isChunkGeneratedAsync(final org.bukkit.World world, final int x, final int z) {
             return world.getChunkGenerationStateAsync(x, z)

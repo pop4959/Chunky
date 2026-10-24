@@ -2,7 +2,10 @@ package org.popcraft.chunky;
 
 import io.papermc.paper.threadedregions.RegionizedServerInitEvent;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
+import org.bstats.charts.DrilldownPie;
 import org.bstats.charts.SimplePie;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,7 +25,9 @@ import org.popcraft.chunky.platform.PaperConfig;
 import org.popcraft.chunky.platform.PaperPlayer;
 import org.popcraft.chunky.platform.PaperSender;
 import org.popcraft.chunky.platform.PaperServer;
+import org.popcraft.chunky.platform.PaperWorld;
 import org.popcraft.chunky.platform.Sender;
+import org.popcraft.chunky.util.TaskMetrics;
 import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.ArrayList;
@@ -44,6 +49,14 @@ public final class ChunkyPaper extends JavaPlugin implements Listener {
         }
         final Metrics metrics = new Metrics(this, 8211);
         metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
+        metrics.addCustomChart(new DrilldownPie("platform", () -> Map.of("Paper", Map.of(getPluginMeta().getVersion(), 1))));
+        metrics.addCustomChart(new SingleLineChart("active_tasks", () -> TaskMetrics.activeTasks(chunky)));
+        metrics.addCustomChart(new SingleLineChart("chunks_per_second", () -> TaskMetrics.chunksPerSecond(chunky)));
+        metrics.addCustomChart(new AdvancedPie("shape", () -> TaskMetrics.shapes(chunky)));
+        metrics.addCustomChart(new AdvancedPie("pattern", () -> TaskMetrics.patterns(chunky)));
+        metrics.addCustomChart(new AdvancedPie("size", () -> TaskMetrics.sizes(chunky)));
+        metrics.addCustomChart(new AdvancedPie("speed", () -> TaskMetrics.speeds(chunky)));
+        metrics.addCustomChart(new AdvancedPie("dimension", () -> TaskMetrics.count(chunky, selection -> ((PaperWorld) selection.world()).getDimension())));
         getServer().getPluginManager().registerEvents(this, this);
     }
 
