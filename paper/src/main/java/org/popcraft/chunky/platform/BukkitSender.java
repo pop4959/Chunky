@@ -1,18 +1,15 @@
 package org.popcraft.chunky.platform;
 
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.popcraft.chunky.platform.util.Location;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class BukkitSender implements Sender {
-    private static final Pattern RGB_PATTERN = Pattern.compile("&#[0-9a-fA-F]{6}");
+    protected static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder().character('&').hexColors().build();
 
     private final CommandSender sender;
 
@@ -47,19 +44,6 @@ public class BukkitSender implements Sender {
 
     @Override
     public void sendMessage(final String key, final boolean prefixed, final Object... args) {
-        sender.sendMessage(formatColored(translateKey(key, prefixed, args)));
-    }
-
-    protected String formatColored(final String message) {
-        String coloredMessage = message;
-        Matcher rgbMatcher = RGB_PATTERN.matcher(message);
-        while (rgbMatcher.find()) {
-            final ChatColor rgbColor = ChatColor.of(rgbMatcher.group().substring(1));
-            final String messageStart = coloredMessage.substring(0, rgbMatcher.start());
-            final String messageEnd = coloredMessage.substring(rgbMatcher.end());
-            coloredMessage = messageStart + rgbColor + messageEnd;
-            rgbMatcher = RGB_PATTERN.matcher(coloredMessage);
-        }
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', coloredMessage);
+        sender.sendMessage(LEGACY_SERIALIZER.deserialize(translateKey(key, prefixed, args)));
     }
 }

@@ -4,6 +4,7 @@ import io.papermc.paper.world.chunk.ChunkGenerationState;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -174,10 +175,13 @@ public class BukkitWorld implements World {
 
     @Override
     public void playSound(final Player player, final String sound) {
-        final Sound soundType;
-        try {
-            soundType = Sound.valueOf(sound.toUpperCase());
-        } catch (IllegalArgumentException e) {
+        final String name = sound.toLowerCase();
+        final Sound soundType = Registry.SOUND_EVENT.keyStream()
+                .filter(key -> key.toString().equals(name) || key.getKey().equals(name) || key.getKey().replace('.', '_').equals(name))
+                .findFirst()
+                .map(Registry.SOUND_EVENT::get)
+                .orElse(null);
+        if (soundType == null) {
             return;
         }
         final Location location = player.getLocation();

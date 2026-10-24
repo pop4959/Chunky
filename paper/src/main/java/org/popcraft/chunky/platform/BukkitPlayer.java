@@ -1,8 +1,6 @@
 package org.popcraft.chunky.platform;
 
 import io.papermc.paper.entity.TeleportFlag;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -81,7 +79,6 @@ public class BukkitPlayer extends BukkitSender implements Player {
 
     @Override
     public void sendActionBar(final String key) {
-        final String message = formatColored(translateKey(key, false));
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+        player.sendActionBar(LEGACY_SERIALIZER.deserialize(translateKey(key, false)));
     }
 }

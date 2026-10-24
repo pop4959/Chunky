@@ -7,7 +7,7 @@ softdepend: [dynmap, BlueMap, squaremap, WorldBorder]
 load: POSTWORLD
 authors: [${author}]
 description: ${description}
-website: https://www.spigotmc.org/resources/chunky.81534/
+website: https://modrinth.com/plugin/chunky
 commands:
   chunky:
     description: Generates chunks
