@@ -7,13 +7,17 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 public final class RegionFile {
@@ -66,20 +70,26 @@ public final class RegionFile {
                 if (offset == 0 && size == 0) {
                     continue;
                 }
+                final int x = (regionX * 32) + (i % 32);
+                final int z = (regionZ * 32) + (i / 32);
                 region.seek(offset);
                 final int length = region.readInt();
-                final byte compressionType = region.readByte();
-                if (compressionType != 2) {
-                    throw new UnsupportedOperationException("Not in zlib format");
+                final int compressionType = region.readByte() & 0xFF;
+                final byte[] compressed;
+                if ((compressionType & CompressionType.EXTERNAL_FLAG) != 0) {
+                    final Path externalFile = file.toPath().getParent().resolve("c.%d.%d.mcc".formatted(x, z));
+                    if (Files.notExists(externalFile)) {
+                        continue;
+                    }
+                    compressed = Files.readAllBytes(externalFile);
+                } else {
+                    compressed = new byte[length - 1];
+                    region.readFully(compressed);
                 }
-                final byte[] compressed = new byte[length - 1];
-                region.readFully(compressed);
                 try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed);
-                     final InflaterInputStream inflater = new InflaterInputStream(bytes);
-                     final BufferedInputStream buffer = new BufferedInputStream(inflater);
+                     final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG);
+                     final BufferedInputStream buffer = new BufferedInputStream(decompressed);
                      final DataInputStream input = new DataInputStream(buffer)) {
-                    final int x = (regionX * 32) + (i % 32);
-                    final int z = (regionZ * 32) + (i / 32);
                     final Tag data;
                     if (filter == null) {
                         data = Tag.load(input);
@@ -94,6 +104,16 @@ public final class RegionFile {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private InputStream decompress(final InputStream input, final int compressionType) throws IOException {
+        return switch (compressionType) {
+            case CompressionType.GZIP -> new GZIPInputStream(input);
+            case CompressionType.ZLIB -> new InflaterInputStream(input);
+            case CompressionType.NONE -> input;
+            case CompressionType.LZ4 -> Lz4Decompressor.decompress(input);
+            default -> throw new UnsupportedOperationException("Unsupported compression type %d".formatted(compressionType));
+        };
     }
 
     public Collection<Chunk> getChunks() {

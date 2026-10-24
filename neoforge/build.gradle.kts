@@ -1,43 +1,45 @@
 plugins {
-    id("org.relativitymc.neo-loom") version "1.16.0-alpha.4"
+    id("org.relativitymc.neo-loom") version "1.17.11"
 }
 
-val shade: Configuration by configurations.creating
+val shade = configurations.create("shade")
 
 repositories {
     maven("https://maven.neoforged.net/releases/")
 }
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "26.1")
-    forgeUserdev(group = "net.neoforged", name = "neoforge", version = "26.1.0.15-beta", classifier = "userdev")
+    minecraft("com.mojang:minecraft:26.1")
+    forgeUserdev("net.neoforged:neoforge:26.1.0.15-beta:userdev")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
 
 loom {
     runs.forEach {
-        it.ideConfigGenerated(true)
+        it.generateRunConfig.set(true)
     }
     mods {
         create("main") {
             sourceSet(project.sourceSets.main.get())
-            dependency(project.dependencyFactory.create(project(":chunky-common")))
+            dependency(project.dependencyFactory.createProjectDependency(":chunky-common"))
         }
     }
 }
 
 tasks {
     processResources {
+        val properties = mapOf(
+            "github" to project.property("github")!!,
+            "id" to rootProject.name,
+            "version" to project.version,
+            "name" to project.property("artifactName")!!,
+            "author" to project.property("author")!!,
+            "description" to project.property("description")!!
+        )
+        inputs.properties(properties)
         filesMatching("META-INF/neoforge.mods.toml") {
-            expand(
-                "github" to project.property("github")!!,
-                "id" to rootProject.name,
-                "version" to project.version,
-                "name" to project.property("artifactName")!!,
-                "author" to project.property("author")!!,
-                "description" to project.property("description")!!
-            )
+            expand(properties)
         }
     }
     jar {

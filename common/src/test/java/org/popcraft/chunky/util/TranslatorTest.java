@@ -50,8 +50,6 @@ public class TranslatorTest {
         translate(TranslationKey.DISABLED);
         translate(TranslationKey.ENABLED);
         translate(TranslationKey.ERROR_PAUSE_WHEN_EMPTY_SECONDS);
-        translate(TranslationKey.ERROR_VERSION);
-        translate(TranslationKey.ERROR_VERSION_SPIGOT);
         translate(TranslationKey.FORMAT_BORDER_ADD, "square", "world", Formatting.number(1), Formatting.number(2), Formatting.number(500));
         translate(TranslationKey.FORMAT_BORDER_BYPASS, "enabled", "pop4959");
         translate(TranslationKey.FORMAT_BORDER_BYPASS_NO_TARGET, "pop4959");
@@ -120,9 +118,11 @@ public class TranslatorTest {
         translate(TranslationKey.HELP_WORLDBORDER);
         translate(TranslationKey.PATTERN_CONCENTRIC);
         translate(TranslationKey.PATTERN_LOOP);
+        translate(TranslationKey.PATTERN_STRIP);
         translate(TranslationKey.PATTERN_SPIRAL);
         translate(TranslationKey.PATTERN_CSV);
         translate(TranslationKey.PATTERN_REGION);
+        translate(TranslationKey.PATTERN_RING);
         translate(TranslationKey.SHAPE_CIRCLE);
         translate(TranslationKey.SHAPE_DIAMOND);
         translate(TranslationKey.SHAPE_ELLIPSE);
@@ -133,6 +133,7 @@ public class TranslatorTest {
         translate(TranslationKey.SHAPE_STAR);
         translate(TranslationKey.SHAPE_TRIANGLE);
         translate(TranslationKey.TASK_TRIM, 5000, "world", String.format("%.3f", 1f));
+        translate(TranslationKey.TASK_TRIM_UNSUPPORTED_COMPRESSION, "world", "r.0.0.mca", "Unsupported compression type 127");
         translate(TranslationKey.TASK_TRIM_UPDATE, "world", 50, String.format("%.2f", 50f));
         translate(TranslationKey.TASK_DONE, "world", 5000, String.format("%.2f", 50f), "0", "01", "15");
         translate(TranslationKey.TASK_STOPPED, "world");

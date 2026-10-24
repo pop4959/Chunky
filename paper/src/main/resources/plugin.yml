@@ -1,29 +1,19 @@
 name: ${name}
 version: ${version}
-main: ${group}.chunky.ChunkyBukkit
-api-version: 1.21.1
+main: ${group}.chunky.ChunkyPaper
+api-version: 1.21.8
 folia-supported: true
-
-dependencies:
-  server:
-    dynmap:
-      required: false
-      load: BEFORE
-    BlueMap:
-      required: false
-      load: BEFORE
-    squaremap:
-      required: false
-      load: BEFORE
-    WorldBorder:
-      required: false
-      load: BEFORE
-
+softdepend: [dynmap, BlueMap, squaremap, WorldBorder]
 load: POSTWORLD
 authors: [${author}]
 description: ${description}
 website: https://modrinth.com/plugin/chunky
-
+commands:
+  chunky:
+    description: Generates chunks
+    aliases: [cy]
+    permission: chunky.command
+    usage: /chunky
 permissions:
   chunky.command:
     default: op

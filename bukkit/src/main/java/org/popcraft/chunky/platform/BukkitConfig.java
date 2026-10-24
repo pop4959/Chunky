@@ -5,7 +5,6 @@ import org.popcraft.chunky.ChunkyBukkit;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Translator;
 
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -18,11 +17,7 @@ public class BukkitConfig implements Config {
         this.plugin = plugin;
         final FileConfigurationOptions options = plugin.getConfig().options();
         options.copyDefaults(true);
-        try {
-            FileConfigurationOptions.class.getMethod("header", String.class).invoke(options, String.join("\n", HEADER));
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            options.setHeader(HEADER);
-        }
+        options.setHeader(HEADER);
         plugin.saveConfig();
         Translator.setLanguage(getLanguage());
     }

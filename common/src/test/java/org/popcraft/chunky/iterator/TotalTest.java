@@ -23,9 +23,13 @@ public class TotalTest {
             final ChunkIterator loop2Iterator = new Loop2ChunkIterator(s);
             final ChunkIterator spiralIterator = new SpiralChunkIterator(s);
             final ChunkIterator regionIterator = new RegionChunkIterator(s);
+            final ChunkIterator stripIterator = new StripChunkIterator(s);
+            final ChunkIterator ringIterator = new RingChunkIterator(s);
             assertEquals(concentricIterator.total(), loop2Iterator.total());
             assertEquals(loop2Iterator.total(), spiralIterator.total());
             assertEquals(spiralIterator.total(), regionIterator.total());
+            assertEquals(regionIterator.total(), stripIterator.total());
+            assertEquals(stripIterator.total(), ringIterator.total());
         }
     }
 
@@ -42,9 +46,13 @@ public class TotalTest {
                 final ChunkIterator loop2Iterator = new Loop2ChunkIterator(s);
                 final ChunkIterator spiralIterator = new SpiralChunkIterator(s);
                 final ChunkIterator regionIterator = new RegionChunkIterator(s);
+                final ChunkIterator stripIterator = new StripChunkIterator(s);
+                final ChunkIterator ringIterator = new RingChunkIterator(s);
                 assertEquals(concentricIterator.total(), loop2Iterator.total());
                 assertEquals(loop2Iterator.total(), spiralIterator.total());
                 assertEquals(spiralIterator.total(), regionIterator.total());
+                assertEquals(regionIterator.total(), stripIterator.total());
+                assertEquals(stripIterator.total(), ringIterator.total());
             }
         }
     }

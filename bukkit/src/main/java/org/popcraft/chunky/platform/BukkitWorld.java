@@ -1,8 +1,8 @@
 package org.popcraft.chunky.platform;
 
-import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -21,23 +21,11 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 public class BukkitWorld implements World {
-    private static final boolean IS_GENERATED_SUPPORTED;
     private static final int TICKING_LOAD_DURATION = Input.tryInteger(System.getProperty("chunky.tickingLoadDuration")).orElse(0);
     private static final boolean AWAIT_TICKET_REMOVAL = Boolean.getBoolean("chunky.awaitTicketRemoval");
     private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
     private final org.bukkit.World world;
     private final Border worldBorder;
-
-    static {
-        boolean isGeneratedSupported;
-        try {
-            Chunk.class.getMethod("isGenerated");
-            isGeneratedSupported = true;
-        } catch (NoSuchMethodException e) {
-            isGeneratedSupported = false;
-        }
-        IS_GENERATED_SUPPORTED = isGeneratedSupported;
-    }
 
     public BukkitWorld(final org.bukkit.World world) {
         this.world = world;
@@ -68,11 +56,7 @@ public class BukkitWorld implements World {
                 }
             });
         } else {
-            if (IS_GENERATED_SUPPORTED) {
-                return CompletableFuture.completedFuture(world.getChunkAt(x, z, false).isGenerated());
-            } else {
-                return CompletableFuture.completedFuture(false);
-            }
+            return CompletableFuture.completedFuture(world.getChunkAt(x, z, false).isGenerated());
         }
     }
 
@@ -230,18 +214,34 @@ public class BukkitWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
+        final NamespacedKey worldKey = world.getKey();
         final org.bukkit.World.Environment environment = world.getEnvironment();
         final String parent;
+        final String dimension;
         if (org.bukkit.World.Environment.NETHER.equals(environment)) {
             parent = "DIM-1";
+            dimension = "the_nether";
         } else if (org.bukkit.World.Environment.THE_END.equals(environment)) {
             parent = "DIM1";
+            dimension = "the_end";
+        } else if (org.bukkit.World.Environment.CUSTOM.equals(environment)) {
+            parent = "";
+            dimension = worldKey.getKey();
         } else {
             parent = "";
+            dimension = "overworld";
         }
         final Path bukkitDir = world.getWorldFolder().toPath().resolve(parent).normalize().resolve(name);
         final Path vanillaDir = world.getWorldFolder().toPath().normalize().resolve(name);
-        final Path directory = Files.isDirectory(bukkitDir) ? bukkitDir : vanillaDir;
+        final Path spigotDir = world.getWorldFolder().toPath().resolve("dimensions").resolve(worldKey.getNamespace()).resolve(dimension).resolve(name);
+        final Path directory;
+        if (Files.isDirectory(bukkitDir)) {
+            directory = bukkitDir;
+        } else if (Files.isDirectory(vanillaDir)) {
+            directory = vanillaDir;
+        } else {
+            directory = spigotDir;
+        }
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
 }
