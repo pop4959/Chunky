@@ -4,24 +4,26 @@ repositories {
 }
 
 dependencies {
-    compileOnly(group = "io.papermc.paper", name = "paper-api", version = "26.3.build.186-stable")
-    compileOnly(group = "com.github.Puremin0rez", name = "WorldBorder", version = "1.19") {
+    compileOnly("io.papermc.paper:paper-api:26.3.build.186-stable")
+    compileOnly("com.github.Puremin0rez:WorldBorder:1.19") {
         isTransitive = false
     }
-    implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.0.2")
+    implementation("org.bstats:bstats-bukkit:3.2.1")
     implementation(project(":chunky-common"))
 }
 
 tasks {
     processResources {
+        val properties = mapOf(
+            "name" to project.property("artifactName")!!,
+            "version" to project.version,
+            "group" to project.group,
+            "author" to project.property("author")!!,
+            "description" to project.property("description")!!
+        )
+        inputs.properties(properties)
         filesMatching("plugin.yml") {
-            expand(
-                "name" to project.property("artifactName")!!,
-                "version" to project.version,
-                "group" to project.group,
-                "author" to project.property("author")!!,
-                "description" to project.property("description")!!,
-            )
+            expand(properties)
         }
     }
     shadowJar {
