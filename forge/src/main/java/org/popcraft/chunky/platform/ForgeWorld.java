@@ -21,6 +21,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
 import org.popcraft.chunky.ducks.MinecraftServerExtension;
+import org.popcraft.chunky.mixin.ChunkHolderAccess;
 import org.popcraft.chunky.mixin.ChunkMapMixin;
 import org.popcraft.chunky.mixin.MinecraftServerAccess;
 import org.popcraft.chunky.mixin.ServerChunkCacheMixin;
@@ -106,11 +107,20 @@ public class ForgeWorld implements World {
             // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
             // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
             return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
-                    .thenApplyAsync(Function.identity(), ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor()) // workaround to prevent memory leaks in vanilla chunk system when racing with entity chunks
+                    .thenComposeAsync(ignored -> {
+                        ChunkHolder holder = world.getChunkSource().chunkMap.getUpdatingChunkIfPresent(chunkPos.pack());
+                        if (holder != null) {
+                            // workaround to prevent memory leaks in vanilla chunk system when racing with entity chunks
+                            CompletableFuture<?> pendingFullStateConfirmation = ((ChunkHolderAccess) holder).chunky$getPendingFullStateConfirmation();
+                            if (pendingFullStateConfirmation != null && !pendingFullStateConfirmation.isDone()) {
+                                return pendingFullStateConfirmation.thenApply(o -> null);
+                            }
+                        }
+                        return CompletableFuture.completedFuture(null);
+                    }, ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor())
                     .whenCompleteAsync((ignored, throwable) -> {
                         serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
                         ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
-                        ((MinecraftServerAccess) world.getServer()).setEmptyTicks(0);
                     }, world.getServer())
                     .thenApply(ignored -> null);
         }
