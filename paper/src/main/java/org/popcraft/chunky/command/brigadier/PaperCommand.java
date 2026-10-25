@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.entity.Player;
 import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.command.brigadier.argument.WorldArgumentType;
 import org.popcraft.chunky.platform.PaperPlayer;
 import org.popcraft.chunky.platform.PaperSender;
 import org.popcraft.chunky.platform.Sender;

@@ -1,4 +1,4 @@
-package org.popcraft.chunky.command.brigadier;
+package org.popcraft.chunky.command.brigadier.argument;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
