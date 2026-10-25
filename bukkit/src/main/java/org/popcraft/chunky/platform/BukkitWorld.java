@@ -244,4 +244,13 @@ public class BukkitWorld implements World {
         }
         return Files.isDirectory(directory) ? Optional.of(directory) : Optional.empty();
     }
+
+    public String getDimension() {
+        return switch (world.getEnvironment()) {
+            case NORMAL -> "overworld";
+            case NETHER -> "nether";
+            case THE_END -> "end";
+            default -> "custom";
+        };
+    }
 }
