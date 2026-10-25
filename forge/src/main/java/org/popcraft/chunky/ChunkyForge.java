@@ -48,7 +48,7 @@ public class ChunkyForge {
 
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
-        final ForgeCommand command = new ForgeCommand(this::getChunky);
+        final ForgeCommand command = new ForgeCommand(this);
         event.getDispatcher().register(command.build());
     }
 

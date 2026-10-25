@@ -50,7 +50,7 @@ public class ChunkyNeoForge {
 
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
-        final NeoForgeCommand command = new NeoForgeCommand(this::getChunky);
+        final NeoForgeCommand command = new NeoForgeCommand(this);
         event.getDispatcher().register(command.build());
     }
 

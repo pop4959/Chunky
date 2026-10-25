@@ -50,7 +50,7 @@ public final class ChunkyPaper extends JavaPlugin implements Listener {
         metrics.addCustomChart(new AdvancedPie("dimension", () -> TaskMetrics.count(chunky, selection -> ((PaperWorld) selection.world()).getDimension())));
         getServer().getPluginManager().registerEvents(this, this);
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final PaperCommand command = new PaperCommand(chunky);
+            final PaperCommand command = new PaperCommand(this);
             event.registrar().register(command.build().build(), "Generates chunks", List.of("cy"));
         });
     }

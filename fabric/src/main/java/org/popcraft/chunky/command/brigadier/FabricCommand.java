@@ -6,22 +6,21 @@ import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.ChunkyFabric;
 import org.popcraft.chunky.platform.FabricPlayer;
 import org.popcraft.chunky.platform.FabricSender;
 import org.popcraft.chunky.platform.Sender;
 
-import java.util.function.Supplier;
-
 public class FabricCommand extends BrigadierCommand<CommandSourceStack> {
-    private final Supplier<Chunky> chunky;
+    private final ChunkyFabric plugin;
 
-    public FabricCommand(final Supplier<Chunky> chunky) {
-        this.chunky = chunky;
+    public FabricCommand(final ChunkyFabric plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     protected Chunky getChunky() {
-        return chunky.get();
+        return plugin.getChunky();
     }
 
     @Override

@@ -11,8 +11,8 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
-import org.popcraft.chunky.command.suggestion.CommandSuggestionProvider;
-import org.popcraft.chunky.command.suggestion.WorldSuggestionProvider;
+import org.popcraft.chunky.command.suggestion.CommandSuggestions;
+import org.popcraft.chunky.command.suggestion.WorldSuggestions;
 import org.popcraft.chunky.platform.Sender;
 
 import java.util.Arrays;
@@ -23,8 +23,8 @@ import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 
 public abstract class BrigadierCommand<S> {
-    private final SuggestionProvider<S> suggestions = new CommandSuggestionProvider<>(this::getChunky);
-    private final SuggestionProvider<S> worldSuggestions = new WorldSuggestionProvider<>(this::getChunky);
+    private final SuggestionProvider<S> suggestions = (context, builder) -> CommandSuggestions.suggest(getChunky(), context, builder);
+    private final SuggestionProvider<S> worldSuggestions = (context, builder) -> WorldSuggestions.suggest(getChunky(), builder);
 
     protected abstract Chunky getChunky();
 

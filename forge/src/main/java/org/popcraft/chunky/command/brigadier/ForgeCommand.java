@@ -7,22 +7,21 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
 import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.platform.ForgePlayer;
 import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.Sender;
 
-import java.util.function.Supplier;
-
 public class ForgeCommand extends BrigadierCommand<CommandSourceStack> {
-    private final Supplier<Chunky> chunky;
+    private final ChunkyForge plugin;
 
-    public ForgeCommand(final Supplier<Chunky> chunky) {
-        this.chunky = chunky;
+    public ForgeCommand(final ChunkyForge plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     protected Chunky getChunky() {
-        return chunky.get();
+        return plugin.getChunky();
     }
 
     @Override

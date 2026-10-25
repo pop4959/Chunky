@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.entity.Player;
 import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.ChunkyPaper;
 import org.popcraft.chunky.command.brigadier.argument.WorldArgumentType;
 import org.popcraft.chunky.platform.PaperPlayer;
 import org.popcraft.chunky.platform.PaperSender;
@@ -12,15 +13,15 @@ import org.popcraft.chunky.platform.Sender;
 
 public class PaperCommand extends BrigadierCommand<CommandSourceStack> {
     private static final String COMMAND_PERMISSION_KEY = "chunky.command";
-    private final Chunky chunky;
+    private final ChunkyPaper plugin;
 
-    public PaperCommand(final Chunky chunky) {
-        this.chunky = chunky;
+    public PaperCommand(final ChunkyPaper plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     protected Chunky getChunky() {
-        return chunky;
+        return plugin.getChunky();
     }
 
     @Override

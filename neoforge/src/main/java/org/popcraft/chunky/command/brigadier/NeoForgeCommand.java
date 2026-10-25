@@ -7,22 +7,21 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
 import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.ChunkyNeoForge;
 import org.popcraft.chunky.platform.NeoForgePlayer;
 import org.popcraft.chunky.platform.NeoForgeSender;
 import org.popcraft.chunky.platform.Sender;
 
-import java.util.function.Supplier;
-
 public class NeoForgeCommand extends BrigadierCommand<CommandSourceStack> {
-    private final Supplier<Chunky> chunky;
+    private final ChunkyNeoForge plugin;
 
-    public NeoForgeCommand(final Supplier<Chunky> chunky) {
-        this.chunky = chunky;
+    public NeoForgeCommand(final ChunkyNeoForge plugin) {
+        this.plugin = plugin;
     }
 
     @Override
     protected Chunky getChunky() {
-        return chunky.get();
+        return plugin.getChunky();
     }
 
     @Override
