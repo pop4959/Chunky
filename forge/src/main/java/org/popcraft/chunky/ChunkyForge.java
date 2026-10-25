@@ -12,8 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
-import org.popcraft.chunky.command.suggestion.SuggestionProviders;
-import org.popcraft.chunky.commands.brigadier.ForgeChunkyCommand;
+import org.popcraft.chunky.command.brigadier.ForgeCommand;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskFinishListener;
@@ -49,8 +48,8 @@ public class ChunkyForge {
 
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
-        final ForgeChunkyCommand command = new ForgeChunkyCommand(this::getChunky);
-        event.getDispatcher().register(command.construct(new SuggestionProviders<>()));
+        final ForgeCommand command = new ForgeCommand(this::getChunky);
+        event.getDispatcher().register(command.build());
     }
 
     @SubscribeEvent

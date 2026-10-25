@@ -13,8 +13,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
-import org.popcraft.chunky.command.brigadier.NeoForgeChunkyCommand;
-import org.popcraft.chunky.command.suggestion.SuggestionProviders;
+import org.popcraft.chunky.command.brigadier.NeoForgeCommand;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskFinishListener;
@@ -51,8 +50,8 @@ public class ChunkyNeoForge {
 
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
-        final NeoForgeChunkyCommand command = new NeoForgeChunkyCommand(this::getChunky);
-        event.getDispatcher().register(command.construct(new SuggestionProviders<>()));
+        final NeoForgeCommand command = new NeoForgeCommand(this::getChunky);
+        event.getDispatcher().register(command.build());
     }
 
     @SubscribeEvent

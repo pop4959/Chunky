@@ -8,8 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerBossEvent;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
-import org.popcraft.chunky.command.suggestion.SuggestionProviders;
-import org.popcraft.chunky.commands.brigadier.FabricChunkyCommand;
+import org.popcraft.chunky.command.brigadier.FabricCommand;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskFinishListener;
@@ -45,8 +44,8 @@ public class ChunkyFabric implements ModInitializer {
             }
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            final FabricChunkyCommand command = new FabricChunkyCommand(this::getChunky);
-            dispatcher.register(command.construct(new SuggestionProviders<>()));
+            final FabricCommand command = new FabricCommand(this::getChunky);
+            dispatcher.register(command.build());
         });
     }
 

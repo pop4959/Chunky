@@ -1,3 +1,7 @@
+repositories {
+    maven("https://libraries.minecraft.net")
+}
+
 dependencies {
     compileOnly("com.google.code.gson:gson:2.8.9")
     compileOnly("com.mojang:brigadier:1.0.18")

@@ -14,9 +14,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.api.ChunkyAPI;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
-import org.popcraft.chunky.command.suggestion.SuggestionProviders;
+import org.popcraft.chunky.command.brigadier.PaperCommand;
 import org.popcraft.chunky.integration.WorldBorderIntegration;
-import org.popcraft.chunky.platform.*;
+import org.popcraft.chunky.platform.PaperConfig;
+import org.popcraft.chunky.platform.PaperServer;
 
 import java.util.List;
 
@@ -35,8 +36,8 @@ public final class ChunkyPaper extends JavaPlugin implements Listener {
         metrics.addCustomChart(new SimplePie("language", () -> chunky.getConfig().getLanguage()));
         getServer().getPluginManager().registerEvents(this, this);
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final PaperChunkyCommand command = new PaperChunkyCommand(chunky);
-            event.registrar().register(command.construct(new SuggestionProviders<>()).build(), "Generates chunks", List.of("cy"));
+            final PaperCommand command = new PaperCommand(chunky);
+            event.registrar().register(command.build().build(), "Generates chunks", List.of("cy"));
         });
     }
 
