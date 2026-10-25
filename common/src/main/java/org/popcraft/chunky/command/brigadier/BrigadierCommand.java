@@ -62,7 +62,7 @@ public abstract class BrigadierCommand<S> {
         registerCommand(command, CommandLiteral.HELP,
                 argument(CommandLiteral.PAGE, integer()));
         registerCommand(command, CommandLiteral.PATTERN,
-                argument(CommandLiteral.PATTERN, string()),
+                suggestedArgument(CommandLiteral.PATTERN, string()),
                 argument(CommandLiteral.VALUE, string()));
         registerCommand(command, CommandLiteral.PAUSE,
                 greedyWorld());
@@ -73,27 +73,27 @@ public abstract class BrigadierCommand<S> {
                 argument(CommandLiteral.RADIUS, word()),
                 argument(CommandLiteral.RADIUS, word()));
         registerCommand(command, CommandLiteral.RELOAD,
-                argument(CommandLiteral.TYPE, word()));
+                suggestedArgument(CommandLiteral.TYPE, word()));
         registerCommand(command, CommandLiteral.SELECTION);
         registerCommand(command, CommandLiteral.SHAPE,
-                argument(CommandLiteral.SHAPE, string()));
+                suggestedArgument(CommandLiteral.SHAPE, string()));
         registerCommand(command, CommandLiteral.SILENT);
         registerCommand(command, CommandLiteral.SPAWN);
         registerCommand(command, CommandLiteral.START,
                 world(),
-                argument(CommandLiteral.SHAPE, string()),
+                suggestedArgument(CommandLiteral.SHAPE, string()),
                 argument(CommandLiteral.CENTER_X, word()),
                 argument(CommandLiteral.CENTER_Z, word()),
                 argument(CommandLiteral.RADIUS_X, word()),
                 argument(CommandLiteral.RADIUS_Z, word()));
         registerCommand(command, CommandLiteral.TRIM,
                 world(),
-                argument(CommandLiteral.SHAPE, string()),
+                suggestedArgument(CommandLiteral.SHAPE, string()),
                 argument(CommandLiteral.CENTER_X, word()),
                 argument(CommandLiteral.CENTER_Z, word()),
                 argument(CommandLiteral.RADIUS_X, word()),
                 argument(CommandLiteral.RADIUS_Z, word()),
-                argument(CommandLiteral.TRIM_MODE, string()),
+                suggestedArgument(CommandLiteral.TRIM_MODE, string()),
                 argument(CommandLiteral.INHABITED, word()));
         registerCommand(command, CommandLiteral.WORLDBORDER,
                 world());
@@ -103,13 +103,13 @@ public abstract class BrigadierCommand<S> {
                 .requires(source -> isBorderAvailable() && hasPermission(source, CommandLiteral.BORDER));
         registerArguments(borderCommand, literal(CommandLiteral.ADD),
                 world(),
-                argument(CommandLiteral.SHAPE, string()),
+                suggestedArgument(CommandLiteral.SHAPE, string()),
                 argument(CommandLiteral.CENTER_X, word()),
                 argument(CommandLiteral.CENTER_Z, word()),
                 argument(CommandLiteral.RADIUS_X, word()),
                 argument(CommandLiteral.RADIUS_Z, word()));
         registerArguments(borderCommand, literal(CommandLiteral.BYPASS),
-                argument(CommandLiteral.PLAYER, word()));
+                suggestedArgument(CommandLiteral.PLAYER, word()));
         registerArguments(borderCommand, literal(CommandLiteral.HELP));
         registerArguments(borderCommand, literal(CommandLiteral.LIST));
         registerArguments(borderCommand, literal(CommandLiteral.LOAD),
@@ -117,7 +117,7 @@ public abstract class BrigadierCommand<S> {
         registerArguments(borderCommand, literal(CommandLiteral.REMOVE),
                 world());
         registerArguments(borderCommand, literal(CommandLiteral.WRAP),
-                argument(CommandLiteral.WRAP, word()));
+                suggestedArgument(CommandLiteral.WRAP, word()));
         registerArguments(command, borderCommand);
         return command;
     }
@@ -142,19 +142,19 @@ public abstract class BrigadierCommand<S> {
     }
 
     private <T> RequiredArgumentBuilder<S, T> argument(final String name, final ArgumentType<T> type) {
-        return argument(name, type, suggestions);
+        return RequiredArgumentBuilder.argument(name, type);
     }
 
-    private <T> RequiredArgumentBuilder<S, T> argument(final String name, final ArgumentType<T> type, final SuggestionProvider<S> provider) {
-        return RequiredArgumentBuilder.<S, T>argument(name, type).suggests(provider);
+    private <T> RequiredArgumentBuilder<S, T> suggestedArgument(final String name, final ArgumentType<T> type) {
+        return argument(name, type).suggests(suggestions);
     }
 
     private RequiredArgumentBuilder<S, ?> world() {
-        return argument(CommandLiteral.WORLD, worldArgumentType(), worldSuggestions);
+        return argument(CommandLiteral.WORLD, worldArgumentType()).suggests(worldSuggestions);
     }
 
     private RequiredArgumentBuilder<S, ?> greedyWorld() {
-        return argument(CommandLiteral.WORLD, greedyWorldArgumentType(), worldSuggestions);
+        return argument(CommandLiteral.WORLD, greedyWorldArgumentType()).suggests(worldSuggestions);
     }
 
     @SafeVarargs
