@@ -1,9 +1,10 @@
 package org.popcraft.chunky.platform;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.PermissionLevel;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.popcraft.chunky.platform.util.Location;
@@ -11,18 +12,6 @@ import org.popcraft.chunky.platform.util.Location;
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class FabricSender implements Sender {
-    private static final boolean HAS_PERMISSIONS;
-
-    static {
-        boolean hasPermissions;
-        try {
-            Class.forName("me.lucko.fabric.api.permissions.v0.Permissions");
-            hasPermissions = true;
-        } catch (ClassNotFoundException e) {
-            hasPermissions = false;
-        }
-        HAS_PERMISSIONS = hasPermissions;
-    }
 
     private final CommandSourceStack source;
 
@@ -54,18 +43,15 @@ public class FabricSender implements Sender {
 
     @Override
     public boolean hasPermission(final String permission) {
-        return hasPermission(permission, false);
+        int firstDot = permission.indexOf('.');
+        return hasPermission(permission.substring(0, firstDot), permission.substring(firstDot + 1), false);
     }
 
-    public boolean hasPermission(final String permission, final boolean defaultOp) {
-        if (HAS_PERMISSIONS) {
-            if (defaultOp) {
-                return Permissions.check(source, permission, 2);
-            } else {
-                return Permissions.check(source, permission, false);
-            }
+    public boolean hasPermission(final String namespace, final String permission, final boolean defaultOp) {
+        if (defaultOp) {
+            return source.checkPermission(Identifier.fromNamespaceAndPath(namespace, permission), PermissionLevel.GAMEMASTERS);
         } else {
-            return source.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
+            return source.checkPermission(Identifier.fromNamespaceAndPath(namespace, permission), false);
         }
     }
 
