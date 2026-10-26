@@ -22,7 +22,7 @@ tasks {
             "description" to project.property("description")!!
         )
         inputs.properties(properties)
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand(properties)
         }
     }

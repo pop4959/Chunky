@@ -3,17 +3,28 @@ version: ${version}
 main: ${group}.chunky.ChunkyPaper
 api-version: 1.21.8
 folia-supported: true
-softdepend: [dynmap, BlueMap, squaremap, WorldBorder]
 load: POSTWORLD
 authors: [${author}]
 description: ${description}
 website: https://modrinth.com/plugin/chunky
-commands:
-  chunky:
-    description: Generates chunks
-    aliases: [cy]
-    permission: chunky.command
-    usage: /chunky
+dependencies:
+  server:
+    dynmap:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    BlueMap:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    squaremap:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    WorldBorder:
+      load: BEFORE
+      required: false
+      join-classpath: true
 permissions:
   chunky.command:
     default: op
