@@ -13,9 +13,9 @@ rootProject.name = "chunky"
 sequenceOf(
     "nbt",
     "common",
-    "paper",
-    "folia",
+    "paperlib",
     "bukkit",
+    "paper",
     "fabric",
     "forge",
     "neoforge",

@@ -5,33 +5,33 @@ repositories {
 }
 
 dependencies {
-    compileOnly(group = "org.spigotmc", name = "spigot-api", version = "1.21.2-R0.1-SNAPSHOT")
-    compileOnly(group = "com.github.Puremin0rez", name = "WorldBorder", version = "1.19") {
+    compileOnly("org.spigotmc:spigot-api:1.21.2-R0.1-SNAPSHOT")
+    compileOnly("com.github.Puremin0rez:WorldBorder:1.19") {
         isTransitive = false
     }
-    implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.0.2")
+    implementation("org.bstats:bstats-bukkit:3.2.1")
     implementation(project(":chunky-common"))
-    implementation(project(":chunky-paper"))
-    implementation(project(":chunky-folia"))
+    implementation(project(":chunky-paperlib"))
 }
 
 tasks {
     processResources {
+        val properties = mapOf(
+            "name" to project.property("artifactName")!!,
+            "version" to project.version,
+            "group" to project.group,
+            "author" to project.property("author")!!,
+            "description" to project.property("description")!!
+        )
+        inputs.properties(properties)
         filesMatching("plugin.yml") {
-            expand(
-                "name" to project.property("artifactName")!!,
-                "version" to project.version,
-                "group" to project.group,
-                "author" to project.property("author")!!,
-                "description" to project.property("description")!!,
-            )
+            expand(properties)
         }
     }
     shadowJar {
         minimize {
             exclude(project(":chunky-common"))
-            exclude(project(":chunky-paper"))
-            exclude(project(":chunky-folia"))
+            exclude(project(":chunky-paperlib"))
         }
         relocate("org.bstats", "${project.group}.${rootProject.name}.lib.bstats")
         manifest {

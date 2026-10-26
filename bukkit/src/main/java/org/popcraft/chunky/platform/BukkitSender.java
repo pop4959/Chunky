@@ -13,19 +13,6 @@ import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class BukkitSender implements Sender {
     private static final Pattern RGB_PATTERN = Pattern.compile("&#[0-9a-fA-F]{6}");
-    private static final boolean RGB_COLORS_SUPPORTED;
-
-    static {
-        boolean rgbSupported;
-        try {
-            Class.forName("net.md_5.bungee.api.ChatColor");
-            ChatColor.class.getMethod("of", String.class);
-            rgbSupported = true;
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
-            rgbSupported = false;
-        }
-        RGB_COLORS_SUPPORTED = rgbSupported;
-    }
 
     private final CommandSender sender;
 
@@ -65,15 +52,13 @@ public class BukkitSender implements Sender {
 
     protected String formatColored(final String message) {
         String coloredMessage = message;
-        if (RGB_COLORS_SUPPORTED) {
-            Matcher rgbMatcher = RGB_PATTERN.matcher(message);
-            while (rgbMatcher.find()) {
-                final ChatColor rgbColor = ChatColor.of(rgbMatcher.group().substring(1));
-                final String messageStart = coloredMessage.substring(0, rgbMatcher.start());
-                final String messageEnd = coloredMessage.substring(rgbMatcher.end());
-                coloredMessage = messageStart + rgbColor + messageEnd;
-                rgbMatcher = RGB_PATTERN.matcher(coloredMessage);
-            }
+        Matcher rgbMatcher = RGB_PATTERN.matcher(message);
+        while (rgbMatcher.find()) {
+            final ChatColor rgbColor = ChatColor.of(rgbMatcher.group().substring(1));
+            final String messageStart = coloredMessage.substring(0, rgbMatcher.start());
+            final String messageEnd = coloredMessage.substring(rgbMatcher.end());
+            coloredMessage = messageStart + rgbColor + messageEnd;
+            rgbMatcher = RGB_PATTERN.matcher(coloredMessage);
         }
         return org.bukkit.ChatColor.translateAlternateColorCodes('&', coloredMessage);
     }

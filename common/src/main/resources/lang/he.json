@@ -1,5 +1,5 @@
 {
-  "border_dependency_update": "צאנקי צריך להתעדכן כדי להשתמש בChunkyBorder!",
+  "border_dependency_update": "צ'אנקי צריך להתעדכן כדי להשתמש בצ'אנקי בורדר!",
   "border_load_failed": "אין גבולות שמורים שנמצאו.",
   "border_save_failed": "לא ניתן לשמור גבולות.",
   "command_no_permission": "&cאין לך גישה להשתמש בפקודה זאת.",
@@ -90,7 +90,7 @@
   "shape_star": "כוכב",
   "shape_triangle": "משולש",
   "task_trim": "נמחק %s צאנקים מ%s ב%s שניות.",
-  "task_trim_update": "תהליך בפעולה ל-%s. עובדו %s איזורים (%s%)",
+  "task_trim_update": "תהליך בפעולה ל-%s. עובדו %s איזורים (%s%%)",
   "task_done": "משימה הושלמה עבור %s. עובד: %s צאנקים (%s%%), זמן סך הכל: %s:%s:%s",
   "task_stopped": "משימה הופסקה עבור %s.",
   "task_update": "משימה פועלת עבור %s. עובד: %s צאנקים (%s%%), זמן משוער: %s:%s:%s, קצב: %s צאנקים לשנייה, כעת: %s, %s",

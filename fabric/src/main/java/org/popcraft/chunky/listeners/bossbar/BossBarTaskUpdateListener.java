@@ -1,6 +1,5 @@
 package org.popcraft.chunky.listeners.bossbar;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
@@ -11,6 +10,7 @@ import net.minecraft.world.level.Level;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
+import org.popcraft.chunky.platform.FabricSender;
 import org.popcraft.chunky.platform.FabricWorld;
 import org.popcraft.chunky.platform.World;
 
@@ -19,19 +19,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateEvent> {
-    private static final boolean HAS_PERMISSIONS;
-
-    static {
-        boolean hasPermissions;
-        try {
-            Class.forName("me.lucko.fabric.api.permissions.v0.Permissions");
-            hasPermissions = true;
-        } catch (ClassNotFoundException e) {
-            hasPermissions = false;
-        }
-        HAS_PERMISSIONS = hasPermissions;
-    }
-
     private final Map<Identifier, ServerBossEvent> bossBars;
 
     public BossBarTaskUpdateListener(final Map<Identifier, ServerBossEvent> bossBars) {
@@ -78,11 +65,8 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         if (server != null && server.isSingleplayer()) {
             return true;
         }
-        if (HAS_PERMISSIONS) {
-            return (Permissions.check(player, "chunky.command", 2)
-                    || Permissions.check(player, "chunky.progressbar", 2));
-        }
-        return player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
+        final FabricSender sender = new FabricSender(player.createCommandSourceStack());
+        return sender.hasPermission("chunky.command", true) || sender.hasPermission("chunky.progressbar", true);
     }
 
     private ServerBossEvent createNewBossBar(final Identifier worldIdentifier) {

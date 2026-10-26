@@ -19,6 +19,6 @@ description="${description}"
 [[dependencies.chunky]]
    modId="minecraft"
    mandatory=true
-   versionRange="[26.1,26.2)"
+   versionRange="[26.1,)"
    ordering="NONE"
    side="BOTH"

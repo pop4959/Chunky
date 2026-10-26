@@ -1,43 +1,45 @@
 plugins {
-    id("org.relativitymc.neo-loom") version "1.16.0-alpha.4"
+    id("org.relativitymc.neo-loom") version "1.17.11"
 }
 
-val shade: Configuration by configurations.creating
+val shade = configurations.create("shade")
 
 repositories {
     maven("https://maven.minecraftforge.net/")
 }
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "26.1")
-    forgeUserdev(group = "net.minecraftforge", name = "forge", version = "26.1-62.0.9", classifier = "userdev")
+    minecraft("com.mojang:minecraft:26.1")
+    forgeUserdev("net.minecraftforge:forge:26.1-62.0.9:userdev")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
 
 loom {
     runs.forEach {
-        it.ideConfigGenerated(true)
+        it.generateRunConfig.set(true)
     }
     mods {
         create("main") {
             sourceSet(project.sourceSets.main.get())
-            dependency(project.dependencyFactory.create(project(":chunky-common")))
+            dependency(project.dependencyFactory.createProjectDependency(":chunky-common"))
         }
     }
 }
 
 tasks {
     processResources {
+        val properties = mapOf(
+            "github" to project.property("github")!!,
+            "id" to rootProject.name,
+            "version" to project.version,
+            "name" to project.property("artifactName")!!,
+            "author" to project.property("author")!!,
+            "description" to project.property("description")!!
+        )
+        inputs.properties(properties)
         filesMatching("META-INF/mods.toml") {
-            expand(
-                "github" to project.property("github")!!,
-                "id" to rootProject.name,
-                "version" to project.version,
-                "name" to project.property("artifactName")!!,
-                "author" to project.property("author")!!,
-                "description" to project.property("description")!!
-            )
+            expand(properties)
         }
     }
     jar {

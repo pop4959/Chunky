@@ -1,28 +1,28 @@
 package org.popcraft.chunky.platform;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.PermissionLevel;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.popcraft.chunky.platform.util.Location;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class FabricSender implements Sender {
-    private static final boolean HAS_PERMISSIONS;
-
-    static {
-        boolean hasPermissions;
-        try {
-            Class.forName("me.lucko.fabric.api.permissions.v0.Permissions");
-            hasPermissions = true;
-        } catch (ClassNotFoundException e) {
-            hasPermissions = false;
-        }
-        HAS_PERMISSIONS = hasPermissions;
-    }
+    private static final List<String> PERMISSION_MANAGERS = List.of("luckperms", "player_roles");
+    private static final boolean HAS_PERMISSION_MANAGER = PERMISSION_MANAGERS.stream().anyMatch(FabricLoader.getInstance()::isModLoaded);
+    private static final Map<String, Optional<Identifier>> PERMISSION_IDS = new ConcurrentHashMap<>();
 
     private final CommandSourceStack source;
 
@@ -54,19 +54,25 @@ public class FabricSender implements Sender {
 
     @Override
     public boolean hasPermission(final String permission) {
-        return hasPermission(permission, false);
+        return hasPermission(permission, !HAS_PERMISSION_MANAGER);
     }
 
     public boolean hasPermission(final String permission, final boolean defaultOp) {
-        if (HAS_PERMISSIONS) {
-            if (defaultOp) {
-                return Permissions.check(source, permission, 2);
-            } else {
-                return Permissions.check(source, permission, false);
+        return toIdentifier(permission)
+                .map(id -> defaultOp ? source.checkPermission(id, PermissionLevel.GAMEMASTERS) : source.checkPermission(id, false))
+                .orElseGet(() -> defaultOp && source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER));
+    }
+
+    private static Optional<Identifier> toIdentifier(final String permission) {
+        return PERMISSION_IDS.computeIfAbsent(permission, key -> {
+            final int separator = key.indexOf('.');
+            if (separator <= 0 || separator == key.length() - 1) {
+                return Optional.empty();
             }
-        } else {
-            return source.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
-        }
+            final String namespace = key.substring(0, separator).toLowerCase(Locale.ROOT);
+            final String path = key.substring(separator + 1).toLowerCase(Locale.ROOT);
+            return Optional.ofNullable(Identifier.tryBuild(namespace, path));
+        });
     }
 
     @Override

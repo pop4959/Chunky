@@ -15,19 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.popcraft.chunky.util.Translator.translateKey;
 
 public class BukkitPlayer extends BukkitSender implements Player {
-    private static final boolean ACTION_BAR_SUPPORTED;
     private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyBukkit.class);
-
-    static {
-        boolean barSupported;
-        try {
-            org.bukkit.entity.Player.class.getMethod("spigot");
-            barSupported = true;
-        } catch (NoSuchMethodException e) {
-            barSupported = false;
-        }
-        ACTION_BAR_SUPPORTED = barSupported;
-    }
 
     final org.bukkit.entity.Player player;
 
@@ -114,11 +102,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
 
     @Override
     public void sendActionBar(final String key) {
-        if (ACTION_BAR_SUPPORTED) {
-            final String message = formatColored(translateKey(key, false));
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
-        } else {
-            this.sendMessage(key);
-        }
+        final String message = formatColored(translateKey(key, false));
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 }

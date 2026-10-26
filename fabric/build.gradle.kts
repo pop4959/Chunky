@@ -1,35 +1,36 @@
 plugins {
-    id("org.relativitymc.neo-loom") version "1.16.0-alpha.4"
+    id("org.relativitymc.neo-loom") version "1.17.11"
 }
 
-val shade: Configuration by configurations.creating
+val shade = configurations.create("shade")
 
 dependencies {
-    minecraft(group = "com.mojang", name = "minecraft", version = "26.1")
-    implementation(group = "net.fabricmc", name = "fabric-loader", version = "0.18.5")
-    implementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = "0.144.3+26.1")
-    compileOnly(group = "me.lucko", name = "fabric-permissions-api", version = "0.7.0")
+    minecraft("com.mojang:minecraft:26.1")
+    implementation("net.fabricmc:fabric-loader:0.18.5")
+    implementation("net.fabricmc.fabric-api:fabric-api:0.150.0+26.1.2")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
 
 loom {
     runs.forEach {
-        it.ideConfigGenerated(true)
+        it.generateRunConfig.set(true)
     }
 }
 
 tasks {
     processResources {
+        val properties = mapOf(
+            "id" to rootProject.name,
+            "version" to project.version,
+            "name" to project.property("artifactName")!!,
+            "description" to project.property("description")!!,
+            "author" to project.property("author")!!,
+            "github" to project.property("github")!!
+        )
+        inputs.properties(properties)
         filesMatching("fabric.mod.json") {
-            expand(
-                "id" to rootProject.name,
-                "version" to project.version,
-                "name" to project.property("artifactName")!!,
-                "description" to project.property("description")!!,
-                "author" to project.property("author")!!,
-                "github" to project.property("github")!!
-            )
+            expand(properties)
         }
     }
     shadowJar {

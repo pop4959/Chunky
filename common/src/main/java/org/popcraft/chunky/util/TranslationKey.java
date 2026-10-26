@@ -8,8 +8,6 @@ public final class TranslationKey {
     public static final String DISABLED = "disabled";
     public static final String ENABLED = "enabled";
     public static final String ERROR_PAUSE_WHEN_EMPTY_SECONDS = "error_pause_when_empty_seconds";
-    public static final String ERROR_VERSION = "error_version";
-    public static final String ERROR_VERSION_SPIGOT = "error_version_spigot";
     public static final String FORMAT_BORDER_ADD = "format_border_add";
     public static final String FORMAT_BORDER_BYPASS = "format_border_bypass";
     public static final String FORMAT_BORDER_BYPASS_NO_TARGET = "format_border_bypass_no_target";
@@ -78,9 +76,11 @@ public final class TranslationKey {
     public static final String HELP_WORLDBORDER = "help_worldborder";
     public static final String PATTERN_CONCENTRIC = "pattern_concentric";
     public static final String PATTERN_LOOP = "pattern_loop";
+    public static final String PATTERN_STRIP = "pattern_strip";
     public static final String PATTERN_SPIRAL = "pattern_spiral";
     public static final String PATTERN_CSV = "pattern_csv";
     public static final String PATTERN_REGION = "pattern_region";
+    public static final String PATTERN_RING = "pattern_ring";
     public static final String SHAPE_CIRCLE = "shape_circle";
     public static final String SHAPE_DIAMOND = "shape_diamond";
     public static final String SHAPE_ELLIPSE = "shape_ellipse";
@@ -91,6 +91,7 @@ public final class TranslationKey {
     public static final String SHAPE_STAR = "shape_star";
     public static final String SHAPE_TRIANGLE = "shape_triangle";
     public static final String TASK_TRIM = "task_trim";
+    public static final String TASK_TRIM_UNSUPPORTED_COMPRESSION = "task_trim_unsupported_compression";
     public static final String TASK_TRIM_UPDATE = "task_trim_update";
     public static final String TASK_DONE = "task_done";
     public static final String TASK_STOPPED = "task_stopped";
