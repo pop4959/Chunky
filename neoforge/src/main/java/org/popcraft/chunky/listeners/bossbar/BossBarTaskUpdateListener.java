@@ -40,8 +40,9 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
             bossBar.setVisible(!silent);
         }
         final MinecraftServer server = neoForgeWorld.getWorld().getServer();
+        final boolean singleplayer = server.isSingleplayer();
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
+            if (singleplayer || player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
                 bossBar.addPlayer(player);
             } else {
                 bossBar.removePlayer(player);

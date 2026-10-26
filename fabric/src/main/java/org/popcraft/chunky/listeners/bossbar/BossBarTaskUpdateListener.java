@@ -5,12 +5,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.level.Level;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
+import org.popcraft.chunky.platform.FabricSender;
 import org.popcraft.chunky.platform.FabricWorld;
 import org.popcraft.chunky.platform.World;
 
@@ -40,8 +40,9 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
             bossBar.setVisible(!silent);
         }
         final MinecraftServer server = fabricWorld.getWorld().getServer();
+        final boolean singleplayer = server.isSingleplayer();
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
+            if (singleplayer || hasBossBarPermission(player)) {
                 bossBar.addPlayer(player);
             } else {
                 bossBar.removePlayer(player);
@@ -59,6 +60,10 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
             bossBar.removeAllPlayers();
             bossBars.remove(worldIdentifier);
         }
+    }
+
+    private static boolean hasBossBarPermission(final ServerPlayer player) {
+        return new FabricSender(player.createCommandSourceStack()).hasPermission("chunky.progress.bossbar", true);
     }
 
     private ServerBossEvent createNewBossBar(final Identifier worldIdentifier) {
