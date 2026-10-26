@@ -40,8 +40,9 @@ public class ForgeCommand extends BrigadierCommand<CommandSourceStack> {
     @Override
     protected boolean hasPermission(final CommandSourceStack source) {
         final MinecraftServer server = source.getServer();
+        final ServerPlayer player = source.getPlayer();
         //noinspection ConstantValue
-        if (server != null && server.isSingleplayer()) {
+        if (server != null && server.isSingleplayer() && (player == null || server.isSingleplayerOwner(player.nameAndId()))) {
             return true;
         }
         return source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);

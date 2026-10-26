@@ -42,7 +42,7 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         final MinecraftServer server = forgeWorld.getWorld().getServer();
         final boolean singleplayer = server.isSingleplayer();
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (singleplayer || player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
+            if ((singleplayer && server.isSingleplayerOwner(player.nameAndId())) || player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
                 bossBar.addPlayer(player);
             } else {
                 bossBar.removePlayer(player);

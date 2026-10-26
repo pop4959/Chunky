@@ -39,7 +39,8 @@ public class FabricCommand extends BrigadierCommand<CommandSourceStack> {
     @Override
     protected boolean hasPermission(final CommandSourceStack source) {
         final MinecraftServer server = source.getServer();
-        if (server != null && server.isSingleplayer()) {
+        final ServerPlayer player = source.getPlayer();
+        if (server != null && server.isSingleplayer() && (player == null || server.isSingleplayerOwner(player.nameAndId()))) {
             return true;
         }
         return new FabricSender(source).hasPermission("chunky.command", true);
