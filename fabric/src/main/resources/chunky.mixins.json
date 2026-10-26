@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.popcraft.chunky.mixin",
+  "plugin": "org.popcraft.chunky.mixin.ChunkyMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "ChunkHolderAccess",

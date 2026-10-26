@@ -18,7 +18,7 @@ public class ChunkMapPatchMixin {
     @Final
     private ChunkTaskDispatcher worldgenTaskDispatcher;
 
-    @WrapWithCondition(method = "onLevelChange", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ChunkTaskDispatcher;onLevelChange(Lnet/minecraft/world/level/ChunkPos;Ljava/util/function/IntSupplier;ILjava/util/function/IntConsumer;)V"), require = 0) // require = 0 because Moonrise
+    @WrapWithCondition(method = "onLevelChange", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ChunkTaskDispatcher;onLevelChange(Lnet/minecraft/world/level/ChunkPos;Ljava/util/function/IntSupplier;ILjava/util/function/IntConsumer;)V"), require = 0)
     private boolean suppressRaceCondition(ChunkTaskDispatcher instance, ChunkPos pos, IntSupplier oldLevel, int newLevel, IntConsumer setQueueLevel) {
         // updating levels for both dispatchers result in a race condition in level updating, because two queues race
         // the same level field for updating, resulting in a corrupted state that leaves tasks not updated.
