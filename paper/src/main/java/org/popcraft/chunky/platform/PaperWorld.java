@@ -39,7 +39,7 @@ public class PaperWorld implements World {
 
     @Override
     public String getName() {
-        return world.getName();
+        return getKey();
     }
 
     @Override

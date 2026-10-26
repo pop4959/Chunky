@@ -69,7 +69,7 @@ public final class ChunkyPaper extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onWorldInit(final WorldInitEvent event) {
-        chunky.getRegionCache().clear(event.getWorld().getName());
+        chunky.getRegionCache().clear(event.getWorld().getKey().toString());
     }
 
     @EventHandler

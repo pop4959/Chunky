@@ -57,7 +57,7 @@ public class TaskLoader {
     }
 
     public Optional<GenerationTask> loadTask(final World world) {
-        final Properties task = tasks.get(world.getName());
+        final Properties task = getTask(world);
         if (task == null) {
             return Optional.empty();
         }
@@ -79,6 +79,20 @@ public class TaskLoader {
         final long chunks = Input.tryLong(task.getProperty(TaskProperty.CHUNKS.key())).orElse(0L);
         final long time = Input.tryLong(task.getProperty(TaskProperty.TIME.key())).orElse(0L);
         return Optional.of(new GenerationTask(chunky, selection.build(), chunks, time, cancelled));
+    }
+
+    private Properties getTask(final World world) {
+        final Properties task = tasks.get(world.getName());
+        if (task != null) {
+            return task;
+        }
+        for (final Map.Entry<String, Properties> entry : tasks.entrySet()) {
+            final Optional<World> taskWorld = chunky.getServer().getWorld(entry.getKey());
+            if (taskWorld.isPresent() && taskWorld.get().getName().equals(world.getName())) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     public List<GenerationTask> loadTasks() {

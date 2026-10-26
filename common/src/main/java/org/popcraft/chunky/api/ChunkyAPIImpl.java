@@ -26,7 +26,11 @@ public class ChunkyAPIImpl implements ChunkyAPI {
 
     @Override
     public boolean isRunning(final String world) {
-        return chunky.getGenerationTasks().containsKey(world);
+        final World implWorld = Input.tryWorld(chunky, world).orElse(null);
+        if (implWorld == null) {
+            return false;
+        }
+        return chunky.getGenerationTasks().containsKey(implWorld.getName());
     }
 
     @Override
@@ -35,7 +39,7 @@ public class ChunkyAPIImpl implements ChunkyAPI {
         if (implWorld == null) {
             return false;
         }
-        if (chunky.getGenerationTasks().containsKey(world)) {
+        if (chunky.getGenerationTasks().containsKey(implWorld.getName())) {
             return false;
         }
         final Selection selection = Selection.builder(chunky, implWorld)
@@ -43,14 +47,18 @@ public class ChunkyAPIImpl implements ChunkyAPI {
                 .radiusX(radiusX).radiusZ(radiusZ)
                 .pattern(Parameter.of(pattern)).build();
         final GenerationTask task = new GenerationTask(chunky, selection);
-        chunky.getGenerationTasks().put(world, task);
+        chunky.getGenerationTasks().put(implWorld.getName(), task);
         chunky.getScheduler().runTask(task);
         return true;
     }
 
     @Override
     public boolean pauseTask(final String world) {
-        final GenerationTask task = chunky.getGenerationTasks().get(world);
+        final World implWorld = Input.tryWorld(chunky, world).orElse(null);
+        if (implWorld == null) {
+            return false;
+        }
+        final GenerationTask task = chunky.getGenerationTasks().get(implWorld.getName());
         if (task == null) {
             return false;
         }
@@ -68,10 +76,10 @@ public class ChunkyAPIImpl implements ChunkyAPI {
         if (task == null || task.isCancelled()) {
             return false;
         }
-        if (chunky.getGenerationTasks().containsKey(world)) {
+        if (chunky.getGenerationTasks().containsKey(implWorld.getName())) {
             return false;
         }
-        chunky.getGenerationTasks().put(world, task);
+        chunky.getGenerationTasks().put(implWorld.getName(), task);
         chunky.getScheduler().runTask(task);
         return true;
     }
@@ -82,10 +90,10 @@ public class ChunkyAPIImpl implements ChunkyAPI {
         if (implWorld == null) {
             return false;
         }
-        if (!chunky.getGenerationTasks().containsKey(world)) {
+        if (!chunky.getGenerationTasks().containsKey(implWorld.getName())) {
             return false;
         }
-        chunky.getGenerationTasks().remove(world).stop(true);
+        chunky.getGenerationTasks().remove(implWorld.getName()).stop(true);
         chunky.getTaskLoader().cancelTask(implWorld);
         return true;
     }

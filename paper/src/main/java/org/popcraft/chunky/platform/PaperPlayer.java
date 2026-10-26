@@ -2,6 +2,7 @@ package org.popcraft.chunky.platform;
 
 import io.papermc.paper.entity.TeleportFlag;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,7 +52,7 @@ public class PaperPlayer extends PaperSender implements Player {
 
     @Override
     public void teleport(final Location location) {
-        final org.bukkit.World world = Bukkit.getWorld(location.getWorld().getName());
+        final org.bukkit.World world = Bukkit.getWorld(NamespacedKey.fromString(location.getWorld().getKey()));
         final org.bukkit.Location loc = new org.bukkit.Location(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         final Entity vehicle = player.getVehicle();
         if (vehicle == null) {
