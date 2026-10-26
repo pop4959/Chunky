@@ -40,8 +40,9 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
             bossBar.setVisible(!silent);
         }
         final MinecraftServer server = fabricWorld.getWorld().getServer();
+        final boolean singleplayer = server.isSingleplayer();
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if (hasBossBarPermission(server, player)) {
+            if (singleplayer || hasBossBarPermission(player)) {
                 bossBar.addPlayer(player);
             } else {
                 bossBar.removePlayer(player);
@@ -61,12 +62,8 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         }
     }
 
-    private static boolean hasBossBarPermission(final MinecraftServer server, final ServerPlayer player) {
-        if (server != null && server.isSingleplayer()) {
-            return true;
-        }
-        final FabricSender sender = new FabricSender(player.createCommandSourceStack());
-        return sender.hasPermission("chunky.command", true) || sender.hasPermission("chunky.progressbar", true);
+    private static boolean hasBossBarPermission(final ServerPlayer player) {
+        return new FabricSender(player.createCommandSourceStack()).hasPermission("chunky.progress.bossbar", true);
     }
 
     private ServerBossEvent createNewBossBar(final Identifier worldIdentifier) {
