@@ -42,6 +42,6 @@ public class FabricCommand extends BrigadierCommand<CommandSourceStack> {
         if (server != null && server.isSingleplayer()) {
             return true;
         }
-        return new FabricSender(source).hasPermission("chunky", "command", true);
+        return new FabricSender(source).hasPermission("chunky.command", true);
     }
 }
