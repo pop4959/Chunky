@@ -3,6 +3,7 @@ package org.popcraft.chunky;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
@@ -18,6 +19,7 @@ import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskFinishListener;
 import org.popcraft.chunky.listeners.bossbar.BossBarTaskUpdateListener;
+import org.popcraft.chunky.platform.NeoForgeSender;
 import org.popcraft.chunky.platform.NeoForgeServer;
 import org.popcraft.chunky.platform.impl.GsonConfig;
 
@@ -34,6 +36,7 @@ public class ChunkyNeoForge {
 
     public ChunkyNeoForge() {
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOW, NeoForgeSender::registerPermissions);
     }
 
     @SubscribeEvent

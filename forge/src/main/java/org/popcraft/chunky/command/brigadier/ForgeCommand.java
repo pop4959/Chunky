@@ -5,7 +5,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.permissions.Permissions;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.ChunkyForge;
 import org.popcraft.chunky.platform.ForgePlayer;
@@ -45,6 +44,6 @@ public class ForgeCommand extends BrigadierCommand<CommandSourceStack> {
         if (server != null && server.isSingleplayer() && (player == null || server.isSingleplayerOwner(player.nameAndId()))) {
             return true;
         }
-        return source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
+        return new ForgeSender(source).hasPermission("chunky.command");
     }
 }
