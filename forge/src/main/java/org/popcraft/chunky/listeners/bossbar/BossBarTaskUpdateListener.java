@@ -5,12 +5,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.level.Level;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
+import org.popcraft.chunky.platform.ForgeSender;
 import org.popcraft.chunky.platform.ForgeWorld;
 import org.popcraft.chunky.platform.World;
 
@@ -42,7 +42,7 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
         final MinecraftServer server = forgeWorld.getWorld().getServer();
         final boolean singleplayer = server.isSingleplayer();
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
-            if ((singleplayer && server.isSingleplayerOwner(player.nameAndId())) || player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)) {
+            if ((singleplayer && server.isSingleplayerOwner(player.nameAndId())) || hasBossBarPermission(player)) {
                 bossBar.addPlayer(player);
             } else {
                 bossBar.removePlayer(player);
@@ -60,6 +60,10 @@ public class BossBarTaskUpdateListener implements Consumer<GenerationTaskUpdateE
             bossBar.removeAllPlayers();
             bossBars.remove(worldIdentifier);
         }
+    }
+
+    private static boolean hasBossBarPermission(final ServerPlayer player) {
+        return new ForgeSender(player.createCommandSourceStack()).hasPermission("chunky.progress.bossbar");
     }
 
     private ServerBossEvent createNewBossBar(final Identifier worldIdentifier) {
