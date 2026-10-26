@@ -1,2 +1,1 @@
 Automatic-Module-Name: chunky.forge
-MixinConfigs: chunky.mixins.json

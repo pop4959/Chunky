@@ -21,8 +21,8 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.LevelResource;
 import org.popcraft.chunky.ducks.MinecraftServerExtension;
+import org.popcraft.chunky.mixin.ChunkHolderAccess;
 import org.popcraft.chunky.mixin.ChunkMapMixin;
-import org.popcraft.chunky.mixin.MinecraftServerAccess;
 import org.popcraft.chunky.mixin.ServerChunkCacheMixin;
 import org.popcraft.chunky.platform.util.Location;
 import org.popcraft.chunky.util.Input;
@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public class ForgeWorld implements World {
@@ -39,6 +40,7 @@ public class ForgeWorld implements World {
     private static final TicketType CHUNKY = new TicketType(0L, TicketType.FLAG_LOADING);
     private static final TicketType CHUNKY_TICKING = new TicketType(TICKING_LOAD_DURATION * 20L, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION);
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
+    private static final long FULL_STATE_CONFIRMATION_TIMEOUT_SECONDS = 30;
     private final ServerLevel world;
     private final Border worldBorder;
 
@@ -106,11 +108,20 @@ public class ForgeWorld implements World {
             // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
             // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
             return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
-                    .thenApplyAsync(Function.identity(), ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor()) // workaround to prevent memory leaks in vanilla chunk system when racing with entity chunks
+                    .thenComposeAsync(ignored -> {
+                        ChunkHolder holder = world.getChunkSource().chunkMap.getUpdatingChunkIfPresent(chunkPos.pack());
+                        if (holder != null) {
+                            // workaround to prevent memory leaks in vanilla chunk system when racing with entity chunks
+                            CompletableFuture<?> pendingFullStateConfirmation = ((ChunkHolderAccess) holder).chunky$getPendingFullStateConfirmation();
+                            if (pendingFullStateConfirmation != null && !pendingFullStateConfirmation.isDone()) {
+                                return pendingFullStateConfirmation.thenApply(o -> null).completeOnTimeout(null, FULL_STATE_CONFIRMATION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+                            }
+                        }
+                        return CompletableFuture.completedFuture(null);
+                    }, ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor())
                     .whenCompleteAsync((ignored, throwable) -> {
                         serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
                         ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
-                        ((MinecraftServerAccess) world.getServer()).setEmptyTicks(0);
                     }, world.getServer())
                     .thenApply(ignored -> null);
         }
