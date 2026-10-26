@@ -1,5 +1,6 @@
 package org.popcraft.chunky.platform;
 
+import org.bukkit.NamespacedKey;
 import org.popcraft.chunky.ChunkyPaper;
 import org.popcraft.chunky.integration.Integration;
 
@@ -26,8 +27,11 @@ public class PaperServer implements Server {
 
     @Override
     public Optional<World> getWorld(final String name) {
-        final org.bukkit.World world = plugin.getServer().getWorld(name);
-        return Optional.ofNullable(world == null ? null : new PaperWorld(world));
+        final org.bukkit.Server server = plugin.getServer();
+        return Optional.ofNullable(server.getWorld(name))
+                .or(() -> Optional.ofNullable(NamespacedKey.fromString(name)).map(server::getWorld))
+                .or(() -> server.getWorlds().stream().filter(world -> name.equals(world.getKey().getKey())).findFirst())
+                .map(PaperWorld::new);
     }
 
     @Override
