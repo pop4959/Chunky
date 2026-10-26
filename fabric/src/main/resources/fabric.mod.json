@@ -26,8 +26,8 @@
     "chunky.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.18.1",
-    "fabric-api": "*",
+    "fabricloader": ">=0.18.4",
+    "fabric-api": ">=0.150.0",
     "minecraft": ">=26.1",
     "java": ">=25"
   },

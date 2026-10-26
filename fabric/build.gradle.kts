@@ -7,8 +7,7 @@ val shade = configurations.create("shade")
 dependencies {
     minecraft("com.mojang:minecraft:26.1")
     implementation("net.fabricmc:fabric-loader:0.18.5")
-    implementation("net.fabricmc.fabric-api:fabric-api:0.144.3+26.1")
-    compileOnly("me.lucko:fabric-permissions-api:0.7.0")
+    implementation("net.fabricmc.fabric-api:fabric-api:0.150.0+26.1.2")
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }
