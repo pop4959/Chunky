@@ -71,7 +71,7 @@ public abstract class BrigadierCommand<S> {
                 argument(CommandLiteral.INTERVAL, integer()));
         registerCommand(command, CommandLiteral.RADIUS,
                 argument(CommandLiteral.RADIUS, word()),
-                argument(CommandLiteral.RADIUS, word()));
+                argument(CommandLiteral.RADIUS_Z, word()));
         registerCommand(command, CommandLiteral.RELOAD,
                 suggestedArgument(CommandLiteral.TYPE, word()));
         registerCommand(command, CommandLiteral.SELECTION);

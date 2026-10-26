@@ -25,7 +25,7 @@ public class FabricPlayer extends FabricSender implements Player {
 
     @Override
     public String getName() {
-        return player.getName().toString();
+        return player.getName().getString();
     }
 
     @Override

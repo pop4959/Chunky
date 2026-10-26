@@ -25,7 +25,7 @@ public class NeoForgePlayer extends NeoForgeSender implements Player {
 
     @Override
     public String getName() {
-        return player.getName().toString();
+        return player.getName().getString();
     }
 
     @Override
