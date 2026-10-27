@@ -1,7 +1,9 @@
 package org.popcraft.chunky.platform;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Relative;
 import org.popcraft.chunky.platform.util.Location;
 
@@ -50,7 +52,13 @@ public class ForgePlayer extends ForgeSender implements Player {
 
     @Override
     public void teleport(final Location location) {
-        player.teleportTo(((ForgeWorld) location.getWorld()).getWorld(), location.getX(), location.getY(), location.getZ(), EnumSet.noneOf(Relative.class), location.getYaw(), location.getPitch(), true);
+        final ServerLevel level = ((ForgeWorld) location.getWorld()).getWorld();
+        final Entity vehicle = player.getRootVehicle();
+        if (vehicle != player && vehicle.level() == level) {
+            vehicle.teleportTo(level, location.getX(), location.getY(), location.getZ(), EnumSet.noneOf(Relative.class), location.getYaw(), location.getPitch(), true);
+        } else {
+            player.teleportTo(level, location.getX(), location.getY(), location.getZ(), EnumSet.noneOf(Relative.class), location.getYaw(), location.getPitch(), true);
+        }
     }
 
     @Override
