@@ -159,6 +159,7 @@ public class NeoForgeWorld implements World {
 
     @Override
     public int getElevation(final int x, final int z) {
+        world.getChunk(x >> 4, z >> 4);
         final int height = world.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) + 1;
         final int logicalHeight = world.getLogicalHeight();
         if (height >= logicalHeight) {
@@ -174,6 +175,11 @@ public class NeoForgeWorld implements World {
             }
         }
         return height;
+    }
+
+    @Override
+    public CompletableFuture<Integer> getElevationAtAsync(final int x, final int z) {
+        return getChunkAtAsync(x >> 4, z >> 4).thenApplyAsync(ignored -> getElevation(x, z), world.getServer());
     }
 
     @Override
