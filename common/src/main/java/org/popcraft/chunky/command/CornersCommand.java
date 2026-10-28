@@ -1,6 +1,7 @@
 package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
+import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.shape.ShapeType;
 import org.popcraft.chunky.util.Formatting;
@@ -9,6 +10,8 @@ import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.popcraft.chunky.util.Translator.translate;
 
 public class CornersCommand implements ChunkyCommand {
     private final Chunky chunky;
@@ -35,6 +38,7 @@ public class CornersCommand implements ChunkyCommand {
         final double centerZ = (z1.get() + z2.get()) / 2d;
         final double radiusX = Math.abs(x1.get() - x2.get()) / 2d;
         final double radiusZ = Math.abs(z1.get() - z2.get()) / 2d;
+        final Selection previous = chunky.getSelection().build();
         chunky.getSelection().center(centerX, centerZ).radiusX(radiusX).radiusZ(radiusZ);
         sender.sendMessagePrefixed(TranslationKey.FORMAT_CENTER, Formatting.number(centerX), Formatting.number(centerZ));
         final String shape;
@@ -46,7 +50,9 @@ public class CornersCommand implements ChunkyCommand {
             shape = ShapeType.RECTANGLE;
         }
         chunky.getSelection().shape(shape);
-        sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, shape);
+        if (!previous.shape().equals(shape)) {
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, translate("shape_" + shape));
+        }
     }
 
     @Override

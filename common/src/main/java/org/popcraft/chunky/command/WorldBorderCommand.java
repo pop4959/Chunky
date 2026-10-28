@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.popcraft.chunky.util.Translator.translate;
+
 public class WorldBorderCommand implements ChunkyCommand {
     private final Chunky chunky;
 
@@ -47,7 +49,7 @@ public class WorldBorderCommand implements ChunkyCommand {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_RADII, Formatting.number(current.radiusX()), Formatting.number(current.radiusZ()));
         }
         if (!previous.shape().equals(current.shape())) {
-            sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, current.shape());
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_SHAPE, translate("shape_" + current.shape()));
         }
         if (current.radiusX() > chunky.getServer().getMaxWorldSize()) {
             sender.sendMessagePrefixed(TranslationKey.FORMAT_WORLDBORDER_TOO_LARGE, chunky.getServer().getMaxWorldSize());
