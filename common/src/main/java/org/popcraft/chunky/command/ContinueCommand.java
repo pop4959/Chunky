@@ -40,6 +40,9 @@ public class ContinueCommand implements ChunkyCommand {
         loadTasks.stream().filter(task -> !task.isCancelled()).forEach(generationTask -> {
             final World world = generationTask.getSelection().world();
             if (!generationTasks.containsKey(world.getName())) {
+                if (sender.isPlayer()) {
+                    generationTask.setOwner(sender.getName());
+                }
                 generationTasks.put(world.getName(), generationTask);
                 chunky.getScheduler().runTask(generationTask);
                 sender.sendMessagePrefixed(TranslationKey.FORMAT_CONTINUE, world.getName());

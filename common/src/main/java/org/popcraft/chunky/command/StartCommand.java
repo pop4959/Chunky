@@ -82,6 +82,9 @@ public class StartCommand implements ChunkyCommand {
         }
         final Runnable startAction = () -> {
             final GenerationTask generationTask = new GenerationTask(chunky, current);
+            if (sender.isPlayer()) {
+                generationTask.setOwner(sender.getName());
+            }
             chunky.getGenerationTasks().put(current.world().getName(), generationTask);
             chunky.getScheduler().runTask(generationTask);
             sender.sendMessagePrefixed(TranslationKey.FORMAT_START, current.world().getName(), translate("shape_" + current.shape()), Formatting.number(current.centerX()), Formatting.number(current.centerZ()), Formatting.radius(current));

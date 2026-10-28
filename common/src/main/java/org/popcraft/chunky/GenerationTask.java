@@ -16,6 +16,7 @@ import org.popcraft.chunky.util.RegionCache;
 import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.Deque;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.Semaphore;
@@ -37,6 +38,7 @@ public class GenerationTask implements Runnable {
     private ChunkIterator chunkIterator;
     private boolean stopped, cancelled;
     private long prevTime;
+    private String owner;
 
     public GenerationTask(final Chunky chunky, final Selection selection, final long count, final long time, final boolean cancelled) {
         this(chunky, selection);
@@ -100,6 +102,9 @@ public class GenerationTask implements Runnable {
         chunky.getEventBus().call(new GenerationProgressEvent(progress.world, progress.chunkCount, progress.complete, progress.percentComplete, progress.hours, progress.minutes, progress.seconds, progress.rate, progress.chunkX, progress.chunkZ));
         if (progress.complete) {
             progress.sendUpdate(chunky.getServer().getConsole());
+            if (owner != null) {
+                chunky.getServer().getPlayer(owner).ifPresent(progress::sendUpdate);
+            }
             chunky.getEventBus().call(new GenerationTaskUpdateEvent(this));
             return;
         }
@@ -173,6 +178,14 @@ public class GenerationTask implements Runnable {
     public void stop(final boolean cancelled) {
         this.stopped = true;
         this.cancelled = cancelled;
+    }
+
+    public Optional<String> getOwner() {
+        return Optional.ofNullable(owner);
+    }
+
+    public void setOwner(final String owner) {
+        this.owner = owner;
     }
 
     public Chunky getChunky() {

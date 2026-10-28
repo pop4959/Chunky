@@ -78,7 +78,9 @@ public class TaskLoader {
                 .shape(shape);
         final long chunks = Input.tryLong(task.getProperty(TaskProperty.CHUNKS.key())).orElse(0L);
         final long time = Input.tryLong(task.getProperty(TaskProperty.TIME.key())).orElse(0L);
-        return Optional.of(new GenerationTask(chunky, selection.build(), chunks, time, cancelled));
+        final GenerationTask generationTask = new GenerationTask(chunky, selection.build(), chunks, time, cancelled);
+        generationTask.setOwner(task.getProperty(TaskProperty.OWNER.key()));
+        return Optional.of(generationTask);
     }
 
     private Properties getTask(final World world) {
@@ -108,6 +110,7 @@ public class TaskLoader {
         final String world = selection.world().getName();
         final Properties properties = tasks.getOrDefault(world, new Properties());
         properties.setProperty(TaskProperty.WORLD.key(), world);
+        task.getOwner().ifPresent(owner -> properties.setProperty(TaskProperty.OWNER.key(), owner));
         properties.setProperty(TaskProperty.CANCELLED.key(), String.valueOf(task.isCancelled()));
         properties.setProperty(TaskProperty.CENTER_X.key(), String.valueOf(selection.centerX()));
         properties.setProperty(TaskProperty.CENTER_Z.key(), String.valueOf(selection.centerZ()));
@@ -165,6 +168,7 @@ public class TaskLoader {
 
     private enum TaskProperty {
         WORLD("world"),
+        OWNER("owner"),
         CANCELLED("cancelled"),
         CENTER_X("center-x"),
         CENTER_Z("center-z"),
