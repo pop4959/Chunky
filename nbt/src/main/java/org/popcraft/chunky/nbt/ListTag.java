@@ -36,6 +36,17 @@ public class ListTag extends Tag {
     public void skip(final DataInput input) throws IOException {
         final byte tagType = input.readByte();
         final int size = input.readInt();
+        final int typeSize = switch (tagType) {
+            case TagType.BYTE -> 1;
+            case TagType.SHORT -> 2;
+            case TagType.INT, TagType.FLOAT -> 4;
+            case TagType.LONG, TagType.DOUBLE -> 8;
+            default -> 0;
+        };
+        if (typeSize > 0) {
+            input.skipBytes(typeSize * size);
+            return;
+        }
         for (int i = 0; i < size; ++i) {
             Tag.skip(input, tagType);
         }
