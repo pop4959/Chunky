@@ -25,6 +25,7 @@ public final class RegionFile {
     private static final int SECTOR_SIZE = 4096;
     private final Set<Chunk> chunks = new HashSet<>();
     private final Map<ChunkPos, Chunk> chunkMap = new HashMap<>();
+    private boolean fullyRead;
 
     public RegionFile(final File file) {
         this(file, null);
@@ -101,6 +102,7 @@ public final class RegionFile {
                     chunkMap.put(ChunkPos.of(x, z), chunk);
                 }
             }
+            fullyRead = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,5 +124,9 @@ public final class RegionFile {
 
     public Optional<Chunk> getChunk(final int x, final int z) {
         return Optional.ofNullable(chunkMap.get(ChunkPos.of(x, z)));
+    }
+
+    public boolean isFullyRead() {
+        return fullyRead;
     }
 }

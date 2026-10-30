@@ -208,6 +208,9 @@ public class TrimCommand implements ChunkyCommand {
         int marked = 0;
         int deleted = 0;
         final RegionFile regionData = inhabitedTimeCheck ? new RegionFile(regionPath.toFile(), ChunkFilter.of(TagType.LONG, "InhabitedTime")) : null;
+        if (regionData != null && !regionData.isFullyRead()) {
+            return 0;
+        }
         try (final RandomAccessFile regionFile = new RandomAccessFile(regionPath.toFile(), "rw");
              final RandomAccessFile poiFile = poiPath == null || Files.notExists(poiPath) ? null : new RandomAccessFile(poiPath.toFile(), "rw");
              final RandomAccessFile entitiesFile = entitiesPath == null || Files.notExists(entitiesPath) ? null : new RandomAccessFile(entitiesPath.toFile(), "rw")) {
