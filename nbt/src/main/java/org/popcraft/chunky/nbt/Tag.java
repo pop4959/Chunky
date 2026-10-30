@@ -30,8 +30,15 @@ public abstract class Tag {
         }
         final int size = input.readUnsignedShort();
         input.skipBytes(size);
-        create(type, "").skip(input);
+        skip(input, type);
         return type;
+    }
+
+    static void skip(final DataInput input, final byte type) throws IOException {
+        if (type < 0 || type >= SkipTags.TAGS.length) {
+            throw new IllegalArgumentException("Invalid tag type %d".formatted(type));
+        }
+        SkipTags.TAGS[type].skip(input);
     }
 
     public static void save(final DataOutput output, final Tag tag) throws IOException {
@@ -98,5 +105,18 @@ public abstract class Tag {
     @Override
     public String toString() {
         return print(0);
+    }
+
+    private static final class SkipTags {
+        private static final Tag[] TAGS = new Tag[TagType.LONG_ARRAY + 1];
+
+        static {
+            for (byte type = TagType.END; type <= TagType.LONG_ARRAY; ++type) {
+                TAGS[type] = create(type, "");
+            }
+        }
+
+        private SkipTags() {
+        }
     }
 }

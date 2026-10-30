@@ -34,11 +34,10 @@ public class ListTag extends Tag {
 
     @Override
     public void skip(final DataInput input) throws IOException {
-        this.type = input.readByte();
+        final byte tagType = input.readByte();
         final int size = input.readInt();
-        final Tag tag = Tag.create(type, "");
         for (int i = 0; i < size; ++i) {
-            tag.skip(input);
+            Tag.skip(input, tagType);
         }
     }
 
