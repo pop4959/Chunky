@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 public final class RegionFile {
@@ -24,6 +25,7 @@ public final class RegionFile {
     private static final int SECTOR_SIZE = 4096;
     private final Set<Chunk> chunks = new HashSet<>();
     private final Map<ChunkPos, Chunk> chunkMap = new HashMap<>();
+    private final Inflater inflater = new Inflater();
     private boolean fullyRead;
 
     public RegionFile(final File file) {
@@ -104,13 +106,18 @@ public final class RegionFile {
             fullyRead = true;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            inflater.end();
         }
     }
 
     private InputStream decompress(final InputStream input, final int compressionType) throws IOException {
         return switch (compressionType) {
             case CompressionType.GZIP -> new GZIPInputStream(input);
-            case CompressionType.ZLIB -> new InflaterInputStream(input);
+            case CompressionType.ZLIB -> {
+                inflater.reset();
+                yield new InflaterInputStream(input, inflater);
+            }
             case CompressionType.NONE -> input;
             case CompressionType.LZ4 -> Lz4Decompressor.decompress(input);
             default -> throw new UnsupportedOperationException("Unsupported compression type %d".formatted(compressionType));
