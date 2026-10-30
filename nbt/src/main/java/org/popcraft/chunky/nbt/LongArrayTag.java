@@ -3,6 +3,7 @@ package org.popcraft.chunky.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class LongArrayTag extends Tag {
@@ -20,10 +21,10 @@ public class LongArrayTag extends Tag {
     @Override
     public void read(final DataInput input) throws IOException {
         final int size = input.readInt();
+        final byte[] bytes = new byte[8 * size];
+        input.readFully(bytes);
         this.value = new long[size];
-        for (int i = 0; i < size; ++i) {
-            value[i] = input.readLong();
-        }
+        ByteBuffer.wrap(bytes).asLongBuffer().get(value);
     }
 
     @Override
