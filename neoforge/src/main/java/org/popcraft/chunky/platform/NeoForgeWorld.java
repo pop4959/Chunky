@@ -63,36 +63,32 @@ public class NeoForgeWorld implements World {
 
     @Override
     public CompletableFuture<Boolean> isChunkGenerated(final int x, final int z) {
-        if (Thread.currentThread() != world.getServer().getRunningThread()) {
-            return CompletableFuture.supplyAsync(() -> isChunkGenerated(x, z), world.getServer()).thenCompose(Function.identity());
-        } else {
-            final ChunkPos chunkPos = new ChunkPos(x, z);
-            final ServerChunkCache serverChunkCache = world.getChunkSource();
-            final ChunkMap chunkStorage = serverChunkCache.chunkMap;
-            final ChunkMapMixin chunkMapMixin = (ChunkMapMixin) chunkStorage;
-            final ChunkHolder loadedChunkHolder = chunkMapMixin.invokeGetVisibleChunkIfPresent(chunkPos.pack());
-            if (loadedChunkHolder != null && loadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
-                return CompletableFuture.completedFuture(true);
-            }
-            if (UPDATE_CHUNK_NBT) {
-                return chunkMapMixin.invokeReadChunk(chunkPos)
-                        .thenApply(optionalNbt -> optionalNbt
-                                .filter(chunkNbt -> chunkNbt.contains("Status"))
-                                .flatMap(chunkNbt -> chunkNbt.getString("Status"))
-                                .map(status -> "minecraft:full".equals(status) || "full".equals(status))
-                                .orElse(false));
-            }
-            final FieldSelector statusSelector = new FieldSelector(StringTag.TYPE, "Status");
-            final CollectFields statusCollector = new CollectFields(statusSelector);
-            return serverChunkCache.chunkScanner().scanChunk(chunkPos, statusCollector)
-                    .thenApply(ignored -> {
-                        if (statusCollector.getResult() instanceof final CompoundTag chunkNbt) {
-                            final String status = chunkNbt.getString("Status").orElse(null);
-                            return "minecraft:full".equals(status) || "full".equals(status);
-                        }
-                        return false;
-                    });
+        final ChunkPos chunkPos = new ChunkPos(x, z);
+        final ServerChunkCache serverChunkCache = world.getChunkSource();
+        final ChunkMap chunkStorage = serverChunkCache.chunkMap;
+        final ChunkMapMixin chunkMapMixin = (ChunkMapMixin) chunkStorage;
+        final ChunkHolder loadedChunkHolder = chunkMapMixin.invokeGetVisibleChunkIfPresent(chunkPos.pack());
+        if (loadedChunkHolder != null && loadedChunkHolder.getLatestStatus() == ChunkStatus.FULL) {
+            return CompletableFuture.completedFuture(true);
         }
+        if (UPDATE_CHUNK_NBT) {
+            return chunkMapMixin.invokeReadChunk(chunkPos)
+                    .thenApply(optionalNbt -> optionalNbt
+                            .filter(chunkNbt -> chunkNbt.contains("Status"))
+                            .flatMap(chunkNbt -> chunkNbt.getString("Status"))
+                            .map(status -> "minecraft:full".equals(status) || "full".equals(status))
+                            .orElse(false));
+        }
+        final FieldSelector statusSelector = new FieldSelector(StringTag.TYPE, "Status");
+        final CollectFields statusCollector = new CollectFields(statusSelector);
+        return serverChunkCache.chunkScanner().scanChunk(chunkPos, statusCollector)
+                .thenApply(ignored -> {
+                    if (statusCollector.getResult() instanceof final CompoundTag chunkNbt) {
+                        final String status = chunkNbt.getString("Status").orElse(null);
+                        return "minecraft:full".equals(status) || "full".equals(status);
+                    }
+                    return false;
+                });
     }
 
     @Override

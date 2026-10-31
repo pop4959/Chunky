@@ -13,6 +13,7 @@ import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Pair;
 import org.popcraft.chunky.util.RegionCache;
+import org.popcraft.chunky.util.RegionStatusReader;
 import org.popcraft.chunky.util.TranslationKey;
 
 import java.util.Deque;
@@ -128,6 +129,9 @@ public class GenerationTask implements Runnable {
         }
         final Semaphore working = new Semaphore(MAX_WORKING_COUNT);
         final boolean forceLoadExistingChunks = chunky.getConfig().isForceLoadExistingChunks();
+        final RegionStatusReader regionStatusReader = !forceLoadExistingChunks ?
+                selection.world().getRegionDirectory().map(regionDirectory -> new RegionStatusReader(selection.world().getName(), regionDirectory, worldState)).orElse(null) :
+                null;
         startTime.set(System.currentTimeMillis());
         while (!stopped && chunkIterator.hasNext()) {
             final ChunkCoordinate chunk = chunkIterator.next();
@@ -148,9 +152,17 @@ public class GenerationTask implements Runnable {
                 stop(cancelled);
                 break;
             }
-            final CompletableFuture<Boolean> isChunkGenerated = forceLoadExistingChunks ?
-                    CompletableFuture.completedFuture(false) :
-                    selection.world().isChunkGenerated(chunk.x(), chunk.z());
+            final CompletableFuture<Boolean> isChunkGenerated;
+            if (forceLoadExistingChunks) {
+                isChunkGenerated = CompletableFuture.completedFuture(false);
+            } else if (regionStatusReader != null) {
+                isChunkGenerated = regionStatusReader.isGenerated(chunk.x(), chunk.z())
+                        .thenCompose(generated -> Boolean.TRUE.equals(generated) ?
+                                CompletableFuture.completedFuture(true) :
+                                selection.world().isChunkGenerated(chunk.x(), chunk.z()));
+            } else {
+                isChunkGenerated = selection.world().isChunkGenerated(chunk.x(), chunk.z());
+            }
             isChunkGenerated
                     .thenCompose(generated -> {
                         if (Boolean.TRUE.equals(generated)) {
@@ -162,6 +174,9 @@ public class GenerationTask implements Runnable {
                         working.release();
                         update(chunk.x(), chunk.z(), true);
                     });
+        }
+        if (regionStatusReader != null) {
+            regionStatusReader.close();
         }
         if (stopped) {
             chunky.getServer().getConsole().sendMessagePrefixed(TranslationKey.TASK_STOPPED, selection.world().getName());

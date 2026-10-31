@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,7 +67,13 @@ public final class RegionFile {
             for (int i = 0; i < ENTRIES; ++i) {
                 timestampTable[i] = region.readInt();
             }
+            final long[] chunksByOffset = new long[ENTRIES];
             for (int i = 0; i < ENTRIES; ++i) {
+                chunksByOffset[i] = (long) offsetTable[i] * ENTRIES + i;
+            }
+            Arrays.sort(chunksByOffset);
+            for (final long entry : chunksByOffset) {
+                final int i = (int) (entry % ENTRIES);
                 final int offset = offsetTable[i] * SECTOR_SIZE;
                 final int size = sizeTable[i] * SECTOR_SIZE;
                 if (offset == 0 && size == 0) {
@@ -85,6 +92,9 @@ public final class RegionFile {
                     }
                     compressed = Files.readAllBytes(externalFile);
                 } else {
+                    if (length <= 1 || length > size - 4) {
+                        throw new IOException("Invalid length %d for chunk %d, %d in %s".formatted(length, x, z, file.getName()));
+                    }
                     compressed = new byte[length - 1];
                     region.readFully(compressed);
                 }
@@ -96,7 +106,9 @@ public final class RegionFile {
                     if (filter == null) {
                         data = Tag.load(input);
                     } else {
-                        data = Tag.find(input, filter.getType(), filter.getName());
+                        data = filter.hasTagNames() ?
+                                Tag.findMany(input, filter.getTagNames()) :
+                                Tag.find(input, filter.getType(), filter.getName());
                     }
                     final Chunk chunk = new Chunk(x, z, data, timestampTable[i]);
                     chunks.add(chunk);
