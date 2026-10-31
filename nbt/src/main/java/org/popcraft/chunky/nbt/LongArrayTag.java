@@ -36,7 +36,7 @@ public class LongArrayTag extends Tag {
     @Override
     public void write(final DataOutput output) throws IOException {
         final int size = value.length;
-        output.writeLong(size);
+        output.writeInt(size);
         for (long i : value) {
             output.writeLong(i);
         }
