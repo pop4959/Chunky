@@ -34,6 +34,10 @@ public final class RegionFile {
     }
 
     public RegionFile(final File file, final ChunkFilter filter) {
+        this(file, filter, 0, 1);
+    }
+
+    public RegionFile(final File file, final ChunkFilter filter, final int part, final int parts) {
         try (final RandomAccessFile region = new RandomAccessFile(file, "r")) {
             if (region.length() < 4096) {
                 return;
@@ -72,8 +76,8 @@ public final class RegionFile {
                 chunksByOffset[i] = (long) offsetTable[i] * ENTRIES + i;
             }
             Arrays.sort(chunksByOffset);
-            for (final long entry : chunksByOffset) {
-                final int i = (int) (entry % ENTRIES);
+            for (int position = part; position < ENTRIES; position += parts) {
+                final int i = (int) (chunksByOffset[position] % ENTRIES);
                 final int offset = offsetTable[i] * SECTOR_SIZE;
                 final int size = sizeTable[i] * SECTOR_SIZE;
                 if (offset == 0 && size == 0) {

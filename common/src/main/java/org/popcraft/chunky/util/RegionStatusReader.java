@@ -41,17 +41,22 @@ public final class RegionStatusReader implements AutoCloseable {
         }
         final int regionX = x >> 5;
         final int regionZ = z >> 5;
-        return regions.computeIfAbsent(ChunkMath.pack(regionX, regionZ), ignored -> CompletableFuture.runAsync(() -> read(regionX, regionZ), executor))
-                .thenApply(ignored -> worldState.isGenerated(x, z))
-                .exceptionally(ignored -> false);
+        return regions.computeIfAbsent(ChunkMath.pack(regionX, regionZ), ignored -> {
+            final CompletableFuture<?>[] parts = new CompletableFuture<?>[THREADS];
+            for (int part = 0; part < THREADS; ++part) {
+                final int index = part;
+                parts[part] = CompletableFuture.runAsync(() -> read(regionX, regionZ, index), executor);
+            }
+            return CompletableFuture.allOf(parts);
+        }).thenApply(ignored -> worldState.isGenerated(x, z)).exceptionally(ignored -> false);
     }
 
-    private void read(final int regionX, final int regionZ) {
+    private void read(final int regionX, final int regionZ, final int part) {
         final Path file = regionDirectory.resolve("r.%d.%d.mca".formatted(regionX, regionZ));
         if (!Files.exists(file)) {
             return;
         }
-        final RegionFile regionFile = new RegionFile(file.toFile(), ChunkFilter.ofTags("xPos", "zPos", "Status"));
+        final RegionFile regionFile = new RegionFile(file.toFile(), ChunkFilter.ofTags("xPos", "zPos", "Status"), part, THREADS);
         for (final Chunk chunk : regionFile.getChunks()) {
             if (chunk.getData() instanceof final CompoundTag data && isFull(data, chunk.getX(), chunk.getZ())) {
                 worldState.setGenerated(chunk.getX(), chunk.getZ());
