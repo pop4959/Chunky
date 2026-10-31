@@ -156,10 +156,12 @@ public class GenerationTask implements Runnable {
             if (forceLoadExistingChunks) {
                 isChunkGenerated = CompletableFuture.completedFuture(false);
             } else if (regionStatusReader != null) {
-                isChunkGenerated = regionStatusReader.isGenerated(chunk.x(), chunk.z())
-                        .thenCompose(generated -> Boolean.TRUE.equals(generated) ?
-                                CompletableFuture.completedFuture(true) :
-                                selection.world().isChunkGenerated(chunk.x(), chunk.z()));
+                isChunkGenerated = regionStatusReader.getState(chunk.x(), chunk.z())
+                        .thenCompose(state -> switch (state) {
+                            case GENERATED -> CompletableFuture.completedFuture(true);
+                            case INCOMPLETE -> CompletableFuture.completedFuture(false);
+                            case UNKNOWN -> selection.world().isChunkGenerated(chunk.x(), chunk.z());
+                        });
             } else {
                 isChunkGenerated = selection.world().isChunkGenerated(chunk.x(), chunk.z());
             }

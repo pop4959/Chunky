@@ -9,6 +9,7 @@ import org.popcraft.chunky.nbt.util.RegionFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -23,6 +24,7 @@ public final class RegionStatusReader implements AutoCloseable {
     private final RegionCache.WorldState worldState;
     private final ExecutorService executor;
     private final Map<Long, CompletableFuture<Void>> regions = new ConcurrentHashMap<>();
+    private final Set<Long> incompleteChunks = ConcurrentHashMap.newKeySet();
 
     public RegionStatusReader(final String worldName, final Path regionDirectory, final RegionCache.WorldState worldState) {
         this.regionDirectory = regionDirectory;
@@ -35,9 +37,9 @@ public final class RegionStatusReader implements AutoCloseable {
         });
     }
 
-    public CompletableFuture<Boolean> isGenerated(final int x, final int z) {
+    public CompletableFuture<ChunkState> getState(final int x, final int z) {
         if (UPDATE_CHUNK_NBT || LOAD_OUTDATED_CHUNKS) {
-            return CompletableFuture.completedFuture(false);
+            return CompletableFuture.completedFuture(ChunkState.UNKNOWN);
         }
         final int regionX = x >> 5;
         final int regionZ = z >> 5;
@@ -48,7 +50,12 @@ public final class RegionStatusReader implements AutoCloseable {
                 parts[part] = CompletableFuture.runAsync(() -> read(regionX, regionZ, index), executor);
             }
             return CompletableFuture.allOf(parts);
-        }).thenApply(ignored -> worldState.isGenerated(x, z)).exceptionally(ignored -> false);
+        }).thenApply(ignored -> {
+            if (worldState.isGenerated(x, z)) {
+                return ChunkState.GENERATED;
+            }
+            return incompleteChunks.contains(ChunkMath.pack(x, z)) ? ChunkState.INCOMPLETE : ChunkState.UNKNOWN;
+        }).exceptionally(ignored -> ChunkState.UNKNOWN);
     }
 
     private void read(final int regionX, final int regionZ, final int part) {
@@ -56,25 +63,40 @@ public final class RegionStatusReader implements AutoCloseable {
         if (!Files.exists(file)) {
             return;
         }
-        final RegionFile regionFile = new RegionFile(file.toFile(), ChunkFilter.ofTags("xPos", "zPos", "Status"), part, THREADS);
+        final RegionFile regionFile = new RegionFile(file.toFile(), ChunkFilter.ofTags("xPos", "zPos", "Status", "isLightOn", "LastUpdate"), part, THREADS);
         for (final Chunk chunk : regionFile.getChunks()) {
-            if (chunk.getData() instanceof final CompoundTag data && isFull(data, chunk.getX(), chunk.getZ())) {
-                worldState.setGenerated(chunk.getX(), chunk.getZ());
+            if (chunk.getData() instanceof final CompoundTag data && isValid(data, chunk.getX(), chunk.getZ())) {
+                if (isFull(data)) {
+                    worldState.setGenerated(chunk.getX(), chunk.getZ());
+                } else {
+                    incompleteChunks.add(ChunkMath.pack(chunk.getX(), chunk.getZ()));
+                }
             }
         }
     }
 
-    private static boolean isFull(final CompoundTag data, final int x, final int z) {
-        final boolean valid = data.getInt("xPos").filter(xPos -> xPos.value() == x).isPresent()
+    private static boolean isValid(final CompoundTag data, final int x, final int z) {
+        return data.getInt("xPos").filter(xPos -> xPos.value() == x).isPresent()
                 && data.getInt("zPos").filter(zPos -> zPos.value() == z).isPresent();
+    }
+
+    private static boolean isFull(final CompoundTag data) {
         final boolean full = data.getString("Status").map(StringTag::value)
                 .filter(status -> "minecraft:full".equals(status) || "full".equals(status))
                 .isPresent();
-        return valid && full;
+        final boolean lit = data.get("isLightOn").isPresent();
+        final boolean saved = data.getLong("LastUpdate").filter(lastUpdate -> lastUpdate.value() > 0).isPresent();
+        return full && lit && saved;
     }
 
     @Override
     public void close() {
         executor.shutdown();
+    }
+
+    public enum ChunkState {
+        GENERATED,
+        INCOMPLETE,
+        UNKNOWN
     }
 }
