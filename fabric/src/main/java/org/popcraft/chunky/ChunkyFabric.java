@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.world.level.storage.LevelResource;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.brigadier.FabricCommand;
@@ -29,7 +30,8 @@ public class ChunkyFabric implements ModInitializer {
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
             final Path configPath = FabricLoader.getInstance().getConfigDir().resolve("chunky/config.json");
-            this.chunky = new Chunky(new FabricServer(this, minecraftServer), new GsonConfig(configPath));
+            final Path dataDirectory = minecraftServer.isDedicatedServer() ? configPath.getParent() : minecraftServer.getWorldPath(LevelResource.ROOT).normalize().resolve("chunky");
+            this.chunky = new Chunky(new FabricServer(this, minecraftServer), new GsonConfig(configPath, dataDirectory));
             if (chunky.getConfig().getContinueOnRestart()) {
                 chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
             }

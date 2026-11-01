@@ -66,7 +66,7 @@ public class WorldChunkIterator implements ChunkIterator {
         this.chunks = new LinkedList<>();
         this.worldName = selection.world().getName();
         final String saveFile = worldName.substring(worldName.indexOf(':') + 1);
-        this.savePath = selection.chunky().getConfig().getDirectory().resolve(String.format("%s.csv", saveFile));
+        this.savePath = selection.chunky().getConfig().getDataDirectory().resolve(String.format("%s.csv", saveFile));
         this.regionPath = selection.world().getRegionDirectory().orElse(null);
         this.name = Parameter.of(PatternType.CSV, saveFile).toString();
     }

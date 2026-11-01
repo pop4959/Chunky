@@ -3,6 +3,7 @@ package org.popcraft.chunky;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -42,7 +43,8 @@ public class ChunkyForge {
     public void onServerStarting(final ServerStartingEvent event) {
         final MinecraftServer server = event.getServer();
         final Path configPath = FMLPaths.CONFIGDIR.get().resolve("chunky/config.json");
-        this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(configPath));
+        final Path dataDirectory = server.isDedicatedServer() ? configPath.getParent() : server.getWorldPath(LevelResource.ROOT).normalize().resolve("chunky");
+        this.chunky = new Chunky(new ForgeServer(this, server), new GsonConfig(configPath, dataDirectory));
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
         }

@@ -5,6 +5,10 @@ import java.nio.file.Path;
 public interface Config {
     Path getDirectory();
 
+    default Path getDataDirectory() {
+        return getDirectory();
+    }
+
     int getVersion();
 
     String getLanguage();

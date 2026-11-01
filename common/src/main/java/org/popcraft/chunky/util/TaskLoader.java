@@ -26,7 +26,7 @@ public class TaskLoader {
 
     public TaskLoader(final Chunky chunky) {
         this.chunky = chunky;
-        this.savePath = chunky.getConfig().getDirectory().resolve("tasks");
+        this.savePath = chunky.getConfig().getDataDirectory().resolve("tasks");
         reload();
     }
 

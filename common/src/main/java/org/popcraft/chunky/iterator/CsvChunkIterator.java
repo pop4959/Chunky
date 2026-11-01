@@ -28,7 +28,11 @@ public class CsvChunkIterator implements ChunkIterator {
 
     public CsvChunkIterator(final Selection selection) {
         final Path filePath = selection.pattern().getValue()
-                .map(value -> selection.chunky().getConfig().getDirectory().resolve(String.format("%s.csv", value)))
+                .map(value -> {
+                    final String fileName = String.format("%s.csv", value);
+                    final Path dataPath = selection.chunky().getConfig().getDataDirectory().resolve(fileName);
+                    return Files.exists(dataPath) ? dataPath : selection.chunky().getConfig().getDirectory().resolve(fileName);
+                })
                 .orElse(null);
         this.chunks = new LinkedList<>();
         final AtomicLong valid = new AtomicLong();

@@ -17,10 +17,12 @@ import java.util.Optional;
 public class GsonConfig implements Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private final Path savePath;
+    private final Path dataDirectory;
     private ConfigModel configModel = new ConfigModel();
 
-    public GsonConfig(final Path savePath) {
+    public GsonConfig(final Path savePath, final Path dataDirectory) {
         this.savePath = savePath;
+        this.dataDirectory = dataDirectory;
         if (Files.exists(this.savePath)) {
             reload();
         } else {
@@ -32,6 +34,11 @@ public class GsonConfig implements Config {
     @Override
     public Path getDirectory() {
         return savePath.getParent();
+    }
+
+    @Override
+    public Path getDataDirectory() {
+        return dataDirectory;
     }
 
     @Override
