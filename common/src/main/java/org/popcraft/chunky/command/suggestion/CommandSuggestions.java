@@ -9,6 +9,7 @@ import org.popcraft.chunky.command.ChunkyCommand;
 import org.popcraft.chunky.command.CommandArguments;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -37,11 +38,16 @@ public final class CommandSuggestions {
             }
             arguments.add(argument);
         }
-        arguments.add(builder.getRemaining());
-        final String remaining = builder.getRemaining().toLowerCase();
+        final int lastSpace = builder.getRemaining().lastIndexOf(' ');
+        final SuggestionsBuilder argumentBuilder = lastSpace < 0 ? builder : builder.createOffset(builder.getStart() + lastSpace + 1);
+        if (lastSpace >= 0) {
+            arguments.addAll(Arrays.asList(builder.getRemaining().substring(0, lastSpace).split(" ")));
+        }
+        arguments.add(argumentBuilder.getRemaining());
+        final String remaining = argumentBuilder.getRemaining().toLowerCase();
         command.suggestions(CommandArguments.of(arguments)).stream()
                 .filter(suggestion -> suggestion.toLowerCase().contains(remaining))
-                .forEach(builder::suggest);
-        return builder.buildFuture();
+                .forEach(argumentBuilder::suggest);
+        return argumentBuilder.buildFuture();
     }
 }

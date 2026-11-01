@@ -29,6 +29,8 @@ public final class TranslationKey {
     public static final String FORMAT_TRIM_CONFIRM = "format_trim_confirm";
     public static final String FORMAT_TRIM_CONFIRM_INSIDE = "format_trim_confirm_inside";
     public static final String FORMAT_TRIM_CONFIRM_INHABITED = "format_trim_confirm_inhabited";
+    public static final String FORMAT_TRIM_CONFIRM_UNMODIFIED = "format_trim_confirm_unmodified";
+    public static final String FORMAT_TRIM_FILTER_INVALID = "format_trim_filter_invalid";
     public static final String FORMAT_PATTERN = "format_pattern";
     public static final String FORMAT_PATTERN_NOT_FOUND = "format_pattern_not_found";
     public static final String FORMAT_PAUSE = "format_pause";
@@ -99,6 +101,14 @@ public final class TranslationKey {
     public static final String TASK_DONE = "task_done";
     public static final String TASK_STOPPED = "task_stopped";
     public static final String TASK_UPDATE = "task_update";
+    public static final String TIME_DAY = "time_day";
+    public static final String TIME_DAYS = "time_days";
+    public static final String TIME_HOUR = "time_hour";
+    public static final String TIME_HOURS = "time_hours";
+    public static final String TIME_MINUTE = "time_minute";
+    public static final String TIME_MINUTES = "time_minutes";
+    public static final String TIME_SECOND = "time_second";
+    public static final String TIME_SECONDS = "time_seconds";
     public static final String WRAP_BOTH = "wrap_both";
     public static final String WRAP_DEFAULT = "wrap_default";
     public static final String WRAP_EARTH = "wrap_earth";

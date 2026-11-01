@@ -27,6 +27,7 @@ public final class RegionFile {
     private final Set<Chunk> chunks = new HashSet<>();
     private final Map<ChunkPos, Chunk> chunkMap = new HashMap<>();
     private final Inflater inflater = new Inflater();
+    private Header header;
     private boolean fullyRead;
 
     public RegionFile(final File file) {
@@ -38,6 +39,14 @@ public final class RegionFile {
     }
 
     public RegionFile(final File file, final ChunkFilter filter, final int part, final int parts) {
+        this(file, filter, part, parts, false);
+    }
+
+    public RegionFile(final File file, final boolean headerOnly) {
+        this(file, null, 0, 1, headerOnly);
+    }
+
+    private RegionFile(final File file, final ChunkFilter filter, final int part, final int parts, final boolean headerOnly) {
         try (final RandomAccessFile region = new RandomAccessFile(file, "r")) {
             if (region.length() < 4096) {
                 return;
@@ -60,16 +69,24 @@ public final class RegionFile {
             } catch (final NumberFormatException e) {
                 return;
             }
-            final int[] offsetTable = new int[ENTRIES];
-            final int[] sizeTable = new int[ENTRIES];
+            final int[] locationTable = new int[ENTRIES];
             for (int i = 0; i < ENTRIES; ++i) {
-                final int location = region.readInt();
-                offsetTable[i] = (location >> 8) & 0xFFFFFF;
-                sizeTable[i] = location & 0xFF;
+                locationTable[i] = region.readInt();
             }
             final int[] timestampTable = new int[ENTRIES];
             for (int i = 0; i < ENTRIES; ++i) {
                 timestampTable[i] = region.readInt();
+            }
+            header = new Header(locationTable, timestampTable);
+            if (headerOnly) {
+                fullyRead = true;
+                return;
+            }
+            final int[] offsetTable = new int[ENTRIES];
+            final int[] sizeTable = new int[ENTRIES];
+            for (int i = 0; i < ENTRIES; ++i) {
+                offsetTable[i] = (locationTable[i] >> 8) & 0xFFFFFF;
+                sizeTable[i] = locationTable[i] & 0xFF;
             }
             final long[] chunksByOffset = new long[ENTRIES];
             for (int i = 0; i < ENTRIES; ++i) {
@@ -152,7 +169,25 @@ public final class RegionFile {
         return Optional.ofNullable(chunkMap.get(ChunkPos.of(x, z)));
     }
 
+    public Optional<Header> getHeader() {
+        return Optional.ofNullable(header);
+    }
+
     public boolean isFullyRead() {
         return fullyRead;
+    }
+
+    public record Header(int[] locations, int[] timestamps) {
+        public boolean hasChunk(final int x, final int z) {
+            return locations[index(x, z)] != 0;
+        }
+
+        public long getTimestamp(final int x, final int z) {
+            return Integer.toUnsignedLong(timestamps[index(x, z)]);
+        }
+
+        private static int index(final int x, final int z) {
+            return (x & 31) + (z & 31) * 32;
+        }
     }
 }

@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 
@@ -94,7 +95,7 @@ public abstract class BrigadierCommand<S> {
                 argument(CommandLiteral.RADIUS_X, word()),
                 argument(CommandLiteral.RADIUS_Z, word()),
                 suggestedArgument(CommandLiteral.TRIM_MODE, string()),
-                argument(CommandLiteral.INHABITED, word()));
+                suggestedArgument(CommandLiteral.FILTERS, greedyString()));
         registerCommand(command, CommandLiteral.WORLDBORDER,
                 world());
         registerCommand(command, CommandLiteral.WORLD,

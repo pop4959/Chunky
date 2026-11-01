@@ -71,6 +71,8 @@ public class TranslatorTest {
         translate(TranslationKey.FORMAT_TRIM_CONFIRM, "world", translate(TranslationKey.SHAPE_SQUARE), Formatting.number(1), Formatting.number(2), "500", "/chunky confirm");
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INSIDE, "world", translate(TranslationKey.SHAPE_SQUARE), Formatting.number(1), Formatting.number(2), "500", "/chunky confirm");
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED, Formatting.number(0));
+        translate(TranslationKey.FORMAT_TRIM_CONFIRM_UNMODIFIED, "30 days");
+        translate(TranslationKey.FORMAT_TRIM_FILTER_INVALID, "inhabited=abc", "inhabited, unmodified");
         translate(TranslationKey.FORMAT_PATTERN, "concentric");
         translate(TranslationKey.FORMAT_PATTERN_NOT_FOUND, "pattern", "concentric, loop, spiral");
         translate(TranslationKey.FORMAT_PAUSE, "world");
@@ -141,6 +143,14 @@ public class TranslatorTest {
         translate(TranslationKey.TASK_DONE, "world", 5000, String.format("%.2f", 50f), "0", "01", "15");
         translate(TranslationKey.TASK_STOPPED, "world");
         translate(TranslationKey.TASK_UPDATE, "world", 5000, String.format("%.2f", 50f), "0", "00", "01", String.format("%.1f", 40f), 70, 70);
+        translate(TranslationKey.TIME_DAY, Formatting.number(1));
+        translate(TranslationKey.TIME_DAYS, Formatting.number(30));
+        translate(TranslationKey.TIME_HOUR, Formatting.number(1));
+        translate(TranslationKey.TIME_HOURS, Formatting.number(30));
+        translate(TranslationKey.TIME_MINUTE, Formatting.number(1));
+        translate(TranslationKey.TIME_MINUTES, Formatting.number(30));
+        translate(TranslationKey.TIME_SECOND, Formatting.number(1));
+        translate(TranslationKey.TIME_SECONDS, Formatting.number(30));
         translate(TranslationKey.WRAP_BOTH);
         translate(TranslationKey.WRAP_DEFAULT);
         translate(TranslationKey.WRAP_EARTH);

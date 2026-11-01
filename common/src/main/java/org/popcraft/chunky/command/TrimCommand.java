@@ -2,17 +2,16 @@ package org.popcraft.chunky.command;
 
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.Selection;
-import org.popcraft.chunky.nbt.LongTag;
-import org.popcraft.chunky.nbt.Tag;
-import org.popcraft.chunky.nbt.TagType;
-import org.popcraft.chunky.nbt.util.ChunkFilter;
 import org.popcraft.chunky.nbt.util.CompressionType;
-import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
 import org.popcraft.chunky.shape.ShapeType;
+import org.popcraft.chunky.trim.TrimChunk;
+import org.popcraft.chunky.trim.TrimFilter;
+import org.popcraft.chunky.trim.TrimFilters;
+import org.popcraft.chunky.trim.TrimRegion;
 import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Formatting;
 import org.popcraft.chunky.util.Input;
@@ -99,8 +98,13 @@ public class TrimCommand implements ChunkyCommand {
         } else {
             inside = false;
         }
-        final int inhabitedTime = arguments.next().flatMap(Input::tryIntegerSuffixed).orElse(Integer.MAX_VALUE);
-        final boolean inhabitedTimeCheck = inhabitedTime < Integer.MAX_VALUE;
+        final List<TrimFilter> filters;
+        try {
+            filters = TrimFilters.parse(arguments.remaining());
+        } catch (final IllegalArgumentException e) {
+            sender.sendMessagePrefixed(TranslationKey.FORMAT_TRIM_FILTER_INVALID, e.getMessage(), String.join(", ", TrimFilters.keys()));
+            return;
+        }
         final Selection selection = chunky.getSelection().build();
         final Shape shape = ShapeFactory.getShape(selection);
         final Runnable deletionAction = () -> chunky.getScheduler().runTask(() -> {
@@ -124,7 +128,7 @@ public class TrimCommand implements ChunkyCommand {
                                 break;
                             }
                             try {
-                                deleted.getAndAdd(checkRegion(selection.world(), region.getFileName().toString(), shape, inside, inhabitedTimeCheck, inhabitedTime));
+                                deleted.getAndAdd(checkRegion(selection.world(), region.getFileName().toString(), shape, inside, filters));
                             } catch (final UnsupportedOperationException e) {
                                 sender.sendMessagePrefixed(TranslationKey.TASK_TRIM_UNSUPPORTED_COMPRESSION, selection.world().getName(), region.getFileName().toString(), e.getMessage());
                                 break;
@@ -150,22 +154,20 @@ public class TrimCommand implements ChunkyCommand {
         });
         chunky.setPendingAction(sender, deletionAction);
         sender.sendMessagePrefixed(inside ? TranslationKey.FORMAT_TRIM_CONFIRM_INSIDE : TranslationKey.FORMAT_TRIM_CONFIRM, selection.world().getName(), translate("shape_" + selection.shape()), Formatting.number(selection.centerX()), Formatting.number(selection.centerZ()), Formatting.radius(selection), "/chunky confirm");
-        if (inhabitedTimeCheck) {
-            sender.sendMessagePrefixed(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED, Formatting.number(inhabitedTime));
-        }
+        filters.forEach(filter -> filter.sendNotice(sender));
     }
 
-    private int checkRegion(final World world, final String regionFileName, final Shape shape, final boolean inside, final boolean inhabitedTimeCheck, final int inhabitedTime) {
+    private int checkRegion(final World world, final String regionFileName, final Shape shape, final boolean inside, final List<TrimFilter> filters) {
         final Optional<ChunkCoordinate> regionCoordinate = ChunkCoordinate.fromRegionFile(regionFileName);
         if (regionCoordinate.isEmpty()) {
             return 0;
         }
         final int chunkX = regionCoordinate.get().x() << 5;
         final int chunkZ = regionCoordinate.get().z() << 5;
-        if (!inhabitedTimeCheck && shouldDeleteRegion(shape, inside, chunkX, chunkZ)) {
+        if (filters.isEmpty() && shouldDeleteRegion(shape, inside, chunkX, chunkZ)) {
             return deleteRegion(world, regionFileName);
         } else {
-            return trimRegion(world, regionFileName, shape, inside, chunkX, chunkZ, inhabitedTimeCheck, inhabitedTime);
+            return trimRegion(world, regionFileName, shape, inside, chunkX, chunkZ, filters);
         }
     }
 
@@ -201,14 +203,15 @@ public class TrimCommand implements ChunkyCommand {
         }
     }
 
-    private int trimRegion(final World world, final String regionFileName, final Shape shape, final boolean inside, final int chunkX, final int chunkZ, final boolean inhabitedTimeCheck, final int inhabitedTime) {
+    private int trimRegion(final World world, final String regionFileName, final Shape shape, final boolean inside, final int chunkX, final int chunkZ, final List<TrimFilter> filters) {
         final Path regionPath = world.getRegionDirectory().map(region -> region.resolve(regionFileName)).orElseThrow(IllegalStateException::new);
         final Path poiPath = world.getPOIDirectory().map(region -> region.resolve(regionFileName)).orElse(null);
         final Path entitiesPath = world.getEntitiesDirectory().map(region -> region.resolve(regionFileName)).orElse(null);
         int marked = 0;
         int deleted = 0;
-        final RegionFile regionData = inhabitedTimeCheck ? new RegionFile(regionPath.toFile(), ChunkFilter.of(TagType.LONG, "InhabitedTime")) : null;
-        if (regionData != null && !regionData.isFullyRead()) {
+        final boolean filtered = !filters.isEmpty();
+        final TrimRegion filterRegion = filtered ? new TrimRegion(regionPath, poiPath, entitiesPath, filters.stream().anyMatch(TrimFilter::readsChunkData)) : null;
+        if (filterRegion != null && !filterRegion.isFullyRead()) {
             return 0;
         }
         try (final RandomAccessFile regionFile = new RandomAccessFile(regionPath.toFile(), "rw");
@@ -225,22 +228,17 @@ public class TrimCommand implements ChunkyCommand {
                     final int offsetChunkZ = chunkZ + offsetZ;
                     final int chunkCenterX = (offsetChunkX << 4) + 8;
                     final int chunkCenterZ = (offsetChunkZ << 4) + 8;
-                    final boolean trimChunk;
+                    boolean trimChunk;
                     if (inside) {
                         trimChunk = shape.isBounding(chunkCenterX, chunkCenterZ);
                     } else {
                         trimChunk = !shape.isBounding(chunkCenterX, chunkCenterZ);
                     }
-                    final boolean trimInhabited = regionData == null || regionData.getChunk(offsetChunkX, offsetChunkZ)
-                            .map(chunk -> {
-                                final Tag tag = chunk.getData();
-                                if (!(tag instanceof final LongTag inhabited)) {
-                                    return true;
-                                }
-                                return inhabited.value() <= inhabitedTime;
-                            })
-                            .orElse(true);
-                    if (trimChunk && trimInhabited) {
+                    if (trimChunk && filtered) {
+                        final TrimChunk chunk = filterRegion.getTrimChunk(offsetChunkX, offsetChunkZ);
+                        trimChunk = filters.stream().allMatch(filter -> filter.test(chunk));
+                    }
+                    if (trimChunk) {
                         ++marked;
                         final int chunkLocation = ((offsetX % 32) + (offsetZ % 32) * 32) * 4;
                         regionFile.seek(chunkLocation);
@@ -275,7 +273,7 @@ public class TrimCommand implements ChunkyCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (inhabitedTimeCheck && marked == 1024) {
+        if (filtered && marked == 1024) {
             deleteRegion(world, regionFileName);
         }
         return deleted;
@@ -298,6 +296,9 @@ public class TrimCommand implements ChunkyCommand {
             return ShapeType.all();
         } else if (arguments.size() == 7) {
             return List.of("inside", "outside");
+        } else if (arguments.size() > 7) {
+            final List<String> tokens = arguments.remaining();
+            return TrimFilters.suggestions(tokens.subList(7, tokens.size()));
         }
         return List.of();
     }
