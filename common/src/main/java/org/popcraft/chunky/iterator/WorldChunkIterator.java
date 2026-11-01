@@ -4,6 +4,7 @@ import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.nbt.StringTag;
 import org.popcraft.chunky.nbt.TagType;
+import org.popcraft.chunky.nbt.util.Chunk;
 import org.popcraft.chunky.nbt.util.ChunkFilter;
 import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.util.ChunkCoordinate;
@@ -15,13 +16,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class WorldChunkIterator implements ChunkIterator {
@@ -97,9 +101,9 @@ public class WorldChunkIterator implements ChunkIterator {
         }
         final long startTime = System.currentTimeMillis();
         final AtomicLong updateTime = new AtomicLong(startTime);
-        final Function<String, Boolean> chunkStatusFilter = chunky.getConfig().isForceLoadExistingChunks() ?
-                status -> !("minecraft:empty".equals(status) || "empty".equals(status)) :
-                status -> "minecraft:full".equals(status) || "full".equals(status);
+        final boolean forceLoadExistingChunks = chunky.getConfig().isForceLoadExistingChunks();
+        final Set<ChunkCoordinate> fullChunks = new HashSet<>();
+        final Set<ChunkCoordinate> partialChunks = new LinkedHashSet<>();
         final StringBuilder saveData = new StringBuilder();
         try (final Stream<Path> files = Files.list(regionPath)) {
             final List<Path> regions = files
@@ -119,22 +123,26 @@ public class WorldChunkIterator implements ChunkIterator {
                 final RegionFile regionFile = new RegionFile(region.toFile(), ChunkFilter.of(TagType.STRING, "Status"));
                 for (final ChunkCoordinate offset : Hilbert.chunkCoordinateOffsets()) {
                     final ChunkCoordinate chunkCoordinate = new ChunkCoordinate((regionX << 5) + offset.x(), (regionZ << 5) + offset.z());
-                    if (chunkCoordinate.x() < minChunkX || chunkCoordinate.x() > maxChunkX || chunkCoordinate.z() < minChunkZ || chunkCoordinate.z() > maxChunkZ) {
+                    final String status = regionFile.getChunk(chunkCoordinate.x(), chunkCoordinate.z())
+                            .map(Chunk::getData)
+                            .filter(StringTag.class::isInstance)
+                            .map(StringTag.class::cast)
+                            .map(StringTag::value)
+                            .orElse(null);
+                    if (status == null || "minecraft:empty".equals(status) || "empty".equals(status)) {
                         continue;
                     }
-                    regionFile.getChunk(chunkCoordinate.x(), chunkCoordinate.z()).ifPresent(chunk -> {
-                        final boolean generated = Optional.ofNullable(chunk.getData())
-                                .filter(StringTag.class::isInstance)
-                                .map(StringTag.class::cast)
-                                .map(StringTag::value)
-                                .map(chunkStatusFilter)
-                                .orElse(false);
-                        if (generated) {
-                            chunks.add(chunkCoordinate);
-                            saveData.append(chunkCoordinate.x()).append(',').append(chunkCoordinate.z()).append('\n');
-                            total.incrementAndGet();
+                    final boolean full = "minecraft:full".equals(status) || "full".equals(status);
+                    if (!forceLoadExistingChunks) {
+                        if (full) {
+                            fullChunks.add(chunkCoordinate);
+                        } else {
+                            partialChunks.add(chunkCoordinate);
                         }
-                    });
+                    }
+                    if ((full || forceLoadExistingChunks) && isInBounds(chunkCoordinate)) {
+                        addChunk(chunkCoordinate, saveData);
+                    }
                 }
                 finishedRegions.getAndIncrement();
                 if (!chunky.getConfig().isSilent()) {
@@ -150,11 +158,53 @@ public class WorldChunkIterator implements ChunkIterator {
                     return false;
                 }
             }
+            final Set<ChunkCoordinate> exteriorChunks = new HashSet<>();
+            final Queue<ChunkCoordinate> queue = new ArrayDeque<>();
+            for (final ChunkCoordinate chunkCoordinate : partialChunks) {
+                if (neighbors(chunkCoordinate).stream().anyMatch(neighbor -> !fullChunks.contains(neighbor) && !partialChunks.contains(neighbor))) {
+                    exteriorChunks.add(chunkCoordinate);
+                    queue.add(chunkCoordinate);
+                }
+            }
+            while (!queue.isEmpty()) {
+                for (final ChunkCoordinate neighbor : neighbors(queue.poll())) {
+                    if (partialChunks.contains(neighbor) && exteriorChunks.add(neighbor)) {
+                        queue.add(neighbor);
+                    }
+                }
+            }
+            for (final ChunkCoordinate chunkCoordinate : partialChunks) {
+                if (!exteriorChunks.contains(chunkCoordinate) && isInBounds(chunkCoordinate)) {
+                    addChunk(chunkCoordinate, saveData);
+                }
+            }
             Files.writeString(savePath, saveData, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private boolean isInBounds(final ChunkCoordinate chunkCoordinate) {
+        return chunkCoordinate.x() >= minChunkX && chunkCoordinate.x() <= maxChunkX && chunkCoordinate.z() >= minChunkZ && chunkCoordinate.z() <= maxChunkZ;
+    }
+
+    private void addChunk(final ChunkCoordinate chunkCoordinate, final StringBuilder saveData) {
+        chunks.add(chunkCoordinate);
+        saveData.append(chunkCoordinate.x()).append(',').append(chunkCoordinate.z()).append('\n');
+        total.incrementAndGet();
+    }
+
+    private static List<ChunkCoordinate> neighbors(final ChunkCoordinate chunkCoordinate) {
+        final List<ChunkCoordinate> neighbors = new ArrayList<>(8);
+        for (int x = chunkCoordinate.x() - 1; x <= chunkCoordinate.x() + 1; ++x) {
+            for (int z = chunkCoordinate.z() - 1; z <= chunkCoordinate.z() + 1; ++z) {
+                if (x != chunkCoordinate.x() || z != chunkCoordinate.z()) {
+                    neighbors.add(new ChunkCoordinate(x, z));
+                }
+            }
+        }
+        return neighbors;
     }
 }
