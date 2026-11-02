@@ -174,7 +174,7 @@ public class GenerationTask implements Runnable {
                         }
                     }).whenComplete((ignored, throwable) -> {
                         working.release();
-                        update(chunk.x(), chunk.z(), true);
+                        update(chunk.x(), chunk.z(), throwable == null);
                     });
         }
         if (regionStatusReader != null) {
