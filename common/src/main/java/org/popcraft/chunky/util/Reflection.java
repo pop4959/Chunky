@@ -1,5 +1,7 @@
 package org.popcraft.chunky.util;
 
+import java.util.Optional;
+
 public final class Reflection {
     private Reflection() {
     }
@@ -19,6 +21,22 @@ public final class Reflection {
             return true;
         } catch (NoSuchMethodException e) {
             return false;
+        }
+    }
+
+    public static Optional<Object> getStaticField(final String clazz, final String name) {
+        try {
+            return Optional.ofNullable(Class.forName(clazz).getField(name).get(null));
+        } catch (ReflectiveOperationException | LinkageError | RuntimeException e) {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Object> invokeMethod(final Object instance, final String name) {
+        try {
+            return Optional.ofNullable(instance.getClass().getMethod(name).invoke(instance));
+        } catch (ReflectiveOperationException | LinkageError | RuntimeException e) {
+            return Optional.empty();
         }
     }
 }
