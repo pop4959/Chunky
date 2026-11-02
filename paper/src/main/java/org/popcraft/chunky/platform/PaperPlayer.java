@@ -12,8 +12,6 @@ import org.popcraft.chunky.platform.util.Location;
 import java.util.List;
 import java.util.UUID;
 
-import static org.popcraft.chunky.util.Translator.translateKey;
-
 public class PaperPlayer extends PaperSender implements Player {
     private final JavaPlugin plugin = JavaPlugin.getPlugin(ChunkyPaper.class);
 
@@ -80,6 +78,6 @@ public class PaperPlayer extends PaperSender implements Player {
 
     @Override
     public void sendActionBar(final String key) {
-        player.sendActionBar(LEGACY_SERIALIZER.deserialize(translateKey(key, false)));
+        player.sendActionBar(format(key, false));
     }
 }

@@ -31,7 +31,7 @@ public final class Translator {
 
     public static String translateKey(final String key, final boolean prefixed, final Object... args) {
         final StringBuilder translation = new StringBuilder();
-        final String message = translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, key));
+        final String message = getMessage(key);
         if (prefixed) {
             translation.append("[Chunky] ");
         }
@@ -41,6 +41,10 @@ public final class Translator {
 
     public static String translate(final String key, final Object... args) {
         return translateKey(key, false, args);
+    }
+
+    public static String getMessage(final String key) {
+        return translations.getOrDefault(key, fallbackTranslations.getOrDefault(key, key));
     }
 
     public static void addCustomTranslation(final String key, final String message) {
