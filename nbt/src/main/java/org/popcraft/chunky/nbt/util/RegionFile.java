@@ -76,6 +76,7 @@ public final class RegionFile {
                 chunksByOffset[i] = (long) offsetTable[i] * ENTRIES + i;
             }
             Arrays.sort(chunksByOffset);
+            boolean complete = true;
             for (int position = part; position < ENTRIES; position += parts) {
                 final int i = (int) (chunksByOffset[position] % ENTRIES);
                 final int offset = offsetTable[i] * SECTOR_SIZE;
@@ -85,43 +86,46 @@ public final class RegionFile {
                 }
                 final int x = (regionX * 32) + (i % 32);
                 final int z = (regionZ * 32) + (i / 32);
-                region.seek(offset);
-                final int length = region.readInt();
-                final int compressionType = region.readByte() & 0xFF;
-                final byte[] compressed;
-                if ((compressionType & CompressionType.EXTERNAL_FLAG) != 0) {
-                    final Path externalFile = file.toPath().getParent().resolve("c.%d.%d.mcc".formatted(x, z));
-                    if (Files.notExists(externalFile)) {
-                        continue;
-                    }
-                    compressed = Files.readAllBytes(externalFile);
-                } else {
-                    if (length <= 1 || length > size - 4) {
-                        throw new IOException("Invalid length %d for chunk %d, %d in %s".formatted(length, x, z, file.getName()));
-                    }
-                    compressed = new byte[length - 1];
-                    region.readFully(compressed);
-                }
-                try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed);
-                     final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG);
-                     final FastBufferedInputStream buffer = new FastBufferedInputStream(decompressed);
-                     final DataInputStream input = new DataInputStream(buffer)) {
-                    final Tag data;
-                    if (filter == null) {
-                        data = Tag.load(input);
+                try {
+                    region.seek(offset);
+                    final int length = region.readInt();
+                    final int compressionType = region.readByte() & 0xFF;
+                    final byte[] compressed;
+                    if ((compressionType & CompressionType.EXTERNAL_FLAG) != 0) {
+                        final Path externalFile = file.toPath().getParent().resolve("c.%d.%d.mcc".formatted(x, z));
+                        if (Files.notExists(externalFile)) {
+                            continue;
+                        }
+                        compressed = Files.readAllBytes(externalFile);
                     } else {
-                        data = filter.hasTagNames() ?
-                                Tag.findMany(input, filter.getTagNames()) :
-                                Tag.find(input, filter.getType(), filter.getName());
+                        if (length <= 1 || length > size - 4) {
+                            throw new IOException("Invalid length %d for chunk %d, %d in %s".formatted(length, x, z, file.getName()));
+                        }
+                        compressed = new byte[length - 1];
+                        region.readFully(compressed);
                     }
-                    final Chunk chunk = new Chunk(x, z, data, timestampTable[i]);
-                    chunks.add(chunk);
-                    chunkMap.put(ChunkPos.of(x, z), chunk);
+                    try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed);
+                         final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG);
+                         final FastBufferedInputStream buffer = new FastBufferedInputStream(decompressed);
+                         final DataInputStream input = new DataInputStream(buffer)) {
+                        final Tag data;
+                        if (filter == null) {
+                            data = Tag.load(input);
+                        } else {
+                            data = filter.hasTagNames() ?
+                                    Tag.findMany(input, filter.getTagNames()) :
+                                    Tag.find(input, filter.getType(), filter.getName());
+                        }
+                        final Chunk chunk = new Chunk(x, z, data, timestampTable[i]);
+                        chunks.add(chunk);
+                        chunkMap.put(ChunkPos.of(x, z), chunk);
+                    }
+                } catch (final IOException | RuntimeException ignored) {
+                    complete = false;
                 }
             }
-            fullyRead = true;
-        } catch (IOException e) {
-            e.printStackTrace();
+            fullyRead = complete;
+        } catch (final IOException ignored) {
         } finally {
             inflater.end();
         }
