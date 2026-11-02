@@ -106,6 +106,10 @@ public class TaskLoader {
     }
 
     public void saveTask(final GenerationTask task) {
+        saveTask(task, task.getCount(), task.getTotalTime());
+    }
+
+    public synchronized void saveTask(final GenerationTask task, final long count, final long time) {
         final Selection selection = task.getSelection();
         final String world = selection.world().getName();
         final Properties properties = tasks.getOrDefault(world, new Properties());
@@ -125,8 +129,8 @@ public class TaskLoader {
             pattern.getValue().ifPresent(file -> properties.setProperty(TaskProperty.CSV.key(), file));
         }
         properties.setProperty(TaskProperty.SHAPE.key(), shape);
-        properties.setProperty(TaskProperty.CHUNKS.key(), String.valueOf(task.getCount()));
-        properties.setProperty(TaskProperty.TIME.key(), String.valueOf(task.getTotalTime()));
+        properties.setProperty(TaskProperty.CHUNKS.key(), String.valueOf(count));
+        properties.setProperty(TaskProperty.TIME.key(), String.valueOf(time));
         tasks.put(world, properties);
         writeTask(world, properties);
     }

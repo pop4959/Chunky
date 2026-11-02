@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GenerationTask implements Runnable {
     private static final double SAMPLE_INTERVAL = 1000d * Math.max(Input.tryInteger(System.getProperty("chunky.sampleInterval")).orElse(30), 30);
     private static final double SAMPLE_SUB_INTERVAL = SAMPLE_INTERVAL / 30;
+    private static final long AUTO_SAVE_INTERVAL = 1000L * Math.max(Input.tryInteger(System.getProperty("chunky.autoSaveInterval")).orElse(60), 0);
     private final Chunky chunky;
     private final Selection selection;
     private final Shape shape;
@@ -39,6 +40,7 @@ public class GenerationTask implements Runnable {
     private ChunkIterator chunkIterator;
     private boolean stopped, cancelled;
     private long prevTime;
+    private long lastAutomaticSave, autoSaveCount, autoSaveTime;
     private String owner;
 
     public GenerationTask(final Chunky chunky, final Selection selection, final long count, final long time, final boolean cancelled) {
@@ -120,6 +122,20 @@ public class GenerationTask implements Runnable {
         }
     }
 
+    private void autoSave() {
+        if (AUTO_SAVE_INTERVAL <= 0) {
+            return;
+        }
+        final long currentTime = System.currentTimeMillis();
+        if (currentTime - lastAutomaticSave < AUTO_SAVE_INTERVAL) {
+            return;
+        }
+        lastAutomaticSave = currentTime;
+        chunky.getTaskLoader().saveTask(this, autoSaveCount, autoSaveTime);
+        autoSaveCount = finishedChunks.get();
+        autoSaveTime = getTotalTime();
+    }
+
     @Override
     public void run() {
         final String poolThreadName = Thread.currentThread().getName();
@@ -133,6 +149,9 @@ public class GenerationTask implements Runnable {
                 selection.world().getRegionDirectory().map(regionDirectory -> new RegionStatusReader(selection.world().getName(), regionDirectory, worldState)).orElse(null) :
                 null;
         startTime.set(System.currentTimeMillis());
+        lastAutomaticSave = startTime.get();
+        autoSaveCount = finishedChunks.get();
+        autoSaveTime = getTotalTime();
         while (!stopped && chunkIterator.hasNext()) {
             final ChunkCoordinate chunk = chunkIterator.next();
             final int chunkCenterX = (chunk.x() << 4) + 8;
@@ -176,6 +195,7 @@ public class GenerationTask implements Runnable {
                         working.release();
                         update(chunk.x(), chunk.z(), throwable == null);
                     });
+            autoSave();
         }
         if (regionStatusReader != null) {
             regionStatusReader.close();
