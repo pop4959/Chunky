@@ -37,7 +37,7 @@ public class Loop2ChunkIterator implements ChunkIterator {
         this.z = z1;
         final int diameterChunksX = selection.diameterChunksX();
         this.diameterChunksZ = selection.diameterChunksZ();
-        this.total = diameterChunksX * diameterChunksZ;
+        this.total = (long) diameterChunksX * diameterChunksZ;
     }
 
     @Override
