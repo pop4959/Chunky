@@ -60,6 +60,8 @@ public abstract class BrigadierCommand<S> {
                 argument(CommandLiteral.Z1, word()),
                 argument(CommandLiteral.X2, word()),
                 argument(CommandLiteral.Z2, word()));
+        registerCommand(command, CommandLiteral.DEBUG,
+                literal(CommandLiteral.MAP));
         registerCommand(command, CommandLiteral.HELP,
                 argument(CommandLiteral.PAGE, integer()));
         registerCommand(command, CommandLiteral.PATTERN,

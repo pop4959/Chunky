@@ -26,6 +26,7 @@ public final class RegionFile {
     private static final int SECTOR_SIZE = 4096;
     private final Set<Chunk> chunks = new HashSet<>();
     private final Map<ChunkPos, Chunk> chunkMap = new HashMap<>();
+    private final Set<ChunkPos> invalidChunks = new HashSet<>();
     private final Inflater inflater = new Inflater();
     private Header header;
     private boolean fullyRead;
@@ -111,6 +112,7 @@ public final class RegionFile {
                     if ((compressionType & CompressionType.EXTERNAL_FLAG) != 0) {
                         final Path externalFile = file.toPath().getParent().resolve("c.%d.%d.mcc".formatted(x, z));
                         if (Files.notExists(externalFile)) {
+                            invalidChunks.add(ChunkPos.of(x, z));
                             continue;
                         }
                         compressed = Files.readAllBytes(externalFile);
@@ -138,6 +140,7 @@ public final class RegionFile {
                         chunkMap.put(ChunkPos.of(x, z), chunk);
                     }
                 } catch (final IOException | RuntimeException ignored) {
+                    invalidChunks.add(ChunkPos.of(x, z));
                     complete = false;
                 }
             }
@@ -171,6 +174,10 @@ public final class RegionFile {
 
     public Optional<Header> getHeader() {
         return Optional.ofNullable(header);
+    }
+
+    public boolean isInvalid(final int x, final int z) {
+        return invalidChunks.contains(ChunkPos.of(x, z));
     }
 
     public boolean isFullyRead() {

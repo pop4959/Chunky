@@ -26,6 +26,9 @@ public final class TranslationKey {
     public static final String FORMAT_CONFIRM = "format_confirm";
     public static final String FORMAT_CONTINUE = "format_continue";
     public static final String FORMAT_CONTINUE_NO_TASKS = "format_continue_no_tasks";
+    public static final String FORMAT_DEBUG_MAP = "format_debug_map";
+    public static final String FORMAT_DEBUG_MAP_FAILED = "format_debug_map_failed";
+    public static final String FORMAT_DEBUG_MAP_START = "format_debug_map_start";
     public static final String FORMAT_TRIM_CONFIRM = "format_trim_confirm";
     public static final String FORMAT_TRIM_CONFIRM_INSIDE = "format_trim_confirm_inside";
     public static final String FORMAT_TRIM_CONFIRM_INHABITED = "format_trim_confirm_inhabited";
@@ -65,6 +68,7 @@ public final class TranslationKey {
     public static final String HELP_CENTER = "help_center";
     public static final String HELP_CONTINUE = "help_continue";
     public static final String HELP_CORNERS = "help_corners";
+    public static final String HELP_DEBUG = "help_debug";
     public static final String HELP_TRIM = "help_trim";
     public static final String HELP_MENU = "help_menu";
     public static final String HELP_MORE = "help_more";

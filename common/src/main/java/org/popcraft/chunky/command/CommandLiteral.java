@@ -10,10 +10,12 @@ public final class CommandLiteral {
     public static final String CONFIRM = "confirm";
     public static final String CONTINUE = "continue";
     public static final String CORNERS = "corners";
+    public static final String DEBUG = "debug";
     public static final String FILTERS = "filters";
     public static final String HELP = "help";
     public static final String INHABITED = "inhabited";
     public static final String INTERVAL = "interval";
+    public static final String MAP = "map";
     public static final String PAGE = "page";
     public static final String PATTERN = "pattern";
     public static final String PAUSE = "pause";

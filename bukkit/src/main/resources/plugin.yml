@@ -35,6 +35,9 @@ permissions:
   chunky.command.corners:
     default: op
     children: [chunky.command]
+  chunky.command.debug:
+    default: op
+    children: [chunky.command]
   chunky.command.help:
     default: op
     children: [chunky.command]
@@ -89,6 +92,7 @@ permissions:
       - chunky.command.confirm
       - chunky.command.continue
       - chunky.command.corners
+      - chunky.command.debug
       - chunky.command.help
       - chunky.command.pattern
       - chunky.command.pause

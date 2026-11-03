@@ -9,6 +9,7 @@ import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.ConfirmCommand;
 import org.popcraft.chunky.command.ContinueCommand;
 import org.popcraft.chunky.command.CornersCommand;
+import org.popcraft.chunky.command.DebugCommand;
 import org.popcraft.chunky.command.HelpCommand;
 import org.popcraft.chunky.command.PatternCommand;
 import org.popcraft.chunky.command.PauseCommand;
@@ -110,6 +111,7 @@ public class Chunky {
         commandMap.put(CommandLiteral.CONFIRM, new ConfirmCommand(this));
         commandMap.put(CommandLiteral.CONTINUE, new ContinueCommand(this));
         commandMap.put(CommandLiteral.CORNERS, new CornersCommand(this));
+        commandMap.put(CommandLiteral.DEBUG, new DebugCommand(this));
         commandMap.put(CommandLiteral.HELP, new HelpCommand(this));
         commandMap.put(CommandLiteral.PATTERN, new PatternCommand(this));
         commandMap.put(CommandLiteral.PAUSE, new PauseCommand(this));

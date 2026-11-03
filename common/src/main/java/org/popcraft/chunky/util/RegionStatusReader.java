@@ -75,18 +75,21 @@ public final class RegionStatusReader implements AutoCloseable {
         }
     }
 
-    private static boolean isValid(final CompoundTag data, final int x, final int z) {
+    static boolean isValid(final CompoundTag data, final int x, final int z) {
         return data.getInt("xPos").filter(xPos -> xPos.value() == x).isPresent()
                 && data.getInt("zPos").filter(zPos -> zPos.value() == z).isPresent();
     }
 
-    private static boolean isFull(final CompoundTag data) {
-        final boolean full = data.getString("Status").map(StringTag::value)
+    static boolean isFullStatus(final CompoundTag data) {
+        return data.getString("Status").map(StringTag::value)
                 .filter(status -> "minecraft:full".equals(status) || "full".equals(status))
                 .isPresent();
+    }
+
+    static boolean isFull(final CompoundTag data) {
         final boolean lit = data.get("isLightOn").isPresent();
         final boolean saved = data.getLong("LastUpdate").filter(lastUpdate -> lastUpdate.value() > 0).isPresent();
-        return full && lit && saved;
+        return isFullStatus(data) && lit && saved;
     }
 
     @Override

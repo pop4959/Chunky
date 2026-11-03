@@ -125,6 +125,20 @@ public class ChunkySponge {
                     return CommandResult.success();
                 })
                 .build();
+        final Command.Parameterized debugMapCommand = Command.builder()
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, CommandLiteral.DEBUG, List.of(CommandLiteral.MAP));
+                    return CommandResult.success();
+                })
+                .build();
+        final Command.Parameterized debugCommand = Command.builder()
+                .permission("chunky.command.debug")
+                .addChild(debugMapCommand, CommandLiteral.MAP)
+                .executor(ctx -> {
+                    executeSpongeCommand(ctx, CommandLiteral.DEBUG, List.of());
+                    return CommandResult.success();
+                })
+                .build();
         final Command.Parameterized helpCommand = Command.builder()
                 .permission("chunky.command.help")
                 .addParameters(Parameter.integerNumber().key(CommandLiteral.PAGE).terminal().build())
@@ -304,6 +318,7 @@ public class ChunkySponge {
                 .addChild(confirmCommand, CommandLiteral.CONFIRM)
                 .addChild(continueCommand, CommandLiteral.CONTINUE)
                 .addChild(cornersCommand, CommandLiteral.CORNERS)
+                .addChild(debugCommand, CommandLiteral.DEBUG)
                 .addChild(helpCommand, CommandLiteral.HELP)
                 .addChild(patternCommand, CommandLiteral.PATTERN)
                 .addChild(pauseCommand, CommandLiteral.PAUSE)

@@ -68,6 +68,9 @@ public class TranslatorTest {
         translate(TranslationKey.FORMAT_CONFIRM);
         translate(TranslationKey.FORMAT_CONTINUE, "world");
         translate(TranslationKey.FORMAT_CONTINUE_NO_TASKS);
+        translate(TranslationKey.FORMAT_DEBUG_MAP, "world", "debug/world.png", Formatting.number(1), Formatting.number(2), Formatting.number(3), Formatting.number(4), Formatting.number(5));
+        translate(TranslationKey.FORMAT_DEBUG_MAP_FAILED, "world", "Access denied");
+        translate(TranslationKey.FORMAT_DEBUG_MAP_START, "world");
         translate(TranslationKey.FORMAT_TRIM_CONFIRM, "world", translate(TranslationKey.SHAPE_SQUARE), Formatting.number(1), Formatting.number(2), "500", "/chunky confirm");
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INSIDE, "world", translate(TranslationKey.SHAPE_SQUARE), Formatting.number(1), Formatting.number(2), "500", "/chunky confirm");
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED, Formatting.number(0));
@@ -107,6 +110,7 @@ public class TranslatorTest {
         translate(TranslationKey.HELP_CENTER);
         translate(TranslationKey.HELP_CONTINUE);
         translate(TranslationKey.HELP_CORNERS);
+        translate(TranslationKey.HELP_DEBUG);
         translate(TranslationKey.HELP_TRIM);
         translate(TranslationKey.HELP_MENU, "");
         translate(TranslationKey.HELP_MORE, "/chunky help 2");
