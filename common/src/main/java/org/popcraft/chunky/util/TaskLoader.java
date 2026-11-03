@@ -3,6 +3,7 @@ package org.popcraft.chunky.util;
 import org.popcraft.chunky.Chunky;
 import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
+import org.popcraft.chunky.api.event.task.GenerationCompleteEvent;
 import org.popcraft.chunky.iterator.PatternType;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.shape.ShapeType;
@@ -143,8 +144,12 @@ public class TaskLoader {
 
     public void cancelTask(final World world) {
         loadTask(world).ifPresent(generationTask -> {
+            final boolean paused = !generationTask.isCancelled() && !chunky.getGenerationTasks().containsKey(world.getName());
             generationTask.stop(true);
             saveTask(generationTask);
+            if (paused) {
+                chunky.getEventBus().call(generationTask.createCompleteEvent(GenerationCompleteEvent.Reason.CANCELLED));
+            }
         });
     }
 

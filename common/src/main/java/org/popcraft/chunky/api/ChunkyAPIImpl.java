@@ -5,6 +5,7 @@ import org.popcraft.chunky.GenerationTask;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.api.event.task.GenerationCompleteEvent;
 import org.popcraft.chunky.api.event.task.GenerationProgressEvent;
+import org.popcraft.chunky.api.event.task.GenerationStartEvent;
 import org.popcraft.chunky.platform.World;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.Parameter;
@@ -93,9 +94,14 @@ public class ChunkyAPIImpl implements ChunkyAPI {
         if (!chunky.getGenerationTasks().containsKey(implWorld.getName())) {
             return false;
         }
-        chunky.getGenerationTasks().remove(implWorld.getName()).stop(true);
         chunky.getTaskLoader().cancelTask(implWorld);
+        chunky.getGenerationTasks().remove(implWorld.getName()).stop(true);
         return true;
+    }
+
+    @Override
+    public void onGenerationStart(final Consumer<GenerationStartEvent> event) {
+        chunky.getEventBus().subscribe(GenerationStartEvent.class, event);
     }
 
     @Override

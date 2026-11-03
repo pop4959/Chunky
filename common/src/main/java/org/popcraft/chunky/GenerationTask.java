@@ -2,6 +2,7 @@ package org.popcraft.chunky;
 
 import org.popcraft.chunky.api.event.task.GenerationCompleteEvent;
 import org.popcraft.chunky.api.event.task.GenerationProgressEvent;
+import org.popcraft.chunky.api.event.task.GenerationStartEvent;
 import org.popcraft.chunky.event.task.GenerationTaskFinishEvent;
 import org.popcraft.chunky.event.task.GenerationTaskUpdateEvent;
 import org.popcraft.chunky.iterator.ChunkIterator;
@@ -38,7 +39,7 @@ public class GenerationTask implements Runnable {
     private final Progress progress;
     private final RegionCache.WorldState worldState;
     private ChunkIterator chunkIterator;
-    private boolean stopped, cancelled;
+    private boolean stopped, cancelled, continued;
     private long prevTime;
     private long lastAutomaticSave, autoSaveCount, autoSaveTime;
     private String owner;
@@ -48,6 +49,7 @@ public class GenerationTask implements Runnable {
         this.chunkIterator = ChunkIteratorFactory.getChunkIterator(selection, count);
         this.finishedChunks.set(count);
         this.cancelled = cancelled;
+        this.continued = true;
         this.prevTime = time;
     }
 
@@ -140,6 +142,7 @@ public class GenerationTask implements Runnable {
     public void run() {
         final String poolThreadName = Thread.currentThread().getName();
         Thread.currentThread().setName(String.format("Chunky-%s Thread", selection.world().getName()));
+        chunky.getEventBus().call(new GenerationStartEvent(selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), selection.radiusX(), selection.radiusZ(), chunkIterator.name(), owner, continued));
         if (!chunkIterator.process()) {
             stop(true);
         }
@@ -200,16 +203,24 @@ public class GenerationTask implements Runnable {
         if (regionStatusReader != null) {
             regionStatusReader.close();
         }
+        final GenerationCompleteEvent.Reason reason;
         if (stopped) {
             chunky.getServer().getConsole().sendMessagePrefixed(TranslationKey.TASK_STOPPED, selection.world().getName());
+            reason = cancelled ? GenerationCompleteEvent.Reason.CANCELLED : GenerationCompleteEvent.Reason.PAUSED;
         } else {
             cancelled = true;
+            reason = GenerationCompleteEvent.Reason.COMPLETED;
         }
         chunky.getTaskLoader().saveTask(this);
         chunky.getGenerationTasks().remove(selection.world().getName());
         Thread.currentThread().setName(poolThreadName);
         chunky.getEventBus().call(new GenerationTaskFinishEvent(this));
-        chunky.getEventBus().call(new GenerationCompleteEvent(selection.world().getName()));
+        chunky.getEventBus().call(createCompleteEvent(reason));
+    }
+
+    public GenerationCompleteEvent createCompleteEvent(final GenerationCompleteEvent.Reason reason) {
+        final long chunks = GenerationCompleteEvent.Reason.COMPLETED.equals(reason) ? chunkIterator.total() : getCount();
+        return new GenerationCompleteEvent(selection.world().getName(), selection.shape(), selection.centerX(), selection.centerZ(), selection.radiusX(), selection.radiusZ(), chunkIterator.name(), owner, chunks, getTotalTime(), reason);
     }
 
     public void stop(final boolean cancelled) {

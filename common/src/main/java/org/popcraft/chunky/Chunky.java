@@ -33,6 +33,7 @@ import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.PendingAction;
 import org.popcraft.chunky.util.RegionCache;
 import org.popcraft.chunky.util.TaskLoader;
+import org.popcraft.chunky.util.TaskLogger;
 import org.popcraft.chunky.util.TaskScheduler;
 import org.popcraft.chunky.util.Translator;
 import org.popcraft.chunky.util.Version;
@@ -68,6 +69,7 @@ public class Chunky {
         this.config = config;
         this.taskLoader = new TaskLoader(this);
         this.eventBus = new EventBus();
+        new TaskLogger(this).register(eventBus);
         this.selection = Selection.builder(this, server.getWorlds().get(0));
         this.limit = loadLimit().orElse(Double.MAX_VALUE);
         this.version = loadVersion();
