@@ -24,7 +24,7 @@ public final class MaxWorkingCount {
                 .filter(Integer.class::isInstance)
                 .map(Integer.class::cast);
         if (c2meParallelism.isPresent()) {
-            return Math.clamp(c2meParallelism.get() * 32L, DEFAULT, 1024);
+            return Math.clamp(c2meParallelism.get() * 8L, DEFAULT, 1024);
         }
         return DEFAULT;
     }
