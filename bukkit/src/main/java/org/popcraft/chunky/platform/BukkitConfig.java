@@ -68,6 +68,11 @@ public class BukkitConfig implements Config {
     }
 
     @Override
+    public int getPlayerPauseCount() {
+        return plugin.getConfig().getInt("player-pause-count", 0);
+    }
+
+    @Override
     public void reload() {
         plugin.reloadConfig();
     }

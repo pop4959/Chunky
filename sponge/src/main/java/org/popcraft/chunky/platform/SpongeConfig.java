@@ -119,6 +119,11 @@ public class SpongeConfig implements Config {
     }
 
     @Override
+    public int getPlayerPauseCount() {
+        return this.rootNode == null ? 0 : this.rootNode.node(ROOT_CONFIG_NODE, "player-pause-count").getInt(0);
+    }
+
+    @Override
     public void reload() {
         try {
             this.rootNode = configLoader.load();

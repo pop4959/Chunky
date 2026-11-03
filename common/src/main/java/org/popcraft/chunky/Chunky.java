@@ -31,6 +31,7 @@ import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.Server;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.PendingAction;
+import org.popcraft.chunky.util.PlayerPauseTask;
 import org.popcraft.chunky.util.RegionCache;
 import org.popcraft.chunky.util.TaskLoader;
 import org.popcraft.chunky.util.TaskLogger;
@@ -63,6 +64,7 @@ public class Chunky {
     private final Version version;
     private final Map<String, ChunkyCommand> commands;
     private final ChunkyAPI api;
+    private final PlayerPauseTask playerPauseTask;
 
     public Chunky(final Server server, final Config config) {
         this.server = server;
@@ -76,9 +78,12 @@ public class Chunky {
         this.commands = loadCommands();
         this.api = new ChunkyAPIImpl(this);
         ChunkyProvider.register(this);
+        this.playerPauseTask = new PlayerPauseTask(this);
+        playerPauseTask.register(eventBus);
     }
 
     public void disable() {
+        playerPauseTask.stop();
         taskLoader.saveTasks();
         getGenerationTasks().values().forEach(generationTask -> generationTask.stop(false));
         getScheduler().cancelTasks();

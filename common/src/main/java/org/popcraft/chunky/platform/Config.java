@@ -25,5 +25,7 @@ public interface Config {
 
     void setUpdateInterval(int updateInterval);
 
+    int getPlayerPauseCount();
+
     void reload();
 }
