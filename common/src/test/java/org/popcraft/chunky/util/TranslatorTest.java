@@ -71,6 +71,8 @@ public class TranslatorTest {
         translate(TranslationKey.FORMAT_TRIM_CONFIRM, "world", translate(TranslationKey.SHAPE_SQUARE), Formatting.number(1), Formatting.number(2), "500", "/chunky confirm");
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INSIDE, "world", translate(TranslationKey.SHAPE_SQUARE), Formatting.number(1), Formatting.number(2), "500", "/chunky confirm");
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED, Formatting.number(0));
+        translate(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED_MINIMUM, Formatting.number(6000));
+        translate(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED_RANGE, Formatting.number(6000), Formatting.number(288000));
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_UNMODIFIED, "30 days");
         translate(TranslationKey.FORMAT_TRIM_FILTER_INVALID, "inhabited=abc", "inhabited, unmodified");
         translate(TranslationKey.FORMAT_PATTERN, "concentric");

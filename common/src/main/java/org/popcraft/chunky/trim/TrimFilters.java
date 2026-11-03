@@ -64,10 +64,17 @@ public final class TrimFilters {
         if (range < 0) {
             return parseTicks(value).map(InhabitedTimeFilter::new);
         }
-        if (range > 0) {
+        final String min = value.substring(0, range);
+        final String max = value.substring(range + RANGE.length());
+        if (min.isEmpty() && max.isEmpty()) {
             return Optional.empty();
         }
-        return parseTicks(value.substring(RANGE.length())).map(InhabitedTimeFilter::new);
+        final Optional<Long> minTicks = min.isEmpty() ? Optional.of(0L) : parseTicks(min);
+        final Optional<Long> maxTicks = max.isEmpty() ? Optional.of(Long.MAX_VALUE) : parseTicks(max);
+        if (minTicks.isEmpty() || maxTicks.isEmpty() || minTicks.get() > maxTicks.get()) {
+            return Optional.empty();
+        }
+        return Optional.of(new InhabitedTimeFilter(minTicks.get(), maxTicks.get()));
     }
 
     private static Optional<UnmodifiedFilter> parseUnmodified(final String value) {

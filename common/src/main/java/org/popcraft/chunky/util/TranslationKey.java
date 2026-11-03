@@ -29,6 +29,8 @@ public final class TranslationKey {
     public static final String FORMAT_TRIM_CONFIRM = "format_trim_confirm";
     public static final String FORMAT_TRIM_CONFIRM_INSIDE = "format_trim_confirm_inside";
     public static final String FORMAT_TRIM_CONFIRM_INHABITED = "format_trim_confirm_inhabited";
+    public static final String FORMAT_TRIM_CONFIRM_INHABITED_MINIMUM = "format_trim_confirm_inhabited_minimum";
+    public static final String FORMAT_TRIM_CONFIRM_INHABITED_RANGE = "format_trim_confirm_inhabited_range";
     public static final String FORMAT_TRIM_CONFIRM_UNMODIFIED = "format_trim_confirm_unmodified";
     public static final String FORMAT_TRIM_FILTER_INVALID = "format_trim_filter_invalid";
     public static final String FORMAT_PATTERN = "format_pattern";
