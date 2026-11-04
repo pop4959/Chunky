@@ -64,6 +64,8 @@ public abstract class BrigadierCommand<S> {
                 literal(CommandLiteral.MAP));
         registerCommand(command, CommandLiteral.HELP,
                 argument(CommandLiteral.PAGE, integer()));
+        registerCommand(command, CommandLiteral.LIMIT,
+                argument(CommandLiteral.RATE, integer()));
         registerCommand(command, CommandLiteral.PATTERN,
                 suggestedArgument(CommandLiteral.PATTERN, string()),
                 argument(CommandLiteral.VALUE, string()));

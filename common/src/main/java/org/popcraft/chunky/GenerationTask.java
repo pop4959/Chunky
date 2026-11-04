@@ -14,6 +14,7 @@ import org.popcraft.chunky.util.ChunkCoordinate;
 import org.popcraft.chunky.util.Input;
 import org.popcraft.chunky.util.MaxWorkingCount;
 import org.popcraft.chunky.util.Pair;
+import org.popcraft.chunky.util.RateLimiter;
 import org.popcraft.chunky.util.RegionCache;
 import org.popcraft.chunky.util.RegionStatusReader;
 import org.popcraft.chunky.util.TranslationKey;
@@ -38,6 +39,7 @@ public class GenerationTask implements Runnable {
     private final Deque<Pair<Long, AtomicLong>> updateSamples = new ConcurrentLinkedDeque<>();
     private final Progress progress;
     private final RegionCache.WorldState worldState;
+    private final RateLimiter rateLimiter;
     private ChunkIterator chunkIterator;
     private boolean stopped, cancelled, continued;
     private long prevTime;
@@ -60,6 +62,7 @@ public class GenerationTask implements Runnable {
         this.shape = ShapeFactory.getShape(selection);
         this.progress = new Progress(selection.world().getName());
         this.worldState = chunky.getRegionCache().getWorld(selection.world().getName());
+        this.rateLimiter = new RateLimiter((long) SAMPLE_INTERVAL, selection.rateLimit());
     }
 
     private synchronized void update(final int chunkX, final int chunkZ, final boolean loaded) {
@@ -91,7 +94,11 @@ public class GenerationTask implements Runnable {
         for (Pair<Long, AtomicLong> b : updateSamples) {
             sampleCount += b.right().get();
         }
-        progress.rate = timeDiff > 0 ? sampleCount / timeDiff : 0;
+        final double rate = rateLimiter.getLimit() > 0 ? rateLimiter.rate(currentTime) : timeDiff > 0 ? sampleCount / timeDiff : 0;
+        if (chunksLeft > 0 && rate <= 0) {
+            return;
+        }
+        progress.rate = rate;
         final long time;
         if (chunksLeft == 0) {
             time = (prevTime + (currentTime - startTime.get())) / 1000;
@@ -146,7 +153,8 @@ public class GenerationTask implements Runnable {
         if (!chunkIterator.process()) {
             stop(true);
         }
-        final Semaphore working = new Semaphore(MaxWorkingCount.get());
+        final int maxWorkingCount = MaxWorkingCount.get();
+        final Semaphore working = new Semaphore(maxWorkingCount);
         final boolean forceLoadExistingChunks = chunky.getConfig().isForceLoadExistingChunks();
         final RegionStatusReader regionStatusReader = !forceLoadExistingChunks ?
                 selection.world().getRegionDirectory().map(regionDirectory -> new RegionStatusReader(selection.world().getName(), regionDirectory, worldState)).orElse(null) :
@@ -174,6 +182,7 @@ public class GenerationTask implements Runnable {
                 stop(cancelled);
                 break;
             }
+            final long rateWindow = rateLimiter.acquire(working, maxWorkingCount);
             final CompletableFuture<Boolean> isChunkGenerated;
             if (forceLoadExistingChunks) {
                 isChunkGenerated = CompletableFuture.completedFuture(false);
@@ -195,6 +204,7 @@ public class GenerationTask implements Runnable {
                             return selection.world().getChunkAtAsync(chunk.x(), chunk.z());
                         }
                     }).whenComplete((ignored, throwable) -> {
+                        rateLimiter.release(rateWindow);
                         working.release();
                         update(chunk.x(), chunk.z(), throwable == null);
                     });
@@ -250,6 +260,10 @@ public class GenerationTask implements Runnable {
 
     public ChunkIterator getChunkIterator() {
         return chunkIterator;
+    }
+
+    public RateLimiter getRateLimiter() {
+        return rateLimiter;
     }
 
     public Shape getShape() {

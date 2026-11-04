@@ -27,6 +27,7 @@ public class HelpCommand implements ChunkyCommand {
             CommandLiteral.PATTERN,
             CommandLiteral.SILENT,
             CommandLiteral.QUIET,
+            CommandLiteral.LIMIT,
             CommandLiteral.TRIM,
             CommandLiteral.SELECTION,
             CommandLiteral.PROGRESS,

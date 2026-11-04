@@ -11,6 +11,7 @@ import org.popcraft.chunky.command.ContinueCommand;
 import org.popcraft.chunky.command.CornersCommand;
 import org.popcraft.chunky.command.DebugCommand;
 import org.popcraft.chunky.command.HelpCommand;
+import org.popcraft.chunky.command.LimitCommand;
 import org.popcraft.chunky.command.PatternCommand;
 import org.popcraft.chunky.command.PauseCommand;
 import org.popcraft.chunky.command.ProgressCommand;
@@ -120,6 +121,7 @@ public class Chunky {
         commandMap.put(CommandLiteral.CORNERS, new CornersCommand(this));
         commandMap.put(CommandLiteral.DEBUG, new DebugCommand(this));
         commandMap.put(CommandLiteral.HELP, new HelpCommand(this));
+        commandMap.put(CommandLiteral.LIMIT, new LimitCommand(this));
         commandMap.put(CommandLiteral.PATTERN, new PatternCommand(this));
         commandMap.put(CommandLiteral.PAUSE, new PauseCommand(this));
         commandMap.put(CommandLiteral.PROGRESS, new ProgressCommand(this));

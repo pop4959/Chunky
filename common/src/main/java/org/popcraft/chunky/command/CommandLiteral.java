@@ -15,6 +15,7 @@ public final class CommandLiteral {
     public static final String HELP = "help";
     public static final String INHABITED = "inhabited";
     public static final String INTERVAL = "interval";
+    public static final String LIMIT = "limit";
     public static final String MAP = "map";
     public static final String PAGE = "page";
     public static final String PATTERN = "pattern";
@@ -24,6 +25,7 @@ public final class CommandLiteral {
     public static final String RADIUS = "radius";
     public static final String RADIUS_X = "radiusX";
     public static final String RADIUS_Z = "radiusZ";
+    public static final String RATE = "rate";
     public static final String RELOAD = "reload";
     public static final String SELECTION = "selection";
     public static final String SHAPE = "shape";

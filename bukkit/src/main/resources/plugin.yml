@@ -41,6 +41,9 @@ permissions:
   chunky.command.help:
     default: op
     children: [chunky.command]
+  chunky.command.limit:
+    default: op
+    children: [chunky.command]
   chunky.command.pattern:
     default: op
     children: [chunky.command]
@@ -94,6 +97,7 @@ permissions:
       - chunky.command.corners
       - chunky.command.debug
       - chunky.command.help
+      - chunky.command.limit
       - chunky.command.pattern
       - chunky.command.pause
       - chunky.command.progress

@@ -150,6 +150,16 @@ public class ChunkySponge {
                     return CommandResult.success();
                 })
                 .build();
+        final Command.Parameterized limitCommand = Command.builder()
+                .permission("chunky.command.limit")
+                .addParameters(Parameter.integerNumber().key(CommandLiteral.RATE).build())
+                .executor(ctx -> {
+                    final List<String> args = new ArrayList<>();
+                    args.add(String.valueOf(ctx.requireOne(Parameter.key(CommandLiteral.RATE, Integer.class))));
+                    executeSpongeCommand(ctx, CommandLiteral.LIMIT, args);
+                    return CommandResult.success();
+                })
+                .build();
         final Command.Parameterized patternCommand = Command.builder()
                 .permission("chunky.command.pattern")
                 .addParameters(
@@ -320,6 +330,7 @@ public class ChunkySponge {
                 .addChild(cornersCommand, CommandLiteral.CORNERS)
                 .addChild(debugCommand, CommandLiteral.DEBUG)
                 .addChild(helpCommand, CommandLiteral.HELP)
+                .addChild(limitCommand, CommandLiteral.LIMIT)
                 .addChild(patternCommand, CommandLiteral.PATTERN)
                 .addChild(pauseCommand, CommandLiteral.PAUSE)
                 .addChild(progressCommand, CommandLiteral.PROGRESS)

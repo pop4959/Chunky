@@ -70,13 +70,15 @@ public class TaskLoader {
         final String pattern = task.getProperty(TaskProperty.PATTERN.key(), PatternType.REGION);
         final String file = task.getProperty(TaskProperty.CSV.key());
         final String shape = task.getProperty(TaskProperty.SHAPE.key(), ShapeType.SQUARE);
+        final int rateLimit = Input.tryInteger(task.getProperty(TaskProperty.RATE_LIMIT.key())).orElse(0);
         final Selection.Builder selection = Selection.builder(chunky, world)
                 .centerX(centerX)
                 .centerZ(centerZ)
                 .radiusX(radiusX)
                 .radiusZ(radiusZ)
                 .pattern(Parameter.of(pattern, file))
-                .shape(shape);
+                .shape(shape)
+                .rateLimit(rateLimit);
         final long chunks = Input.tryLong(task.getProperty(TaskProperty.CHUNKS.key())).orElse(0L);
         final long time = Input.tryLong(task.getProperty(TaskProperty.TIME.key())).orElse(0L);
         final GenerationTask generationTask = new GenerationTask(chunky, selection.build(), chunks, time, cancelled);
@@ -130,6 +132,7 @@ public class TaskLoader {
             pattern.getValue().ifPresent(file -> properties.setProperty(TaskProperty.CSV.key(), file));
         }
         properties.setProperty(TaskProperty.SHAPE.key(), shape);
+        properties.setProperty(TaskProperty.RATE_LIMIT.key(), String.valueOf(task.getRateLimiter().getLimit()));
         properties.setProperty(TaskProperty.CHUNKS.key(), String.valueOf(count));
         properties.setProperty(TaskProperty.TIME.key(), String.valueOf(time));
         tasks.put(world, properties);
@@ -186,6 +189,7 @@ public class TaskLoader {
         SHAPE("shape"),
         PATTERN("pattern"),
         CSV("csv"),
+        RATE_LIMIT("rate-limit"),
         CHUNKS("chunks"),
         TIME("time");
 

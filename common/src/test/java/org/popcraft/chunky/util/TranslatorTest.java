@@ -78,6 +78,8 @@ public class TranslatorTest {
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_INHABITED_RANGE, Formatting.number(6000), Formatting.number(288000));
         translate(TranslationKey.FORMAT_TRIM_CONFIRM_UNMODIFIED, "30 days");
         translate(TranslationKey.FORMAT_TRIM_FILTER_INVALID, "inhabited=abc", "inhabited, unmodified");
+        translate(TranslationKey.FORMAT_LIMIT, "world", 30);
+        translate(TranslationKey.FORMAT_LIMIT_DISABLED, "world");
         translate(TranslationKey.FORMAT_PATTERN, "concentric");
         translate(TranslationKey.FORMAT_PATTERN_NOT_FOUND, "pattern", "concentric, loop, spiral");
         translate(TranslationKey.FORMAT_PAUSE, "world");
@@ -114,6 +116,7 @@ public class TranslatorTest {
         translate(TranslationKey.HELP_TRIM);
         translate(TranslationKey.HELP_MENU, "");
         translate(TranslationKey.HELP_MORE, "/chunky help 2");
+        translate(TranslationKey.HELP_LIMIT);
         translate(TranslationKey.HELP_PATTERN);
         translate(TranslationKey.HELP_PAUSE);
         translate(TranslationKey.HELP_PROGRESS);

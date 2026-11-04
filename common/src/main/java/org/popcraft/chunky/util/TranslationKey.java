@@ -36,6 +36,8 @@ public final class TranslationKey {
     public static final String FORMAT_TRIM_CONFIRM_INHABITED_RANGE = "format_trim_confirm_inhabited_range";
     public static final String FORMAT_TRIM_CONFIRM_UNMODIFIED = "format_trim_confirm_unmodified";
     public static final String FORMAT_TRIM_FILTER_INVALID = "format_trim_filter_invalid";
+    public static final String FORMAT_LIMIT = "format_limit";
+    public static final String FORMAT_LIMIT_DISABLED = "format_limit_disabled";
     public static final String FORMAT_PATTERN = "format_pattern";
     public static final String FORMAT_PATTERN_NOT_FOUND = "format_pattern_not_found";
     public static final String FORMAT_PAUSE = "format_pause";
@@ -72,6 +74,7 @@ public final class TranslationKey {
     public static final String HELP_TRIM = "help_trim";
     public static final String HELP_MENU = "help_menu";
     public static final String HELP_MORE = "help_more";
+    public static final String HELP_LIMIT = "help_limit";
     public static final String HELP_PATTERN = "help_pattern";
     public static final String HELP_PAUSE = "help_pause";
     public static final String HELP_PROGRESS = "help_progress";
