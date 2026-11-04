@@ -5,9 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.popcraft.chunky.command.CommandArguments;
 import org.popcraft.chunky.command.CommandLiteral;
 import org.popcraft.chunky.command.suggestion.SuggestionProviders;
+import org.popcraft.chunky.platform.Sender;
 import org.popcraft.chunky.platform.SpongeConfig;
+import org.popcraft.chunky.platform.SpongePlayer;
 import org.popcraft.chunky.platform.SpongeSender;
 import org.popcraft.chunky.platform.SpongeServer;
+import org.popcraft.chunky.util.Input;
+import org.popcraft.chunky.util.TranslationKey;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Server;
@@ -16,18 +20,28 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.parameter.CommandContext;
 import org.spongepowered.api.command.parameter.Parameter;
 import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
 import org.spongepowered.api.event.lifecycle.LoadedGameEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
+import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
 import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+
+import static org.popcraft.chunky.util.Translator.translate;
 
 @Plugin("chunky")
 public class ChunkySponge {
@@ -52,6 +66,11 @@ public class ChunkySponge {
         if (chunky.getConfig().getContinueOnRestart()) {
             chunky.getCommands().get(CommandLiteral.CONTINUE).execute(chunky.getServer().getConsole(), CommandArguments.empty());
         }
+    }
+
+    @Listener
+    public void onServerStarted(final StartedEngineEvent<Server> event) {
+        disablePauseWhenEmptySeconds();
     }
 
     @Listener
@@ -289,7 +308,9 @@ public class ChunkySponge {
                         Parameter.string().key(CommandLiteral.X).terminal().build(),
                         Parameter.string().key(CommandLiteral.Z).terminal().build(),
                         Parameter.string().key(CommandLiteral.RADIUS_X).terminal().build(),
-                        Parameter.string().key(CommandLiteral.RADIUS_Z).terminal().build()
+                        Parameter.string().key(CommandLiteral.RADIUS_Z).terminal().build(),
+                        Parameter.string().key(CommandLiteral.TRIM_MODE).terminal().build(),
+                        Parameter.remainingJoinedStrings().key(CommandLiteral.FILTERS).terminal().build()
                 )
                 .terminal(true)
                 .executor(ctx -> {
@@ -300,14 +321,20 @@ public class ChunkySponge {
                     ctx.one(Parameter.key(CommandLiteral.Z, String.class)).ifPresent(args::add);
                     ctx.one(Parameter.key(CommandLiteral.RADIUS_X, String.class)).ifPresent(args::add);
                     ctx.one(Parameter.key(CommandLiteral.RADIUS_Z, String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key(CommandLiteral.TRIM_MODE, String.class)).ifPresent(args::add);
+                    ctx.one(Parameter.key(CommandLiteral.FILTERS, String.class)).map(filters -> filters.split(" ")).map(List::of).ifPresent(args::addAll);
                     executeSpongeCommand(ctx, CommandLiteral.TRIM, args);
                     return CommandResult.success();
                 })
                 .build();
         final Command.Parameterized worldborderCommand = Command.builder()
                 .permission("chunky.command.worldborder")
+                .addParameters(Parameter.world().key(CommandLiteral.WORLD).terminal().build())
+                .terminal(true)
                 .executor(ctx -> {
-                    executeSpongeCommand(ctx, CommandLiteral.WORLDBORDER, List.of());
+                    final List<String> args = new ArrayList<>();
+                    ctx.one(Parameter.key(CommandLiteral.WORLD, ServerWorld.class)).map(ServerWorld::key).map(ResourceKey::asString).ifPresent(args::add);
+                    executeSpongeCommand(ctx, CommandLiteral.WORLDBORDER, args);
                     return CommandResult.success();
                 })
                 .build();
@@ -353,7 +380,28 @@ public class ChunkySponge {
     }
 
     private void executeSpongeCommand(final CommandContext ctx, final String command, final List<String> args) {
-        chunky.getCommands().get(command).execute(new SpongeSender(ctx.cause().root()), CommandArguments.of(args));
+        final Sender sender = ctx.subject() instanceof final ServerPlayer player ? new SpongePlayer(player) : new SpongeSender(ctx.subject());
+        chunky.getCommands().get(command).execute(sender, CommandArguments.of(args));
+    }
+
+    private void disablePauseWhenEmptySeconds() {
+        final File serverPropertiesFile = Path.of(".").resolve("server.properties").toFile();
+        final Properties serverProperties = new Properties();
+        try (final FileInputStream serverPropertiesFileInputStream = new FileInputStream(serverPropertiesFile)) {
+            serverProperties.load(serverPropertiesFileInputStream);
+            final Optional<Integer> pauseWhenEmptySeconds = Input.tryInteger(serverProperties.getProperty("pause-when-empty-seconds"));
+            if (pauseWhenEmptySeconds.isPresent() && pauseWhenEmptySeconds.get() > 0) {
+                serverProperties.setProperty("pause-when-empty-seconds", "0");
+                try (final FileOutputStream serverPropertiesFileOutputStream = new FileOutputStream(serverPropertiesFile)) {
+                    serverProperties.store(serverPropertiesFileOutputStream, "Minecraft server properties");
+                    logger.warn(translate(TranslationKey.ERROR_PAUSE_WHEN_EMPTY_SECONDS));
+                } catch (final IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Chunky getChunky() {
