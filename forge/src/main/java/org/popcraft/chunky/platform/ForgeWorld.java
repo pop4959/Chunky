@@ -43,10 +43,12 @@ public class ForgeWorld implements World {
     private static final long FULL_STATE_CONFIRMATION_TIMEOUT_SECONDS = 30;
     private final ServerLevel world;
     private final Border worldBorder;
+    private final Path worldDirectory;
 
     public ForgeWorld(final ServerLevel world) {
         this.world = world;
         this.worldBorder = new ForgeBorder(world.getWorldBorder());
+        this.worldDirectory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT)).normalize();
     }
 
     @Override
@@ -198,7 +200,7 @@ public class ForgeWorld implements World {
         if (name == null) {
             return Optional.empty();
         }
-        final Path directory = DimensionType.getStorageFolder(world.dimension(), world.getServer().getWorldPath(LevelResource.ROOT)).normalize().resolve(name);
+        final Path directory = worldDirectory.resolve(name);
         return Files.exists(directory) ? Optional.of(directory) : Optional.empty();
     }
 
