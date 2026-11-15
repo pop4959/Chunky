@@ -3,7 +3,6 @@ package org.popcraft.chunky.nbt.util;
 import org.popcraft.chunky.nbt.Tag;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -148,9 +147,8 @@ public final class RegionFile {
                         compressedLength = length - 1;
                     }
                     try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed, compressedOffset, compressedLength);
-                         final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG);
-                         final FastBufferedInputStream buffer = new FastBufferedInputStream(decompressed);
-                         final DataInputStream input = new DataInputStream(buffer)) {
+                         final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG)) {
+                        final BufferedDataInput input = new BufferedDataInput(decompressed);
                         final Tag data;
                         if (filter == null) {
                             data = Tag.load(input);
