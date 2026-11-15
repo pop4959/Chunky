@@ -13,13 +13,12 @@ import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
@@ -28,9 +27,10 @@ public final class RegionFile {
     private static final int ENTRIES = 1024;
     private static final int SECTOR_SIZE = 4096;
     private static final ThreadLocal<Inflater> INFLATER = ThreadLocal.withInitial(Inflater::new);
-    private final Set<Chunk> chunks = new HashSet<>();
-    private final Map<ChunkPos, Chunk> chunkMap = new HashMap<>();
-    private final Set<ChunkPos> invalidChunks = new HashSet<>();
+    private final Chunk[] chunks = new Chunk[ENTRIES];
+    private final BitSet invalidChunks = new BitSet(ENTRIES);
+    private int regionX;
+    private int regionZ;
     private final Inflater inflater = INFLATER.get();
     private Header header;
     private boolean fullyRead;
@@ -74,6 +74,8 @@ public final class RegionFile {
             } catch (final NumberFormatException e) {
                 return;
             }
+            this.regionX = regionX;
+            this.regionZ = regionZ;
             final byte[] headerBytes = new byte[ENTRIES * 8];
             region.readFully(headerBytes);
             final IntBuffer headerInts = ByteBuffer.wrap(headerBytes).asIntBuffer();
@@ -122,7 +124,7 @@ public final class RegionFile {
                     if ((compressionType & CompressionType.EXTERNAL_FLAG) != 0) {
                         final Path externalFile = file.toPath().getParent().resolve("c.%d.%d.mcc".formatted(x, z));
                         if (Files.notExists(externalFile)) {
-                            invalidChunks.add(ChunkPos.of(x, z));
+                            invalidChunks.set(i);
                             continue;
                         }
                         compressed = Files.readAllBytes(externalFile);
@@ -157,12 +159,10 @@ public final class RegionFile {
                                     Tag.findMany(input, filter.getTagNames()) :
                                     Tag.find(input, filter.getType(), filter.getName());
                         }
-                        final Chunk chunk = new Chunk(x, z, data, timestampTable[i]);
-                        chunks.add(chunk);
-                        chunkMap.put(ChunkPos.of(x, z), chunk);
+                        chunks[i] = new Chunk(x, z, data, timestampTable[i]);
                     }
                 } catch (final IOException | RuntimeException ignored) {
-                    invalidChunks.add(ChunkPos.of(x, z));
+                    invalidChunks.set(i);
                     complete = false;
                 }
             }
@@ -185,11 +185,18 @@ public final class RegionFile {
     }
 
     public Collection<Chunk> getChunks() {
-        return chunks;
+        final List<Chunk> list = new ArrayList<>();
+        for (final Chunk chunk : chunks) {
+            if (chunk != null) {
+                list.add(chunk);
+            }
+        }
+        return list;
     }
 
     public Optional<Chunk> getChunk(final int x, final int z) {
-        return Optional.ofNullable(chunkMap.get(ChunkPos.of(x, z)));
+        final Chunk chunk = chunks[(x & 31) + (z & 31) * 32];
+        return chunk != null && chunk.getX() == x && chunk.getZ() == z ? Optional.of(chunk) : Optional.empty();
     }
 
     public Optional<Header> getHeader() {
@@ -197,7 +204,7 @@ public final class RegionFile {
     }
 
     public boolean isInvalid(final int x, final int z) {
-        return invalidChunks.contains(ChunkPos.of(x, z));
+        return (x >> 5) == regionX && (z >> 5) == regionZ && invalidChunks.get((x & 31) + (z & 31) * 32);
     }
 
     public boolean isFullyRead() {
