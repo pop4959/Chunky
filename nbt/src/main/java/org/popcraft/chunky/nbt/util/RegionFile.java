@@ -27,10 +27,11 @@ import java.util.zip.InflaterInputStream;
 public final class RegionFile {
     private static final int ENTRIES = 1024;
     private static final int SECTOR_SIZE = 4096;
+    private static final ThreadLocal<Inflater> INFLATER = ThreadLocal.withInitial(Inflater::new);
     private final Set<Chunk> chunks = new HashSet<>();
     private final Map<ChunkPos, Chunk> chunkMap = new HashMap<>();
     private final Set<ChunkPos> invalidChunks = new HashSet<>();
-    private final Inflater inflater = new Inflater();
+    private final Inflater inflater = INFLATER.get();
     private Header header;
     private boolean fullyRead;
 
@@ -167,8 +168,6 @@ public final class RegionFile {
             }
             fullyRead = complete;
         } catch (final IOException ignored) {
-        } finally {
-            inflater.end();
         }
     }
 
