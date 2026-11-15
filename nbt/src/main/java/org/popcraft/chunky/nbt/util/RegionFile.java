@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -84,6 +85,8 @@ public final class RegionFile {
                 fullyRead = true;
                 return;
             }
+            final FileChannel channel = region.getChannel();
+            byte[] chunkBuffer = new byte[65536];
             final int[] offsetTable = new int[ENTRIES];
             final int[] sizeTable = new int[ENTRIES];
             for (int i = 0; i < ENTRIES; ++i) {
@@ -106,10 +109,15 @@ public final class RegionFile {
                 final int x = (regionX * 32) + (i % 32);
                 final int z = (regionZ * 32) + (i / 32);
                 try {
-                    region.seek(offset);
-                    final int length = region.readInt();
-                    final int compressionType = region.readByte() & 0xFF;
+                    int buffered = channel.read(ByteBuffer.wrap(chunkBuffer, 0, Math.min(size, SECTOR_SIZE)), offset);
+                    if (buffered < 5) {
+                        throw new IOException("Truncated chunk %d, %d in %s".formatted(x, z, file.getName()));
+                    }
+                    final int length = ByteBuffer.wrap(chunkBuffer).getInt(0);
+                    final int compressionType = chunkBuffer[4] & 0xFF;
                     final byte[] compressed;
+                    final int compressedOffset;
+                    final int compressedLength;
                     if ((compressionType & CompressionType.EXTERNAL_FLAG) != 0) {
                         final Path externalFile = file.toPath().getParent().resolve("c.%d.%d.mcc".formatted(x, z));
                         if (Files.notExists(externalFile)) {
@@ -117,14 +125,26 @@ public final class RegionFile {
                             continue;
                         }
                         compressed = Files.readAllBytes(externalFile);
+                        compressedOffset = 0;
+                        compressedLength = compressed.length;
                     } else {
                         if (length <= 1 || length > size - 4) {
                             throw new IOException("Invalid length %d for chunk %d, %d in %s".formatted(length, x, z, file.getName()));
                         }
-                        compressed = new byte[length - 1];
-                        region.readFully(compressed);
+                        if (chunkBuffer.length < length + 4) {
+                            chunkBuffer = Arrays.copyOf(chunkBuffer, length + 4);
+                        }
+                        if (buffered < length + 4) {
+                            buffered += channel.read(ByteBuffer.wrap(chunkBuffer, buffered, length + 4 - buffered), offset + buffered);
+                            if (buffered < length + 4) {
+                                throw new IOException("Truncated chunk %d, %d in %s".formatted(x, z, file.getName()));
+                            }
+                        }
+                        compressed = chunkBuffer;
+                        compressedOffset = 5;
+                        compressedLength = length - 1;
                     }
-                    try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed);
+                    try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed, compressedOffset, compressedLength);
                          final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG);
                          final FastBufferedInputStream buffer = new FastBufferedInputStream(decompressed);
                          final DataInputStream input = new DataInputStream(buffer)) {
