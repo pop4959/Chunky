@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -70,14 +72,13 @@ public final class RegionFile {
             } catch (final NumberFormatException e) {
                 return;
             }
+            final byte[] headerBytes = new byte[ENTRIES * 8];
+            region.readFully(headerBytes);
+            final IntBuffer headerInts = ByteBuffer.wrap(headerBytes).asIntBuffer();
             final int[] locationTable = new int[ENTRIES];
-            for (int i = 0; i < ENTRIES; ++i) {
-                locationTable[i] = region.readInt();
-            }
+            headerInts.get(locationTable);
             final int[] timestampTable = new int[ENTRIES];
-            for (int i = 0; i < ENTRIES; ++i) {
-                timestampTable[i] = region.readInt();
-            }
+            headerInts.get(timestampTable);
             header = new Header(locationTable, timestampTable);
             if (headerOnly) {
                 fullyRead = true;
