@@ -10,14 +10,23 @@ import java.nio.charset.StandardCharsets;
 
 public final class BufferedDataInput implements DataInput {
     private static final int BUFFER_SIZE = 8192;
-    private final InputStream in;
     private final byte[] buffer = new byte[BUFFER_SIZE];
     private final ByteBuffer view = ByteBuffer.wrap(buffer);
+    private InputStream in;
     private int position;
     private int limit;
 
+    public BufferedDataInput() {
+    }
+
     public BufferedDataInput(final InputStream in) {
         this.in = in;
+    }
+
+    public void reset(final InputStream in) {
+        this.in = in;
+        this.position = 0;
+        this.limit = 0;
     }
 
     @Override

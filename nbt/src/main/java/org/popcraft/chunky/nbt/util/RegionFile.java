@@ -89,6 +89,7 @@ public final class RegionFile {
             }
             final FileChannel channel = region.getChannel();
             byte[] chunkBuffer = new byte[65536];
+            final BufferedDataInput input = new BufferedDataInput();
             final int[] offsetTable = new int[ENTRIES];
             final int[] sizeTable = new int[ENTRIES];
             for (int i = 0; i < ENTRIES; ++i) {
@@ -148,7 +149,7 @@ public final class RegionFile {
                     }
                     try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed, compressedOffset, compressedLength);
                          final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG)) {
-                        final BufferedDataInput input = new BufferedDataInput(decompressed);
+                        input.reset(decompressed);
                         final Tag data;
                         if (filter == null) {
                             data = Tag.load(input);
