@@ -112,7 +112,7 @@ public final class RegionFile {
                 final int x = (regionX * 32) + (i % 32);
                 final int z = (regionZ * 32) + (i / 32);
                 try {
-                    int buffered = channel.read(ByteBuffer.wrap(chunkBuffer, 0, Math.min(size, SECTOR_SIZE)), offset);
+                    int buffered = channel.read(ByteBuffer.wrap(chunkBuffer, 0, Math.min(size, chunkBuffer.length)), offset);
                     if (buffered < 5) {
                         throw new IOException("Truncated chunk %d, %d in %s".formatted(x, z, file.getName()));
                     }
