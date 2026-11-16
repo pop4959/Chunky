@@ -24,7 +24,7 @@ public class ListTag extends Tag {
     public void read(final DataInput input) throws IOException {
         this.type = input.readByte();
         final int size = input.readInt();
-        this.value = new ArrayList<>();
+        this.value = new ArrayList<>(Math.max(size, 0));
         for (int i = 0; i < size; ++i) {
             final Tag tag = Tag.create(type, "");
             tag.read(input);
