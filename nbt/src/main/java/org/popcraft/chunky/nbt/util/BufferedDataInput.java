@@ -153,6 +153,32 @@ public final class BufferedDataInput implements DataInput {
         return DataInputStream.readUTF(this);
     }
 
+    public void readInts(final int[] values) throws IOException {
+        int index = 0;
+        while (index < values.length) {
+            if (limit - position < 4) {
+                ensure(4);
+            }
+            final int count = Math.min(values.length - index, (limit - position) >> 2);
+            view.slice(position, count << 2).asIntBuffer().get(values, index, count);
+            position += count << 2;
+            index += count;
+        }
+    }
+
+    public void readLongs(final long[] values) throws IOException {
+        int index = 0;
+        while (index < values.length) {
+            if (limit - position < 8) {
+                ensure(8);
+            }
+            final int count = Math.min(values.length - index, (limit - position) >> 3);
+            view.slice(position, count << 3).asLongBuffer().get(values, index, count);
+            position += count << 3;
+            index += count;
+        }
+    }
+
     private void ensure(final int count) throws IOException {
         if (limit - position >= count) {
             return;

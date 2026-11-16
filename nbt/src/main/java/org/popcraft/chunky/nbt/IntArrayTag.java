@@ -1,5 +1,7 @@
 package org.popcraft.chunky.nbt;
 
+import org.popcraft.chunky.nbt.util.BufferedDataInput;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -21,6 +23,11 @@ public class IntArrayTag extends Tag {
     @Override
     public void read(final DataInput input) throws IOException {
         final int size = input.readInt();
+        if (input instanceof final BufferedDataInput buffered) {
+            this.value = new int[size];
+            buffered.readInts(value);
+            return;
+        }
         final byte[] bytes = new byte[4 * size];
         input.readFully(bytes);
         this.value = new int[size];
