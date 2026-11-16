@@ -60,13 +60,17 @@ public abstract class Tag {
         if (TagType.END == t) {
             return END;
         }
-        final String n = input.readUTF();
-        final Tag tag = create(t, n);
-        if (type == t && name.equals(n)) {
-            tag.read(input);
-            return tag;
+        if (type == t) {
+            final String n = input.readUTF();
+            if (name.equals(n)) {
+                final Tag tag = create(t, n);
+                tag.read(input);
+                return tag;
+            }
+        } else {
+            input.skipBytes(input.readUnsignedShort());
         }
-        return tag.search(input, type, name);
+        return SkipTags.TAGS[t].search(input, type, name);
     }
 
     public static CompoundTag findMany(final DataInput input, final Set<String> tagNames) throws IOException {
