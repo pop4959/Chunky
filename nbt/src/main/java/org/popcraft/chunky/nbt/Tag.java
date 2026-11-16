@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 
 public abstract class Tag {
     protected static final int INDENT = 2;
+    private static final EndTag END = new EndTag();
     protected final String name;
 
     protected Tag(final String name) {
@@ -18,7 +19,7 @@ public abstract class Tag {
     public static Tag load(final DataInput input) throws IOException {
         final byte type = input.readByte();
         if (TagType.END == type) {
-            return new EndTag();
+            return END;
         }
         final String name = input.readUTF();
         final Tag tag = create(type, name);
@@ -57,7 +58,7 @@ public abstract class Tag {
     public static Tag find(final DataInput input, final byte type, final String name) throws IOException {
         final byte t = input.readByte();
         if (TagType.END == t) {
-            return new EndTag();
+            return END;
         }
         final String n = input.readUTF();
         final Tag tag = create(t, n);
@@ -99,7 +100,7 @@ public abstract class Tag {
 
     public static Tag create(final byte type, final String name) {
         return switch (type) {
-            case TagType.END -> new EndTag();
+            case TagType.END -> END;
             case TagType.BYTE -> new ByteTag(name);
             case TagType.SHORT -> new ShortTag(name);
             case TagType.INT -> new IntTag(name);
