@@ -5,6 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public abstract class Tag {
     protected static final int INDENT = 2;
@@ -68,6 +69,10 @@ public abstract class Tag {
     }
 
     public static CompoundTag findMany(final DataInput input, final Set<String> tagNames) throws IOException {
+        return findMany(input, tagNames, null);
+    }
+
+    public static CompoundTag findMany(final DataInput input, final Set<String> tagNames, final Predicate<CompoundTag> stop) throws IOException {
         if (TagType.COMPOUND != input.readByte()) {
             return null;
         }
@@ -82,6 +87,9 @@ public abstract class Tag {
                 tag.read(input);
                 results.put(tag);
                 ++found;
+                if (stop != null && stop.test(results)) {
+                    break;
+                }
             } else {
                 skip(input, type);
             }

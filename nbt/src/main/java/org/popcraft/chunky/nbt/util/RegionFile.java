@@ -155,7 +155,7 @@ public final class RegionFile {
                             data = Tag.load(input);
                         } else {
                             data = filter.hasTagNames() ?
-                                    Tag.findMany(input, filter.getTagNames()) :
+                                    Tag.findMany(input, filter.getTagNames(), filter.getStop()) :
                                     Tag.find(input, filter.getType(), filter.getName());
                         }
                         chunks[i] = new Chunk(x, z, data, timestampTable[i]);

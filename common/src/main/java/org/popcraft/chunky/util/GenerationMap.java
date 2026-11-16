@@ -35,7 +35,7 @@ public final class GenerationMap {
     private static final int[] COLORS = {0x7FB238, 0x4F8FE0, 0x000000, 0xE5E533, 0xE03C3C, 0xFFFFFF};
     private static final int OUTSIDE = STATUSES;
     private static final int MAX_SIZE = 4096;
-    private static final ChunkFilter FILTER = ChunkFilter.ofTags("xPos", "zPos", "Status", "isLightOn", "LastUpdate");
+    private static final ChunkFilter FILTER = ChunkFilter.ofTags(RegionStatusReader::isIncomplete, "xPos", "zPos", "Status", "isLightOn", "LastUpdate");
     private static final int THREADS = Math.max(1, Runtime.getRuntime().availableProcessors() / 4);
     private final Selection selection;
     private final Shape shape;

@@ -63,7 +63,7 @@ public final class RegionStatusReader implements AutoCloseable {
         if (!Files.exists(file)) {
             return;
         }
-        final RegionFile regionFile = new RegionFile(file.toFile(), ChunkFilter.ofTags("xPos", "zPos", "Status", "isLightOn", "LastUpdate"), part, THREADS);
+        final RegionFile regionFile = new RegionFile(file.toFile(), ChunkFilter.ofTags(RegionStatusReader::isIncomplete, "xPos", "zPos", "Status", "isLightOn", "LastUpdate"), part, THREADS);
         for (final Chunk chunk : regionFile.getChunks()) {
             if (chunk.getData() instanceof final CompoundTag data && isValid(data, chunk.getX(), chunk.getZ())) {
                 if (isFull(data)) {
@@ -90,6 +90,10 @@ public final class RegionStatusReader implements AutoCloseable {
         final boolean lit = data.get("isLightOn").isPresent();
         final boolean saved = data.getLong("LastUpdate").filter(lastUpdate -> lastUpdate.value() > 0).isPresent();
         return isFullStatus(data) && lit && saved;
+    }
+
+    static boolean isIncomplete(final CompoundTag data) {
+        return data.get("xPos").isPresent() && data.get("zPos").isPresent() && data.get("Status").isPresent() && !isFullStatus(data);
     }
 
     @Override
