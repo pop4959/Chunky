@@ -10,11 +10,18 @@ import java.nio.charset.StandardCharsets;
 
 public final class BufferedDataInput implements DataInput {
     private static final int BUFFER_SIZE = 8192;
+    private static final String[] ASCII = new String[128];
     private final byte[] buffer = new byte[BUFFER_SIZE];
     private final ByteBuffer view = ByteBuffer.wrap(buffer);
     private InputStream in;
     private int position;
     private int limit;
+
+    static {
+        for (int i = 0; i < ASCII.length; ++i) {
+            ASCII[i] = String.valueOf((char) i);
+        }
+    }
 
     public BufferedDataInput() {
     }
@@ -147,6 +154,12 @@ public final class BufferedDataInput implements DataInput {
             }
             if (ascii) {
                 position = start + length;
+                if (length == 0) {
+                    return "";
+                }
+                if (length == 1) {
+                    return ASCII[buffer[start]];
+                }
                 return new String(buffer, start, length, StandardCharsets.ISO_8859_1);
             }
         }
