@@ -1,7 +1,8 @@
 package org.popcraft.chunky.nbt;
 
+import org.popcraft.chunky.nbt.util.BufferedDataInput;
+
 import java.io.DataInput;
-import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,7 +16,7 @@ public final class NBT {
     }
 
     public static Tag load(final InputStream inputStream) throws IOException {
-        final DataInput dataInput = new DataInputStream(inputStream);
+        final DataInput dataInput = new BufferedDataInput(inputStream);
         return Tag.load(dataInput);
     }
 
@@ -26,7 +27,7 @@ public final class NBT {
 
     public static Tag loadCompressed(final InputStream inputStream) throws IOException {
         try (final GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream)) {
-            final DataInput dataInput = new DataInputStream(gzipInputStream);
+            final DataInput dataInput = new BufferedDataInput(gzipInputStream);
             return Tag.load(dataInput);
         }
     }
