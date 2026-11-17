@@ -103,8 +103,12 @@ public final class RegionFile {
             }
             Arrays.sort(chunksByOffset);
             boolean complete = true;
-            for (int position = part; position < ENTRIES; position += parts) {
+            final long sectors = channel.size() / SECTOR_SIZE;
+            for (int position = 0; position < ENTRIES; ++position) {
                 final int i = (int) (chunksByOffset[position] % ENTRIES);
+                if (Math.min(offsetTable[i] * (long) parts / sectors, parts - 1) != part) {
+                    continue;
+                }
                 final int offset = offsetTable[i] * SECTOR_SIZE;
                 final int size = sizeTable[i] * SECTOR_SIZE;
                 if (offset == 0 && size == 0) {
