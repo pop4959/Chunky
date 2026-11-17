@@ -28,9 +28,9 @@ public final class RegionFile {
     private static final ThreadLocal<Inflater> INFLATER = ThreadLocal.withInitial(Inflater::new);
     private final Chunk[] chunks = new Chunk[ENTRIES];
     private final BitSet invalidChunks = new BitSet(ENTRIES);
+    private final Inflater inflater = INFLATER.get();
     private int regionX;
     private int regionZ;
-    private final Inflater inflater = INFLATER.get();
     private Header header;
     private boolean fullyRead;
 
