@@ -5,14 +5,20 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 public final class BufferedDataInput implements DataInput {
     private static final int BUFFER_SIZE = 8192;
     private static final String[] ASCII = new String[128];
+    private static final ValueLayout.OfInt INT_BE = ValueLayout.JAVA_INT_UNALIGNED.withOrder(ByteOrder.BIG_ENDIAN);
+    private static final ValueLayout.OfLong LONG_BE = ValueLayout.JAVA_LONG_UNALIGNED.withOrder(ByteOrder.BIG_ENDIAN);
     private final byte[] buffer = new byte[BUFFER_SIZE];
     private final ByteBuffer view = ByteBuffer.wrap(buffer);
+    private final MemorySegment segment = MemorySegment.ofArray(buffer);
     private InputStream in;
     private int position;
     private int limit;
@@ -173,7 +179,7 @@ public final class BufferedDataInput implements DataInput {
                 ensure(4);
             }
             final int count = Math.min(values.length - index, (limit - position) >> 2);
-            view.slice(position, count << 2).asIntBuffer().get(values, index, count);
+            MemorySegment.copy(segment, INT_BE, position, values, index, count);
             position += count << 2;
             index += count;
         }
@@ -186,7 +192,7 @@ public final class BufferedDataInput implements DataInput {
                 ensure(8);
             }
             final int count = Math.min(values.length - index, (limit - position) >> 3);
-            view.slice(position, count << 3).asLongBuffer().get(values, index, count);
+            MemorySegment.copy(segment, LONG_BE, position, values, index, count);
             position += count << 3;
             index += count;
         }
