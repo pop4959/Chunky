@@ -21,10 +21,12 @@ public class CompoundTag extends Tag {
 
     @Override
     public void read(final DataInput input) throws IOException {
-        this.value = new HashMap<>();
-        Tag tag;
-        while (TagType.END != (tag = Tag.load(input)).type()) {
-            this.value.put(tag.name(), tag);
+        byte type;
+        while (TagType.END != (type = input.readByte())) {
+            final String name = input.readUTF();
+            final Tag tag = Tag.create(type, name);
+            tag.read(input);
+            this.value.put(name, tag);
         }
     }
 
