@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ListTag extends Tag {
     private byte type;
-    private List<Tag> value = new ArrayList<>();
+    private List<Tag> value = List.of();
 
     protected ListTag(final String name) {
         super(name);
