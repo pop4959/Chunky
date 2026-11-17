@@ -6,12 +6,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -51,8 +51,8 @@ public final class RegionFile {
     }
 
     private RegionFile(final File file, final ChunkFilter filter, final int part, final int parts, final boolean headerOnly) {
-        try (final RandomAccessFile region = new RandomAccessFile(file, "r")) {
-            if (region.length() < 4096) {
+        try (final FileChannel channel = FileChannel.open(file.toPath(), StandardOpenOption.READ)) {
+            if (channel.size() < 4096) {
                 return;
             }
             final String regionFileName = file.getName();
@@ -76,7 +76,9 @@ public final class RegionFile {
             this.regionX = regionX;
             this.regionZ = regionZ;
             final byte[] headerBytes = new byte[ENTRIES * 8];
-            region.readFully(headerBytes);
+            if (channel.read(ByteBuffer.wrap(headerBytes), 0) < headerBytes.length) {
+                return;
+            }
             final IntBuffer headerInts = ByteBuffer.wrap(headerBytes).asIntBuffer();
             final int[] locationTable = new int[ENTRIES];
             headerInts.get(locationTable);
@@ -87,7 +89,6 @@ public final class RegionFile {
                 fullyRead = true;
                 return;
             }
-            final FileChannel channel = region.getChannel();
             byte[] chunkBuffer = new byte[65536];
             final BufferedDataInput input = new BufferedDataInput();
             final int[] offsetTable = new int[ENTRIES];
