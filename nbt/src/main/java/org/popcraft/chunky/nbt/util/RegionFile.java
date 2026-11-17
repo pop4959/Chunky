@@ -153,7 +153,7 @@ public final class RegionFile {
                         compressedLength = length - 1;
                     }
                     try (final ByteArrayInputStream bytes = new ByteArrayInputStream(compressed, compressedOffset, compressedLength);
-                         final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG)) {
+                         final InputStream decompressed = decompress(bytes, compressionType & ~CompressionType.EXTERNAL_FLAG, bufferSize(filter))) {
                         input.reset(decompressed);
                         final Tag data;
                         if (filter == null) {
@@ -175,17 +175,24 @@ public final class RegionFile {
         }
     }
 
-    private InputStream decompress(final InputStream input, final int compressionType) throws IOException {
+    private InputStream decompress(final InputStream input, final int compressionType, final int bufferSize) throws IOException {
         return switch (compressionType) {
             case CompressionType.GZIP -> new GZIPInputStream(input);
             case CompressionType.ZLIB -> {
                 inflater.reset();
-                yield new InflaterInputStream(input, inflater);
+                yield new InflaterInputStream(input, inflater, bufferSize);
             }
             case CompressionType.NONE -> input;
             case CompressionType.LZ4 -> Lz4Decompressor.decompress(input);
             default -> throw new UnsupportedOperationException("Unsupported compression type %d".formatted(compressionType));
         };
+    }
+
+    private static int bufferSize(final ChunkFilter filter) {
+        if (filter == null) {
+            return 4096;
+        }
+        return filter.hasTagNames() ? 512 : 64;
     }
 
     public Collection<Chunk> getChunks() {
