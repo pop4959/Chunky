@@ -25,7 +25,7 @@ import java.util.zip.InflaterInputStream;
 public final class RegionFile {
     private static final int ENTRIES = 1024;
     private static final int SECTOR_SIZE = 4096;
-    private static final ThreadLocal<Inflater> INFLATER = ThreadLocal.withInitial(Inflater::new);
+    private static final ThreadLocal<Inflater> INFLATER = ThreadLocal.withInitial(() -> new Inflater(true));
     private final Chunk[] chunks = new Chunk[ENTRIES];
     private final BitSet invalidChunks = new BitSet(ENTRIES);
     private final Inflater inflater = INFLATER.get();
@@ -179,6 +179,7 @@ public final class RegionFile {
         return switch (compressionType) {
             case CompressionType.GZIP -> new GZIPInputStream(input);
             case CompressionType.ZLIB -> {
+                input.skipNBytes(2);
                 inflater.reset();
                 yield new InflaterInputStream(input, inflater, bufferSize);
             }
