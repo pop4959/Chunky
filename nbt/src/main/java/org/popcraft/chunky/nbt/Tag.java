@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -56,19 +57,28 @@ public abstract class Tag {
     }
 
     public static Tag find(final DataInput input, final byte type, final String name) throws IOException {
+        return find(input, type, name, Map.of());
+    }
+
+    public static Tag find(final DataInput input, final byte type, final String name, final Map<String, String> aliases) throws IOException {
         final byte t = input.readByte();
         if (TagType.END == t) {
             return END;
         }
         if (type == t) {
             final String n = input.readUTF();
-            if (name.equals(n)) {
-                final Tag tag = create(t, n);
+            if (name.equals(n) || name.equals(aliases.get(n))) {
+                final Tag tag = create(t, name);
                 tag.read(input);
                 return tag;
             }
         } else {
             input.skipBytes(input.readUnsignedShort());
+        }
+        if (TagType.COMPOUND == t) {
+            Tag tag;
+            while ((tag = find(input, type, name, aliases)) == null) ;
+            return TagType.END == tag.type() ? null : tag;
         }
         return SkipTags.TAGS[t].search(input, type, name);
     }
@@ -78,20 +88,24 @@ public abstract class Tag {
     }
 
     public static CompoundTag findMany(final DataInput input, final Set<String> tagNames, final Predicate<CompoundTag> stop) throws IOException {
+        return findMany(input, tagNames, Map.of(), stop);
+    }
+
+    public static CompoundTag findMany(final DataInput input, final Set<String> tagNames, final Map<String, String> aliases, final Predicate<CompoundTag> stop) throws IOException {
         if (TagType.COMPOUND != input.readByte()) {
             return null;
         }
         input.readUTF();
-        final CompoundTag results = new CompoundTag("", new HashMap<>());
-        int found = 0;
+        final Map<String, Tag> values = new HashMap<>();
+        final CompoundTag results = new CompoundTag("", values);
         byte type;
-        while (found < tagNames.size() && TagType.END != (type = input.readByte())) {
+        while (values.size() < tagNames.size() && TagType.END != (type = input.readByte())) {
             final String name = input.readUTF();
-            if (tagNames.contains(name)) {
-                final Tag tag = create(type, name);
+            final String tagName = tagNames.contains(name) ? name : aliases.get(name);
+            if (tagName != null) {
+                final Tag tag = create(type, tagName);
                 tag.read(input);
                 results.put(tag);
-                ++found;
                 if (stop != null && stop.test(results)) {
                     break;
                 }

@@ -120,7 +120,7 @@ public class WorldChunkIterator implements ChunkIterator {
                         .orElseThrow(IllegalStateException::new);
                 final int regionX = regionCoordinate.x();
                 final int regionZ = regionCoordinate.z();
-                final RegionFile regionFile = new RegionFile(region.toFile(), ChunkFilter.of(TagType.STRING, "Status"));
+                final RegionFile regionFile = new RegionFile(region.toFile(), ChunkFilter.of(TagType.STRING, "Status").withAlias("Status", "status"));
                 for (final ChunkCoordinate offset : Hilbert.chunkCoordinateOffsets()) {
                     final ChunkCoordinate chunkCoordinate = new ChunkCoordinate((regionX << 5) + offset.x(), (regionZ << 5) + offset.z());
                     final String status = regionFile.getChunk(chunkCoordinate.x(), chunkCoordinate.z())

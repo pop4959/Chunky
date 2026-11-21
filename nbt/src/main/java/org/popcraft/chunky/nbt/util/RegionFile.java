@@ -158,10 +158,10 @@ public final class RegionFile {
                         final Tag data;
                         if (filter == null) {
                             data = Tag.load(input);
+                        } else if (filter.hasTagNames()) {
+                            data = Tag.findMany(input, filter.getTagNames(), filter.getAliases(), filter.getStop());
                         } else {
-                            data = filter.hasTagNames() ?
-                                    Tag.findMany(input, filter.getTagNames(), filter.getStop()) :
-                                    Tag.find(input, filter.getType(), filter.getName());
+                            data = Tag.find(input, filter.getType(), filter.getName(), filter.getAliases());
                         }
                         chunks[i] = new Chunk(x, z, data, timestampTable[i]);
                     }

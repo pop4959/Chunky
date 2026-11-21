@@ -17,6 +17,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class RegionStatusReader implements AutoCloseable {
+    static final ChunkFilter FILTER = ChunkFilter.ofTags(RegionStatusReader::isIncomplete, "xPos", "zPos", "Status", "isLightOn", "LastUpdate")
+            .withAlias("Status", "status");
     private static final boolean UPDATE_CHUNK_NBT = Boolean.getBoolean("chunky.updateChunkNbt");
     private static final boolean LOAD_OUTDATED_CHUNKS = Boolean.getBoolean("chunky.loadOutdatedChunks");
     private static final int THREADS = Math.max(1, Input.tryInteger(System.getProperty("chunky.regionReaderThreads")).orElse(Runtime.getRuntime().availableProcessors() / 4));
@@ -63,7 +65,7 @@ public final class RegionStatusReader implements AutoCloseable {
         if (!Files.exists(file)) {
             return;
         }
-        final RegionFile regionFile = new RegionFile(file.toFile(), ChunkFilter.ofTags(RegionStatusReader::isIncomplete, "xPos", "zPos", "Status", "isLightOn", "LastUpdate"), part, THREADS);
+        final RegionFile regionFile = new RegionFile(file.toFile(), FILTER, part, THREADS);
         for (final Chunk chunk : regionFile.getChunks()) {
             if (chunk.getData() instanceof final CompoundTag data && isValid(data, chunk.getX(), chunk.getZ())) {
                 if (isFull(data)) {

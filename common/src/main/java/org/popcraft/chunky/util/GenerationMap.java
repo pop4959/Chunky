@@ -3,7 +3,6 @@ package org.popcraft.chunky.util;
 import org.popcraft.chunky.Selection;
 import org.popcraft.chunky.nbt.CompoundTag;
 import org.popcraft.chunky.nbt.util.Chunk;
-import org.popcraft.chunky.nbt.util.ChunkFilter;
 import org.popcraft.chunky.nbt.util.RegionFile;
 import org.popcraft.chunky.shape.Shape;
 import org.popcraft.chunky.shape.ShapeFactory;
@@ -35,7 +34,6 @@ public final class GenerationMap {
     private static final int[] COLORS = {0x7FB238, 0x4F8FE0, 0x000000, 0xE5E533, 0xE03C3C, 0xFFFFFF};
     private static final int OUTSIDE = STATUSES;
     private static final int MAX_SIZE = 4096;
-    private static final ChunkFilter FILTER = ChunkFilter.ofTags(RegionStatusReader::isIncomplete, "xPos", "zPos", "Status", "isLightOn", "LastUpdate");
     private static final int THREADS = Math.max(1, Runtime.getRuntime().availableProcessors() / 4);
     private final Selection selection;
     private final Shape shape;
@@ -113,7 +111,7 @@ public final class GenerationMap {
         final ChunkCoordinate regionCoordinate = ChunkCoordinate.fromRegionFile(region.getFileName().toString()).orElseThrow();
         final int regionChunkX = regionCoordinate.x() << 5;
         final int regionChunkZ = regionCoordinate.z() << 5;
-        final RegionFile regionFile = new RegionFile(region.toFile(), FILTER);
+        final RegionFile regionFile = new RegionFile(region.toFile(), RegionStatusReader.FILTER);
         final int[] statuses = new int[1024];
         for (int i = 0; i < 1024; ++i) {
             final int x = regionChunkX + (i & 31);
