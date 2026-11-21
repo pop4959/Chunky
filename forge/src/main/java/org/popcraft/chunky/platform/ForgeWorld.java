@@ -75,17 +75,21 @@ public class ForgeWorld implements World {
         if (UPDATE_CHUNK_NBT) {
             return chunkMapMixin.invokeReadChunk(chunkPos)
                     .thenApply(optionalNbt -> optionalNbt
-                            .filter(chunkNbt -> chunkNbt.contains("Status"))
-                            .flatMap(chunkNbt -> chunkNbt.getString("Status"))
+                            .flatMap(chunkNbt -> chunkNbt.getString("Status")
+                                    .or(() -> chunkNbt.getString("status")))
                             .map(status -> "minecraft:full".equals(status) || "full".equals(status))
                             .orElse(false));
         }
-        final FieldSelector statusSelector = new FieldSelector(StringTag.TYPE, "Status");
-        final CollectFields statusCollector = new CollectFields(statusSelector);
+        final CollectFields statusCollector = new CollectFields(
+                new FieldSelector(StringTag.TYPE, "Status"),
+                new FieldSelector(StringTag.TYPE, "status")
+        );
         return serverChunkCache.chunkScanner().scanChunk(chunkPos, statusCollector)
                 .thenApply(ignored -> {
                     if (statusCollector.getResult() instanceof final CompoundTag chunkNbt) {
-                        final String status = chunkNbt.getString("Status").orElse(null);
+                        final String status = chunkNbt.getString("Status")
+                                .or(() -> chunkNbt.getString("status"))
+                                .orElse(null);
                         return "minecraft:full".equals(status) || "full".equals(status);
                     }
                     return false;
