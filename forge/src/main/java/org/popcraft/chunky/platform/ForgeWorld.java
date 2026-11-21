@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -103,6 +104,7 @@ public class ForgeWorld implements World {
                 serverChunkCache.addTicketWithRadius(CHUNKY_TICKING, chunkPos, 1);
             }
             ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
+            final Executor mainThreadExecutor = ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor();
             // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
             // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
             return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
@@ -112,11 +114,12 @@ public class ForgeWorld implements World {
                             // workaround to prevent memory leaks in vanilla chunk system when racing with entity chunks
                             CompletableFuture<?> pendingFullStateConfirmation = ((ChunkHolderAccess) holder).chunky$getPendingFullStateConfirmation();
                             if (pendingFullStateConfirmation != null && !pendingFullStateConfirmation.isDone()) {
-                                return pendingFullStateConfirmation.thenApply(o -> null).completeOnTimeout(null, FULL_STATE_CONFIRMATION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+                                return pendingFullStateConfirmation.thenApply(o -> null).completeOnTimeout(null, FULL_STATE_CONFIRMATION_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                                        .thenComposeAsync(o -> CompletableFuture.runAsync(() -> {}, mainThreadExecutor), mainThreadExecutor);
                             }
                         }
-                        return CompletableFuture.completedFuture(null);
-                    }, ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor())
+                        return CompletableFuture.runAsync(() -> {}, mainThreadExecutor);
+                    }, mainThreadExecutor)
                     .whenCompleteAsync((ignored, throwable) -> {
                         serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
                         ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
