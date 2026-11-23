@@ -1,5 +1,5 @@
 plugins {
-    id("org.relativitymc.neo-loom") version "1.17.11"
+    id("org.relativitymc.neo-loom") version "1.19.1"
 }
 
 val shade = configurations.create("shade")
