@@ -58,7 +58,7 @@ public class BukkitPlayer extends BukkitSender implements Player {
         if (vehicle == null) {
             teleportAsync(player, loc);
         } else if (Paper.isPaper() && player.getWorld().equals(loc.getWorld())) {
-            Paper.teleportAsyncWithPassengers(vehicle, loc);
+            Paper.teleportAsync(vehicle, loc);
         } else if (Folia.isFolia() && !Folia.isTickThread(player.getLocation())) {
             Folia.schedule(plugin, player, () -> teleport(location), 1);
         } else {

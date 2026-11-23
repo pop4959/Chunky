@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[38,)"
+loaderVersion="[62,)"
 license="GNU GPLv3"
 issueTrackerURL="${github}/issues"
 [[mods]]

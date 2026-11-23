@@ -1,10 +1,8 @@
 package org.popcraft.chunky.platform;
 
-import io.papermc.paper.entity.TeleportFlag;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.popcraft.chunky.ChunkyPaper;
 import org.popcraft.chunky.platform.util.Location;
@@ -56,7 +54,7 @@ public class PaperPlayer extends PaperSender implements Player {
         if (vehicle == null) {
             player.teleportAsync(loc);
         } else if (player.getWorld().equals(loc.getWorld())) {
-            vehicle.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN, TeleportFlag.EntityState.RETAIN_PASSENGERS, TeleportFlag.EntityState.RETAIN_VEHICLE);
+            vehicle.teleportAsync(loc);
         } else if (!plugin.getServer().isOwnedByCurrentRegion(player.getLocation())) {
             player.getScheduler().execute(plugin, () -> teleport(location), null, 1);
         } else {

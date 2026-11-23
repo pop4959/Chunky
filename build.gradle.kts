@@ -4,17 +4,18 @@ plugins {
     id("com.gradleup.shadow") version "9.6.1"
 }
 
+val buildNumber = commitsSinceLastTag()
+
 subprojects {
     plugins.apply("java-library")
     plugins.apply("maven-publish")
     plugins.apply("com.gradleup.shadow")
 
     group = "${project.property("group")}"
-    version = "${project.property("version")}.${commitsSinceLastTag()}"
+    version = "${project.property("version")}.$buildNumber"
 
     repositories {
         mavenCentral()
-        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 
     java {
@@ -28,7 +29,7 @@ subprojects {
         withType<JavaCompile> {
             options.encoding = "UTF-8"
             options.release = 25
-            options.compilerArgs.add("-Xlint:none")
+            options.compilerArgs.add("-Xlint:deprecation,removal")
         }
         jar {
             archiveClassifier.set("noshade")
@@ -68,9 +69,7 @@ subprojects {
 fun commitsSinceLastTag(): String {
     val tagDescription = providers.exec {
         commandLine("git", "describe", "--tags")
+        isIgnoreExitValue = true
     }.standardOutput.asText.get()
-    if (tagDescription.indexOf('-') < 0) {
-        return "0"
-    }
-    return tagDescription.split('-')[1]
+    return tagDescription.split('-').getOrElse(1) { "0" }
 }

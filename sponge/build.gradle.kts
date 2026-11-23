@@ -6,6 +6,7 @@ plugins {
 }
 
 dependencies {
+    compileOnly("org.jetbrains:annotations:24.1.0")
     implementation(project(":chunky-common"))
 }
 
