@@ -163,6 +163,7 @@ public class FabricWorld implements World {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getElevation(final int x, final int z) {
         world.getChunk(x >> 4, z >> 4);
         final int height = world.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) + 1;

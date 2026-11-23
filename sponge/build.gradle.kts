@@ -42,3 +42,7 @@ tasks {
         archiveFileName.set("${project.property("artifactName")}-Sponge-${project.version}.jar")
     }
 }
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-proc:none")
+}

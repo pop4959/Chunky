@@ -1,7 +1,6 @@
 package org.popcraft.chunky.platform;
 
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.popcraft.chunky.platform.util.Location;
 import org.spongepowered.api.Sponge;
@@ -49,7 +48,7 @@ public class SpongeSender implements Sender {
     @Override
     public void sendMessage(final String key, final boolean prefixed, final Object... args) {
         if (source instanceof final Audience audience) {
-            audience.sendMessage(Identity.nil(), LegacyComponentSerializer.legacyAmpersand().deserialize(translateKey(key, prefixed, args)));
+            audience.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(translateKey(key, prefixed, args)));
         }
     }
 }

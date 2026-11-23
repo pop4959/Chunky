@@ -103,6 +103,6 @@ public class BukkitPlayer extends BukkitSender implements Player {
     @Override
     public void sendActionBar(final String key) {
         final String message = formatColored(translateKey(key, false));
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacy(message));
     }
 }

@@ -8,6 +8,7 @@ final class Lz4Decompressor {
     private Lz4Decompressor() {
     }
 
+    @SuppressWarnings("deprecation")
     static InputStream decompress(final InputStream input) {
         return new LZ4BlockInputStream(input);
     }
