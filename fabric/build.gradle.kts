@@ -1,13 +1,13 @@
 plugins {
-    id("org.relativitymc.neo-loom") version "1.19.1"
+    alias(libs.plugins.neo.loom)
 }
 
 val shade = configurations.create("shade")
 
 dependencies {
-    minecraft("com.mojang:minecraft:26.1")
-    implementation("net.fabricmc:fabric-loader:0.18.5")
-    implementation("net.fabricmc.fabric-api:fabric-api:0.150.0+26.1.2")
+    minecraft(libs.minecraft)
+    implementation(libs.fabric.loader)
+    implementation(libs.fabric.api)
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }

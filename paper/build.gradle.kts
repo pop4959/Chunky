@@ -4,11 +4,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:26.3.build.186-stable")
-    compileOnly("com.github.Puremin0rez:WorldBorder:1.19") {
+    compileOnly(libs.paper.api)
+    compileOnly(libs.worldborder) {
         isTransitive = false
     }
-    implementation("org.bstats:bstats-bukkit:3.2.1")
+    implementation(libs.bstats.bukkit)
     implementation(project(":chunky-common"))
 }
 

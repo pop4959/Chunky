@@ -1,5 +1,5 @@
 plugins {
-    id("org.relativitymc.neo-loom") version "1.19.1"
+    alias(libs.plugins.neo.loom)
 }
 
 val shade = configurations.create("shade")
@@ -9,8 +9,8 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:26.1")
-    forgeUserdev("net.neoforged:neoforge:26.1.0.15-beta:userdev")
+    minecraft(libs.minecraft)
+    forgeUserdev(variantOf(libs.neoforge) { classifier("userdev") })
     implementation(project(":chunky-common"))
     shade(project(":chunky-common"))
 }

@@ -3,10 +3,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.google.code.gson:gson:2.10.1")
-    compileOnly("com.mojang:brigadier:1.0.18")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("com.google.code.gson:gson:2.10.1")
+    compileOnly(libs.gson)
+    compileOnly(libs.brigadier)
+    testImplementation(libs.junit)
+    testImplementation(libs.gson)
     implementation(project(":chunky-nbt"))
 }
 

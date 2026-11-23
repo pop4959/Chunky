@@ -1,0 +1,61 @@
+[versions]
+# build
+shadow = "9.6.1"
+neo-loom = "1.19.1"
+sponge-gradle = "2.3.0"
+# common
+gson = "2.10.1"
+brigadier = "1.0.18"
+junit = "4.13.2"
+# nbt
+lz4 = "1.10.1"
+# bukkit
+spigot-api = "1.21.2-R0.1-SNAPSHOT"
+worldborder = "1.19"
+bstats = "3.2.1"
+# paper
+paper-api = "26.3.build.186-stable"
+# minecraft
+minecraft = "26.1"
+# fabric
+fabric-loader = "0.18.5"
+fabric-api = "0.150.0+26.1.2"
+# forge
+forge = "26.1-62.0.9"
+mixinextras = "0.5.3"
+# neoforge
+neoforge = "26.1.0.15-beta"
+# sponge
+sponge-api = "12.0.0"
+annotations = "24.1.0"
+
+[libraries]
+# common
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
+junit = { module = "junit:junit", version.ref = "junit" }
+# nbt
+lz4 = { module = "at.yawk.lz4:lz4-java", version.ref = "lz4" }
+# bukkit
+spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api" }
+worldborder = { module = "com.github.Puremin0rez:WorldBorder", version.ref = "worldborder" }
+bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
+# paper
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+# minecraft
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+# fabric
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+# forge
+forge = { module = "net.minecraftforge:forge", version.ref = "forge" }
+mixinextras-common = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixinextras" }
+# neoforge
+neoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
+# sponge
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+neo-loom = { id = "org.relativitymc.neo-loom", version.ref = "neo-loom" }
+sponge = { id = "org.spongepowered.gradle.plugin", version.ref = "sponge-gradle" }

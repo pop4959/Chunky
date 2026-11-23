@@ -2,16 +2,16 @@ import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
-    id("org.spongepowered.gradle.plugin") version "2.3.0"
+    alias(libs.plugins.sponge)
 }
 
 dependencies {
-    compileOnly("org.jetbrains:annotations:24.1.0")
+    compileOnly(libs.annotations)
     implementation(project(":chunky-common"))
 }
 
 sponge {
-    apiVersion("12.0.0")
+    apiVersion(libs.versions.sponge.api.get())
     loader {
         name(PluginLoaders.JAVA_PLAIN)
         version("1.0")
