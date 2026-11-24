@@ -1,0 +1,64 @@
+name: Release Chunky
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Publish targets
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - modrinth-curseforge
+          - devbukkit
+          - hangar
+          - ore
+permissions:
+  contents: read
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: ${{ github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up JDK
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c
+        with:
+          cache-disabled: true
+      - name: Build
+        run: ./gradlew --no-daemon build
+      - name: Publish to Modrinth and CurseForge
+        if: ${{ inputs.target == 'all' || inputs.target == 'modrinth-curseforge' }}
+        env:
+          PUBLISH_TOKEN_MODRINTH: ${{ secrets.PUBLISH_TOKEN_MODRINTH }}
+          PUBLISH_TOKEN_CURSEFORGE: ${{ secrets.PUBLISH_TOKEN_CURSEFORGE }}
+        run: ./gradlew --no-daemon publishMods -x publishCurseforgeBukkit
+      - name: Publish to Hangar
+        if: ${{ inputs.target == 'all' || inputs.target == 'hangar' }}
+        env:
+          PUBLISH_TOKEN_HANGAR: ${{ secrets.PUBLISH_TOKEN_HANGAR }}
+        run: ./gradlew --no-daemon :chunky-paper:publishAllPublicationsToHangar
+      - name: Publish to BukkitDev
+        if: ${{ inputs.target == 'all' || inputs.target == 'devbukkit' }}
+        env:
+          PUBLISH_TOKEN_CURSEFORGE: ${{ secrets.PUBLISH_TOKEN_CURSEFORGE }}
+        run: ./gradlew --no-daemon publishCurseforgeBukkit
+      - name: Publish to Ore
+        if: ${{ inputs.target == 'all' || inputs.target == 'ore' }}
+        env:
+          PUBLISH_TOKEN_ORE: ${{ secrets.PUBLISH_TOKEN_ORE }}
+        run: ./gradlew --no-daemon :chunky-sponge:publishToOre

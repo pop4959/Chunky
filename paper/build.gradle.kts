@@ -1,3 +1,7 @@
+plugins {
+    alias(libs.plugins.hangar.publish)
+}
+
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://jitpack.io")
@@ -35,5 +39,20 @@ tasks {
             attributes("paperweight-mappings-namespace" to "mojang")
         }
         archiveFileName.set("${project.property("artifactName")}-Paper-${project.version}.jar")
+    }
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        version.set("${project.version}")
+        id.set("${project.property("hangarProjectId")}")
+        channel.set("Release")
+        apiKey.set(providers.environmentVariable("PUBLISH_TOKEN_HANGAR"))
+        platforms {
+            paper {
+                jar.set(tasks.shadowJar.flatMap { it.archiveFile })
+                platformVersions.set("${project.property("releaseMinecraftVersions")}".split(","))
+            }
+        }
     }
 }

@@ -3,6 +3,8 @@
 shadow = "9.6.1"
 neo-loom = "1.19.1"
 sponge-gradle = "2.3.0"
+mod-publish = "04fb4ab"
+hangar-publish = "0.1.4"
 # common
 gson = "2.10.1"
 brigadier = "1.0.18"
@@ -59,3 +61,6 @@ annotations = { module = "org.jetbrains:annotations", version.ref = "annotations
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 neo-loom = { id = "org.relativitymc.neo-loom", version.ref = "neo-loom" }
 sponge = { id = "org.spongepowered.gradle.plugin", version.ref = "sponge-gradle" }
+mod-publish = { id = "me.modmuss50.mod-publish-plugin", version.ref = "mod-publish" }
+hangar-publish = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar-publish" }
+ore = { id = "org.spongepowered.gradle.ore", version.ref = "sponge-gradle" }

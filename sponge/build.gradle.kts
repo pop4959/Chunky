@@ -3,6 +3,7 @@ import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
     alias(libs.plugins.sponge)
+    alias(libs.plugins.ore)
 }
 
 dependencies {
@@ -34,6 +35,16 @@ sponge {
             loadOrder(PluginDependency.LoadOrder.AFTER)
             optional(false)
         }
+    }
+}
+
+oreDeployment {
+    apiKey().set(providers.environmentVariable("PUBLISH_TOKEN_ORE"))
+    defaultPublication {
+        projectId.set("${project.property("oreProjectId")}")
+        createForumPost.set(false)
+        versionBody.set("")
+        publishArtifacts.setFrom(tasks.shadowJar)
     }
 }
 

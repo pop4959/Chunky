@@ -1,7 +1,10 @@
+import me.modmuss50.mpp.ReleaseType
+
 plugins {
     id("java-library")
     id("maven-publish")
     alias(libs.plugins.shadow)
+    alias(libs.plugins.mod.publish)
 }
 
 val buildNumber = commitsSinceLastTag()
@@ -65,6 +68,113 @@ subprojects {
         }
     }
 }
+
+val releaseVersion = "${project.property("version")}.$buildNumber"
+val releaseMinecraftVersions = "${project.property("releaseMinecraftVersions")}".split(",")
+val releaseSpongeVersions = "${project.property("releaseSpongeVersions")}".split(",")
+
+publishMods {
+    version.set(releaseVersion)
+    displayName.set("Chunky $releaseVersion")
+    changelog.set("")
+    type.set(ReleaseType.STABLE)
+
+    val modrinthOptions = modrinthOptions {
+        accessToken.set(providers.environmentVariable("PUBLISH_TOKEN_MODRINTH"))
+        projectId.set("${project.property("modrinthProjectId")}")
+        minecraftVersions.addAll(releaseMinecraftVersions)
+    }
+    val curseforgeOptions = curseforgeOptions {
+        accessToken.set(providers.environmentVariable("PUBLISH_TOKEN_CURSEFORGE"))
+        minecraftVersions.addAll(releaseMinecraftVersions)
+        client.set(true)
+        server.set(true)
+    }
+
+    modrinth("modrinthSponge") {
+        from(modrinthOptions)
+        file.set(shadowJarFile("sponge"))
+        modLoaders.add("sponge")
+        minecraftVersions.set(releaseSpongeVersions)
+    }
+    modrinth("modrinthBukkit") {
+        from(modrinthOptions)
+        file.set(shadowJarFile("bukkit"))
+        modLoaders.addAll("bukkit", "spigot")
+    }
+    modrinth("modrinthPaper") {
+        from(modrinthOptions)
+        file.set(shadowJarFile("paper"))
+        modLoaders.addAll("paper", "folia")
+    }
+    modrinth("modrinthForge") {
+        from(modrinthOptions)
+        file.set(shadowJarFile("forge"))
+        modLoaders.add("forge")
+    }
+    modrinth("modrinthNeoForge") {
+        from(modrinthOptions)
+        file.set(shadowJarFile("neoforge"))
+        modLoaders.add("neoforge")
+    }
+    modrinth("modrinthFabric") {
+        from(modrinthOptions)
+        file.set(shadowJarFile("fabric"))
+        modLoaders.add("fabric")
+        requires {
+            id.set("${project.property("modrinthFabricApiId")}")
+        }
+    }
+
+    curseforge("curseforgeBukkit") {
+        accessToken.set(providers.environmentVariable("PUBLISH_TOKEN_CURSEFORGE"))
+        projectId.set("${project.property("devBukkitProjectId")}")
+        file.set(shadowJarFile("bukkit"))
+        modLoaders.add("bukkit")
+        minecraftVersions.addAll(releaseMinecraftVersions)
+    }
+    curseforge("curseforgeForge") {
+        from(curseforgeOptions)
+        projectId.set("${project.property("curseforgeForgeProjectId")}")
+        file.set(shadowJarFile("forge"))
+        modLoaders.add("forge")
+    }
+    curseforge("curseforgeNeoForge") {
+        from(curseforgeOptions)
+        projectId.set("${project.property("curseforgeForgeProjectId")}")
+        file.set(shadowJarFile("neoforge"))
+        modLoaders.add("neoforge")
+    }
+    curseforge("curseforgeFabric") {
+        from(curseforgeOptions)
+        projectId.set("${project.property("curseforgeFabricProjectId")}")
+        file.set(shadowJarFile("fabric"))
+        modLoaders.add("fabric")
+    }
+}
+
+tasks {
+    val publishOrder = listOf(
+        "publishModrinthSponge",
+        "publishModrinthBukkit",
+        "publishModrinthPaper",
+        "publishModrinthForge",
+        "publishModrinthNeoForge",
+        "publishModrinthFabric",
+        "publishCurseforgeBukkit",
+        "publishCurseforgeForge",
+        "publishCurseforgeNeoForge",
+        "publishCurseforgeFabric"
+    )
+    publishOrder.forEachIndexed { index, task ->
+        named(task) {
+            mustRunAfter(publishOrder.take(index))
+        }
+    }
+}
+
+fun shadowJarFile(module: String) =
+    project(":chunky-$module").tasks.named<AbstractArchiveTask>("shadowJar").flatMap { it.archiveFile }
 
 fun commitsSinceLastTag(): String {
     val tagDescription = providers.exec {
