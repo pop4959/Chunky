@@ -109,8 +109,6 @@ public class ForgeWorld implements World {
             }
             ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
             final Executor mainThreadExecutor = ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor();
-            // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
-            // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
             return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
                     .thenComposeAsync(ignored -> {
                         ChunkHolder holder = world.getChunkSource().chunkMap.getUpdatingChunkIfPresent(chunkPos.pack());

@@ -110,9 +110,9 @@ public class NeoForgeWorld implements World {
                 serverChunkCache.addTicketWithRadius(CHUNKY_TICKING, chunkPos, 1);
             }
             ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
-            // note: when Moonrise is present, holders do not get created most of the time even after explicit distance manager update
-            // so we force `create = true` *only if* Moonrise is present, as it breaks pausing for everyone else
-            boolean create = ChunkyNeoForge.ENABLE_MOONRISE_WORKAROUNDS;
+            // note: Moonrise requires create = true to load the chunk holder
+            // vanilla uses create = false so the server can still pause when empty
+            boolean create = ChunkyNeoForge.MOONRISE_LOADED;
             final Executor mainThreadExecutor = ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor();
             return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
                     .thenComposeAsync(ignored -> {
@@ -130,7 +130,7 @@ public class NeoForgeWorld implements World {
                     .whenCompleteAsync((ignored, throwable) -> {
                         serverChunkCache.removeTicketWithRadius(CHUNKY, chunkPos, 0);
                         ((MinecraftServerExtension) world.getServer()).chunky$markChunkSystemHousekeeping();
-                        if (ChunkyNeoForge.ENABLE_MOONRISE_WORKAROUNDS) {
+                        if (ChunkyNeoForge.MOONRISE_LOADED) {
                             // note: to prevent pausing on dedicated server when Moonrise is present
                             ((MinecraftServerAccess) world.getServer()).setEmptyTicks(0);
                         }

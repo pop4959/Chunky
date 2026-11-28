@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChunkyFabric implements ModInitializer {
-    public static final boolean ENABLE_MOONRISE_WORKAROUNDS = FabricLoader.getInstance().isModLoaded("moonrise");
+    public static final boolean MOONRISE_LOADED = FabricLoader.getInstance().isModLoaded("moonrise");
     private Chunky chunky;
     private final Map<Identifier, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 

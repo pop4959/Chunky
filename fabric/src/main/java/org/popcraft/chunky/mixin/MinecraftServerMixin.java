@@ -34,8 +34,8 @@ public abstract class MinecraftServerMixin implements MinecraftServerExtension {
             for (ServerLevel level : this.getAllLevels()) {
                 ((ChunkMapMixin) level.getChunkSource().chunkMap).invokeTick(() -> true); // push the vanilla chunk system to unload unneeded chunks ASAP
                 ((ServerChunkCacheMixin) level.getChunkSource()).invokeBroadcastChangedChunks(InactiveProfiler.INSTANCE);
-                if (!ChunkyFabric.ENABLE_MOONRISE_WORKAROUNDS) {
-                    // note: Moonrise destroys the vanilla entity system, so skip it here if it's present
+                if (!ChunkyFabric.MOONRISE_LOADED) {
+                    // note: Moonrise replaces the vanilla entity manager, so only tick it when Moonrise is not present
                     ((ServerLevelMixin) level).getEntityManager().tick();
                 }
             }

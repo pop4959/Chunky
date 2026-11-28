@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mod(ChunkyNeoForge.MOD_ID)
 public class ChunkyNeoForge {
     public static final String MOD_ID = "chunky";
-    public static final boolean ENABLE_MOONRISE_WORKAROUNDS = ModList.get().isLoaded("moonrise");
+    public static final boolean MOONRISE_LOADED = ModList.get().isLoaded("moonrise");
     private Chunky chunky;
     private final Map<Identifier, ServerBossEvent> bossBars = new ConcurrentHashMap<>();
 
