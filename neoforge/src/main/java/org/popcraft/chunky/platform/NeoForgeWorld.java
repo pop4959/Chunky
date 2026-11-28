@@ -114,9 +114,9 @@ public class NeoForgeWorld implements World {
             // vanilla uses create = false so the server can still pause when empty
             boolean create = ChunkyNeoForge.MOONRISE_LOADED;
             final Executor mainThreadExecutor = ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor();
-            return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
+            return ((ServerChunkCacheMixin) serverChunkCache).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, create)
                     .thenComposeAsync(ignored -> {
-                        ChunkHolder holder = world.getChunkSource().chunkMap.getUpdatingChunkIfPresent(chunkPos.pack());
+                        ChunkHolder holder = serverChunkCache.chunkMap.getUpdatingChunkIfPresent(chunkPos.pack());
                         if (holder != null) {
                             // workaround to prevent memory leaks in vanilla chunk system when racing with entity chunks
                             CompletableFuture<?> pendingFullStateConfirmation = ((ChunkHolderAccess) holder).chunky$getPendingFullStateConfirmation();

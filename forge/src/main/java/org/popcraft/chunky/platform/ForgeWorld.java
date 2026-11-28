@@ -109,9 +109,9 @@ public class ForgeWorld implements World {
             }
             ((ServerChunkCacheMixin) serverChunkCache).invokeRunDistanceManagerUpdates();
             final Executor mainThreadExecutor = ((ChunkMapMixin) serverChunkCache.chunkMap).getMainThreadExecutor();
-            return ((ServerChunkCacheMixin) world.getChunkSource()).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
+            return ((ServerChunkCacheMixin) serverChunkCache).invokeGetChunkFutureMainThread(x, z, ChunkStatus.FULL, false)
                     .thenComposeAsync(ignored -> {
-                        ChunkHolder holder = world.getChunkSource().chunkMap.getUpdatingChunkIfPresent(chunkPos.pack());
+                        ChunkHolder holder = serverChunkCache.chunkMap.getUpdatingChunkIfPresent(chunkPos.pack());
                         if (holder != null) {
                             // workaround to prevent memory leaks in vanilla chunk system when racing with entity chunks
                             CompletableFuture<?> pendingFullStateConfirmation = ((ChunkHolderAccess) holder).chunky$getPendingFullStateConfirmation();
