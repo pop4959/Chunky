@@ -19,20 +19,6 @@ loom {
 }
 
 tasks {
-    processResources {
-        val properties = mapOf(
-            "id" to rootProject.name,
-            "version" to project.version,
-            "name" to project.property("artifactName")!!,
-            "description" to project.property("description")!!,
-            "author" to project.property("author")!!,
-            "github" to project.property("github")!!
-        )
-        inputs.properties(properties)
-        filesMatching("fabric.mod.json") {
-            expand(properties)
-        }
-    }
     shadowJar {
         configurations = listOf(shade)
         archiveFileName.set("${project.property("artifactName")}-Fabric-${project.version}.jar")

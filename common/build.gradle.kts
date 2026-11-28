@@ -11,15 +11,6 @@ dependencies {
 }
 
 tasks {
-    processResources {
-        val properties = mapOf(
-            "version" to project.version
-        )
-        inputs.properties(properties)
-        filesMatching("version.properties") {
-            expand(properties)
-        }
-    }
     javadoc {
         setDestinationDir(rootProject.projectDir.resolve("docs/chunky/javadoc"))
         include("org/popcraft/chunky/api/**")

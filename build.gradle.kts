@@ -34,6 +34,30 @@ subprojects {
             options.release = 25
             options.compilerArgs.add("-Xlint:deprecation,removal")
         }
+        processResources {
+            val properties = mapOf(
+                "id" to rootProject.name,
+                "name" to project.property("artifactName")!!,
+                "version" to project.version,
+                "group" to project.group,
+                "author" to project.property("author")!!,
+                "description" to project.property("description")!!,
+                "github" to project.property("github")!!
+            )
+            inputs.properties(properties)
+            filesMatching(
+                listOf(
+                    "version.properties",
+                    "plugin.yml",
+                    "paper-plugin.yml",
+                    "fabric.mod.json",
+                    "META-INF/mods.toml",
+                    "META-INF/neoforge.mods.toml"
+                )
+            ) {
+                expand(properties)
+            }
+        }
         jar {
             archiveClassifier.set("noshade")
         }
